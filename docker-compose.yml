@@ -3,7 +3,7 @@ services:
   app:
     container_name: kjg-nikolaus
     build: .
-    image: kjg-nikolaus:latest
+    image: kjg-nikolaus:dev
     restart: unless-stopped
     env_file: .env
     environment:
