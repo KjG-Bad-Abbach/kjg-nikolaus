@@ -24,6 +24,7 @@ services:
       - ./pnpm-lock.yaml:/opt/pnpm-lock.yaml
       - ./.env:/opt/app/.env
       - ./public/uploads:/opt/app/public/uploads
+      - ./types:/opt/app/types
     ports:
       - 1337:1337
     depends_on:
