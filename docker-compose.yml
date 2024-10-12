@@ -43,3 +43,15 @@ services:
       - ./.data:/var/lib/postgresql/data/
     expose:
       - 5432
+
+  pgadmin:
+    container_name: kjg-nikolaus-pgadmin
+    image: dpage/pgadmin4
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - 5050:80
+    depends_on:
+      - db
