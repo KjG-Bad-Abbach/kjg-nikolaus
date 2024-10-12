@@ -1,0 +1,45 @@
+{
+  "kind": "collectionType",
+  "collectionName": "bookings",
+  "info": {
+    "singularName": "booking",
+    "pluralName": "bookings",
+    "displayName": "Booking",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "contact_person": {
+      "displayName": "Contact Person",
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.contact-person",
+      "required": true
+    },
+    "children": {
+      "type": "component",
+      "repeatable": true,
+      "component": "booking.child"
+    },
+    "present_location": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "location": {
+      "displayName": "Address",
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.address",
+      "required": true
+    },
+    "time_slots": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::time-slot.time-slot",
+      "inversedBy": "bookings"
+    }
+  }
+}

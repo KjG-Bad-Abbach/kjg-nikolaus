@@ -1,0 +1,33 @@
+{
+  "collectionName": "components_shared_addresses",
+  "info": {
+    "displayName": "Address",
+    "icon": "pinMap",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "street": {
+      "type": "string",
+      "required": true,
+      "maxLength": 100
+    },
+    "house_number": {
+      "type": "string",
+      "required": true,
+      "maxLength": 10
+    },
+    "zip_code": {
+      "type": "string",
+      "required": true,
+      "maxLength": 5,
+      "minLength": 5,
+      "regex": "^\\d{5}$"
+    },
+    "place": {
+      "type": "string",
+      "required": true,
+      "maxLength": 100
+    }
+  }
+}

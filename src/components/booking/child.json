@@ -1,0 +1,18 @@
+{
+  "collectionName": "components_booking_children",
+  "info": {
+    "displayName": "Child",
+    "icon": "walk"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "maxLength": 50
+    },
+    "text": {
+      "type": "blocks"
+    }
+  }
+}
