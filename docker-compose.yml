@@ -1,8 +1,8 @@
 version: "3"
 services:
-  app:
-    container_name: kjg-nikolaus
-    build: .
+  backend:
+    container_name: kjg-nikolaus-backend
+    build: backend
     image: kjg-nikolaus:dev
     restart: unless-stopped
     env_file: .env
@@ -18,13 +18,13 @@ services:
       APP_KEYS: ${APP_KEYS}
       NODE_ENV: ${NODE_ENV}
     volumes:
-      - ./config:/opt/app/config
-      - ./src:/opt/app/src
-      - ./package.json:/opt/package.json
-      - ./pnpm-lock.yaml:/opt/pnpm-lock.yaml
+      - ./backend/config:/opt/app/config
+      - ./backend/src:/opt/app/src
+      - ./backend/package.json:/opt/package.json
+      - ./backend/pnpm-lock.yaml:/opt/pnpm-lock.yaml
       - ./.env:/opt/app/.env
-      - ./public/uploads:/opt/app/public/uploads
-      - ./types:/opt/app/types
+      - ./backend/public/uploads:/opt/app/public/uploads
+      - ./backend/types:/opt/app/types
     ports:
       - 1337:1337
     depends_on:
