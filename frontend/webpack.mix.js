@@ -1,11 +1,12 @@
 const fs = require("fs");
+const path = require("path");
 const mix = require("laravel-mix");
 require("mix-tailwindcss");
 
-function getIndexHtml() {
+function getIndexHtml(file = 'index.html') {
   const hashes = JSON.parse(fs.readFileSync("dist/mix-manifest.json"));
   // replace {{ mix('file') }} with the hashed file path
-  let content = fs.readFileSync("src/index.html").toString();
+  let content = fs.readFileSync(path.join("src", file)).toString();
   content = content.replace(
     /{{ mix\('(.+?)'\) }}/g,
     (_, file) => hashes[file] ?? file
@@ -30,6 +31,13 @@ mix.browserSync({
       route: "/",
       handle: (req, res, next) => {
         res.write(getIndexHtml());
+        res.end();
+      },
+    },
+    {
+      route: "/colors",
+      handle: (req, res, next) => {
+        res.write(getIndexHtml('colors.html'));
         res.end();
       },
     },
