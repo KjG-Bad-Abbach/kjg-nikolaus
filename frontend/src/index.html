@@ -1,18 +1,88 @@
 <!doctype html>
-<html lang="en">
+<html lang="de">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>KjG Nikolaus</title>
+    <title>KjG Nikolaus Buchung</title>
     <link href="{{ mix('/css/app.css') }}" rel="stylesheet" />
     <script defer src="{{ mix('/js/app.js') }}"></script>
   </head>
-  <body>
-    <h1 class="text-3xl font-bold underline">Hello world!</h1>
+  <body class="bg-java flex min-h-screen flex-col items-center justify-center">
+    <!-- Main Container -->
+    <div class="mx-auto w-full max-w-3xl text-center" x-data="bookingForm">
+      <h1 class="text-calypso mb-4 text-4xl font-bold">KjG Nikolaus Buchung</h1>
 
-    <div x-data="{ counter: 0 }">
-      <button @click="counter++">Increment</button>
-      <span x-text="counter"></span>
+      <!-- Placeholder for Future Content -->
+      <p class="text-calypso text-lg">
+        Buche deinen persönlichen Nikolausbesuch mit der KjG Bad Abbach!
+      </p>
+
+      <div>
+        <h2 class="sr-only">Schritte</h2>
+
+        <div
+          class="after:bg-java-500 relative after:absolute after:inset-x-0 after:top-1/2 after:block after:h-0.5 after:-translate-y-1/2 after:rounded-lg"
+        >
+          <ol
+            class="text-calypso relative z-10 flex justify-between text-sm font-medium"
+          >
+            <!-- Loop through the steps -->
+            <template x-for="(x, index) in steps" :key="index">
+              <li
+                x-data="{ hoverable: canJumpToAnyStep || step === index + 1 }"
+                x-on:click="clickStep(index)"
+                x-bind:class="hoverable ? 'hover:text-calypso-950 cursor-pointer' : 'cursor-not-allowed'"
+                class="bg-java group flex select-none items-center gap-2 p-2"
+              >
+                <span
+                  class="size-6 rounded-full text-center text-[10px]/6 font-bold"
+                  x-bind:class="step === index + 1 ? ('bg-calypso' + (hoverable ? ' group-hover:bg-calypso-950' : '') + ' text-calypso-500') : 'bg-java-500'"
+                >
+                  <span x-show="!x.alreadyFilled" x-text="index + 1"></span>
+                  <span x-show="x.alreadyFilled">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="m-1 size-4"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </span>
+                </span>
+                <span class="hidden sm:block" x-text="x.name"></span>
+              </li>
+            </template>
+          </ol>
+        </div>
+      </div>
     </div>
+
+    <script>
+      document.addEventListener("alpine:init", () => {
+        Alpine.data("bookingForm", () => ({
+          step: 1,
+          steps: [
+            { name: "Kontakt", alreadyFilled: true },
+            { name: "Adresse", alreadyFilled: true },
+            { name: "Zeitslot", alreadyFilled: false },
+            { name: "Kinder", alreadyFilled: true },
+            { name: "Kontrolle", alreadyFilled: false },
+          ],
+          canJumpToAnyStep: false,
+
+          // Click on step
+          clickStep(index) {
+            if (this.canJumpToAnyStep) {
+              this.step = index + 1;
+            }
+          },
+        }));
+      });
+    </script>
   </body>
 </html>
