@@ -20,135 +20,175 @@
         Buche deinen persönlichen Nikolausbesuch mit der KjG Bad Abbach!
       </p>
 
-      <div class="mx-2 mb-4 mt-8">
-        <h2 class="sr-only">Schritte</h2>
+      <!-- View for steps -->
+      <div x-show="view === 'steps'">
+        <div class="mx-2 mb-4 mt-8">
+          <h2 class="sr-only">Schritte</h2>
 
-        <div
-          class="after:bg-java-500 relative after:absolute after:inset-x-0 after:top-1/2 after:block after:h-0.5 after:-translate-y-1/2 after:rounded-lg"
-        >
-          <ol
-            class="text-calypso relative z-10 flex justify-between text-sm font-medium"
+          <div
+            class="after:bg-java-500 relative after:absolute after:inset-x-0 after:top-1/2 after:block after:h-0.5 after:-translate-y-1/2 after:rounded-lg"
           >
-            <!-- Loop through the steps -->
-            <template x-for="(x, index) in steps" :key="index">
-              <li
-                x-data="{ hoverable: canJumpToAnyStep || step === index + 1 }"
-                x-on:click="clickStep(index)"
-                x-bind:class="hoverable ? 'hover:text-calypso-950 cursor-pointer' : 'cursor-not-allowed'"
-                class="bg-java group flex select-none items-center gap-2 p-2"
-              >
-                <span
-                  class="size-6 rounded-full text-center text-[10px]/6 font-bold"
-                  x-bind:class="step === index + 1 ? ('bg-calypso' + (hoverable ? ' group-hover:bg-calypso-950' : '') + ' text-calypso-500') : 'bg-java-500'"
+            <ol
+              class="text-calypso relative z-10 flex justify-between text-sm font-medium"
+            >
+              <!-- Loop through the steps -->
+              <template x-for="(x, index) in steps" :key="index">
+                <li
+                  x-data="{ hoverable: canJumpToAnyStep || step === index + 1 }"
+                  x-on:click="clickStep(index)"
+                  x-bind:class="hoverable ? 'hover:text-calypso-950 cursor-pointer' : 'cursor-not-allowed'"
+                  class="bg-java group flex select-none items-center gap-2 p-2"
                 >
-                  <span x-show="!x.alreadyFilled" x-text="index + 1"></span>
-                  <span x-show="x.alreadyFilled">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="m-1 size-4"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clip-rule="evenodd"
-                      />
-                    </svg>
+                  <span
+                    class="size-6 rounded-full text-center text-[10px]/6 font-bold"
+                    x-bind:class="step === index + 1 ? ('bg-calypso' + (hoverable ? ' group-hover:bg-calypso-950' : '') + ' text-calypso-500') : 'bg-java-500'"
+                  >
+                    <span x-show="!x.alreadyFilled" x-text="index + 1"></span>
+                    <span x-show="x.alreadyFilled">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="m-1 size-4"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                    </span>
                   </span>
-                </span>
-                <span class="hidden sm:block" x-text="x.name"></span>
-              </li>
-            </template>
-          </ol>
+                  <span class="hidden sm:block" x-text="x.name"></span>
+                </li>
+              </template>
+            </ol>
+          </div>
         </div>
+
+        <!-- Step 1: Contact Details -->
+        <template x-if="step === 1">
+          <div
+            class="mx-auto w-full max-w-3xl rounded-lg bg-white p-6 shadow-md"
+          >
+            <h2 class="text-surfie-green mb-4 text-2xl font-bold">
+              Kontaktinformationen
+            </h2>
+
+            <form class="space-y-6" @submit.prevent="submitContactDetails">
+              <div>
+                <label
+                  for="first_name"
+                  class="text-surfie-green block text-left font-medium"
+                  >Vorname *</label
+                >
+                <input
+                  type="text"
+                  id="first_name"
+                  required
+                  class="focus:ring-atlantis focus:border-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
+                  x-model="booking.contact_person.first_name"
+                  placeholder="Vorname"
+                />
+              </div>
+
+              <div>
+                <label
+                  for="last_name"
+                  class="text-surfie-green block text-left font-medium"
+                  >Nachname *</label
+                >
+                <input
+                  type="text"
+                  id="last_name"
+                  required
+                  class="focus:ring-atlantis focus:border-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
+                  x-model="booking.contact_person.last_name"
+                  placeholder="Nachname"
+                />
+              </div>
+
+              <div>
+                <label
+                  for="email"
+                  class="text-surfie-green block text-left font-medium"
+                  >E-Mail *</label
+                >
+                <input
+                  type="email"
+                  id="email"
+                  required
+                  class="focus:ring-atlantis focus:border-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
+                  x-model="booking.contact_person.email"
+                  placeholder="example@example.com"
+                />
+              </div>
+
+              <div>
+                <label
+                  for="phone_number"
+                  class="text-surfie-green block text-left font-medium"
+                  >Telefonnummer *</label
+                >
+                <input
+                  type="tel"
+                  id="phone_number"
+                  required
+                  class="focus:ring-atlantis focus:border-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
+                  x-model="booking.contact_person.phone_number"
+                  placeholder="0123 4567890"
+                />
+              </div>
+
+              <!-- Submit Button -->
+              <div class="mt-6">
+                <button
+                  type="submit"
+                  class="bg-atlantis hover:bg-surfie-green focus:ring-java w-full rounded px-4 py-2 font-bold text-white focus:outline-none focus:ring-2 focus:ring-opacity-50"
+                >
+                  Speichern & Weiter
+                </button>
+              </div>
+            </form>
+          </div>
+        </template>
       </div>
 
-      <!-- Step 1: Contact Details -->
-      <template x-if="step === 1">
-        <div class="mx-auto w-full max-w-3xl rounded-lg bg-white p-6 shadow-md">
+      <!-- View for email verification needed -->
+      <template x-if="view === 'email-verification-needed'">
+        <div
+          class="mx-auto mt-8 w-full max-w-3xl rounded-lg bg-white p-6 shadow-md"
+        >
           <h2 class="text-surfie-green mb-4 text-2xl font-bold">
-            Kontaktinformationen
+            E-Mail-Verifizierung
           </h2>
 
-          <form class="space-y-6" @submit.prevent="submitContactDetails">
-            <div>
-              <label
-                for="first_name"
-                class="text-surfie-green block text-left font-medium"
-                >Vorname *</label
-              >
-              <input
-                type="text"
-                id="first_name"
-                required
-                class="focus:ring-atlantis focus:border-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
-                x-model="booking.contact_person.first_name"
-                placeholder="Vorname"
-              />
-            </div>
+          <p class="text-gray-700">
+            Wir haben dir eine E-Mail an
+            <span
+              class="font-bold"
+              x-text="booking.contact_person.email"
+            ></span>
+            gesendet. Bitte klicke auf den Link in der E-Mail, um deine
+            E-Mail-Adresse zu bestätigen und fortzufahren.
+          </p>
 
-            <div>
-              <label
-                for="last_name"
-                class="text-surfie-green block text-left font-medium"
-                >Nachname *</label
-              >
-              <input
-                type="text"
-                id="last_name"
-                required
-                class="focus:ring-atlantis focus:border-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
-                x-model="booking.contact_person.last_name"
-                placeholder="Nachname"
-              />
-            </div>
+          <p class="mt-4 text-gray-700">
+            Falls du keine E-Mail erhalten hast, überprüfe bitte deinen Spam-
+            oder Junk-Ordner.
+          </p>
 
-            <div>
-              <label
-                for="email"
-                class="text-surfie-green block text-left font-medium"
-                >E-Mail *</label
-              >
-              <input
-                type="email"
-                id="email"
-                required
-                class="focus:ring-atlantis focus:border-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
-                x-model="booking.contact_person.email"
-                placeholder="example@example.com"
-              />
-            </div>
-
-            <div>
-              <label
-                for="phone_number"
-                class="text-surfie-green block text-left font-medium"
-                >Telefonnummer *</label
-              >
-              <input
-                type="tel"
-                id="phone_number"
-                required
-                class="focus:ring-atlantis focus:border-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
-                x-model="booking.contact_person.phone_number"
-                placeholder="0123 4567890"
-              />
-            </div>
-
-            <!-- Submit Button -->
-            <div class="mt-6">
-              <button
-                type="submit"
-                class="bg-atlantis hover:bg-surfie-green focus:ring-java w-full rounded px-4 py-2 font-bold text-white focus:outline-none focus:ring-2 focus:ring-opacity-50"
-              >
-                Speichern & Weiter
-              </button>
-            </div>
-          </form>
+          <div class="mt-6">
+            <button
+              type="button"
+              x-on:click="sendEmailVerification"
+              class="bg-atlantis hover:bg-surfie-green focus:ring-java w-full rounded px-4 py-2 font-bold text-white focus:outline-none focus:ring-2 focus:ring-opacity-50"
+            >
+              E-Mail erneut senden
+            </button>
+          </div>
         </div>
       </template>
-    </div>
 
       <!-- Placeholder to center content -->
       <div class="h-24"></div>
@@ -157,6 +197,7 @@
     <script>
       document.addEventListener("alpine:init", () => {
         Alpine.data("bookingForm", () => ({
+          view: "steps",
           step: 1,
           steps: [
             { name: "Kontakt", alreadyFilled: true },
@@ -190,7 +231,13 @@
               this.booking.contact_person,
             );
             this.bookingId = 1; // Simulate backend response
+            this.view = "email-verification-needed";
             this.step = 2;
+          },
+
+          // Send email verification again
+          sendEmailVerification() {
+            console.log("Sending email verification again...");
           },
         }));
       });
