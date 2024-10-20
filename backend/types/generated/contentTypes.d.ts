@@ -504,8 +504,7 @@ export interface ApiBookingBooking extends Struct.CollectionTypeSchema {
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 200;
       }>;
-    location: Schema.Attribute.Component<'shared.address', false> &
-      Schema.Attribute.Required;
+    location: Schema.Attribute.Component<'shared.address', false>;
     time_slots: Schema.Attribute.Relation<
       'manyToMany',
       'api::time-slot.time-slot'

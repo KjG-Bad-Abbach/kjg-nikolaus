@@ -33,7 +33,7 @@
       "type": "component",
       "repeatable": false,
       "component": "shared.address",
-      "required": true
+      "required": false
     },
     "time_slots": {
       "type": "relation",
