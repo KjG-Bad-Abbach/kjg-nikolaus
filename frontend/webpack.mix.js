@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const webpack = require("webpack");
 const mix = require("laravel-mix");
 require("mix-tailwindcss");
 
@@ -21,7 +22,16 @@ mix
   .postCss("src/css/app.css", "css")
   .tailwind()
   .setPublicPath("dist")
-  .version();
+  .version()
+  .webpackConfig({
+    plugins: [
+      new webpack.DefinePlugin({
+        "process.env": {
+          API_TOKEN: JSON.stringify(process.env.API_TOKEN),
+        },
+      }),
+    ],
+  });
 
 mix.browserSync({
   watch: true,
