@@ -149,6 +149,56 @@
                   Speichern & Weiter
                 </button>
               </div>
+
+              <!-- Error Message -->
+              <div
+                x-show="error"
+                role="alert"
+                class="rounded border-s-4 border-red-500 bg-red-50 p-4 text-left"
+              >
+                <div class="flex items-center gap-2 text-red-800">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    class="size-5"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+
+                  <strong class="block font-medium">
+                    <span x-text="error?.message"></span>
+                  </strong>
+                </div>
+
+                <div x-data="{ open: false }" class="mt-4">
+                  <a
+                    x-on:click="open = !open"
+                    x-bind:class="{ 'font-bold': open }"
+                    class="cursor-pointer text-red-700 underline"
+                    >Details</a
+                  >
+                  <div x-show="open" class="text-sm text-red-700">
+                    <p x-show="error?.status">
+                      <span class="font-bold">Status:</span>
+                      <span x-text="error?.status?.code"></span> (<span
+                        x-text="error?.status?.text"
+                      ></span
+                      >)
+                    </p>
+                    <p x-show="error?.body">
+                      <code
+                        class="block overflow-x-scroll whitespace-pre"
+                        x-text="JSON.stringify(error?.body, null, '  ')"
+                      ></code>
+                    </p>
+                  </div>
+                </div>
+              </div>
             </form>
           </div>
         </template>
@@ -197,6 +247,9 @@
     <script>
       document.addEventListener("alpine:init", () => {
         Alpine.data("bookingForm", () => ({
+          isLoading: false,
+          success: false,
+          error: null,
           view: "steps",
           step: 1,
           steps: [
@@ -225,14 +278,66 @@
           },
 
           // Step 1: Submit Contact Details
-          submitContactDetails() {
-            console.log(
-              "Submitting contact details:",
-              this.booking.contact_person,
-            );
-            this.bookingId = 1; // Simulate backend response
-            this.view = "email-verification-needed";
-            this.step = 2;
+          async submitContactDetails() {
+            this.isLoading = true;
+            this.success = false;
+            this.error = null;
+            try {
+              const response = await fetch(`${API_BASE_URL}/api/bookings`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${API_TOKEN}`,
+                },
+                body: JSON.stringify({
+                  data: {
+                    contact_person: this.booking.contact_person,
+                  },
+                }),
+              });
+
+              if (!response.ok) {
+                this.isLoading = false;
+                let body = await response.text();
+                try {
+                  body = JSON.parse(body);
+                } catch {}
+                this.error = {
+                  message:
+                    body?.error?.name === "ValidationError"
+                      ? "Bitte überprüfe deine Eingaben."
+                      : "Ein Fehler ist aufgetreten. Bitte versuche es erneut.",
+                  status: {
+                    code: response.status,
+                    text: response.statusText,
+                  },
+                  body: body,
+                };
+                return;
+              }
+
+              const body = await response.json();
+              this.bookingId = body.data.documentId;
+              this.isLoading = false;
+              this.success = true;
+              this.view = "email-verification-needed";
+              this.step = 2;
+            } catch (error) {
+              console.error("Error:", error);
+              this.isLoading = false;
+              this.error = {
+                message:
+                  "Ein Fehler ist aufgetreten. Bitte versuche es erneut.",
+                body: {
+                  message: error.toString(),
+                  fileName: error.fileName,
+                  lineNumber: error.lineNumber,
+                  columnNumber: error.columnNumber,
+                  cause: error.cause,
+                  stack: error.stack?.split("\n"),
+                },
+              };
+            }
           },
 
           // Send email verification again

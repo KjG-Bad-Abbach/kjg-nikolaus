@@ -28,6 +28,7 @@ mix
       new webpack.DefinePlugin({
         "process.env": {
           API_TOKEN: JSON.stringify(process.env.API_TOKEN),
+          API_BASE_URL: JSON.stringify(process.env.API_BASE_URL),
         },
       }),
     ],
