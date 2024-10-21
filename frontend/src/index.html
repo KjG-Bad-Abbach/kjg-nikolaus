@@ -34,14 +34,14 @@
               <!-- Loop through the steps -->
               <template x-for="(x, index) in steps" :key="index">
                 <li
-                  x-data="{ hoverable: canJumpToAnyStep || step === index + 1 }"
+                  x-data="{ hoverable: canJumpToAnyStep || step === index }"
                   x-on:click="clickStep(index)"
                   x-bind:class="hoverable ? 'hover:text-calypso-950 cursor-pointer' : 'cursor-not-allowed'"
                   class="bg-java group flex select-none items-center gap-2 p-2"
                 >
                   <span
                     class="size-6 rounded-full text-center text-[10px]/6 font-bold"
-                    x-bind:class="step === index + 1 ? ('bg-calypso' + (hoverable ? ' group-hover:bg-calypso-950' : '') + ' text-calypso-500') : 'bg-java-500'"
+                    x-bind:class="step === index ? ('bg-calypso' + (hoverable ? ' group-hover:bg-calypso-950' : '') + ' text-calypso-500') : 'bg-java-500'"
                   >
                     <span x-show="!x.alreadyFilled" x-text="index + 1"></span>
                     <span x-show="x.alreadyFilled">
@@ -66,8 +66,8 @@
           </div>
         </div>
 
-        <!-- Step 1: Contact Details -->
-        <template x-if="step === 1">
+        <!-- Step 0: Contact Details -->
+        <template x-if="step === 0">
           <div
             class="mx-auto w-full max-w-3xl rounded-lg bg-white p-6 shadow-md"
           >
@@ -328,7 +328,7 @@
           success: false,
           error: null,
           view: "steps",
-          step: 1,
+          step: 0,
           steps: [
             { name: "Kontakt", alreadyFilled: true },
             { name: "Adresse", alreadyFilled: true },
@@ -350,11 +350,11 @@
           // Click on step
           clickStep(index) {
             if (this.canJumpToAnyStep) {
-              this.step = index + 1;
+              this.step = index;
             }
           },
 
-          // Step 1: Submit Contact Details
+          // Step 0: Submit Contact Details
           async submitContactDetails() {
             this.isLoading = true;
             this.success = false;
@@ -374,7 +374,7 @@
               this.isLoading = false;
               this.success = true;
               this.view = "email-verification-needed";
-              this.step = 2;
+              this.step = 1;
             } catch (error) {
               this.isLoading = false;
               this.error = error;
