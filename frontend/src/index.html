@@ -245,6 +245,82 @@
     </div>
 
     <script>
+      async function sendRequest({ url, method = "GET", body = null }) {
+        let passthroughErrors = false;
+        try {
+          // Prepare URL (trim leading slash and trim api/ prefix)
+          url = url.replace(/^\/?(?:api\/)?/g, "");
+
+          // Prepare the fetch options
+          const options = {
+            method: method,
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${API_TOKEN}`,
+            },
+          };
+
+          // If body is provided, stringify it and attach to the options
+          if (body) {
+            options.body = JSON.stringify(body);
+          }
+
+          // Send the fetch request
+          const response = await fetch(`${API_BASE_URL}/api/${url}`, options);
+
+          // Handle non-OK responses (status codes outside of 200-299)
+          if (!response.ok) {
+            let responseBody = await response.text();
+            try {
+              responseBody = JSON.parse(responseBody);
+            } catch {}
+
+            // Construct the error object
+            const errorObj = {
+              message:
+                responseBody?.error?.name === "ValidationError"
+                  ? "Bitte überprüfe deine Eingaben."
+                  : "Ein Fehler ist aufgetreten. Bitte versuche es erneut.",
+              status: {
+                code: response.status,
+                text: response.statusText,
+              },
+              body: responseBody,
+            };
+
+            passthroughErrors = true;
+            throw errorObj; // Throw error for further handling
+          }
+
+          // Parse and return the JSON response body
+          return await response.json();
+        } catch (error) {
+          if (passthroughErrors) {
+            throw error; // Re-throw the error if it's a passthrough error
+          }
+
+          // Log the error and throw it so it can be handled by the caller
+          console.error("Request failed:", error);
+
+          // Construct a more detailed error object if it's a network error
+          const errorDetails = {
+            message:
+              error.message ||
+              "Ein Fehler ist aufgetreten. Bitte versuche es erneut.",
+            body: {
+              message: error.toString(),
+              fileName: error.fileName,
+              lineNumber: error.lineNumber,
+              columnNumber: error.columnNumber,
+              cause: error.cause,
+              stack: error.stack?.split("\n"),
+            },
+          };
+
+          throw errorDetails; // Re-throw the error so the caller can handle it
+        }
+      }
+
       document.addEventListener("alpine:init", () => {
         Alpine.data("bookingForm", () => ({
           isLoading: false,
@@ -283,60 +359,24 @@
             this.success = false;
             this.error = null;
             try {
-              const response = await fetch(`${API_BASE_URL}/api/bookings`, {
+              const response = await sendRequest({
+                url: "/api/bookings",
                 method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${API_TOKEN}`,
-                },
-                body: JSON.stringify({
+                body: {
                   data: {
                     contact_person: this.booking.contact_person,
                   },
-                }),
+                },
               });
 
-              if (!response.ok) {
-                this.isLoading = false;
-                let body = await response.text();
-                try {
-                  body = JSON.parse(body);
-                } catch {}
-                this.error = {
-                  message:
-                    body?.error?.name === "ValidationError"
-                      ? "Bitte überprüfe deine Eingaben."
-                      : "Ein Fehler ist aufgetreten. Bitte versuche es erneut.",
-                  status: {
-                    code: response.status,
-                    text: response.statusText,
-                  },
-                  body: body,
-                };
-                return;
-              }
-
-              const body = await response.json();
-              this.bookingId = body.data.documentId;
+              this.bookingId = response.data.documentId;
               this.isLoading = false;
               this.success = true;
               this.view = "email-verification-needed";
               this.step = 2;
             } catch (error) {
-              console.error("Error:", error);
               this.isLoading = false;
-              this.error = {
-                message:
-                  "Ein Fehler ist aufgetreten. Bitte versuche es erneut.",
-                body: {
-                  message: error.toString(),
-                  fileName: error.fileName,
-                  lineNumber: error.lineNumber,
-                  columnNumber: error.columnNumber,
-                  cause: error.cause,
-                  stack: error.stack?.split("\n"),
-                },
-              };
+              this.error = error;
             }
           },
 
