@@ -41,7 +41,7 @@
                 >
                   <span
                     class="size-6 rounded-full text-center text-[10px]/6 font-bold"
-                    x-bind:class="step === index ? ('bg-calypso' + (hoverable ? ' group-hover:bg-calypso-950' : '') + ' text-calypso-500') : 'bg-java-500'"
+                    x-bind:class="x.alreadyFilled || step === index ? ('bg-calypso' + (hoverable ? ' group-hover:bg-calypso-950' : '') + ' text-calypso-500') : 'bg-java-500'"
                   >
                     <span x-show="!x.alreadyFilled" x-text="index + 1"></span>
                     <span x-show="x.alreadyFilled">
@@ -149,56 +149,6 @@
                   Speichern & Weiter
                 </button>
               </div>
-
-              <!-- Error Message -->
-              <div
-                x-show="error"
-                role="alert"
-                class="rounded border-s-4 border-red-500 bg-red-50 p-4 text-left"
-              >
-                <div class="flex items-center gap-2 text-red-800">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    class="size-5"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z"
-                      clip-rule="evenodd"
-                    />
-                  </svg>
-
-                  <strong class="block font-medium">
-                    <span x-text="error?.message"></span>
-                  </strong>
-                </div>
-
-                <div x-data="{ open: false }" class="mt-4">
-                  <a
-                    x-on:click="open = !open"
-                    x-bind:class="{ 'font-bold': open }"
-                    class="cursor-pointer text-red-700 underline"
-                    >Details</a
-                  >
-                  <div x-show="open" class="text-sm text-red-700">
-                    <p x-show="error?.status">
-                      <span class="font-bold">Status:</span>
-                      <span x-text="error?.status?.code"></span> (<span
-                        x-text="error?.status?.text"
-                      ></span
-                      >)
-                    </p>
-                    <p x-show="error?.body">
-                      <code
-                        class="block overflow-x-scroll whitespace-pre"
-                        x-text="JSON.stringify(error?.body, null, '  ')"
-                      ></code>
-                    </p>
-                  </div>
-                </div>
-              </div>
             </form>
           </div>
         </template>
@@ -243,6 +193,78 @@
 
       <!-- Placeholder to center content -->
       <div class="h-24"></div>
+
+      <!-- Backdrop and Modal for error messages -->
+      <div
+        x-show="error"
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+        @click.self="error = null"
+      >
+        <!-- Modal content -->
+        <div
+          class="w-full max-w-lg rounded-lg border-s-4 border-red-500 bg-red-50 p-8 text-left shadow-2xl"
+          role="alert"
+        >
+          <div class="flex items-center gap-2 text-red-800">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              class="size-5"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z"
+                clip-rule="evenodd"
+              />
+            </svg>
+
+            <strong class="block font-medium">
+              <span x-text="error?.message"></span>
+            </strong>
+          </div>
+
+          <div x-data="{ open: false }" class="mt-4">
+            <a
+              x-on:click="open = !open"
+              x-bind:class="{ 'font-bold': open }"
+              class="cursor-pointer text-red-700 underline"
+              >Details</a
+            >
+            <div x-show="open" class="text-sm text-red-700">
+              <p x-show="error?.status">
+                <span class="font-bold">Status:</span>
+                <span x-text="error?.status?.code"></span> (<span
+                  x-text="error?.status?.text"
+                ></span
+                >)
+              </p>
+              <p x-show="error?.body">
+                <code
+                  class="block overflow-x-scroll whitespace-pre"
+                  x-text="JSON.stringify(error?.body, null, '  ')"
+                ></code>
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-4 flex justify-end gap-2">
+            <button
+              @click="error = null"
+              type="button"
+              class="rounded bg-gray-100 border-2 border-gray-400 px-4 py-2 text-sm font-medium text-gray-600"
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <script>
@@ -322,6 +344,19 @@
         }
       }
 
+      function updateExistingObjectKeys(obj, newObj) {
+        Object.keys(obj).forEach((key) => {
+          if (newObj[key]) {
+            // if property is object, call the function recursively
+            if (typeof obj[key] === "object" && obj[key] !== null) {
+              updateExistingObjectKeys(obj[key], newObj[key]);
+            } else {
+              obj[key] = newObj[key];
+            }
+          }
+        });
+      }
+
       document.addEventListener("alpine:init", () => {
         Alpine.data("bookingForm", () => ({
           isLoading: false,
@@ -330,14 +365,15 @@
           view: "steps",
           step: 0,
           steps: [
-            { name: "Kontakt", alreadyFilled: true },
-            { name: "Adresse", alreadyFilled: true },
+            { name: "Kontakt", alreadyFilled: false },
+            { name: "Adresse", alreadyFilled: false },
             { name: "Zeitslot", alreadyFilled: false },
-            { name: "Kinder", alreadyFilled: true },
+            { name: "Kinder", alreadyFilled: false },
             { name: "Kontrolle", alreadyFilled: false },
           ],
           canJumpToAnyStep: false,
           bookingId: null,
+          maxTimeslots: 3,
           booking: {
             contact_person: {
               first_name: "",
@@ -345,6 +381,90 @@
               email: "",
               phone_number: "",
             },
+            location: {
+              street: "",
+              house_number: "",
+              zip_code: "",
+              place: "",
+            },
+            present_location: "",
+            children: [],
+            time_slots: [],
+          },
+
+          async init() {
+            // Get the query parameters from the URL
+            const params = new URLSearchParams(window.location.search);
+
+            // Read the "id" parameter from the URL and store it in the bookingId variable
+            this.bookingId = params.get("id") || null;
+
+            if (this.bookingId) {
+              this.isLoading = true;
+              this.success = false;
+              this.error = null;
+              try {
+                // Fetch the booking data from the API
+                const response = await sendRequest({
+                  url: `/api/bookings/${this.bookingId}?populate=*`,
+                });
+
+                // Update the booking object with the fetched data
+                updateExistingObjectKeys(this.booking, response.data);
+                this.updateSteps(response.data);
+
+                this.isLoading = false;
+                this.success = true;
+              } catch (error) {
+                this.isLoading = false;
+                this.error = error;
+              }
+            }
+          },
+
+          // Update steps based on the fetched data
+          updateSteps(data) {
+            // Step 0: Contact Details
+            this.steps[0].alreadyFilled =
+              data.contact_person &&
+              data.contact_person.first_name &&
+              data.contact_person.last_name &&
+              data.contact_person.email &&
+              data.contact_person.phone_number;
+            if (this.steps[0].alreadyFilled) {
+              this.step = 1;
+            }
+
+            // Step 1: Address
+            this.steps[1].alreadyFilled =
+              data.location &&
+              data.location.street &&
+              data.location.house_number &&
+              data.location.zip_code &&
+              data.location.place &&
+              data.present_location;
+            if (this.steps[1].alreadyFilled) {
+              this.step = 2;
+            }
+
+            // Step 2: Timeslot
+            this.steps[2].alreadyFilled =
+              data.time_slots && data.time_slots.length >= this.maxTimeslots;
+            if (this.steps[2].alreadyFilled) {
+              this.step = 3;
+            }
+
+            // Step 3: Children
+            this.steps[3].alreadyFilled =
+              data.children &&
+              data.children.length &&
+              data.children.every((child) => child.name && child.speech);
+            if (this.steps[3].alreadyFilled) {
+              this.step = 4;
+            }
+
+            // Step 4: Review
+            this.steps[4].alreadyFilled = false; // ToDo
           },
 
           // Click on step
