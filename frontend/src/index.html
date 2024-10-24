@@ -34,14 +34,13 @@
               <!-- Loop through the steps -->
               <template x-for="(x, index) in steps" :key="index">
                 <li
-                  x-data="{ hoverable: canJumpToAnyStep || step === index }"
                   x-on:click="clickStep(index)"
-                  x-bind:class="hoverable ? 'hover:text-calypso-950 cursor-pointer' : 'cursor-not-allowed'"
+                  x-bind:class="canJumpToAnyStep || step === index ? 'hover:text-calypso-950 cursor-pointer' : 'cursor-not-allowed'"
                   class="group flex select-none items-center gap-2 bg-java p-2"
                 >
                   <span
                     class="size-6 rounded-full text-center text-[10px]/6 font-bold"
-                    x-bind:class="x.alreadyFilled || step === index ? ('bg-calypso' + (hoverable ? ' group-hover:bg-calypso-950' : '') + ' text-calypso-500') : 'bg-java-500'"
+                    x-bind:class="x.alreadyFilled || step === index ? ('bg-calypso' + (canJumpToAnyStep || step === index ? ' group-hover:bg-calypso-950' : '') + ' text-calypso-500') : 'bg-java-500'"
                   >
                     <span x-show="!x.alreadyFilled" x-text="index + 1"></span>
                     <span x-show="x.alreadyFilled">
