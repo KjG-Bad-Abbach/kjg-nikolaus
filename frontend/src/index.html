@@ -431,6 +431,15 @@
 
           <div class="mt-4 flex justify-end gap-2">
             <button
+              x-show="askToReload"
+              @click="reload()"
+              type="button"
+              class="rounded border-2 border-gray-400 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600"
+            >
+              Erneut versuchen
+            </button>
+            <button
+              x-show="!askToReload"
               @click="error = null"
               type="button"
               class="rounded border-2 border-gray-400 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600"
@@ -537,6 +546,7 @@
           isLoading: false,
           success: false,
           error: null,
+          askToReload: false,
           view: "steps",
           step: 0,
           steps: [
@@ -593,8 +603,13 @@
               } catch (error) {
                 this.isLoading = false;
                 this.error = error;
+                this.askToReload = true;
               }
             }
+          },
+
+          async reload() {
+            await this.init();
           },
 
           // Update steps based on the fetched data
