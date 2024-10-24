@@ -8,15 +8,15 @@
     <script defer src="{{ mix('/js/app.js') }}"></script>
   </head>
   <body
-    class="bg-java my-4 flex min-h-screen flex-col items-center justify-center"
+    class="my-4 flex min-h-screen flex-col items-center justify-center bg-java"
   >
     <!-- Main Container -->
     <div class="mx-auto w-full max-w-3xl text-center" x-data="bookingForm">
-      <h1 class="text-calypso mx-2 mb-4 text-4xl font-bold">
+      <h1 class="mx-2 mb-4 text-4xl font-bold text-calypso">
         KjG Nikolaus Buchung
       </h1>
 
-      <p class="text-calypso mx-2 text-lg">
+      <p class="mx-2 text-lg text-calypso">
         Buche deinen persönlichen Nikolausbesuch mit der KjG Bad Abbach!
       </p>
 
@@ -26,10 +26,10 @@
           <h2 class="sr-only">Schritte</h2>
 
           <div
-            class="after:bg-java-500 relative after:absolute after:inset-x-0 after:top-1/2 after:block after:h-0.5 after:-translate-y-1/2 after:rounded-lg"
+            class="relative after:absolute after:inset-x-0 after:top-1/2 after:block after:h-0.5 after:-translate-y-1/2 after:rounded-lg after:bg-java-500"
           >
             <ol
-              class="text-calypso relative z-10 flex justify-between text-sm font-medium"
+              class="relative z-10 flex justify-between text-sm font-medium text-calypso"
             >
               <!-- Loop through the steps -->
               <template x-for="(x, index) in steps" :key="index">
@@ -37,7 +37,7 @@
                   x-data="{ hoverable: canJumpToAnyStep || step === index }"
                   x-on:click="clickStep(index)"
                   x-bind:class="hoverable ? 'hover:text-calypso-950 cursor-pointer' : 'cursor-not-allowed'"
-                  class="bg-java group flex select-none items-center gap-2 p-2"
+                  class="group flex select-none items-center gap-2 bg-java p-2"
                 >
                   <span
                     class="size-6 rounded-full text-center text-[10px]/6 font-bold"
@@ -71,7 +71,7 @@
           <div
             class="mx-auto w-full max-w-3xl rounded-lg bg-white p-6 shadow-md"
           >
-            <h2 class="text-surfie-green mb-4 text-2xl font-bold">
+            <h2 class="mb-4 text-2xl font-bold text-surfie-green">
               Kontaktinformationen
             </h2>
 
@@ -79,14 +79,14 @@
               <div>
                 <label
                   for="first_name"
-                  class="text-surfie-green block text-left font-medium"
+                  class="block text-left font-medium text-surfie-green"
                   >Vorname *</label
                 >
                 <input
                   type="text"
                   id="first_name"
                   required
-                  class="focus:ring-atlantis focus:border-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
+                  class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
                   x-model="booking.contact_person.first_name"
                   placeholder="Vorname"
                 />
@@ -95,14 +95,14 @@
               <div>
                 <label
                   for="last_name"
-                  class="text-surfie-green block text-left font-medium"
+                  class="block text-left font-medium text-surfie-green"
                   >Nachname *</label
                 >
                 <input
                   type="text"
                   id="last_name"
                   required
-                  class="focus:ring-atlantis focus:border-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
+                  class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
                   x-model="booking.contact_person.last_name"
                   placeholder="Nachname"
                 />
@@ -111,14 +111,14 @@
               <div>
                 <label
                   for="email"
-                  class="text-surfie-green block text-left font-medium"
+                  class="block text-left font-medium text-surfie-green"
                   >E-Mail *</label
                 >
                 <input
                   type="email"
                   id="email"
                   required
-                  class="focus:ring-atlantis focus:border-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
+                  class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
                   x-model="booking.contact_person.email"
                   placeholder="example@example.com"
                 />
@@ -127,14 +127,14 @@
               <div>
                 <label
                   for="phone_number"
-                  class="text-surfie-green block text-left font-medium"
+                  class="block text-left font-medium text-surfie-green"
                   >Telefonnummer *</label
                 >
                 <input
                   type="tel"
                   id="phone_number"
                   required
-                  class="focus:ring-atlantis focus:border-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
+                  class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
                   x-model="booking.contact_person.phone_number"
                   placeholder="0123 4567890"
                 />
@@ -144,7 +144,7 @@
               <div class="mt-6">
                 <button
                   type="submit"
-                  class="bg-atlantis hover:bg-surfie-green focus:ring-java w-full rounded px-4 py-2 font-bold text-white focus:outline-none focus:ring-2 focus:ring-opacity-50"
+                  class="w-full rounded bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:outline-none focus:ring-2 focus:ring-java focus:ring-opacity-50"
                 >
                   Speichern & Weiter
                 </button>
@@ -159,7 +159,7 @@
         <div
           class="mx-auto mt-8 w-full max-w-3xl rounded-lg bg-white p-6 shadow-md"
         >
-          <h2 class="text-surfie-green mb-4 text-2xl font-bold">
+          <h2 class="mb-4 text-2xl font-bold text-surfie-green">
             E-Mail-Verifizierung
           </h2>
 
@@ -183,7 +183,7 @@
             <button
               type="button"
               x-on:click="sendEmailVerification"
-              class="bg-atlantis hover:bg-surfie-green focus:ring-java w-full rounded px-4 py-2 font-bold text-white focus:outline-none focus:ring-2 focus:ring-opacity-50"
+              class="w-full rounded bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:outline-none focus:ring-2 focus:ring-java focus:ring-opacity-50"
             >
               E-Mail erneut senden
             </button>
@@ -258,7 +258,7 @@
             <button
               @click="error = null"
               type="button"
-              class="rounded bg-gray-100 border-2 border-gray-400 px-4 py-2 text-sm font-medium text-gray-600"
+              class="rounded border-2 border-gray-400 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600"
             >
               OK
             </button>
