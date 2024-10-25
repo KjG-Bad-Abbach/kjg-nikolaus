@@ -1005,7 +1005,7 @@
               data.contact_person.last_name ||
               data.contact_person.email ||
               data.contact_person.phone_number;
-            if (this.steps[0].allFilled) {
+            if (this.steps[0].allFilled && this.step === 0) {
               await this.setStep(1);
             }
 
@@ -1024,7 +1024,7 @@
               data.location.zip_code ||
               data.location.place ||
               data.present_location;
-            if (this.steps[1].allFilled) {
+            if (this.steps[1].allFilled && this.step === 1) {
               await this.setStep(2);
             }
 
@@ -1035,7 +1035,7 @@
             this.steps[2].anyFilled =
               data.time_slots ||
               data.time_slots.length >= this.options.maxTimeSlots;
-            if (this.steps[2].allFilled) {
+            if (this.steps[2].allFilled && this.step === 2) {
               await this.setStep(3);
             }
 
@@ -1048,7 +1048,7 @@
               data.children ||
               data.children.length ||
               data.children.every((child) => child.name && child.speech);
-            if (this.steps[3].allFilled) {
+            if (this.steps[3].allFilled && this.step === 3) {
               await this.setStep(4);
             }
 
