@@ -11,8 +11,8 @@
       "required": true,
       "maxLength": 50
     },
-    "text": {
-      "type": "blocks"
+    "speech": {
+      "type": "text"
     }
   }
 }

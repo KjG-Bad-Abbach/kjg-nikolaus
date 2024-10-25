@@ -74,7 +74,7 @@ export interface BookingChild extends Struct.ComponentSchema {
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 50;
       }>;
-    text: Schema.Attribute.Blocks;
+    speech: Schema.Attribute.Text;
   };
 }
 
