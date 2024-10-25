@@ -114,6 +114,7 @@
                   required
                   class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
                   x-model="booking.contact_person.first_name"
+                  maxlength="50"
                   placeholder="Vorname"
                 />
               </div>
@@ -130,6 +131,7 @@
                   required
                   class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
                   x-model="booking.contact_person.last_name"
+                  maxlength="50"
                   placeholder="Nachname"
                 />
               </div>
@@ -146,6 +148,7 @@
                   required
                   class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
                   x-model="booking.contact_person.email"
+                  maxlength="100"
                   placeholder="example@example.com"
                 />
               </div>
@@ -162,6 +165,7 @@
                   required
                   class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
                   x-model="booking.contact_person.phone_number"
+                  maxlength="50"
                   placeholder="0123 4567890"
                 />
               </div>
@@ -239,6 +243,7 @@
                   required
                   class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
                   x-model="booking.location.street"
+                  maxlength="100"
                   placeholder="Straße"
                 />
               </div>
@@ -254,6 +259,7 @@
                   required
                   class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
                   x-model="booking.location.house_number"
+                  maxlength="10"
                   placeholder="Hausnummer"
                 />
               </div>
@@ -264,12 +270,15 @@
                   >PLZ *</label
                 >
                 <input
-                  type="text"
+                  type="number"
                   id="zip_code"
                   required
                   class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
                   x-model="booking.location.zip_code"
+                  max="99999"
+                  min="10000"
                   placeholder="PLZ"
+                  oninput="if(this.value.length > 5) this.value = this.value.slice(0,5)"
                 />
               </div>
               <div>
@@ -284,6 +293,7 @@
                   required
                   class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
                   x-model="booking.location.place"
+                  maxlength="100"
                   placeholder="Ort"
                 />
               </div>
@@ -298,6 +308,7 @@
                   id="present_location"
                   class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
                   x-model="booking.present_location"
+                  maxlength="200"
                   placeholder="Ort für Geschenke"
                 />
               </div>
