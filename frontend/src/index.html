@@ -399,10 +399,10 @@
                     >
                       <label
                         :class="{
-                          'border-gray-200': !slot.selected,
-                          'border-atlantis': slot.selected,
-                          'border-2': slot.selected,
-                          'm-0.5': !slot.selected,
+                          'border-gray-200': !slot.isSelected,
+                          'border-atlantis': slot.isSelected,
+                          'border-2': slot.isSelected,
+                          'm-0.5': !slot.isSelected,
                         }"
                         class="flex items-center rounded-lg border p-3 shadow-sm"
                       >
@@ -411,7 +411,7 @@
                           class="form-checkbox peer h-5 w-5 text-calypso"
                           :value="slot.id"
                           @change="updateTimeSlot(slot.id)"
-                          x-model="slot.selected"
+                          x-model="slot.isSelected"
                           :disabled="(selectedTimeSlotIds.length >= options.maxTimeSlots && !selectedTimeSlotIds.includes(slot.id)) || (slot.available_slots <= 0)"
                         />
                         <span
@@ -1021,7 +1021,7 @@
                 end: new Date(slot.end),
                 max_bookings: slot.max_bookings,
                 available_slots: slot.available_slots,
-                selected: false,
+                isSelected: false,
               }));
 
               // Sort available time slots by start time
@@ -1047,8 +1047,8 @@
                 )
                 .map((slot) => slot.id);
               this.availableTimeSlots.forEach((slot) => {
-                slot.selected = this.selectedTimeSlotIds.includes(slot.id);
-                slot.available_slots += slot.selected ? 1 : 0;
+                slot.isSelected = this.selectedTimeSlotIds.includes(slot.id);
+                slot.available_slots += slot.isSelected ? 1 : 0;
               });
 
               this.isLoading = false;
@@ -1087,9 +1087,12 @@
           updateTimeSlot(slotId, isSelected = null) {
             const slot = this.availableTimeSlots.find((s) => s.id === slotId);
             if (isSelected !== null) {
-              slot.selected = isSelected;
+              slot.isSelected = isSelected;
             }
-            if (slot.selected && !this.selectedTimeSlotIds.includes(slot.id)) {
+            if (
+              slot.isSelected &&
+              !this.selectedTimeSlotIds.includes(slot.id)
+            ) {
               this.selectedTimeSlotIds.push(slot.id);
               this.selectedTimeSlotIds.sort((a, b) => {
                 const slotA = this.availableTimeSlots.find((s) => s.id === a);
@@ -1097,7 +1100,7 @@
                 return new Date(slotA.start) - new Date(slotB.start);
               });
             } else if (
-              !slot.selected &&
+              !slot.isSelected &&
               this.selectedTimeSlotIds.includes(slot.id)
             ) {
               this.selectedTimeSlotIds = this.selectedTimeSlotIds.filter(
