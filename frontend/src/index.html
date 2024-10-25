@@ -574,7 +574,6 @@
       document.addEventListener("alpine:init", () => {
         Alpine.data("bookingForm", () => ({
           isLoading: false,
-          success: false,
           error: null,
           askToReload: false,
           view: "steps",
@@ -616,7 +615,6 @@
 
             if (this.bookingId) {
               this.isLoading = true;
-              this.success = false;
               this.error = null;
               try {
                 // Fetch the booking data from the API
@@ -629,7 +627,6 @@
                 this.updateSteps(response.data);
 
                 this.isLoading = false;
-                this.success = true;
               } catch (error) {
                 this.isLoading = false;
                 this.error = error;
@@ -720,7 +717,6 @@
           // Step 0: Submit Contact Details
           async submitContactDetails() {
             this.isLoading = true;
-            this.success = false;
             this.error = null;
             const hadBookingId = !!this.bookingId;
             try {
@@ -738,7 +734,6 @@
 
               this.bookingId = response.data.documentId;
               this.isLoading = false;
-              this.success = true;
               if (hadBookingId) {
                 this.view = "steps";
                 await this.init();
@@ -760,7 +755,6 @@
           // Step 1: Submit Address
           async submitAddress() {
             this.isLoading = true;
-            this.success = false;
             this.error = null;
             try {
               const response = await sendRequest({
@@ -777,7 +771,6 @@
               this.fetchTimeslots(); // Fetch available timeslots
               await this.init();
               this.isLoading = false;
-              this.success = true;
               this.step = 2;
             } catch (error) {
               this.isLoading = false;
