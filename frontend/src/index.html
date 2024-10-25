@@ -888,7 +888,7 @@
             if (Array.isArray(obj[key]) && Array.isArray(newObj[key])) {
               obj[key] = newObj[key];
             } else if (typeof obj[key] === "object" && obj[key] !== null) {
-            // if property is object, call the function recursively
+              // if property is object, call the function recursively
               updateExistingObjectKeys(obj[key], newObj[key]);
             } else {
               obj[key] = newObj[key];
@@ -1081,7 +1081,7 @@
                 this.view = "steps";
                 await this.init();
               } else {
-              this.view = "email-verification-needed";
+                this.view = "email-verification-needed";
               }
               await this.setStep(1);
             } catch (error) {
