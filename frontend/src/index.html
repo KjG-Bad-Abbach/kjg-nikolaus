@@ -45,6 +45,7 @@
 
       <!-- View for steps -->
       <div x-show="view === 'steps'" x-cloak>
+        <!-- Show Steps -->
         <div class="mx-2 mb-4 mt-8">
           <h2 class="sr-only">Schritte</h2>
 
@@ -184,7 +185,10 @@
         </template>
 
         <!-- Show contact details -->
-        <template x-if="step !== 0 && steps[0].anyFilled" x-cloak>
+        <template
+          x-if="(step !== 0 && steps[0].anyFilled) || step === 4"
+          x-cloak
+        >
           <div class="mb-4 pb-4 text-left">
             <h3 class="flex items-center text-lg font-medium text-calypso">
               <span>Kontaktinformationen</span>
@@ -206,17 +210,37 @@
               </span>
             </h3>
             <p class="text-gray-700">
-              Vorname: <span x-text="booking.contact_person.first_name"></span>
+              Vorname: <span x-text="booking.contact_person.first_name"></span
+              ><span
+                x-show="!(booking.contact_person.first_name || '').length"
+                class="italic text-rust"
+                >(Angabe fehlt)</span
+              >
             </p>
             <p class="text-gray-700">
-              Nachname: <span x-text="booking.contact_person.last_name"></span>
+              Nachname: <span x-text="booking.contact_person.last_name"></span
+              ><span
+                x-show="!(booking.contact_person.last_name || '').length"
+                class="italic text-rust"
+                >(Angabe fehlt)</span
+              >
             </p>
             <p class="text-gray-700">
-              E-Mail: <span x-text="booking.contact_person.email"></span>
+              E-Mail: <span x-text="booking.contact_person.email"></span
+              ><span
+                x-show="!(booking.contact_person.email || '').length"
+                class="italic text-rust"
+                >(Angabe fehlt)</span
+              >
             </p>
             <p class="text-gray-700">
               Telefonnummer:
-              <span x-text="booking.contact_person.phone_number"></span>
+              <span x-text="booking.contact_person.phone_number"></span
+              ><span
+                x-show="!(booking.contact_person.phone_number || '').length"
+                class="italic text-rust"
+                >(Angabe fehlt)</span
+              >
             </p>
           </div>
         </template>
@@ -330,7 +354,10 @@
         </template>
 
         <!-- Show address -->
-        <template x-if="step !== 1 && steps[1].anyFilled" x-cloak>
+        <template
+          x-if="(step !== 1 && steps[1].anyFilled) || step === 4"
+          x-cloak
+        >
           <div class="mb-4 pb-4 text-left">
             <h3 class="flex items-center text-lg font-medium text-calypso">
               <span>Adresse und Ort für Geschenke</span>
@@ -352,19 +379,44 @@
               </span>
             </h3>
             <p class="text-gray-700">
-              Straße: <span x-text="booking.location.street"></span>
+              Straße: <span x-text="booking.location.street"></span
+              ><span
+                x-show="!(booking.location.street || '').length"
+                class="italic text-rust"
+                >(Angabe fehlt)</span
+              >
             </p>
             <p class="text-gray-700">
-              Hausnummer: <span x-text="booking.location.house_number"></span>
+              Hausnummer: <span x-text="booking.location.house_number"></span
+              ><span
+                x-show="!(booking.location.house_number || '').length"
+                class="italic text-rust"
+                >(Angabe fehlt)</span
+              >
             </p>
             <p class="text-gray-700">
-              PLZ: <span x-text="booking.location.zip_code"></span>
+              PLZ: <span x-text="booking.location.zip_code"></span
+              ><span
+                x-show="!(booking.location.zip_code || '').length"
+                class="italic text-rust"
+                >(Angabe fehlt)</span
+              >
             </p>
             <p class="text-gray-700">
-              Ort: <span x-text="booking.location.place"></span>
+              Ort: <span x-text="booking.location.place"></span
+              ><span
+                x-show="!(booking.location.place || '').length"
+                class="italic text-rust"
+                >(Angabe fehlt)</span
+              >
             </p>
             <p class="text-gray-700">
-              Ort für Geschenke: <span x-text="booking.present_location"></span>
+              Ort für Geschenke: <span x-text="booking.present_location"></span
+              ><span
+                x-show="!(booking.present_location || '').length"
+                class="italic text-rust"
+                >(Angabe fehlt)</span
+              >
             </p>
           </div>
         </template>
@@ -506,7 +558,10 @@
         </template>
 
         <!-- Show time-slot selection -->
-        <template x-if="step !== 2 && steps[2].anyFilled" x-cloak>
+        <template
+          x-if="(step !== 2 && steps[2].anyFilled) || step === 4"
+          x-cloak
+        >
           <div class="mb-4 pb-4 text-left">
             <h3 class="flex items-center text-lg font-medium text-calypso">
               <span>Ausgewählte Zeitslots</span>
@@ -534,6 +589,12 @@
                   x-text="availableTimeSlots.find(s => s.id === slotId).label"
                 ></li>
               </template>
+              <li
+                x-show="selectedTimeSlotIds.length === 0"
+                class="italic text-rust"
+              >
+                (Angabe fehlt)
+              </li>
             </ul>
           </div>
         </template>
@@ -640,7 +701,10 @@
         </template>
 
         <!-- Show children details -->
-        <template x-if="step !== 3 && steps[3].anyFilled" x-cloak>
+        <template
+          x-if="(step !== 3 && steps[3].anyFilled) || step === 4"
+          x-cloak
+        >
           <div class="mb-4 pb-4 text-left">
             <h3 class="flex items-center text-lg font-medium text-calypso">
               <span>Kinder</span>
@@ -671,10 +735,21 @@
                     Name: <span x-text="child.name"></span>
                   </p>
                   <p class="inline-block max-w-xs truncate text-gray-700">
-                    Rede: <span x-text="child.speech"></span>
+                    Rede: <span x-text="child.speech"></span
+                    ><span
+                      x-show="!(child.speech || '').length"
+                      class="italic text-rust"
+                      >(Angabe fehlt)</span
+                    >
                   </p>
                 </li>
               </template>
+              <li
+                x-show="booking.children.length === 0"
+                class="italic text-rust"
+              >
+                (Angabe fehlt)
+              </li>
             </ul>
           </div>
         </template>
@@ -1032,9 +1107,7 @@
             this.steps[2].allFilled =
               data.time_slots &&
               data.time_slots.length >= this.options.maxTimeSlots;
-            this.steps[2].anyFilled =
-              data.time_slots ||
-              data.time_slots.length >= this.options.maxTimeSlots;
+            this.steps[2].anyFilled = data.time_slots?.length;
             if (this.steps[2].allFilled && this.step === 2) {
               await this.setStep(3);
             }
@@ -1044,10 +1117,7 @@
               data.children &&
               data.children.length &&
               data.children.every((child) => child.name && child.speech);
-            this.steps[3].anyFilled =
-              data.children ||
-              data.children.length ||
-              data.children.every((child) => child.name && child.speech);
+            this.steps[3].anyFilled = data.children?.length;
             if (this.steps[3].allFilled && this.step === 3) {
               await this.setStep(4);
             }
