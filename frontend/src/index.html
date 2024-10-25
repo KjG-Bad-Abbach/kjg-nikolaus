@@ -303,13 +303,16 @@
                   class="block text-left font-medium text-surfie-green"
                   >Ort für Geschenke</label
                 >
+                <p class="text-left italic text-gray-600">
+                  Hinweis: Diese Information kann auch später ergänzt werden.
+                </p>
                 <input
                   type="text"
                   id="present_location"
                   class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
                   x-model="booking.present_location"
                   maxlength="200"
-                  placeholder="Ort für Geschenke"
+                  placeholder="Wo können wir die Geschenke finden?"
                 />
               </div>
 
@@ -443,7 +446,9 @@
             </div>
 
             <div x-show="selectedTimeSlotIds.length > 0" class="mt-6" x-cloak>
-              <h4 class="mb-2 font-medium">Ausgewählte Zeitslots:</h4>
+              <h4 class="mb-2 text-lg font-medium text-surfie-green">
+                Ausgewählte Zeitslots:
+              </h4>
               <ul class="space-y-2">
                 <template x-for="slotId in selectedTimeSlotIds" :key="slotId">
                   <li
@@ -483,7 +488,7 @@
               >
                 Bitte wähle mindestens
                 <span x-text="options.maxTimeSlots"></span> Zeitslots. Damit wir
-                eine bestmögliche Fahrroute für unsere Nikol&auml;use erstellen
+                eine bestmögliche Fahrroute für unsere Nikoläuse erstellen
                 können.
               </p>
 
