@@ -354,6 +354,173 @@
             </p>
           </div>
         </template>
+
+        <!-- Step 2: Time-Slot Selection -->
+        <template x-if="step === 2" x-cloak>
+          <div
+            class="mx-auto w-full max-w-3xl rounded-lg bg-white p-6 shadow-md"
+          >
+            <h2 class="mb-4 text-2xl font-bold text-surfie-green">
+              Wähle <span x-text="options.maxTimeSlots"></span> Zeitslots
+            </h2>
+
+            <p
+              class="mt-2 text-rust"
+              x-show="selectedTimeSlotIds.length >= options.maxTimeSlots"
+              x-cloak
+            >
+              Du kannst maximal
+              <span x-text="options.maxTimeSlots"></span> Zeitslots auswählen.
+            </p>
+
+            <div class="mb-4" x-show="options.showSearchForTimeSlots" x-cloak>
+              <input
+                type="text"
+                class="w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
+                x-model="timeSlotSearchQuery"
+                placeholder="Suche nach Zeitslots..."
+              />
+            </div>
+
+            <div class="space-y-6">
+              <template
+                x-for="(slotIds, date) in groupedTimeSlotIds"
+                :key="date"
+              >
+                <div>
+                  <h4
+                    class="mb-2 text-lg font-medium text-surfie-green"
+                    x-text="date"
+                  ></h4>
+                  <div class="grid grid-cols-1 gap-1 sm:grid-cols-2">
+                    <template
+                      x-for="slot in availableTimeSlots.filter(s => slotIds.includes(s.id)).filter(s => s.label.toLowerCase().includes(timeSlotSearchQuery.toLowerCase()))"
+                      :key="slot.id"
+                    >
+                      <label
+                        :class="{
+                          'border-gray-200': !slot.selected,
+                          'border-atlantis': slot.selected,
+                          'border-2': slot.selected,
+                          'm-0.5': !slot.selected,
+                        }"
+                        class="flex items-center rounded-lg border p-3 shadow-sm"
+                      >
+                        <input
+                          type="checkbox"
+                          class="form-checkbox peer h-5 w-5 text-calypso"
+                          :value="slot.id"
+                          @change="updateTimeSlot(slot.id)"
+                          x-model="slot.selected"
+                          :disabled="(selectedTimeSlotIds.length >= options.maxTimeSlots && !selectedTimeSlotIds.includes(slot.id)) || (slot.available_slots <= 0)"
+                        />
+                        <span
+                          class="ml-2 select-none text-gray-800 peer-disabled:text-gray-300"
+                          x-text="slot.label"
+                        ></span>
+                        <span
+                          x-show="slot.available_slots <= 0"
+                          class="ml-2 text-sm text-sun-400"
+                          x-cloak
+                          >ausgebucht</span
+                        >
+                      </label>
+                    </template>
+                  </div>
+                </div>
+              </template>
+            </div>
+
+            <div x-show="selectedTimeSlotIds.length > 0" class="mt-6" x-cloak>
+              <h4 class="mb-2 font-medium">Ausgewählte Zeitslots:</h4>
+              <ul class="space-y-2">
+                <template x-for="slotId in selectedTimeSlotIds" :key="slotId">
+                  <li
+                    class="flex items-center justify-between rounded-md bg-gray-100 p-2"
+                  >
+                    <span
+                      x-text="availableTimeSlots.find(s => s.id === slotId).label"
+                    ></span>
+                    <button
+                      @click="updateTimeSlot(slotId, false)"
+                      class="text-gray-500 hover:text-gray-700"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-5 w-5"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                    </button>
+                  </li>
+                </template>
+              </ul>
+            </div>
+
+            <form class="space-y-6" @submit.prevent="submitTimeSlots">
+              <!-- If not all possible time-slots until options.maxTimeSlots are selected, show a warning -->
+              <p
+                class="mt-4 text-rust"
+                x-show="selectedTimeSlotIds.length < options.maxTimeSlots"
+                x-cloak
+              >
+                Bitte wähle mindestens
+                <span x-text="options.maxTimeSlots"></span> Zeitslots. Damit wir
+                eine bestmögliche Fahrroute für unsere Nikol&auml;use erstellen
+                können.
+              </p>
+
+              <!-- Submit Button -->
+              <div class="mt-6">
+                <button
+                  type="submit"
+                  class="w-full rounded bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:outline-none focus:ring-2 focus:ring-java focus:ring-opacity-50"
+                >
+                  Speichern & Weiter
+                </button>
+              </div>
+            </form>
+          </div>
+        </template>
+
+        <!-- Show time-slot selection -->
+        <template x-if="step !== 2 && steps[2].anyFilled" x-cloak>
+          <div class="mb-4 pb-4 text-left">
+            <h3 class="flex items-center text-lg font-medium text-calypso">
+              <span>Ausgewählte Zeitslots</span>
+              <span class="ml-2 size-6 cursor-pointer" x-on:click="setStep(2)">
+                <svg
+                  class="h-6 w-6"
+                  fill="currentColor"
+                  viewBox="0 0 16 16"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                  data-slot="icon"
+                >
+                  <path
+                    clip-rule="evenodd"
+                    fill-rule="evenodd"
+                    d="M11.013 2.513a1.75 1.75 0 0 1 2.475 2.474L6.226 12.25a2.751 2.751 0 0 1-.892.596l-2.047.848a.75.75 0 0 1-.98-.98l.848-2.047a2.75 2.75 0 0 1 .596-.892l7.262-7.261Z"
+                  ></path>
+                </svg>
+              </span>
+            </h3>
+            <ul class="mt-2 space-y-1">
+              <template x-for="slotId in selectedTimeSlotIds" :key="slotId">
+                <li
+                  class="text-gray-700"
+                  x-text="availableTimeSlots.find(s => s.id === slotId).label"
+                ></li>
+              </template>
+            </ul>
+          </div>
+        </template>
       </div>
 
       <!-- View for email verification needed -->
@@ -561,8 +728,10 @@
       function updateExistingObjectKeys(obj, newObj) {
         Object.keys(obj).forEach((key) => {
           if (newObj[key]) {
+            if (Array.isArray(obj[key]) && Array.isArray(newObj[key])) {
+              obj[key] = newObj[key];
+            } else if (typeof obj[key] === "object" && obj[key] !== null) {
             // if property is object, call the function recursively
-            if (typeof obj[key] === "object" && obj[key] !== null) {
               updateExistingObjectKeys(obj[key], newObj[key]);
             } else {
               obj[key] = newObj[key];
@@ -573,6 +742,10 @@
 
       document.addEventListener("alpine:init", () => {
         Alpine.data("bookingForm", () => ({
+          options: {
+            showSearchForTimeSlots: false,
+            maxTimeSlots: 3,
+          },
           isLoading: false,
           error: null,
           askToReload: false,
@@ -583,6 +756,9 @@
             // ToDo: check if inputs have changed and saving is needed
             if (this.canJumpToAnyStep) {
               this.step = step;
+              if (step === 2) {
+                await this.fetchTimeSlots();
+              }
             }
           },
           steps: [
@@ -593,7 +769,10 @@
             { name: "Kontrolle", anyFilled: false, allFilled: false },
           ],
           bookingId: null,
-          maxTimeslots: 3,
+          selectedTimeSlotIds: [],
+          availableTimeSlots: [], // API-fetched time-slots
+          groupedTimeSlotIds: {},
+          timeSlotSearchQuery: "",
           booking: {
             contact_person: {
               first_name: "",
@@ -628,9 +807,7 @@
                   url: `/api/bookings/${this.bookingId}?populate=*`,
                 });
 
-                // Update the booking object with the fetched data
-                updateExistingObjectKeys(this.booking, response.data);
-                await this.updateSteps(response.data);
+                await this.updateFromDatabase(response.data);
 
                 this.isLoading = false;
               } catch (error) {
@@ -645,12 +822,15 @@
             await this.init();
           },
 
-          // Update steps based on the fetched data
-          async updateSteps(data) {
+          // Update data based on the fetched data
+          async updateFromDatabase(data) {
             // Can jump to any step if bookingId is set
             this.canJumpToAnyStep = !!this.bookingId;
 
             await this.setStep(0);
+
+            // Update the booking object with the fetched data
+            updateExistingObjectKeys(this.booking, data);
 
             // Step 0: Contact Details
             this.steps[0].allFilled =
@@ -688,11 +868,13 @@
               await this.setStep(2);
             }
 
-            // Step 2: Timeslot
+            // Step 2: Time-Slot
             this.steps[2].allFilled =
-              data.time_slots && data.time_slots.length >= this.maxTimeslots;
+              data.time_slots &&
+              data.time_slots.length >= this.options.maxTimeSlots;
             this.steps[2].anyFilled =
-              data.time_slots || data.time_slots.length >= this.maxTimeslots;
+              data.time_slots ||
+              data.time_slots.length >= this.options.maxTimeSlots;
             if (this.steps[2].allFilled) {
               await this.setStep(3);
             }
@@ -775,6 +957,152 @@
             } catch (error) {
               this.isLoading = false;
               this.error = error;
+            }
+          },
+
+          // Step 2: Fetch available time-slots
+          async fetchTimeSlots() {
+            this.isLoading = true;
+            this.error = null;
+            try {
+              const response = await sendRequest({
+                url: "/api/time-slots?populate=*",
+              });
+
+              if (!response || !response.data) {
+                throw new Error("No time-slots available");
+              }
+
+              const currentYear = new Date().getFullYear();
+
+              const formatDate = (date) => {
+                const day = date.toLocaleDateString("de-DE", {
+                  weekday: "short",
+                });
+                const dateNum = date.getDate();
+                const month = date.getMonth() + 1;
+                const year =
+                  date.getFullYear() !== currentYear
+                    ? ` ${date.getFullYear()}`
+                    : "";
+                return `${day} ${dateNum}.${month}.${year}`;
+              };
+
+              const formatTime = (date) => {
+                return `${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
+              };
+
+              const formatTimeSlot = (slot) => {
+                const start = new Date(slot.start);
+                const end = new Date(slot.end);
+
+                const startStr = `${formatDate(start)} ${formatTime(start)}`;
+                const endStr = formatTime(end);
+
+                const endDateStr =
+                  start.getDate() !== end.getDate() ||
+                  start.getMonth() !== end.getMonth() ||
+                  start.getFullYear() !== end.getFullYear()
+                    ? `${formatDate(end)} `
+                    : "";
+
+                return `${startStr} - ${endDateStr}${endStr} Uhr`;
+              };
+
+              const formatTimeSlotGroup = (date) => {
+                return formatDate(date);
+              };
+
+              // Map available time slots to a more usable format
+              this.availableTimeSlots = response.data.map((slot) => ({
+                id: slot.documentId,
+                label: formatTimeSlot(slot),
+                start: new Date(slot.start),
+                end: new Date(slot.end),
+                max_bookings: slot.max_bookings,
+                available_slots: slot.available_slots,
+                selected: false,
+              }));
+
+              // Sort available time slots by start time
+              this.availableTimeSlots.sort((a, b) => a.start - b.start);
+
+              // Group available time slots by date
+              this.groupedTimeSlotIds = this.availableTimeSlots.reduce(
+                (acc, slot) => {
+                  const date = formatTimeSlotGroup(slot.start);
+                  acc[date] = acc[date] || [];
+                  acc[date].push(slot.id);
+                  return acc;
+                },
+                {},
+              );
+
+              // Set selected time-slots based on the booking object
+              this.selectedTimeSlotIds = this.availableTimeSlots
+                .filter((slot) =>
+                  this.booking.time_slots.some(
+                    (s) => s === slot.id || s.documentId === slot.id,
+                  ),
+                )
+                .map((slot) => slot.id);
+              this.availableTimeSlots.forEach((slot) => {
+                slot.selected = this.selectedTimeSlotIds.includes(slot.id);
+                slot.available_slots += slot.selected ? 1 : 0;
+              });
+
+              this.isLoading = false;
+            } catch (error) {
+              this.isLoading = false;
+              this.error = error.message || "Failed to fetch time-slots";
+            }
+          },
+
+          // Step 2: Submit Time-Slot Selection
+          async submitTimeSlots() {
+            this.booking.time_slots = this.selectedTimeSlotIds;
+            this.isLoading = true;
+            this.error = null;
+            try {
+              const response = await sendRequest({
+                url: `/api/bookings/${this.bookingId}`,
+                method: "PUT",
+                body: {
+                  data: {
+                    time_slots: this.booking.time_slots,
+                  },
+                },
+              });
+
+              await this.init();
+              this.isLoading = false;
+              await this.setStep(3);
+            } catch (error) {
+              this.isLoading = false;
+              this.error = error;
+            }
+          },
+
+          // Toggle time-slot selection
+          updateTimeSlot(slotId, isSelected = null) {
+            const slot = this.availableTimeSlots.find((s) => s.id === slotId);
+            if (isSelected !== null) {
+              slot.selected = isSelected;
+            }
+            if (slot.selected && !this.selectedTimeSlotIds.includes(slot.id)) {
+              this.selectedTimeSlotIds.push(slot.id);
+              this.selectedTimeSlotIds.sort((a, b) => {
+                const slotA = this.availableTimeSlots.find((s) => s.id === a);
+                const slotB = this.availableTimeSlots.find((s) => s.id === b);
+                return new Date(slotA.start) - new Date(slotB.start);
+              });
+            } else if (
+              !slot.selected &&
+              this.selectedTimeSlotIds.includes(slot.id)
+            ) {
+              this.selectedTimeSlotIds = this.selectedTimeSlotIds.filter(
+                (sId) => sId !== slotId,
+              );
             }
           },
         }));
