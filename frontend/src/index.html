@@ -989,6 +989,9 @@
             // Update the booking object with the fetched data
             updateExistingObjectKeys(this.booking, data);
 
+            // Update selected time-slots
+            await this.fetchTimeSlots();
+
             // Step 0: Contact Details
             this.steps[0].allFilled =
               data.contact_person &&
