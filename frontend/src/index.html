@@ -11,7 +11,11 @@
     class="my-4 flex min-h-screen flex-col items-center justify-center bg-java"
   >
     <!-- Main Container -->
-    <div class="mx-auto w-full max-w-3xl text-center" x-data="bookingForm">
+    <div
+      class="mx-auto w-full max-w-3xl text-center"
+      x-data="bookingForm"
+      x-init="updateCanEdit(); setInterval(() => updateCanEdit(), 1000)"
+    >
       <h1 class="mx-2 mb-4 text-4xl font-bold text-calypso">
         KjG Nikolaus Buchung
       </h1>
@@ -19,6 +23,27 @@
       <p class="mx-2 text-lg text-calypso">
         Buche deinen persönlichen Nikolausbesuch mit der KjG Bad Abbach!
       </p>
+
+      <!-- Deadlines -->
+      <div class="mx-2 mt-4 text-calypso">
+        <p class="font-bold">Wichtige Termine:</p>
+        <p :class="canEditRoutePlanning ? '' : 'line-through text-calypso-700'">
+          Adresse und Zeitslots:
+          <span
+            x-text="formatDateTime(options.routePlanningDeadline)"
+            class="font-semibold"
+          ></span>
+          <span class="text-sm">(wichtig für Routenplanung)</span>
+        </p>
+        <p :class="canEditAnything ? '' : 'line-through text-calypso-700'">
+          Finale Deadline:
+          <span
+            x-text="formatDateTime(options.finalDeadline)"
+            class="font-semibold"
+          ></span>
+          <span class="text-sm">(für alle restlichen Angaben)</span>
+        </p>
+      </div>
 
       <!-- Loading Spinner -->
       <div
@@ -342,6 +367,23 @@
               Kontaktinformationen
             </h2>
 
+            <p class="italic text-gray-600">
+              Hinweis: Deadline für diese Angaben
+              <span
+                x-text="formatDateTime(options.finalDeadline)"
+                class="font-semibold"
+              ></span
+              >.
+            </p>
+            <p
+              x-show="!canEditAnything"
+              class="mb-4 text-sm italic text-rust"
+              x-cloak
+            >
+              (Nach der Deadline können die Angaben nicht mehr bearbeitet
+              werden)
+            </p>
+
             <form class="space-y-6" @submit.prevent="submitContactDetails">
               <div>
                 <label
@@ -357,6 +399,7 @@
                   x-model="booking.contact_person.first_name"
                   maxlength="50"
                   placeholder="Vorname"
+                  :readonly="!canEditAnything"
                 />
               </div>
 
@@ -374,6 +417,7 @@
                   x-model="booking.contact_person.last_name"
                   maxlength="50"
                   placeholder="Nachname"
+                  :readonly="!canEditAnything"
                 />
               </div>
 
@@ -391,6 +435,7 @@
                   x-model="booking.contact_person.email"
                   maxlength="100"
                   placeholder="example@example.com"
+                  :readonly="!canEditAnything"
                 />
               </div>
 
@@ -408,11 +453,12 @@
                   x-model="booking.contact_person.phone_number"
                   maxlength="50"
                   placeholder="0123 4567890"
+                  :readonly="!canEditAnything"
                 />
               </div>
 
               <!-- Submit Button -->
-              <div class="mt-6">
+              <div x-show="canEditAnything" class="mt-6" x-cloak>
                 <button
                   type="submit"
                   class="w-full rounded bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:outline-none focus:ring-2 focus:ring-java focus:ring-opacity-50"
@@ -433,6 +479,23 @@
               Adresse und Ort für Geschenke
             </h2>
 
+            <p class="italic text-gray-600">
+              Hinweis: Deadline für diese Angaben
+              <span
+                x-text="formatDateTime(options.routePlanningDeadline)"
+                class="font-semibold"
+              ></span
+              >.
+            </p>
+            <p
+              x-show="!canEditRoutePlanning"
+              class="mb-4 text-sm italic text-rust"
+              x-cloak
+            >
+              (Nach der Deadline können die Angaben nicht mehr bearbeitet
+              werden)
+            </p>
+
             <form class="space-y-6" @submit.prevent="submitAddress">
               <div>
                 <label
@@ -448,6 +511,7 @@
                   x-model="booking.location.street"
                   maxlength="100"
                   placeholder="Straße"
+                  :readonly="!canEditRoutePlanning"
                 />
               </div>
               <div>
@@ -464,6 +528,7 @@
                   x-model="booking.location.house_number"
                   maxlength="10"
                   placeholder="Hausnummer"
+                  :readonly="!canEditRoutePlanning"
                 />
               </div>
               <div>
@@ -482,6 +547,7 @@
                   min="10000"
                   placeholder="PLZ"
                   oninput="if(this.value.length > 5) this.value = this.value.slice(0,5)"
+                  :readonly="!canEditRoutePlanning"
                 />
               </div>
               <div>
@@ -498,6 +564,7 @@
                   x-model="booking.location.place"
                   maxlength="100"
                   placeholder="Ort"
+                  :readonly="!canEditRoutePlanning"
                 />
               </div>
               <div>
@@ -508,6 +575,12 @@
                 >
                 <p class="text-left italic text-gray-600">
                   Hinweis: Diese Information kann auch später ergänzt werden.
+                  Deadline für diese Angaben
+                  <span
+                    x-text="formatDateTime(options.finalDeadline)"
+                    class="font-semibold"
+                  ></span
+                  >.
                 </p>
                 <input
                   type="text"
@@ -516,11 +589,12 @@
                   x-model="booking.present_location"
                   maxlength="200"
                   placeholder="Wo können wir die Geschenke finden?"
+                  :readonly="!canEditAnything"
                 />
               </div>
 
               <!-- Submit Button -->
-              <div class="mt-6">
+              <div x-show="canEditAnything" class="mt-6" x-cloak>
                 <button
                   type="submit"
                   class="w-full rounded bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:outline-none focus:ring-2 focus:ring-java focus:ring-opacity-50"
@@ -537,13 +611,46 @@
           <div
             class="mx-auto w-full max-w-3xl rounded-lg bg-white p-6 shadow-md"
           >
-            <h2 class="mb-4 text-2xl font-bold text-surfie-green">
-              Wähle <span x-text="options.maxTimeSlots"></span> Zeitslots
+            <h2
+              x-show="canEditRoutePlanning"
+              class="mb-4 text-2xl font-bold text-surfie-green"
+              x-cloak
+            >
+              Wähle
+              <span
+                x-text="options.maxTimeSlots"
+                class="text-3xl font-bold underline"
+              ></span>
+              unterschiedliche Zeitslots
             </h2>
+            <h2
+              x-show="!canEditRoutePlanning"
+              class="mb-4 text-2xl font-bold text-surfie-green"
+              x-cloak
+            >
+              Ausgewählte Zeitslots
+            </h2>
+
+            <p class="italic text-gray-600">
+              Hinweis: Deadline für diese Angaben
+              <span
+                x-text="formatDateTime(options.routePlanningDeadline)"
+                class="font-semibold"
+              ></span
+              >.
+            </p>
+            <p
+              x-show="!canEditRoutePlanning"
+              class="mb-4 text-sm italic text-rust"
+              x-cloak
+            >
+              (Nach der Deadline können die Angaben nicht mehr bearbeitet
+              werden)
+            </p>
 
             <p
               class="mt-2 text-rust"
-              x-show="selectedTimeSlotIds.length >= options.maxTimeSlots"
+              x-show="canEditRoutePlanning && selectedTimeSlotIds.length >= options.maxTimeSlots"
               x-cloak
             >
               Du kannst maximal
@@ -559,7 +666,7 @@
               />
             </div>
 
-            <div class="space-y-6">
+            <div x-show="canEditRoutePlanning" class="space-y-6" x-cloak>
               <template
                 x-for="(slotIds, date) in groupedTimeSlotIds"
                 :key="date"
@@ -609,7 +716,11 @@
             </div>
 
             <div x-show="selectedTimeSlotIds.length > 0" class="mt-6" x-cloak>
-              <h4 class="mb-2 text-lg font-medium text-surfie-green">
+              <h4
+                x-show="canEditRoutePlanning"
+                class="mb-2 text-lg font-medium text-surfie-green"
+                x-cloak
+              >
                 Ausgewählte Zeitslots:
               </h4>
               <ul class="space-y-2">
@@ -621,8 +732,11 @@
                       x-text="availableTimeSlots.find(s => s.id === slotId).label"
                     ></span>
                     <button
+                      x-show="canEditRoutePlanning"
+                      :disabled="!canEditRoutePlanning"
                       @click="updateTimeSlot(slotId, false)"
                       class="text-gray-500 hover:text-gray-700"
+                      x-cloak
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -646,7 +760,7 @@
               <!-- If not all possible time-slots until options.maxTimeSlots are selected, show a warning -->
               <p
                 class="mt-4 text-rust"
-                x-show="selectedTimeSlotIds.length < options.maxTimeSlots"
+                x-show="canEditRoutePlanning && selectedTimeSlotIds.length < options.maxTimeSlots"
                 x-cloak
               >
                 Bitte wähle mindestens
@@ -656,7 +770,7 @@
               </p>
 
               <!-- Submit Button -->
-              <div class="mt-6">
+              <div x-show="canEditRoutePlanning" class="mt-6" x-cloak>
                 <button
                   type="submit"
                   class="w-full rounded bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:outline-none focus:ring-2 focus:ring-java focus:ring-opacity-50"
@@ -675,14 +789,27 @@
           >
             <h2 class="mb-4 text-2xl font-bold text-surfie-green">Kinder</h2>
 
-            <p class="mb-4 italic text-gray-600">
+            <p class="italic text-gray-600">
               Hinweis: Die Informationen zu den Kindern können auch später
-              ergänzt werden.
+              ergänzt werden. Deadline für diese Angaben
+              <span
+                x-text="formatDateTime(options.finalDeadline)"
+                class="font-semibold"
+              ></span
+              >.
+            </p>
+            <p
+              x-show="!canEditAnything"
+              class="mb-4 text-sm italic text-rust"
+              x-cloak
+            >
+              (Nach der Deadline können die Angaben nicht mehr bearbeitet
+              werden)
             </p>
 
             <p
               class="mt-2 text-rust"
-              x-show="booking.children.length <= 0"
+              x-show="canEditAnything && booking.children.length <= 0"
               x-cloak
             >
               Bitte füge mindestens ein Kind hinzu.
@@ -708,6 +835,7 @@
                       class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
                       x-model="child.name"
                       placeholder="Name des Kindes"
+                      :readonly="!canEditAnything"
                     />
                   </div>
                   <div>
@@ -722,12 +850,16 @@
                       x-model="child.speech"
                       rows="8"
                       placeholder="Rede für den Nikolaus"
+                      :readonly="!canEditAnything"
                     ></textarea>
                   </div>
                   <button
+                    x-show="canEditAnything"
+                    :disabled="!canEditAnything"
                     type="button"
                     @click="removeChild(index)"
                     class="mt-2 rounded bg-red-500 px-3 py-1 text-sm font-bold text-white hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300 focus:ring-opacity-50"
+                    x-cloak
                   >
                     Kind entfernen
                   </button>
@@ -735,10 +867,11 @@
               </template>
 
               <!-- Add child button -->
-              <div class="mt-4">
+              <div x-show="canEditAnything" class="mt-4" x-cloak>
                 <button
                   type="button"
                   @click="addChild"
+                  :disabled="!canEditAnything"
                   class="rounded bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:outline-none focus:ring-2 focus:ring-java focus:ring-opacity-50"
                 >
                   Kind hinzufügen
@@ -746,7 +879,7 @@
               </div>
 
               <!-- Submit Button -->
-              <div class="mt-6">
+              <div x-show="canEditAnything" class="mt-6" x-cloak>
                 <button
                   type="submit"
                   class="w-full rounded bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:outline-none focus:ring-2 focus:ring-java focus:ring-opacity-50"
@@ -757,7 +890,7 @@
             </form>
 
             <!-- Skip to Next Step Button -->
-            <div class="mt-4">
+            <div x-show="canEditAnything" class="mt-4" x-cloak>
               <button
                 type="button"
                 @click="setStep(4)"
@@ -765,6 +898,180 @@
               >
                 Aktuell überspringen (nicht speichern)
               </button>
+            </div>
+          </div>
+        </template>
+
+        <!-- Step 4: Summary -->
+        <template x-if="step === 4" x-cloak>
+          <div class="mx-auto w-full max-w-3xl p-4">
+            <h2 class="mb-4 text-2xl font-bold text-calypso">
+              Vielen Dank für Ihre Anmeldung.
+            </h2>
+
+            <!-- Route planning is filled -->
+            <div
+              x-show="isRoutePlanningFilled && !isEverythingFilled"
+              class="mb-4 flex items-start gap-2 text-left text-gray-700"
+              x-cloak
+            >
+              <div class="flex-shrink-0">
+                <svg
+                  class="h-6 w-6 text-atlantis"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                  data-slot="icon"
+                >
+                  <path
+                    clip-rule="evenodd"
+                    fill-rule="evenodd"
+                    d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
+                  ></path>
+                </svg>
+              </div>
+              <p>Für unsere Routenplanung haben wir nun alle Informationen.</p>
+            </div>
+
+            <!-- Route planning is missing -->
+            <div
+              x-show="!isRoutePlanningFilled"
+              class="mb-4 flex items-start gap-2 text-left text-rust"
+              x-cloak
+            >
+              <div class="flex-shrink-0">
+                <svg
+                  class="h-6 w-6"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                  data-slot="icon"
+                >
+                  <path
+                    clip-rule="evenodd"
+                    fill-rule="evenodd"
+                    d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z"
+                  ></path>
+                </svg>
+              </div>
+              <p>
+                Bitte ergänze bis zum
+                <span
+                  x-text="formatDateTime(options.routePlanningDeadline)"
+                  class="font-bold"
+                ></span>
+                die Adresse und die Zeitslots, damit wir die Routen für die
+                Nikoläuse erstellen können.
+              </p>
+            </div>
+
+            <!-- Something is missing -->
+            <div
+              x-show="!isEverythingFilled"
+              class="mb-4 flex items-start gap-2 text-left text-rust"
+              x-cloak
+            >
+              <div class="flex-shrink-0">
+                <svg
+                  class="h-6 w-6"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                  data-slot="icon"
+                >
+                  <path
+                    clip-rule="evenodd"
+                    fill-rule="evenodd"
+                    d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z"
+                  ></path>
+                </svg>
+              </div>
+              <p>
+                Bitte ergänze bis zum
+                <span
+                  x-text="formatDateTime(options.finalDeadline)"
+                  class="font-bold"
+                ></span>
+                die noch fehlenden Details für die Nikoläuse. Nutze dafür
+                jederzeit den Link in der Bestätigungs-E-Mail. Deine Angaben
+                helfen uns, den Nikolausbesuch für deine Kinder so persönlich
+                und schön wie möglich zu gestalten.
+              </p>
+            </div>
+
+            <!-- Success -->
+            <p x-show="isEverythingFilled" class="mb-4 text-gray-700" x-cloak>
+              Wir haben alle erforderlichen Informationen erhalten.
+            </p>
+            <div
+              x-show="isEverythingFilled"
+              class="my-6 flex items-center justify-center text-atlantis"
+              x-cloak
+            >
+              <svg
+                class="h-32 w-32"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+                data-slot="icon"
+              >
+                <path
+                  clip-rule="evenodd"
+                  fill-rule="evenodd"
+                  d="M8.603 3.799A4.49 4.49 0 0 1 12 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 0 1 3.498 1.307 4.491 4.491 0 0 1 1.307 3.497A4.49 4.49 0 0 1 21.75 12a4.49 4.49 0 0 1-1.549 3.397 4.491 4.491 0 0 1-1.307 3.497 4.491 4.491 0 0 1-3.497 1.307A4.49 4.49 0 0 1 12 21.75a4.49 4.49 0 0 1-3.397-1.549 4.49 4.49 0 0 1-3.498-1.306 4.491 4.491 0 0 1-1.307-3.498A4.49 4.49 0 0 1 2.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 0 1 1.307-3.497 4.49 4.49 0 0 1 3.497-1.307Zm7.007 6.387a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
+                ></path>
+              </svg>
+            </div>
+
+            <!-- Info -->
+            <div class="mb-4 flex items-start gap-2 text-left text-calypso">
+              <div class="flex-shrink-0">
+                <svg
+                  class="h-6 w-6"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                  data-slot="icon"
+                >
+                  <path
+                    clip-rule="evenodd"
+                    fill-rule="evenodd"
+                    d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 0 1 .67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 1 1-.671-1.34l.041-.022ZM12 9a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
+                  ></path>
+                </svg>
+              </div>
+              <p>
+                Sobald wir die Routen geplant haben, erhältst du eine
+                Rückmeldung, welchen Zeitslot wir für dich vorsehen.
+              </p>
+            </div>
+
+            <div class="mb-4 flex items-start gap-2 text-left text-calypso">
+              <div class="flex-shrink-0">
+                <svg
+                  class="h-6 w-6"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                  data-slot="icon"
+                >
+                  <path
+                    clip-rule="evenodd"
+                    fill-rule="evenodd"
+                    d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 0 1 .67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 1 1-.671-1.34l.041-.022ZM12 9a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
+                  ></path>
+                </svg>
+              </div>
+              <p>
+                Du kannst deine Angaben jederzeit bis zur jeweiligen Deadline
+                ändern. Nutze dafür den Link aus der Bestätigungs-E-Mail.
+              </p>
             </div>
           </div>
         </template>
@@ -987,11 +1294,52 @@
         });
       }
 
+      const currentYear = new Date().getFullYear();
+
+      const formatDate = (date) => {
+        const day = date.toLocaleDateString("de-DE", {
+          weekday: "short",
+        });
+        const dateNum = date.getDate();
+        const month = date.getMonth() + 1;
+        const year =
+          date.getFullYear() !== currentYear ? ` ${date.getFullYear()}` : "";
+        return `${day} ${dateNum}.${month}.${year}`;
+      };
+
+      const formatTime = (date) => {
+        return `${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
+      };
+
+      const formatDateTime = (date) => {
+        return `${formatDate(date)} ${formatTime(date)} Uhr`;
+      };
+
+      const formatDateTimeRange = (start, end) => {
+        const startStr = `${formatDate(start)} ${formatTime(start)}`;
+        const endStr = formatTime(end);
+
+        const endDateStr =
+          start.getDate() !== end.getDate() ||
+          start.getMonth() !== end.getMonth() ||
+          start.getFullYear() !== end.getFullYear()
+            ? `${formatDate(end)} `
+            : "";
+
+        return `${startStr} - ${endDateStr}${endStr} Uhr`;
+      };
+
+      const formatTimeSlotGroup = (date) => {
+        return formatDate(date);
+      };
+
       document.addEventListener("alpine:init", () => {
         Alpine.data("bookingForm", () => ({
           options: {
             showSearchForTimeSlots: false,
             maxTimeSlots: 3,
+            routePlanningDeadline: new Date("2024-11-27T23:59:59+01:00"), // UTC+1 (Europe/Berlin)
+            finalDeadline: new Date("2024-12-01T23:59:59+01:00"), // UTC+1 (Europe/Berlin)
           },
           isLoading: false,
           error: null,
@@ -1016,6 +1364,20 @@
             { name: "Kontrolle", anyFilled: false, allFilled: false },
           ],
           bookingId: null,
+          canEditRoutePlanning: false,
+          canEditAnything: false,
+          updateCanEdit() {
+            this.canEditRoutePlanning =
+              new Date() < this.options.routePlanningDeadline;
+            this.canEditAnything = new Date() < this.options.finalDeadline;
+          },
+          isRoutePlanningFilled: false,
+          isEverythingFilled: false,
+          updateIsFilled() {
+            this.isRoutePlanningFilled = this.booking.time_slots.length > 0;
+            this.isEverythingFilled =
+              this.isRoutePlanningFilled && this.booking.children.length > 0;
+          },
           selectedTimeSlotIds: [],
           availableTimeSlots: [], // API-fetched time-slots
           groupedTimeSlotIds: {},
@@ -1083,12 +1445,13 @@
             await this.fetchTimeSlots();
 
             // Step 0: Contact Details
-            this.steps[0].allFilled =
+            const isContactDetailsFilled =
               data.contact_person &&
               data.contact_person.first_name &&
               data.contact_person.last_name &&
               data.contact_person.email &&
               data.contact_person.phone_number;
+            this.steps[0].allFilled = isContactDetailsFilled;
             this.steps[0].anyFilled =
               data.contact_person ||
               data.contact_person?.first_name ||
@@ -1100,13 +1463,15 @@
             }
 
             // Step 1: Address
-            this.steps[1].allFilled =
+            const isAddressFilled =
               data.location &&
               data.location.street &&
               data.location.house_number &&
               data.location.zip_code &&
-              data.location.place &&
-              data.present_location;
+              data.location.place;
+            const isPresentLocationFilled = !!data.present_location;
+            this.steps[1].allFilled =
+              isAddressFilled && isPresentLocationFilled;
             this.steps[1].anyFilled =
               data.location ||
               data.location?.street ||
@@ -1119,27 +1484,36 @@
             }
 
             // Step 2: Time-Slot
-            this.steps[2].allFilled =
+            const areTimeSlotsFilled =
               data.time_slots &&
               data.time_slots.length >= this.options.maxTimeSlots;
+            this.steps[2].allFilled = areTimeSlotsFilled;
             this.steps[2].anyFilled = data.time_slots?.length;
             if (this.steps[2].allFilled && this.step === 2) {
               await this.setStep(3);
             }
 
             // Step 3: Children
-            this.steps[3].allFilled =
+            const areChildrenFilled =
               data.children &&
               data.children.length &&
               data.children.every((child) => child.name && child.speech);
+            this.steps[3].allFilled = areChildrenFilled;
             this.steps[3].anyFilled = data.children?.length;
             if (this.steps[3].allFilled && this.step === 3) {
               await this.setStep(4);
             }
 
             // Step 4: Review
-            this.steps[4].allFilled = false; // ToDo
-            this.steps[4].anyFilled = false; // ToDo
+            this.isRoutePlanningFilled = isAddressFilled && areTimeSlotsFilled;
+            this.isEverythingFilled =
+              isContactDetailsFilled &&
+              isAddressFilled &&
+              isPresentLocationFilled &&
+              areTimeSlotsFilled &&
+              areChildrenFilled;
+            this.steps[4].allFilled = this.isEverythingFilled;
+            this.steps[4].anyFilled = false;
           },
 
           // Step 0: Submit Contact Details
@@ -1218,50 +1592,13 @@
                 throw new Error("No time-slots available");
               }
 
-              const currentYear = new Date().getFullYear();
-
-              const formatDate = (date) => {
-                const day = date.toLocaleDateString("de-DE", {
-                  weekday: "short",
-                });
-                const dateNum = date.getDate();
-                const month = date.getMonth() + 1;
-                const year =
-                  date.getFullYear() !== currentYear
-                    ? ` ${date.getFullYear()}`
-                    : "";
-                return `${day} ${dateNum}.${month}.${year}`;
-              };
-
-              const formatTime = (date) => {
-                return `${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
-              };
-
-              const formatTimeSlot = (slot) => {
-                const start = new Date(slot.start);
-                const end = new Date(slot.end);
-
-                const startStr = `${formatDate(start)} ${formatTime(start)}`;
-                const endStr = formatTime(end);
-
-                const endDateStr =
-                  start.getDate() !== end.getDate() ||
-                  start.getMonth() !== end.getMonth() ||
-                  start.getFullYear() !== end.getFullYear()
-                    ? `${formatDate(end)} `
-                    : "";
-
-                return `${startStr} - ${endDateStr}${endStr} Uhr`;
-              };
-
-              const formatTimeSlotGroup = (date) => {
-                return formatDate(date);
-              };
-
               // Map available time slots to a more usable format
               this.availableTimeSlots = response.data.map((slot) => ({
                 id: slot.documentId,
-                label: formatTimeSlot(slot),
+                label: formatDateTimeRange(
+                  new Date(slot.start),
+                  new Date(slot.end),
+                ),
                 start: new Date(slot.start),
                 end: new Date(slot.end),
                 max_bookings: slot.max_bookings,
