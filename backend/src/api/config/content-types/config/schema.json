@@ -1,0 +1,44 @@
+{
+  "kind": "singleType",
+  "collectionName": "configs",
+  "info": {
+    "singularName": "config",
+    "pluralName": "configs",
+    "displayName": "Config",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "api_token": {
+      "type": "text",
+      "required": true
+    },
+    "api_base_url": {
+      "type": "string",
+      "required": true
+    },
+    "max_time_slots": {
+      "type": "integer",
+      "default": 1,
+      "required": true,
+      "max": 99,
+      "min": 1
+    },
+    "show_search_for_time_slots": {
+      "type": "boolean",
+      "default": false,
+      "required": true
+    },
+    "route_planning_deadline": {
+      "type": "datetime",
+      "required": true
+    },
+    "final_deadline": {
+      "type": "datetime",
+      "required": true
+    }
+  }
+}

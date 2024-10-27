@@ -525,6 +525,48 @@ export interface ApiBookingBooking extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiConfigConfig extends Struct.SingleTypeSchema {
+  collectionName: 'configs';
+  info: {
+    singularName: 'config';
+    pluralName: 'configs';
+    displayName: 'Config';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    api_token: Schema.Attribute.Text & Schema.Attribute.Required;
+    api_base_url: Schema.Attribute.String & Schema.Attribute.Required;
+    max_time_slots: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 1;
+          max: 99;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<1>;
+    show_search_for_time_slots: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<false>;
+    route_planning_deadline: Schema.Attribute.DateTime &
+      Schema.Attribute.Required;
+    final_deadline: Schema.Attribute.DateTime & Schema.Attribute.Required;
+    createdAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    publishedAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::config.config'>;
+  };
+}
+
 export interface ApiTimeSlotTimeSlot extends Struct.CollectionTypeSchema {
   collectionName: 'time_slots';
   info: {
@@ -940,6 +982,7 @@ declare module '@strapi/strapi' {
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
       'api::booking.booking': ApiBookingBooking;
+      'api::config.config': ApiConfigConfig;
       'api::time-slot.time-slot': ApiTimeSlotTimeSlot;
       'admin::permission': AdminPermission;
       'admin::user': AdminUser;
