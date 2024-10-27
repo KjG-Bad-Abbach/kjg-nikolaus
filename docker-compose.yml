@@ -3,7 +3,7 @@ services:
   backend:
     container_name: kjg-nikolaus-backend
     build: backend
-    image: kjg-nikolaus:dev
+    image: kjg-nikolaus-backend:dev
     restart: unless-stopped
     env_file: .env
     environment:
@@ -56,3 +56,21 @@ services:
       - 5050:80
     depends_on:
       - db
+
+  frontend:
+    container_name: kjg-nikolaus-frontend
+    build: frontend
+    image: kjg-nikolaus-frontend:dev
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      API_TOKEN: ${API_TOKEN}
+      API_BASE_URL: ${API_BASE_URL}
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/package.json:/app/package.json
+      - ./frontend/pnpm-lock.yaml:/app/pnpm-lock.yaml
+      - ./.env:/app/.env
+    ports:
+      - 3000:3000
+      - 3001:3001
