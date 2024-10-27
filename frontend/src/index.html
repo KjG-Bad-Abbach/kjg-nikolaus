@@ -74,47 +74,123 @@
         <div class="mx-2 mb-4 mt-8">
           <h2 class="sr-only">Schritte</h2>
 
-          <div
-            class="relative after:absolute after:inset-x-0 after:top-1/2 after:block after:h-0.5 after:-translate-y-1/2 after:rounded-lg after:bg-java-500"
-          >
-            <ol
-              class="relative z-10 flex justify-between text-sm font-medium text-calypso"
+          <div class="flex items-center space-x-2 px-2">
+            <!-- Previous Step Button -->
+            <button
+              x-show="canJumpToAnyStep"
+              @click="step > 0 ? setStep(step - 1) : null"
+              class="flex-none cursor-pointer select-none py-2 font-bold text-calypso"
+              :class="step <= 0 ? 'opacity-50 cursor-not-allowed' : 'hover:text-calypso-950'"
+              :disabled="step <= 0"
+              aria-hidden="true"
+              aria-label="Vorheriger Schritt"
+              title="Vorheriger Schritt"
+              x-cloak
             >
-              <!-- Loop through the steps -->
-              <template x-for="(x, index) in steps" :key="index">
-                <li
-                  x-on:click="setStep(index)"
-                  x-bind:class="canJumpToAnyStep || step === index ? 'hover:text-calypso-950 cursor-pointer' : 'cursor-not-allowed'"
-                  class="group flex select-none items-center gap-2 bg-java p-2"
-                >
-                  <span
-                    class="size-6 rounded-full text-center text-[10px]/6 font-bold"
-                    x-bind:class="x.allFilled || step === index ? ('bg-calypso' + (canJumpToAnyStep || step === index ? ' group-hover:bg-calypso-950' : '') + ' text-calypso-500') : 'bg-java-500'"
+              <svg
+                class="size-8"
+                fill="currentColor"
+                viewBox="0 0 16 16"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+                data-slot="icon"
+              >
+                <path
+                  clip-rule="evenodd"
+                  fill-rule="evenodd"
+                  d="M14 8a.75.75 0 0 1-.75.75H4.56l3.22 3.22a.75.75 0 1 1-1.06 1.06l-4.5-4.5a.75.75 0 0 1 0-1.06l4.5-4.5a.75.75 0 0 1 1.06 1.06L4.56 7.25h8.69A.75.75 0 0 1 14 8Z"
+                ></path>
+              </svg>
+            </button>
+
+            <!-- Step Progress Bar -->
+            <div
+              class="relative flex-grow after:absolute after:inset-x-0 after:top-1/2 after:block after:h-0.5 after:-translate-y-1/2 after:rounded-lg after:bg-java-500"
+            >
+              <ol
+                class="relative z-10 flex justify-between text-sm font-medium text-calypso"
+              >
+                <!-- Loop through the steps -->
+                <template x-for="(x, index) in steps" :key="index">
+                  <li
+                    x-on:click="setStep(index)"
+                    :class="canJumpToAnyStep || step === index ? 'hover:text-calypso-950 cursor-pointer' : 'cursor-not-allowed'"
+                    class="group flex select-none items-center gap-1 bg-java p-1"
+                    :title="x.name"
                   >
                     <span
-                      x-show="!x.allFilled"
-                      x-text="index + 1"
-                      x-cloak
-                    ></span>
-                    <span x-show="x.allFilled" x-cloak>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="m-1 size-4"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path
-                          fill-rule="evenodd"
-                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                          clip-rule="evenodd"
-                        />
-                      </svg>
+                      class="size-8 rounded-full border-4 text-center text-[10px]/6 font-bold"
+                      :class="
+                        (
+                          x.allFilled || step === index
+                            ? (
+                              'bg-calypso' + (
+                                canJumpToAnyStep || step === index
+                                  ? ' group-hover:bg-calypso-950'
+                                  : ''
+                              ) + ' text-calypso-500'
+                            )
+                          : 'bg-java-500'
+                        ) + (
+                          step === index
+                            ? ' border-calypso-950'
+                            : ' border-java'
+                        )
+                      "
+                    >
+                      <span
+                        x-show="!x.allFilled"
+                        x-text="index + 1"
+                        x-cloak
+                      ></span>
+                      <span x-show="x.allFilled" x-cloak>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="m-1 size-4"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                            clip-rule="evenodd"
+                          />
+                        </svg>
+                      </span>
                     </span>
-                  </span>
-                  <span class="hidden sm:block" x-text="x.name"></span>
-                </li>
-              </template>
-            </ol>
+                    <span class="hidden sm:block" x-text="x.name"></span>
+                  </li>
+                </template>
+              </ol>
+            </div>
+
+            <!-- Next Step Button -->
+            <button
+              x-show="canJumpToAnyStep"
+              @click="step < steps.length - 1 ? setStep(step + 1) : null"
+              class="flex-none cursor-pointer select-none py-2 font-bold text-calypso"
+              :class="step >= steps.length - 1 ? 'opacity-50 cursor-not-allowed' : 'hover:text-calypso-950'"
+              :disabled="step >= steps.length - 1"
+              aria-hidden="true"
+              aria-label="Nächster Schritt"
+              title="Nächster Schritt"
+              x-cloak
+            >
+              <svg
+                class="size-8"
+                fill="currentColor"
+                viewBox="0 0 16 16"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+                data-slot="icon"
+              >
+                <path
+                  clip-rule="evenodd"
+                  fill-rule="evenodd"
+                  d="M2 8a.75.75 0 0 1 .75-.75h8.69L8.22 4.03a.75.75 0 0 1 1.06-1.06l4.5 4.5a.75.75 0 0 1 0 1.06l-4.5 4.5a.75.75 0 0 1-1.06-1.06l3.22-3.22H2.75A.75.75 0 0 1 2 8Z"
+                ></path>
+              </svg>
+            </button>
           </div>
         </div>
 
@@ -128,60 +204,73 @@
           >
             <h3 class="flex items-center text-lg font-medium text-calypso">
               <span>Kontaktinformationen</span>
-              <span class="ml-2 size-6 cursor-pointer" x-on:click="setStep(0)">
+              <span
+                class="ml-2 size-6 cursor-pointer"
+                x-on:click="setStep(0)"
+                title="Bearbeiten"
+              >
                 <svg
                   class="h-6 w-6"
                   fill="currentColor"
-                  viewBox="0 0 16 16"
+                  viewBox="0 0 24 24"
                   xmlns="http://www.w3.org/2000/svg"
                   aria-hidden="true"
                   data-slot="icon"
                 >
                   <path
-                    clip-rule="evenodd"
-                    fill-rule="evenodd"
-                    d="M11.013 2.513a1.75 1.75 0 0 1 2.475 2.474L6.226 12.25a2.751 2.751 0 0 1-.892.596l-2.047.848a.75.75 0 0 1-.98-.98l.848-2.047a2.75 2.75 0 0 1 .596-.892l7.262-7.261Z"
+                    d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z"
+                  ></path>
+                  <path
+                    d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z"
                   ></path>
                 </svg>
               </span>
             </h3>
             <p class="text-gray-700">
               Vorname:
-              <span x-text="booking.contact_person.first_name"></span
+              <span x-text="booking.contact_person?.first_name"></span
               ><span
-                x-show="!(booking.contact_person.first_name || '').length"
+                x-show="!isFilled(booking.contact_person?.first_name)"
                 class="italic text-rust"
                 x-cloak
-                >(Angabe fehlt)</span
+                >(Angabe fehlt, Deadline:
+                <span x-text="formatDateTime(options.finalDeadline)"></span
+                >)</span
               >
             </p>
             <p class="text-gray-700">
               Nachname:
-              <span x-text="booking.contact_person.last_name"></span
+              <span x-text="booking.contact_person?.last_name"></span
               ><span
-                x-show="!(booking.contact_person.last_name || '').length"
+                x-show="!isFilled(booking.contact_person?.last_name)"
                 class="italic text-rust"
                 x-cloak
-                >(Angabe fehlt)</span
+                >(Angabe fehlt, Deadline:
+                <span x-text="formatDateTime(options.finalDeadline)"></span
+                >)</span
               >
             </p>
             <p class="text-gray-700">
-              E-Mail: <span x-text="booking.contact_person.email"></span
+              E-Mail: <span x-text="booking.contact_person?.email"></span
               ><span
-                x-show="!(booking.contact_person.email || '').length"
+                x-show="!isFilled(booking.contact_person?.email)"
                 class="italic text-rust"
                 x-cloak
-                >(Angabe fehlt)</span
+                >(Angabe fehlt, Deadline:
+                <span x-text="formatDateTime(options.finalDeadline)"></span
+                >)</span
               >
             </p>
             <p class="text-gray-700">
               Telefonnummer:
-              <span x-text="booking.contact_person.phone_number"></span
+              <span x-text="booking.contact_person?.phone_number"></span
               ><span
-                x-show="!(booking.contact_person.phone_number || '').length"
+                x-show="!isFilled(booking.contact_person?.phone_number)"
                 class="italic text-rust"
                 x-cloak
-                >(Angabe fehlt)</span
+                >(Angabe fehlt, Deadline:
+                <span x-text="formatDateTime(options.finalDeadline)"></span
+                >)</span
               >
             </p>
           </div>
@@ -194,68 +283,91 @@
           >
             <h3 class="flex items-center text-lg font-medium text-calypso">
               <span>Adresse und Ort für Geschenke</span>
-              <span class="ml-2 size-6 cursor-pointer" x-on:click="setStep(1)">
+              <span
+                class="ml-2 size-6 cursor-pointer"
+                x-on:click="setStep(1)"
+                title="Bearbeiten"
+              >
                 <svg
                   class="h-6 w-6"
                   fill="currentColor"
-                  viewBox="0 0 16 16"
+                  viewBox="0 0 24 24"
                   xmlns="http://www.w3.org/2000/svg"
                   aria-hidden="true"
                   data-slot="icon"
                 >
                   <path
-                    clip-rule="evenodd"
-                    fill-rule="evenodd"
-                    d="M11.013 2.513a1.75 1.75 0 0 1 2.475 2.474L6.226 12.25a2.751 2.751 0 0 1-.892.596l-2.047.848a.75.75 0 0 1-.98-.98l.848-2.047a2.75 2.75 0 0 1 .596-.892l7.262-7.261Z"
+                    d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z"
+                  ></path>
+                  <path
+                    d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z"
                   ></path>
                 </svg>
               </span>
             </h3>
             <p class="text-gray-700">
-              Straße: <span x-text="booking.location.street"></span
+              Straße: <span x-text="booking.location?.street"></span
               ><span
-                x-show="!(booking.location.street || '').length"
+                x-show="!isFilled(booking.location?.street)"
                 class="italic text-rust"
                 x-cloak
-                >(Angabe fehlt)</span
+                >(Angabe fehlt, Deadline:
+                <span
+                  x-text="formatDateTime(options.routePlanningDeadline)"
+                ></span
+                >)</span
               >
             </p>
             <p class="text-gray-700">
               Hausnummer:
-              <span x-text="booking.location.house_number"></span
+              <span x-text="booking.location?.house_number"></span
               ><span
-                x-show="!(booking.location.house_number || '').length"
+                x-show="!isFilled(booking.location?.house_number)"
                 class="italic text-rust"
                 x-cloak
-                >(Angabe fehlt)</span
+                >(Angabe fehlt, Deadline:
+                <span
+                  x-text="formatDateTime(options.routePlanningDeadline)"
+                ></span
+                >)</span
               >
             </p>
             <p class="text-gray-700">
-              PLZ: <span x-text="booking.location.zip_code"></span
+              PLZ: <span x-text="booking.location?.zip_code"></span
               ><span
-                x-show="!(booking.location.zip_code || '').length"
+                x-show="!isFilled(booking.location?.zip_code)"
                 class="italic text-rust"
                 x-cloak
-                >(Angabe fehlt)</span
+                >(Angabe fehlt, Deadline:
+                <span
+                  x-text="formatDateTime(options.routePlanningDeadline)"
+                ></span
+                >)</span
               >
             </p>
             <p class="text-gray-700">
-              Ort: <span x-text="booking.location.place"></span
+              Ort: <span x-text="booking.location?.place"></span
               ><span
-                x-show="!(booking.location.place || '').length"
+                x-show="!isFilled(booking.location?.place)"
                 class="italic text-rust"
                 x-cloak
-                >(Angabe fehlt)</span
+                >(Angabe fehlt, Deadline:
+                <span
+                  x-text="formatDateTime(options.routePlanningDeadline)"
+                ></span
+                >)</span
               >
             </p>
             <p class="text-gray-700">
               Ort für Geschenke:
               <span x-text="booking.present_location"></span
               ><span
-                x-show="!(booking.present_location || '').length"
+                x-show="!isFilled(booking.present_location)"
                 class="italic text-rust"
                 x-cloak
-                >(Angabe fehlt)</span
+                >(Angabe fehlt, Deadline:
+                <span x-text="formatDateTime(options.finalDeadline)"></span
+                >)</span
               >
             </p>
           </div>
@@ -268,24 +380,29 @@
           >
             <h3 class="flex items-center text-lg font-medium text-calypso">
               <span>Ausgewählte Zeitslots</span>
-              <span class="ml-2 size-6 cursor-pointer" x-on:click="setStep(2)">
+              <span
+                class="ml-2 size-6 cursor-pointer"
+                x-on:click="setStep(2)"
+                title="Bearbeiten"
+              >
                 <svg
                   class="h-6 w-6"
                   fill="currentColor"
-                  viewBox="0 0 16 16"
+                  viewBox="0 0 24 24"
                   xmlns="http://www.w3.org/2000/svg"
                   aria-hidden="true"
                   data-slot="icon"
                 >
                   <path
-                    clip-rule="evenodd"
-                    fill-rule="evenodd"
-                    d="M11.013 2.513a1.75 1.75 0 0 1 2.475 2.474L6.226 12.25a2.751 2.751 0 0 1-.892.596l-2.047.848a.75.75 0 0 1-.98-.98l.848-2.047a2.75 2.75 0 0 1 .596-.892l7.262-7.261Z"
+                    d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z"
+                  ></path>
+                  <path
+                    d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z"
                   ></path>
                 </svg>
               </span>
             </h3>
-            <ul class="mt-2 space-y-1">
+            <ul>
               <template x-for="slotId in selectedTimeSlotIds" :key="slotId">
                 <li
                   class="text-gray-700"
@@ -297,7 +414,23 @@
                 class="italic text-rust"
                 x-cloak
               >
-                (Angabe fehlt)
+                (Angabe fehlt, Deadline:
+                <span
+                  x-text="formatDateTime(options.routePlanningDeadline)"
+                ></span
+                >)
+              </li>
+              <li
+                x-show="selectedTimeSlotIds.length > 0 && selectedTimeSlotIds.length < options.maxTimeSlots"
+                class="italic text-rust"
+                x-cloak
+              >
+                (Bitte <span x-text="options.maxTimeSlots"></span> Zeitslots
+                auswählen, Deadline:
+                <span
+                  x-text="formatDateTime(options.routePlanningDeadline)"
+                ></span
+                >)
               </li>
             </ul>
           </div>
@@ -310,49 +443,76 @@
           >
             <h3 class="flex items-center text-lg font-medium text-calypso">
               <span>Kinder</span>
-              <span class="ml-2 size-6 cursor-pointer" x-on:click="setStep(3)">
+              <span
+                class="ml-2 size-6 cursor-pointer"
+                x-on:click="setStep(3)"
+                title="Bearbeiten"
+              >
                 <svg
                   class="h-6 w-6"
                   fill="currentColor"
-                  viewBox="0 0 16 16"
+                  viewBox="0 0 24 24"
                   xmlns="http://www.w3.org/2000/svg"
                   aria-hidden="true"
                   data-slot="icon"
                 >
                   <path
-                    clip-rule="evenodd"
-                    fill-rule="evenodd"
-                    d="M11.013 2.513a1.75 1.75 0 0 1 2.475 2.474L6.226 12.25a2.751 2.751 0 0 1-.892.596l-2.047.848a.75.75 0 0 1-.98-.98l.848-2.047a2.75 2.75 0 0 1 .596-.892l7.262-7.261Z"
+                    d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z"
+                  ></path>
+                  <path
+                    d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z"
                   ></path>
                 </svg>
               </span>
             </h3>
-            <ul class="mt-2 space-y-1">
+            <ul class="space-y-2">
               <template
                 x-for="(child, index) in (booking.children || [])"
                 :key="index"
               >
-                <li class="text-gray-700">
-                  <p class="text-gray-700">
-                    Name: <span x-text="child.name"></span>
-                  </p>
-                  <p class="inline-block max-w-xs truncate text-gray-700">
-                    Rede: <span x-text="child.speech"></span
-                    ><span
-                      x-show="!(child.speech || '').length"
+                <li class="flex flex-col text-gray-700">
+                  <div>
+                    <div class="flex flex-wrap items-baseline gap-1">
+                      Name: <span x-text="child.name"></span
+                      ><span
+                        x-show="!isFilled(child.name)"
+                        class="italic text-rust"
+                        x-cloak
+                        >(Angabe fehlt, Deadline:
+                        <span
+                          x-text="formatDateTime(options.finalDeadline)"
+                        ></span
+                        >)</span
+                      >
+                    </div>
+                  </div>
+                  <div>
+                    <div class="flex flex-wrap items-baseline gap-1">
+                      <span>Rede:</span>
+                      <div class="min-w-0 flex-1">
+                        <div class="truncate" x-text="child.speech"></div>
+                      </div>
+                    </div>
+                    <span
+                      x-show="!isFilled(child.speech)"
                       class="italic text-rust"
                       x-cloak
-                      >(Angabe fehlt)</span
+                      >(Angabe fehlt, Deadline:
+                      <span
+                        x-text="formatDateTime(options.finalDeadline)"
+                      ></span
+                      >)</span
                     >
-                  </p>
+                  </div>
                 </li>
               </template>
               <li
-                x-show="booking.children.length === 0"
+                x-show="booking.children.length <= 0"
                 class="italic text-rust"
                 x-cloak
               >
-                (Angabe fehlt)
+                (Angabe fehlt, Deadline:
+                <span x-text="formatDateTime(options.finalDeadline)"></span>)
               </li>
             </ul>
           </div>
@@ -575,13 +735,32 @@
                 >
                 <p class="text-left italic text-gray-600">
                   Hinweis: Diese Information kann auch später ergänzt werden.
-                  Deadline für diese Angaben
+                  Deadline für diese Angabe
                   <span
                     x-text="formatDateTime(options.finalDeadline)"
                     class="font-semibold"
                   ></span
                   >.
                 </p>
+                <div
+                  class="mt-2 rounded-md border border-gray-300 bg-gray-50 p-3 text-left text-sm text-gray-700"
+                >
+                  <p class="font-semibold">Beispiele:</p>
+                  <ul class="list-inside list-disc">
+                    <li>
+                      Geschenke liegen in einem Sack in der Garage links neben
+                      dem Eingang
+                    </li>
+                    <li>
+                      Im Gartenhäuschen hinter dem Haus, der Schlüssel liegt
+                      unter dem Blumentopf neben der Tür
+                    </li>
+                    <li>
+                      Im Carport neben dem Auto, die Geschenke sind in einer
+                      roten Tasche mit Weihnachtsmotiv
+                    </li>
+                  </ul>
+                </div>
                 <input
                   type="text"
                   id="present_location"
@@ -844,6 +1023,15 @@
                       class="block text-left font-medium text-surfie-green"
                       >Rede</label
                     >
+                    <div
+                      class="mt-2 rounded-md border border-gray-300 bg-gray-50 p-3 text-left text-sm text-gray-700"
+                    >
+                      <p>
+                        Bitte schreib hier den Text rein, den der Nikolaus für
+                        ein Kind vorlesen soll. Gerne in Stichpunkten oder auch
+                        als Fließtext.
+                      </p>
+                    </div>
                     <textarea
                       :id="'child-speech-' + index"
                       class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
@@ -1157,7 +1345,7 @@
           <div x-data="{ open: false }" class="mt-4">
             <a
               x-on:click="open = !open"
-              x-bind:class="{ 'font-bold': open }"
+              :class="{ 'font-bold': open }"
               class="cursor-pointer text-red-700 underline"
               >Details</a
             >
@@ -1294,6 +1482,10 @@
         });
       }
 
+      function isFilled(value) {
+        return value?.trim() ? true : false;
+      }
+
       const currentYear = new Date().getFullYear();
 
       const formatDate = (date) => {
@@ -1373,11 +1565,6 @@
           },
           isRoutePlanningFilled: false,
           isEverythingFilled: false,
-          updateIsFilled() {
-            this.isRoutePlanningFilled = this.booking.time_slots.length > 0;
-            this.isEverythingFilled =
-              this.isRoutePlanningFilled && this.booking.children.length > 0;
-          },
           selectedTimeSlotIds: [],
           availableTimeSlots: [], // API-fetched time-slots
           groupedTimeSlotIds: {},
@@ -1446,60 +1633,56 @@
 
             // Step 0: Contact Details
             const isContactDetailsFilled =
-              data.contact_person &&
-              data.contact_person.first_name &&
-              data.contact_person.last_name &&
-              data.contact_person.email &&
-              data.contact_person.phone_number;
+              isFilled(data.contact_person?.first_name) &&
+              isFilled(data.contact_person?.last_name) &&
+              isFilled(data.contact_person?.email) &&
+              isFilled(data.contact_person?.phone_number);
             this.steps[0].allFilled = isContactDetailsFilled;
             this.steps[0].anyFilled =
-              data.contact_person ||
-              data.contact_person?.first_name ||
-              data.contact_person?.last_name ||
-              data.contact_person?.email ||
-              data.contact_person?.phone_number;
+              isFilled(data.contact_person?.first_name) ||
+              isFilled(data.contact_person?.last_name) ||
+              isFilled(data.contact_person?.email) ||
+              isFilled(data.contact_person?.phone_number);
             if (this.steps[0].allFilled && this.step === 0) {
               await this.setStep(1);
             }
 
             // Step 1: Address
             const isAddressFilled =
-              data.location &&
-              data.location.street &&
-              data.location.house_number &&
-              data.location.zip_code &&
-              data.location.place;
-            const isPresentLocationFilled = !!data.present_location;
+              isFilled(data.location?.street) &&
+              isFilled(data.location?.house_number) &&
+              isFilled(data.location?.zip_code) &&
+              isFilled(data.location?.place);
+            const isPresentLocationFilled = isFilled(data.present_location);
             this.steps[1].allFilled =
               isAddressFilled && isPresentLocationFilled;
             this.steps[1].anyFilled =
-              data.location ||
-              data.location?.street ||
-              data.location?.house_number ||
-              data.location?.zip_code ||
-              data.location?.place ||
-              data.present_location;
+              isFilled(data.location?.street) ||
+              isFilled(data.location?.house_number) ||
+              isFilled(data.location?.zip_code) ||
+              isFilled(data.location?.place) ||
+              isFilled(data.present_location);
             if (this.steps[1].allFilled && this.step === 1) {
               await this.setStep(2);
             }
 
             // Step 2: Time-Slot
             const areTimeSlotsFilled =
-              data.time_slots &&
-              data.time_slots.length >= this.options.maxTimeSlots;
+              data.time_slots?.length >= this.options.maxTimeSlots;
             this.steps[2].allFilled = areTimeSlotsFilled;
-            this.steps[2].anyFilled = data.time_slots?.length;
+            this.steps[2].anyFilled = !!data.time_slots?.length;
             if (this.steps[2].allFilled && this.step === 2) {
               await this.setStep(3);
             }
 
             // Step 3: Children
             const areChildrenFilled =
-              data.children &&
-              data.children.length &&
-              data.children.every((child) => child.name && child.speech);
+              data.children?.length &&
+              data.children.every(
+                (child) => isFilled(child.name) && isFilled(child.speech),
+              );
             this.steps[3].allFilled = areChildrenFilled;
-            this.steps[3].anyFilled = data.children?.length;
+            this.steps[3].anyFilled = !!data.children?.length;
             if (this.steps[3].allFilled && this.step === 3) {
               await this.setStep(4);
             }
@@ -1696,7 +1879,9 @@
           },
 
           removeChild(index) {
-            this.booking.children.splice(index, 1);
+            if (confirm("Möchten Sie dieses Kind wirklich entfernen?")) {
+              this.booking.children.splice(index, 1);
+            }
           },
 
           // Step 3: Submit Children Details
