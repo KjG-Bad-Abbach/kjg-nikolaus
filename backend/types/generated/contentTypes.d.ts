@@ -509,6 +509,7 @@ export interface ApiBookingBooking extends Struct.CollectionTypeSchema {
       'manyToMany',
       'api::time-slot.time-slot'
     >;
+    additional_notes: Schema.Attribute.Text;
     createdAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     publishedAt: Schema.Attribute.DateTime;
