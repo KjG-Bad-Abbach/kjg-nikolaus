@@ -1091,10 +1091,10 @@
               data.contact_person.phone_number;
             this.steps[0].anyFilled =
               data.contact_person ||
-              data.contact_person.first_name ||
-              data.contact_person.last_name ||
-              data.contact_person.email ||
-              data.contact_person.phone_number;
+              data.contact_person?.first_name ||
+              data.contact_person?.last_name ||
+              data.contact_person?.email ||
+              data.contact_person?.phone_number;
             if (this.steps[0].allFilled && this.step === 0) {
               await this.setStep(1);
             }
@@ -1109,10 +1109,10 @@
               data.present_location;
             this.steps[1].anyFilled =
               data.location ||
-              data.location.street ||
-              data.location.house_number ||
-              data.location.zip_code ||
-              data.location.place ||
+              data.location?.street ||
+              data.location?.house_number ||
+              data.location?.zip_code ||
+              data.location?.place ||
               data.present_location;
             if (this.steps[1].allFilled && this.step === 1) {
               await this.setStep(2);
