@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@strapi/plugin-cloud':
-        specifier: 5.0.5
-        version: 5.0.5(lbvxc6xgziye3r7izzak3yjfwi)
+        specifier: 5.1.1
+        version: 5.1.1(lbvxc6xgziye3r7izzak3yjfwi)
       '@strapi/plugin-users-permissions':
         specifier: 5.0.5
         version: 5.0.5(lbur35bmq2wzpzd2yay5h6m57u)
@@ -1540,8 +1540,8 @@ packages:
     resolution: {integrity: sha512-4/ykvM2cNS5qQQd0UfHtVpuajYdwT5K1uvCCWqWvLFy/UtpptB3Afy9gVqvlOI1ezlzSlvlkPbiBhI3vePGihA==}
     engines: {node: '>=18.0.0 <=22.x.x', npm: '>=6.0.0'}
 
-  '@strapi/plugin-cloud@5.0.5':
-    resolution: {integrity: sha512-dVAvABFrNAV5Mq32+cm4lij+/toA6FqbxT0os2uAXcqUHGUnN61hti2aZAG7XDvi4CHjED7QKssBVvoLV8cRtw==}
+  '@strapi/plugin-cloud@5.1.1':
+    resolution: {integrity: sha512-HKpqRxZgY7Za7m3ZhbMov2dqeQp9MJHq5p07KVXQB5cr5j4P8q6AbEWlgn0jK/7ktTlTccx29ocBLmN80wvI4Q==}
     engines: {node: '>=18.0.0 <=22.x.x', npm: '>=6.0.0'}
     peerDependencies:
       '@strapi/strapi': ^5.0.0 || ^5.0.0-beta || ^5.0.0-alpha || ^5.0.0-rc
@@ -8225,7 +8225,7 @@ snapshots:
       qs: 6.11.1
       sift: 16.0.1
 
-  '@strapi/plugin-cloud@5.0.5(lbvxc6xgziye3r7izzak3yjfwi)':
+  '@strapi/plugin-cloud@5.1.1(lbvxc6xgziye3r7izzak3yjfwi)':
     dependencies:
       '@strapi/design-system': 2.0.0-rc.11(@babel/runtime@7.25.7)(@codemirror/autocomplete@6.18.1(@codemirror/language@6.10.3)(@codemirror/state@6.4.1)(@codemirror/view@6.34.1)(@lezer/common@1.2.2))(@codemirror/language@6.10.3)(@codemirror/lint@6.8.2)(@codemirror/search@6.5.6)(@codemirror/state@6.4.1)(@codemirror/theme-one-dark@6.1.2)(@codemirror/view@6.34.1)(@strapi/icons@2.0.0-rc.11(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-components@6.1.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1)))(@types/react-dom@18.3.1)(@types/react@18.3.12)(codemirror@5.65.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-components@6.1.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       '@strapi/icons': 2.0.0-rc.11(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-components@6.1.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
