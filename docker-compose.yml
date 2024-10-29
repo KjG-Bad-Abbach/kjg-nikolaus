@@ -17,6 +17,9 @@ services:
       ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET}
       APP_KEYS: ${APP_KEYS}
       NODE_ENV: ${NODE_ENV}
+      SMTP_HOST: mailhog
+      SMTP_PORT: 1025
+      SMTP_IGNORE_TLS: true
     volumes:
       - ./backend/config:/opt/app/config
       - ./backend/src:/opt/app/src
@@ -74,3 +77,10 @@ services:
     ports:
       - 3000:3000
       - 3001:3001
+
+  mailhog:
+    container_name: kjg-nikolaus-mailhog
+    image: mailhog/mailhog
+    restart: unless-stopped
+    ports:
+      - 8025:8025
