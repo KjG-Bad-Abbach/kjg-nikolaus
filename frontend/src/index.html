@@ -1329,8 +1329,7 @@
             oder Junk-Ordner.
           </p>
 
-          <div class="mt-6" x-show="false" x-cloak>
-            <!-- ToDo -->
+          <div class="mt-6">
             <button
               type="button"
               x-on:click="sendEmailVerification"
@@ -1792,8 +1791,19 @@
           },
 
           // Send email verification again
-          sendEmailVerification() {
-            console.log("Sending email verification again...");
+          async sendEmailVerification() {
+            this.isLoading = true;
+            this.error = null;
+            try {
+              await sendRequest({
+                url: `/api/bookings/${this.bookingId}/send-verification-email`,
+                method: "POST",
+              });
+            } catch (error) {
+              this.error = error;
+            } finally {
+              this.isLoading = false;
+            }
           },
 
           // Step 1: Submit Address
