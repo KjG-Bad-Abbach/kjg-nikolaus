@@ -2044,7 +2044,7 @@
             this.error = null;
             try {
               const response = await sendRequest({
-                url: "/api/time-slots?populate=*",
+                url: "/api/time-slots",
               });
 
               if (!response || !response.data) {
