@@ -43,6 +43,9 @@
     "base_url": {
       "type": "string",
       "required": true
+    },
+    "introduction_text": {
+      "type": "blocks"
     }
   }
 }

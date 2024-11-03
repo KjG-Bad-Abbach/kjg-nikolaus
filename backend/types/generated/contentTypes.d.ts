@@ -429,6 +429,7 @@ export interface ApiConfigConfig extends Struct.SingleTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     final_deadline: Schema.Attribute.DateTime & Schema.Attribute.Required;
+    introduction_text: Schema.Attribute.Blocks;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
