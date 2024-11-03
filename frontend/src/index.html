@@ -506,6 +506,21 @@
                   </div>
                   <div>
                     <div class="flex flex-wrap items-baseline gap-1">
+                      Merkmal: <span x-text="child.identification_trait"></span
+                      ><span
+                        x-show="!isFilled(child.identification_trait)"
+                        class="italic text-rust"
+                        x-cloak
+                        >(Angabe fehlt, Deadline:
+                        <span
+                          x-text="formatDateTime(options.final_deadline)"
+                        ></span
+                        >)</span
+                      >
+                    </div>
+                  </div>
+                  <div>
+                    <div class="flex flex-wrap items-baseline gap-1">
                       <span>Rede:</span>
                       <div class="min-w-0 flex-1">
                         <div class="truncate" x-text="child.speech"></div>
@@ -1049,6 +1064,24 @@
                       :readonly="!canEditAnything"
                     />
                   </div>
+
+                  <div>
+                    <label
+                      :for="'child-identification-' + index"
+                      class="block text-left font-medium text-surfie-green"
+                      >Identifikationsmerkmal</label
+                    >
+                    <input
+                      :id="'child-identification-' + index"
+                      type="text"
+                      maxlength="250"
+                      class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
+                      x-model="child.identification_trait"
+                      placeholder="Alter, Haarfarbe, Größe, ..."
+                      :readonly="!canEditAnything"
+                    />
+                  </div>
+
                   <div>
                     <label
                       :for="'child-speech-' + index"
@@ -1943,7 +1976,10 @@
             const areChildrenFilled =
               data.children?.length &&
               data.children.every(
-                (child) => isFilled(child.name) && isFilled(child.speech),
+                (child) =>
+                  isFilled(child.name) &&
+                  isFilled(child.identification_trait) &&
+                  isFilled(child.speech),
               );
             this.steps[3].allFilled = areChildrenFilled;
             this.steps[3].anyFilled =
@@ -2151,7 +2187,11 @@
           },
 
           addChild() {
-            this.booking.children.push({ name: "", speech: "" });
+            this.booking.children.push({
+              name: "",
+              identification_trait: "",
+              speech: "",
+            });
           },
 
           removeChild(index) {
@@ -2166,6 +2206,7 @@
             this.error = null;
             const children = this.booking.children.map((child) => ({
               name: child.name,
+              identification_trait: child.identification_trait,
               speech: child.speech,
             }));
             try {

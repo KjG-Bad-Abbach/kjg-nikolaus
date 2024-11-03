@@ -3,10 +3,12 @@ import type { Schema, Struct } from '@strapi/strapi';
 export interface BookingChild extends Struct.ComponentSchema {
   collectionName: 'components_booking_children';
   info: {
+    description: '';
     displayName: 'Child';
     icon: 'walk';
   };
   attributes: {
+    identification_trait: Schema.Attribute.String;
     name: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMaxLength<{

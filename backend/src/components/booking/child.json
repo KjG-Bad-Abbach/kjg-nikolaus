@@ -2,7 +2,8 @@
   "collectionName": "components_booking_children",
   "info": {
     "displayName": "Child",
-    "icon": "walk"
+    "icon": "walk",
+    "description": ""
   },
   "options": {},
   "attributes": {
@@ -13,6 +14,9 @@
     },
     "speech": {
       "type": "text"
+    },
+    "identification_trait": {
+      "type": "string"
     }
   }
 }
