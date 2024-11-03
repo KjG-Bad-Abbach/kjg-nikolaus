@@ -11,17 +11,29 @@ export default factories.createCoreController(
       // Call the default find method
       const { data, meta } = await super.find(ctx);
 
+      // Query bookings to calculate available slots for each time slot
+      const bookings = await strapi.documents("api::booking.booking").findMany({
+        filters: {
+          time_slots: {
+            id: {
+              $in: data.map((timeSlot) => timeSlot.id),
+            },
+          },
+        },
+        populate: {
+          time_slots: true,
+        },
+      });
+
       // Add a calculated field to each time slot
       const enhancedData = data.map((timeSlot) => {
-        if (timeSlot.bookings) {
-          const enhancedTimeSlot = {
-            ...timeSlot,
-            available_slots: timeSlot.max_bookings - timeSlot.bookings.length,
-          };
-          delete enhancedTimeSlot.bookings;
-          return enhancedTimeSlot;
-        }
-        return timeSlot;
+        const bookingsForTimeSlot = bookings.filter((booking) =>
+          (booking as any).time_slots?.some((ts) => ts.id === timeSlot.id)
+        );
+        return {
+          ...timeSlot,
+          available_slots: timeSlot.max_bookings - bookingsForTimeSlot.length,
+        };
       });
 
       // Return the enhanced data
