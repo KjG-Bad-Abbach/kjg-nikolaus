@@ -1,6 +1,33 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended"
-  ]
+    "config:recommended",
+    ":approveMajorUpdates",
+    ":automergeMinor",
+    ":automergePr",
+    ":docker",
+    ":ignoreUnstable",
+    ":label(renovate)",
+    ":maintainLockFilesWeekly",
+    ":semanticCommits",
+    ":separateMajorReleases"
+  ],
+  "git-submodules": {
+    "enabled": true
+  },
+  "rangeStrategy": "bump",
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "automerge": true
+    },
+    {
+      "matchDatasources": ["npm"],
+      "minimumReleaseAge": "3 days",
+      "internalChecksFilter": "strict"
+    }
+  ],
+  "platformAutomerge": true,
+  "rebaseWhen": "conflicted",
+  "osvVulnerabilityAlerts": true
 }
