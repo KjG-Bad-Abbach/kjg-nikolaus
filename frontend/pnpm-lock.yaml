@@ -37,7 +37,7 @@ importers:
         specifier: ^0.6.8
         version: 0.6.8(prettier@3.3.3)
       tailwindcss:
-        specifier: ^3.4.13
+        specifier: ^3.4.14
         version: 3.4.14
       webpack:
         specifier: ^5.95.0
