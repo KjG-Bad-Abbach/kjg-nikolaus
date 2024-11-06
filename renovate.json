@@ -27,7 +27,6 @@
       "internalChecksFilter": "strict"
     }
   ],
-  "platformAutomerge": true,
   "rebaseWhen": "conflicted",
   "osvVulnerabilityAlerts": true
 }
