@@ -9,7 +9,7 @@ importers:
   .:
     dependencies:
       alpinejs:
-        specifier: ^3.14.1
+        specifier: ^3.14.3
         version: 3.14.3
     devDependencies:
       autoprefixer:
