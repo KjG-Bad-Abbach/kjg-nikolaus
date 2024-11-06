@@ -15,7 +15,7 @@ importers:
         specifier: 5.2.0
         version: 5.2.0(cvd6uogvhgtzlkk2hmokl5xnl4)
       '@strapi/provider-email-nodemailer':
-        specifier: ^5.1.1
+        specifier: ^5.2.0
         version: 5.2.0
       '@strapi/strapi':
         specifier: 5.2.0
