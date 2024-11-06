@@ -16,7 +16,7 @@ importers:
         specifier: ^10.4.20
         version: 10.4.20(postcss@8.4.47)
       browser-sync:
-        specifier: ^3.0.0
+        specifier: ^3.0.3
         version: 3.0.3
       browser-sync-webpack-plugin:
         specifier: ^2.3.0
@@ -4275,7 +4275,7 @@ snapshots:
 
   '@types/express-serve-static-core@5.0.0':
     dependencies:
-      '@types/node': 22.7.5
+      '@types/node': 22.8.6
       '@types/qs': 6.9.16
       '@types/range-parser': 1.2.7
       '@types/send': 0.17.4
@@ -4348,7 +4348,7 @@ snapshots:
   '@types/send@0.17.4':
     dependencies:
       '@types/mime': 1.3.5
-      '@types/node': 22.7.5
+      '@types/node': 22.8.6
 
   '@types/serve-index@1.9.4':
     dependencies:
