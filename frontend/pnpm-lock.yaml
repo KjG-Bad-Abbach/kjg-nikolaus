@@ -40,7 +40,7 @@ importers:
         specifier: ^3.4.14
         version: 3.4.14
       webpack:
-        specifier: ^5.95.0
+        specifier: ^5.96.1
         version: 5.96.1(webpack-cli@5.1.4)
       webpack-cli:
         specifier: ^5.1.4
