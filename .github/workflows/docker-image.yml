@@ -1,0 +1,20 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build the Backend Docker image
+      run: docker build backend --file Dockerfile.prod --tag kjg-nikolaus-backend:$(date +%s)
+    - name: Build the Frontend Docker image
+      run: docker build frontend --file Dockerfile.prod --tag kjg-nikolaus-frontend:$(date +%s)
