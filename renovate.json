@@ -2,6 +2,8 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended",
+    ":dependencyDashboard",
+    ":configMigration",
     ":approveMajorUpdates",
     ":automergeMinor",
     ":automergePr",
@@ -10,7 +12,7 @@
     ":label(renovate)",
     ":maintainLockFilesWeekly",
     ":semanticCommits",
-    ":separateMajorReleases"
+    ":separateMultipleMajorReleases"
   ],
   "git-submodules": {
     "enabled": true
