@@ -15,6 +15,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build the Backend Docker image
-      run: docker build backend --file Dockerfile.prod --tag kjg-nikolaus-backend:$(date +%s)
+      run: docker build ./backend --file ./backend/Dockerfile.prod --tag kjg-nikolaus-backend:$(date +%s)
     - name: Build the Frontend Docker image
-      run: docker build frontend --file Dockerfile.prod --tag kjg-nikolaus-frontend:$(date +%s)
+      run: docker build ./frontend --file ./frontend/Dockerfile.prod --tag kjg-nikolaus-frontend:$(date +%s)
