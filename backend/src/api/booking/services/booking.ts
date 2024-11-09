@@ -47,5 +47,84 @@ export default factories.createCoreService(
         throw error;
       }
     },
+
+    async filterOnlyPossibleTimeSlotsForBooking(
+      timeSlotIds: string[],
+      bookingId?: string
+    ): Promise<string[]> {
+      // Filter time slots to only include those that are not fully booked
+      // This is done by checking if the number of bookings for each time slot
+      // is less than the maximum bookings allowed for that time slot.
+
+      // Fetch config data from your config content type
+      const config = await strapi.documents("api::config.config").findFirst();
+
+      // Fetch time slots with their bookings to filter out fully booked slots
+      const timeSlots = await strapi
+        .documents("api::time-slot.time-slot")
+        .findMany({
+          filters: {
+            documentId: {
+              $in: timeSlotIds,
+            },
+          },
+          populate: {
+            bookings: true,
+          },
+        });
+
+      // Filter out time slots that are not fully booked, excluding the current booking
+      const possibleTimeSlots = timeSlots.filter(
+        (slot) =>
+          slot.bookings.filter((b) => b.documentId !== bookingId).length <
+          slot.max_bookings * config.max_time_slots
+      );
+
+      // Return the IDs of the possible time slots
+      return possibleTimeSlots.map((s) => s.documentId);
+    },
+
+    async sanitizeTimeSlots(
+      timeSlots: any[],
+      bookingId?: string
+    ): Promise<{
+      filteredTimeSlotIds: string[];
+      neededToCleanUpFullyBookedTimeSlots: boolean;
+      message: string;
+    }> {
+      let neededToCleanUpFullyBookedTimeSlots = false;
+      let filteredTimeSlotIds = timeSlots.map((s) =>
+        typeof s === "object" ? s.documentId : s
+      );
+      // const message =
+      //   "One or more time slots are fully booked and have been removed from your selection." +
+      //   " " +
+      //   "The selected available time slots have been saved for you.";
+      const message =
+        "Ein oder mehrere Zeitslots sind vollständig ausgebucht und wurden aus deiner Auswahl entfernt." +
+        " " +
+        "Die ausgewählten verfügbaren Zeitslots wurden für dich gespeichert.";
+
+      if (timeSlots) {
+        const bookableTimeSlotIds = (await strapi
+          .service("api::booking.booking")
+          .filterOnlyPossibleTimeSlotsForBooking(
+            filteredTimeSlotIds,
+            bookingId
+          )) as string[];
+        if (
+          !filteredTimeSlotIds.every((s) => bookableTimeSlotIds.includes(s))
+        ) {
+          neededToCleanUpFullyBookedTimeSlots = true;
+          filteredTimeSlotIds = bookableTimeSlotIds;
+        }
+      }
+
+      return {
+        filteredTimeSlotIds,
+        neededToCleanUpFullyBookedTimeSlots,
+        message,
+      };
+    },
   })
 );

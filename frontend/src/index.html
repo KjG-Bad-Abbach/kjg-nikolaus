@@ -925,14 +925,14 @@
                           :value="slot.id"
                           @change="updateTimeSlot(slot.id)"
                           x-model="slot.isSelected"
-                          :disabled="(selectedTimeSlotIds.length >= options.max_time_slots && !selectedTimeSlotIds.includes(slot.id)) || (slot.available_slots <= 0)"
+                          :disabled="(selectedTimeSlotIds.length >= options.max_time_slots && !selectedTimeSlotIds.includes(slot.id)) || (slot.available_reservations <= 0)"
                         />
                         <span
                           class="ml-2 select-none text-gray-800 peer-disabled:text-gray-300"
                           x-text="slot.label"
                         ></span>
                         <span
-                          x-show="slot.available_slots <= 0"
+                          x-show="slot.available_reservations <= 0"
                           class="ml-2 text-sm text-sun-400"
                           x-cloak
                           >ausgebucht</span
@@ -1452,7 +1452,7 @@
         x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0"
         class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
-        @click.self="error = null"
+        @click.self="closeError()"
         x-cloak
       >
         <!-- Modal content -->
@@ -1515,7 +1515,7 @@
             </button>
             <button
               x-show="!askToReload"
-              @click="error = null"
+              @click="closeError()"
               type="button"
               class="rounded border-2 border-gray-400 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600"
               x-cloak
@@ -1838,6 +1838,15 @@
           },
           isLoading: false,
           error: null,
+          errorCloseCallback: null,
+          closeError() {
+            this.error = null;
+            const callback = this.errorCloseCallback;
+            this.errorCloseCallback = null;
+            if (callback) {
+              callback();
+            }
+          },
           askToReload: false,
           view: "intro",
           step: 0,
@@ -2144,7 +2153,8 @@
                 start: new Date(slot.start),
                 end: new Date(slot.end),
                 max_bookings: slot.max_bookings,
-                available_slots: slot.available_slots,
+                max_reservations: slot.max_reservations,
+                available_reservations: slot.available_reservations,
                 isSelected: false,
               }));
 
@@ -2172,7 +2182,7 @@
                 .map((slot) => slot.id);
               this.availableTimeSlots.forEach((slot) => {
                 slot.isSelected = this.selectedTimeSlotIds.includes(slot.id);
-                slot.available_slots += slot.isSelected ? 1 : 0;
+                slot.available_reservations += slot.isSelected ? 1 : 0;
               });
 
               this.isLoading = false;
@@ -2203,7 +2213,21 @@
               await this.setStep(3);
             } catch (error) {
               this.isLoading = false;
-              this.error = error;
+              if (
+                error.status.code === 409 /*Conflict*/ &&
+                error.body?.error?.details?.meta?.concurrencyTimeSlotsError
+              ) {
+                this.error = {
+                  ...error,
+                  message:
+                    error.body.error.message +
+                    " " +
+                    "Bitte wähle noch andere Zeitslots aus.",
+                };
+                this.errorCloseCallback = async () => await this.init();
+              } else {
+                this.error = error;
+              }
             }
           },
 
