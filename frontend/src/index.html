@@ -1439,8 +1439,35 @@
         </div>
       </template>
 
-      <!-- Placeholder to center content -->
-      <div class="h-24"></div>
+      <!-- Footer -->
+      <footer class="mt-8 w-full p-4 text-center text-sm text-gray-700">
+        <p>
+          &copy; <span x-text="new Date().getFullYear()"></span> KjG Bad Abbach
+        </p>
+        <div>
+          <a
+            x-show="options.legal_notice_link"
+            :href="options.legal_notice_link"
+            class="text-gray-700 hover:text-gray-900"
+            x-cloak
+            >Impressum</a
+          >
+          <span
+            x-show="options.legal_notice_link && options.privacy_policy_link"
+            class="mx-2"
+            x-cloak
+            >|</span
+          >
+          <a
+            x-show="options.privacy_policy_link"
+            :href="options.privacy_policy_link"
+            class="text-gray-700 hover:text-gray-900"
+            x-cloak
+            >Datenschutz</a
+          >
+        </div>
+        <div>Alle Daten werden nach der Aktion vollständig gelöscht.</div>
+      </footer>
 
       <!-- Backdrop and Modal for error messages -->
       <div
@@ -1835,6 +1862,8 @@
             route_planning_deadline: new Date("2004-11-27T23:59:59+01:00"), // UTC+1 (Europe/Berlin)
             final_deadline: new Date("2004-12-01T23:59:59+01:00"), // UTC+1 (Europe/Berlin)
             introduction_text: [],
+            privacy_policy_link: null,
+            legal_notice_link: null,
           },
           isLoading: false,
           error: null,

@@ -46,6 +46,12 @@
     },
     "introduction_text": {
       "type": "blocks"
+    },
+    "privacy_policy_link": {
+      "type": "string"
+    },
+    "legal_notice_link": {
+      "type": "string"
     }
   }
 }

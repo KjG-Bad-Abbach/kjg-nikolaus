@@ -430,6 +430,7 @@ export interface ApiConfigConfig extends Struct.SingleTypeSchema {
       Schema.Attribute.Private;
     final_deadline: Schema.Attribute.DateTime & Schema.Attribute.Required;
     introduction_text: Schema.Attribute.Blocks;
+    legal_notice_link: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -446,6 +447,7 @@ export interface ApiConfigConfig extends Struct.SingleTypeSchema {
         number
       > &
       Schema.Attribute.DefaultTo<1>;
+    privacy_policy_link: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
     route_planning_deadline: Schema.Attribute.DateTime &
       Schema.Attribute.Required;
