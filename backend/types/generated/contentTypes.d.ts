@@ -457,6 +457,9 @@ export interface ApiConfigConfig extends Struct.SingleTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    verification_email_body_template: Schema.Attribute.Blocks;
+    verification_email_subject_template: Schema.Attribute.String &
+      Schema.Attribute.Required;
   };
 }
 

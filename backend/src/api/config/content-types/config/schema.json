@@ -52,6 +52,13 @@
     },
     "legal_notice_link": {
       "type": "string"
+    },
+    "verification_email_subject_template": {
+      "type": "string",
+      "required": true
+    },
+    "verification_email_body_template": {
+      "type": "blocks"
     }
   }
 }
