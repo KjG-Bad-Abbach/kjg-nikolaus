@@ -2,26 +2,24 @@ function replaceInString(
   input: string,
   parameters: { [key: string]: string | Function }
 ): string {
-  Object.keys(parameters || {}).forEach((key) => {
-    const keyRegex = new RegExp(
-      `{{${key}(?:\\((?:'(?<param>[^']*)'(?:,\\s*)?)*\\))?}}`,
-      "g"
-    );
-    const paramRegex = /'([^']*)'/g;
+  const keyRegex =
+    /{{(?<key>[\w\-_]+)(?:\((?:'(?<param>[^']*)'(?:,\s*)?)*\))?}}/g;
+  const paramRegex = /'([^']*)'/g;
 
-    input = (input || "").replace(keyRegex, (placeholder) => {
-      let replacement = parameters[key];
+  input = (input || "").replace(keyRegex, (placeholder, ...captures) => {
+    const key = captures[captures.length - 1].key;
+    let replacement =
+      (Object.keys(parameters).includes(key) ? parameters[key] : "") || "";
 
-      if (typeof replacement === "function") {
-        const params = [];
-        for (const match of placeholder.matchAll(paramRegex)) {
-          params.push(match[1]);
-        }
-        replacement = replacement(placeholder, ...params);
+    if (typeof replacement === "function") {
+      const params = [];
+      for (const match of placeholder.matchAll(paramRegex)) {
+        params.push(match[1]);
       }
+      replacement = replacement(placeholder, ...params);
+    }
 
-      return replacement as string;
-    });
+    return replacement as string;
   });
 
   return input;
