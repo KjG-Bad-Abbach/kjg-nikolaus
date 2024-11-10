@@ -108,3 +108,51 @@ Generate an API token with the following rights under `Settings` -> `Global Sett
 - `Permissions` for `Time-slot`:
   - `find`
   - `findOne`
+
+## Screenshots
+
+![Step 0](imgs/Step0.png)
+
+![Step 1.1](imgs/Step1.1.png)
+
+![Step 1.2](imgs/Step1.2.png)
+
+![Step 1.3](imgs/Step1.3.png)
+
+If the email client does not support HTML there is a plain text also provided in the email:
+
+```
+# E-Mail erfolgreich verifiziert!
+
+Hallo John Doe,
+
+vielen Dank für die Verifizierung deiner E-Mail-Adresse. Du kannst jetzt deine Buchung vervollständigen, indem du alle erforderlichen Informationen eingibst.
+
+Nutze den untenstehenden Link, um deine Buchung jederzeit aufzurufen, zu überprüfen und zu bearbeiten:
+
+
+
+[Buchung vervollständigen/bearbeiten](http://localhost:3000/?id=xxxxxxxxxxxxxxxxxxxxxxxx)
+
+
+
+Bitte stelle sicher, dass du alle erforderlichen Felder für eine erfolgreiche Buchung ausfüllst.
+
+Deine KjG Bad Abbach.
+```
+
+![Step 2](imgs/Step2.png)
+
+![Step 3](imgs/Step3.png)
+
+![Step 4.1](imgs/Step4.1.png)
+
+![Step 4.2](imgs/Step4.2.png)
+
+![Step 5.1](imgs/Step5.1.png)
+
+![Step 5.2](imgs/Step5.2.png)
+
+![Step 5.3](imgs/Step5.3.png)
+
+![Step 5.4](imgs/Step5.4.png)
