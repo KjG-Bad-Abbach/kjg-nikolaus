@@ -2,7 +2,7 @@
 
 In the Strapi backend `Content Manager` -> `Single Types` -> `Config` configure the basic configuration:
 
-- `api_token`: see below how to create an [API Token](#create-an-api-token)
+- `api_token`: see below how to create an [API Token](#-create-an-api-token)
 - `base_url`: this is the web URL for the tool and is used for link generation in emails
 - `api_base_url`: this is the API URL the frontend will use to make API calls
 - `max_time_slots`: this is the number of concurrent reservations per available slot booking
@@ -61,7 +61,7 @@ In the Strapi backend `Content Manager` -> `Single Types` -> `Config` configure 
     - `{{phone_number}}`
     - `{{email}}`
 
-## 🕒️ Create the Time-slots
+## ⏰ Create the Time-slots
 
 - `start`: the start time of the Time-slot
 - `end`: the end time of the Time-slot
@@ -73,7 +73,7 @@ Create the Time-slots using the Strapi backend `Content Manager` -> `Collection 
 
 ### Using HTTP-POST requests
 
-Create an [API Token](#create-an-api-token) that is allowed to create Time-slots. A token with this rights must not be used for the API Token in the Config, so be careful who can create the Time-slots.
+Create an [API Token](#-create-an-api-token) that is allowed to create Time-slots. A token with this rights must not be used for the API Token in the Config, so be careful who can create the Time-slots.
 
 Then send the HTTP-POST requests to the server. Keep in mind that the timestamp with `...Z` uses the universal UTC timezone and you must convert it to your timezone i. e. Europe/Berlin. During conversion keep in mind, that we have a timezone switch from summer to winter in October, so the time-offset at your current time may not apply in December.
 
