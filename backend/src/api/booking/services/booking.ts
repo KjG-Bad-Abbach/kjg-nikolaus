@@ -1493,19 +1493,15 @@ export default factories.createCoreService(
         " " +
         "Die ausgewählten verfügbaren Zeitslots wurden für dich gespeichert.";
 
-      if (timeSlots) {
-        const bookableTimeSlotIds = (await strapi
-          .service("api::booking.booking")
-          .filterOnlyPossibleTimeSlotsForBooking(
-            filteredTimeSlotIds,
-            bookingId
-          )) as string[];
-        if (
-          !filteredTimeSlotIds.every((s) => bookableTimeSlotIds.includes(s))
-        ) {
-          neededToCleanUpFullyBookedTimeSlots = true;
-          filteredTimeSlotIds = bookableTimeSlotIds;
-        }
+      const bookableTimeSlotIds = (await strapi
+        .service("api::booking.booking")
+        .filterOnlyPossibleTimeSlotsForBooking(
+          filteredTimeSlotIds,
+          bookingId
+        )) as string[];
+      if (!filteredTimeSlotIds.every((s) => bookableTimeSlotIds.includes(s))) {
+        neededToCleanUpFullyBookedTimeSlots = true;
+        filteredTimeSlotIds = bookableTimeSlotIds;
       }
 
       return {

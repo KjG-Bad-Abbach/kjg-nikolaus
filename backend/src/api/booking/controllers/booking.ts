@@ -22,12 +22,15 @@ export default factories.createCoreController(
         time_slots?: any[];
       };
 
-      // Sanitize time slots to keep only available ones for booking
-      const filterResult = await strapi
-        .service("api::booking.booking")
-        .sanitizeTimeSlots(data.time_slots);
-      if (filterResult.neededToCleanUpFullyBookedTimeSlots) {
-        data.time_slots = filterResult.filteredTimeSlotIds;
+      let filterResult: any = {};
+      if (data.time_slots) {
+        // Sanitize time slots to keep only available ones for booking
+        filterResult = await strapi
+          .service("api::booking.booking")
+          .sanitizeTimeSlots(data.time_slots);
+        if (filterResult.neededToCleanUpFullyBookedTimeSlots) {
+          data.time_slots = filterResult.filteredTimeSlotIds;
+        }
       }
 
       ctx.request.body.data = data;
@@ -45,12 +48,15 @@ export default factories.createCoreController(
         time_slots?: any[];
       };
 
-      // Sanitize time slots to keep only available ones for booking
-      const filterResult = await strapi
-        .service("api::booking.booking")
-        .sanitizeTimeSlots(data.time_slots, ctx.params.id);
-      if (filterResult.neededToCleanUpFullyBookedTimeSlots) {
-        data.time_slots = filterResult.filteredTimeSlotIds;
+      let filterResult: any = {};
+      if (data.time_slots) {
+        // Sanitize time slots to keep only available ones for booking
+        filterResult = await strapi
+          .service("api::booking.booking")
+          .sanitizeTimeSlots(data.time_slots, ctx.params.id);
+        if (filterResult.neededToCleanUpFullyBookedTimeSlots) {
+          data.time_slots = filterResult.filteredTimeSlotIds;
+        }
       }
 
       ctx.request.body.data = data;
