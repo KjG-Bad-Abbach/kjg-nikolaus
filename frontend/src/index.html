@@ -1981,14 +1981,11 @@
               // Read the "id" parameter from the URL and store it in the bookingId variable
               this.bookingId = params.get("id") || null;
 
+              this.isLoading = false;
+
               if (this.bookingId) {
                 this.view = "steps";
-                // Fetch the booking data from the API
-                const response = await sendRequest({
-                  url: `/api/bookings/${this.bookingId}?populate=*`,
-                });
 
-                this.isLoading = false;
                 await this.updateFromDatabase(response.data);
               }
             } catch (error) {
@@ -2004,87 +2001,104 @@
 
           // Update data based on the fetched data
           async updateFromDatabase(data) {
-            // Can jump to any step if bookingId is set
-            this.canJumpToAnyStep = !!this.bookingId;
-
-            await this.setStep(0);
-
-            // Update the booking object with the fetched data
-            updateExistingObjectKeys(this.booking, data);
-
-            // Update selected time-slots
-            await this.fetchTimeSlots();
-
-            // Step 0: Contact Details
-            const isContactDetailsFilled =
-              isFilled(data.contact_person?.first_name) &&
-              isFilled(data.contact_person?.last_name) &&
-              isFilled(data.contact_person?.email) &&
-              isFilled(data.contact_person?.phone_number);
-            this.steps[0].allFilled = isContactDetailsFilled;
-            this.steps[0].anyFilled =
-              isFilled(data.contact_person?.first_name) ||
-              isFilled(data.contact_person?.last_name) ||
-              isFilled(data.contact_person?.email) ||
-              isFilled(data.contact_person?.phone_number);
-            if (this.steps[0].allFilled && this.step === 0) {
-              await this.setStep(1);
+            if (this.isLoading) {
+              return;
             }
+            this.isLoading = true;
+            this.error = null;
+            try {
+              // Fetch the booking data from the API
+              const response = await sendRequest({
+                url: `/api/bookings/${this.bookingId}?populate=*`,
+              });
 
-            // Step 1: Address
-            const isAddressFilled =
-              isFilled(data.location?.street) &&
-              isFilled(data.location?.house_number) &&
-              isFilled(data.location?.zip_code) &&
-              isFilled(data.location?.place);
-            const isPresentLocationFilled = isFilled(data.present_location);
-            this.steps[1].allFilled =
-              isAddressFilled && isPresentLocationFilled;
-            this.steps[1].anyFilled =
-              isFilled(data.location?.street) ||
-              isFilled(data.location?.house_number) ||
-              isFilled(data.location?.zip_code) ||
-              isFilled(data.location?.place) ||
-              isFilled(data.present_location);
-            if (this.steps[1].allFilled && this.step === 1) {
-              await this.setStep(2);
+              // Can jump to any step if bookingId is set
+              this.canJumpToAnyStep = !!this.bookingId;
+
+              await this.setStep(0);
+
+              // Update the booking object with the fetched data
+              updateExistingObjectKeys(this.booking, data);
+
+              // Update selected time-slots
+              await this.fetchTimeSlots();
+
+              // Step 0: Contact Details
+              const isContactDetailsFilled =
+                isFilled(data.contact_person?.first_name) &&
+                isFilled(data.contact_person?.last_name) &&
+                isFilled(data.contact_person?.email) &&
+                isFilled(data.contact_person?.phone_number);
+              this.steps[0].allFilled = isContactDetailsFilled;
+              this.steps[0].anyFilled =
+                isFilled(data.contact_person?.first_name) ||
+                isFilled(data.contact_person?.last_name) ||
+                isFilled(data.contact_person?.email) ||
+                isFilled(data.contact_person?.phone_number);
+              if (this.steps[0].allFilled && this.step === 0) {
+                await this.setStep(1);
+              }
+
+              // Step 1: Address
+              const isAddressFilled =
+                isFilled(data.location?.street) &&
+                isFilled(data.location?.house_number) &&
+                isFilled(data.location?.zip_code) &&
+                isFilled(data.location?.place);
+              const isPresentLocationFilled = isFilled(data.present_location);
+              this.steps[1].allFilled =
+                isAddressFilled && isPresentLocationFilled;
+              this.steps[1].anyFilled =
+                isFilled(data.location?.street) ||
+                isFilled(data.location?.house_number) ||
+                isFilled(data.location?.zip_code) ||
+                isFilled(data.location?.place) ||
+                isFilled(data.present_location);
+              if (this.steps[1].allFilled && this.step === 1) {
+                await this.setStep(2);
+              }
+
+              // Step 2: Time-Slot
+              const areTimeSlotsFilled =
+                data.time_slots?.length >= this.options.max_time_slots;
+              this.steps[2].allFilled = areTimeSlotsFilled;
+              this.steps[2].anyFilled = !!data.time_slots?.length;
+              if (this.steps[2].allFilled && this.step === 2) {
+                await this.setStep(3);
+              }
+
+              // Step 3: Children
+              const areChildrenFilled =
+                data.children?.length &&
+                data.children.every(
+                  (child) =>
+                    isFilled(child.name) &&
+                    isFilled(child.identification_trait) &&
+                    isFilled(child.speech),
+                );
+              this.steps[3].allFilled = areChildrenFilled;
+              this.steps[3].anyFilled =
+                !!data.children?.length || isFilled(data.additional_notes);
+              if (this.steps[3].allFilled && this.step === 3) {
+                await this.setStep(4);
+              }
+
+              // Step 4: Review
+              this.isRoutePlanningFilled =
+                isAddressFilled && areTimeSlotsFilled;
+              this.isEverythingFilled =
+                isContactDetailsFilled &&
+                isAddressFilled &&
+                isPresentLocationFilled &&
+                areTimeSlotsFilled &&
+                areChildrenFilled;
+              this.steps[4].allFilled = this.isEverythingFilled;
+              this.steps[4].anyFilled = false;
+            } catch (error) {
+              this.error = error;
+            } finally {
+              this.isLoading = false;
             }
-
-            // Step 2: Time-Slot
-            const areTimeSlotsFilled =
-              data.time_slots?.length >= this.options.max_time_slots;
-            this.steps[2].allFilled = areTimeSlotsFilled;
-            this.steps[2].anyFilled = !!data.time_slots?.length;
-            if (this.steps[2].allFilled && this.step === 2) {
-              await this.setStep(3);
-            }
-
-            // Step 3: Children
-            const areChildrenFilled =
-              data.children?.length &&
-              data.children.every(
-                (child) =>
-                  isFilled(child.name) &&
-                  isFilled(child.identification_trait) &&
-                  isFilled(child.speech),
-              );
-            this.steps[3].allFilled = areChildrenFilled;
-            this.steps[3].anyFilled =
-              !!data.children?.length || isFilled(data.additional_notes);
-            if (this.steps[3].allFilled && this.step === 3) {
-              await this.setStep(4);
-            }
-
-            // Step 4: Review
-            this.isRoutePlanningFilled = isAddressFilled && areTimeSlotsFilled;
-            this.isEverythingFilled =
-              isContactDetailsFilled &&
-              isAddressFilled &&
-              isPresentLocationFilled &&
-              areTimeSlotsFilled &&
-              areChildrenFilled;
-            this.steps[4].allFilled = this.isEverythingFilled;
-            this.steps[4].anyFilled = false;
           },
 
           // Step 0: Submit Contact Details
