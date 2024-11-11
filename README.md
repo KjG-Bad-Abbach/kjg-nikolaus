@@ -120,6 +120,8 @@ Generate an API token with the following rights under `Settings` -> `Global Sett
 
 ## Screenshots
 
+### Desktop
+
 ![Step 0](imgs/Step0.png)
 
 ![Step 1.1](imgs/Step1.1.png)
@@ -165,3 +167,9 @@ Deine KjG Bad Abbach.
 ![Step 5.3](imgs/Step5.3.png)
 
 ![Step 5.4](imgs/Step5.4.png)
+
+### Mobile
+
+![Step 1.1 Mobile](imgs/Step1.1-Mobile.png)
+
+![Step 2 Mobile](imgs/Step2-Mobile.png)
