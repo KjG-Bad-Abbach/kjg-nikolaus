@@ -10,6 +10,37 @@ import { ParameterReplacer } from "../../../utils/ParameterReplacer";
 export default factories.createCoreService(
   "api::booking.booking",
   ({ strapi }) => ({
+    async addHistoryEntry(bookingId: string, change?: any) {
+      try {
+        if (!bookingId) {
+          throw new Error("Booking ID is required");
+        }
+
+        let booking = await strapi.documents("api::booking.booking").findOne({
+          documentId: bookingId,
+          populate: "*",
+        });
+
+        if (!booking) {
+          throw new Error("Booking not found");
+        }
+
+        // create new history entry
+        const historyEntry = {
+          timestamp: new Date(),
+          booking: bookingId,
+          state: JSON.stringify(booking),
+          change: JSON.stringify(change || null),
+        };
+        await strapi.documents("api::booking-history.booking-history").create({
+          data: historyEntry,
+        });
+      } catch (error) {
+        console.error("History entry failed:", error);
+        throw error;
+      }
+    },
+
     async sendVerificationEmail(bookingId: string) {
       try {
         if (!bookingId) {

@@ -94,6 +94,15 @@ Content-Type: application/json
 }
 ```
 
+## 🔖 Query history
+
+Create an [API Token](#-create-an-api-token) that is allowed to `findOne` and `find` for both Booking-history and Booking. A token with this rights must not be used for the API Token in the Config, so be careful who can query all history entries with all details.
+
+```rest
+GET http://localhost:1337/api/booking-histories?filters[id][$gt]=6&populate[booking][fields]=documentId&fields=timestamp,change&sort=timestamp
+Authorization: Bearer {{$dotenv REST_HISTORY_API_TOKEN}}
+```
+
 ## 🔑 Create an API Token
 
 Generate an API token with the following rights under `Settings` -> `Global Settings` -> `API Tokens` -> `New`

@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "booking_histories",
+  "info": {
+    "singularName": "booking-history",
+    "pluralName": "booking-histories",
+    "displayName": "Booking History"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "timestamp": {
+      "type": "datetime",
+      "required": true
+    },
+    "booking": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::booking.booking"
+    },
+    "state": {
+      "type": "json",
+      "required": true
+    },
+    "change": {
+      "type": "json"
+    }
+  }
+}

@@ -35,6 +35,9 @@ export default factories.createCoreController(
 
       ctx.request.body.data = data;
       const response = await super.create(ctx);
+      await strapi
+        .service("api::booking.booking")
+        .addHistoryEntry(response.data.documentId, data);
 
       if (filterResult.neededToCleanUpFullyBookedTimeSlots) {
         response.meta.concurrencyTimeSlotsError = true;
@@ -61,6 +64,9 @@ export default factories.createCoreController(
 
       ctx.request.body.data = data;
       const response = await super.update(ctx);
+      await strapi
+        .service("api::booking.booking")
+        .addHistoryEntry(response.data.documentId, data);
 
       if (filterResult.neededToCleanUpFullyBookedTimeSlots) {
         response.meta.concurrencyTimeSlotsError = true;
