@@ -82,7 +82,7 @@ Then send the HTTP-POST requests to the server. Keep in mind that the timestamp 
 
 ```rest
 POST http://localhost:1337/api/time-slots
-Authorization: Bearer {{$dotenv REST_API_TOKEN}}
+Authorization: Bearer {{$dotenv REST_CREATE_API_TOKEN}}
 Content-Type: application/json
 
 {
@@ -99,7 +99,7 @@ Content-Type: application/json
 Create an [API Token](#-create-an-api-token) that is allowed to `findOne` and `find` for both Booking-history and Booking. A token with this rights must not be used for the API Token in the Config, so be careful who can query all history entries with all details.
 
 ```rest
-GET http://localhost:1337/api/booking-histories?filters[id][$gt]=6&populate[booking][fields]=documentId&fields=timestamp,change&sort=timestamp
+GET http://localhost:1337/api/booking-histories?populate[booking][fields]=documentId&fields=timestamp,change&sort=timestamp
 Authorization: Bearer {{$dotenv REST_HISTORY_API_TOKEN}}
 ```
 
