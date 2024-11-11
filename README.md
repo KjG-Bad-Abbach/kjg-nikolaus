@@ -94,6 +94,29 @@ Content-Type: application/json
 }
 ```
 
+Or create multiple at once:
+
+```rest
+POST http://localhost:1337/api/time-slots
+Authorization: Bearer {{$dotenv REST_CREATE_API_TOKEN}}
+Content-Type: application/json
+
+{
+    "data": [
+        {
+            "start": "2024-12-05T19:30:00.000Z",
+            "end": "2024-12-05T20:00:00.000Z",
+            "max_bookings": 3
+        },
+        {
+            "start": "2024-12-05T20:00:00.000Z",
+            "end": "2024-12-05T20:30:00.000Z",
+            "max_bookings": 3
+        }
+    ]
+}
+```
+
 ## 🔖 Query history
 
 Create an [API Token](#-create-an-api-token) that is allowed to `findOne` and `find` for both Booking-history and Booking. A token with this rights must not be used for the API Token in the Config, so be careful who can query all history entries with all details.
