@@ -1930,69 +1930,71 @@
           },
 
           async init() {
-            if (!this.options.id) {
-              const response = await sendRequest({
-                url: "/api/config?populate=*",
-              });
-              if (!API_TOKEN) {
-                API_TOKEN = response.data.api_token;
-              }
-              if (!API_BASE_URL) {
-                API_BASE_URL = response.data.api_base_url;
-              }
-              updateExistingObjectKeys(this.options, response.data);
-              if (
-                this.options.introduction_text &&
-                this.options.introduction_text.length
-              ) {
-                this.view = "intro";
-                const content = document.querySelector("#introduction-text");
-                const renderer = new RichTextBlocksRenderer(
-                  this.options.introduction_text,
-                  {
-                    extend: {
-                      heading1: "text-calypso",
-                      heading2: "text-calypso",
-                      heading3: "text-calypso",
-                      heading4: "text-calypso",
-                      heading5: "text-calypso",
-                      heading6: "text-calypso",
-                      list: "marker:text-calypso",
-                      link: "text-atlantis hover:text-surfie-green",
-                    },
-                  },
-                );
-                content.innerHTML = renderer.render();
-              } else {
-                this.view = "steps";
-              }
+            if (this.isLoading) {
+              return;
             }
-            this.updateCanEdit();
+            this.isLoading = true;
+            this.error = null;
+            try {
+              if (!this.options.id) {
+                const response = await sendRequest({
+                  url: "/api/config?populate=*",
+                });
+                if (!API_TOKEN) {
+                  API_TOKEN = response.data.api_token;
+                }
+                if (!API_BASE_URL) {
+                  API_BASE_URL = response.data.api_base_url;
+                }
+                updateExistingObjectKeys(this.options, response.data);
+                if (
+                  this.options.introduction_text &&
+                  this.options.introduction_text.length
+                ) {
+                  this.view = "intro";
+                  const content = document.querySelector("#introduction-text");
+                  const renderer = new RichTextBlocksRenderer(
+                    this.options.introduction_text,
+                    {
+                      extend: {
+                        heading1: "text-calypso",
+                        heading2: "text-calypso",
+                        heading3: "text-calypso",
+                        heading4: "text-calypso",
+                        heading5: "text-calypso",
+                        heading6: "text-calypso",
+                        list: "marker:text-calypso",
+                        link: "text-atlantis hover:text-surfie-green",
+                      },
+                    },
+                  );
+                  content.innerHTML = renderer.render();
+                } else {
+                  this.view = "steps";
+                }
+              }
+              this.updateCanEdit();
 
-            // Get the query parameters from the URL
-            const params = new URLSearchParams(window.location.search);
+              // Get the query parameters from the URL
+              const params = new URLSearchParams(window.location.search);
 
-            // Read the "id" parameter from the URL and store it in the bookingId variable
-            this.bookingId = params.get("id") || null;
+              // Read the "id" parameter from the URL and store it in the bookingId variable
+              this.bookingId = params.get("id") || null;
 
-            if (this.bookingId) {
-              this.view = "steps";
-              this.isLoading = true;
-              this.error = null;
-              try {
+              if (this.bookingId) {
+                this.view = "steps";
                 // Fetch the booking data from the API
                 const response = await sendRequest({
                   url: `/api/bookings/${this.bookingId}?populate=*`,
                 });
 
+                this.isLoading = false;
                 await this.updateFromDatabase(response.data);
-
-                this.isLoading = false;
-              } catch (error) {
-                this.isLoading = false;
-                this.error = error;
-                this.askToReload = true;
               }
+            } catch (error) {
+              this.isLoading = false;
+              this.error = error;
+              this.askToReload = true;
             }
           },
 
@@ -2087,10 +2089,14 @@
 
           // Step 0: Submit Contact Details
           async submitContactDetails() {
+            if (this.isLoading) {
+              return;
+            }
             this.isLoading = true;
             this.error = null;
-            const hadBookingId = !!this.bookingId;
             try {
+              const hadBookingId = !!this.bookingId;
+
               const response = await sendRequest({
                 url: this.bookingId
                   ? `/api/bookings/${this.bookingId}`
@@ -2120,6 +2126,9 @@
 
           // Send email verification again
           async sendEmailVerification() {
+            if (this.isLoading) {
+              return;
+            }
             this.isLoading = true;
             this.error = null;
             try {
@@ -2136,6 +2145,9 @@
 
           // Step 1: Submit Address
           async submitAddress() {
+            if (this.isLoading) {
+              return;
+            }
             this.isLoading = true;
             this.error = null;
             try {
@@ -2150,8 +2162,8 @@
                 },
               });
 
-              await this.init();
               this.isLoading = false;
+              await this.init();
               await this.setStep(2);
             } catch (error) {
               this.isLoading = false;
@@ -2161,6 +2173,9 @@
 
           // Step 2: Fetch available time-slots
           async fetchTimeSlots() {
+            if (this.isLoading) {
+              return;
+            }
             this.isLoading = true;
             this.error = null;
             try {
@@ -2223,10 +2238,14 @@
 
           // Step 2: Submit Time-Slot Selection
           async submitTimeSlots() {
-            this.booking.time_slots = this.selectedTimeSlotIds;
+            if (this.isLoading) {
+              return;
+            }
             this.isLoading = true;
             this.error = null;
             try {
+              this.booking.time_slots = this.selectedTimeSlotIds;
+
               const response = await sendRequest({
                 url: `/api/bookings/${this.bookingId}`,
                 method: "PUT",
@@ -2237,8 +2256,8 @@
                 },
               });
 
-              await this.init();
               this.isLoading = false;
+              await this.init();
               await this.setStep(3);
             } catch (error) {
               this.isLoading = false;
@@ -2302,14 +2321,18 @@
 
           // Step 3: Submit Children Details
           async submitChildren() {
+            if (this.isLoading) {
+              return;
+            }
             this.isLoading = true;
             this.error = null;
-            const children = this.booking.children.map((child) => ({
-              name: child.name,
-              identification_trait: child.identification_trait,
-              speech: child.speech,
-            }));
             try {
+              const children = this.booking.children.map((child) => ({
+                name: child.name,
+                identification_trait: child.identification_trait,
+                speech: child.speech,
+              }));
+
               const response = await sendRequest({
                 url: `/api/bookings/${this.bookingId}`,
                 method: "PUT",
@@ -2321,8 +2344,8 @@
                 },
               });
 
-              await this.init();
               this.isLoading = false;
+              await this.init();
               await this.setStep(4);
             } catch (error) {
               this.isLoading = false;
