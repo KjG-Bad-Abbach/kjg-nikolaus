@@ -2023,7 +2023,10 @@
               updateExistingObjectKeys(this.booking, data);
 
               // Update selected time-slots
-              await this.fetchTimeSlots();
+              await this.fetchTimeSlots(/*forceWhileLoading*/ true);
+              if (this.error) {
+                throw this.error;
+              }
 
               // Step 0: Contact Details
               const isContactDetailsFilled =
@@ -2195,10 +2198,11 @@
           },
 
           // Step 2: Fetch available time-slots
-          async fetchTimeSlots() {
-            if (this.isLoading) {
+          async fetchTimeSlots(forceWhileLoading = false) {
+            if (this.isLoading && !forceWhileLoading) {
               return;
             }
+            const oldIsLoading = this.isLoading;
             this.isLoading = true;
             this.error = null;
             try {
@@ -2252,10 +2256,10 @@
                 slot.available_reservations += slot.isSelected ? 1 : 0;
               });
 
-              this.isLoading = false;
+              this.isLoading = oldIsLoading;
             } catch (error) {
               console.error(error);
-              this.isLoading = false;
+              this.isLoading = oldIsLoading;
               this.error = error.message || "Failed to fetch time-slots";
             }
           },
