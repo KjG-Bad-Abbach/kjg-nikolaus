@@ -1986,7 +1986,7 @@
               if (this.bookingId) {
                 this.view = "steps";
 
-                await this.updateFromDatabase(response.data);
+                await this.updateFromDatabase();
               }
             } catch (error) {
               this.isLoading = false;
@@ -2000,7 +2000,7 @@
           },
 
           // Update data based on the fetched data
-          async updateFromDatabase(data) {
+          async updateFromDatabase() {
             if (this.isLoading) {
               return;
             }
@@ -2011,6 +2011,7 @@
               const response = await sendRequest({
                 url: `/api/bookings/${this.bookingId}?populate=*`,
               });
+              const data = response.data;
 
               // Can jump to any step if bookingId is set
               this.canJumpToAnyStep = !!this.bookingId;
@@ -2141,6 +2142,9 @@
           // Send email verification again
           async sendEmailVerification() {
             if (this.isLoading) {
+              return;
+            }
+            if (!confirm("E-Mail erneut senden?")) {
               return;
             }
             this.isLoading = true;
