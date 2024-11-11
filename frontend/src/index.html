@@ -1989,6 +1989,7 @@
                 await this.updateFromDatabase();
               }
             } catch (error) {
+              console.error(error);
               this.isLoading = false;
               this.error = error;
               this.askToReload = true;
@@ -2096,6 +2097,7 @@
               this.steps[4].allFilled = this.isEverythingFilled;
               this.steps[4].anyFilled = false;
             } catch (error) {
+              console.error(error);
               this.error = error;
             } finally {
               this.isLoading = false;
@@ -2134,6 +2136,7 @@
               }
               await this.setStep(1);
             } catch (error) {
+              console.error(error);
               this.isLoading = false;
               this.error = error;
             }
@@ -2155,6 +2158,7 @@
                 method: "POST",
               });
             } catch (error) {
+              console.error(error);
               this.error = error;
             } finally {
               this.isLoading = false;
@@ -2184,6 +2188,7 @@
               await this.init();
               await this.setStep(2);
             } catch (error) {
+              console.error(error);
               this.isLoading = false;
               this.error = error;
             }
@@ -2249,6 +2254,7 @@
 
               this.isLoading = false;
             } catch (error) {
+              console.error(error);
               this.isLoading = false;
               this.error = error.message || "Failed to fetch time-slots";
             }
@@ -2278,6 +2284,7 @@
               await this.init();
               await this.setStep(3);
             } catch (error) {
+              console.error(error);
               this.isLoading = false;
               if (
                 error.status.code === 409 /*Conflict*/ &&
@@ -2366,6 +2373,7 @@
               await this.init();
               await this.setStep(4);
             } catch (error) {
+              console.error(error);
               this.isLoading = false;
               this.error = error;
             }
