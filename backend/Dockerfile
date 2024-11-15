@@ -15,4 +15,5 @@ RUN chown -R node:node /opt/app
 USER node
 RUN ["pnpm", "run", "build"]
 EXPOSE 1337
+VOLUME [ "/opt/app/public/uploads" ]
 CMD ["pnpm", "run", "develop"]

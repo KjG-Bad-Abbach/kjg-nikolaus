@@ -17,6 +17,8 @@ services:
       ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET}
       APP_KEYS: ${APP_KEYS}
       NODE_ENV: ${NODE_ENV}
+      SMTP_DEFAULT_FROM: Nikolaus KjG Bad Abbach <no-reply@kjg-bad-abbach.de>
+      SMTP_DEFAULT_REPLY_TO: info@kjg-bad-abbach.de
       SMTP_HOST: mailhog
       SMTP_PORT: 1025
       SMTP_IGNORE_TLS: true

@@ -4,7 +4,7 @@ const webpack = require("webpack");
 const mix = require("laravel-mix");
 require("mix-tailwindcss");
 
-function getIndexHtml(file = "index.html") {
+function getHtml(file = "index.html") {
   const hashes = JSON.parse(fs.readFileSync("dist/mix-manifest.json"));
   // replace {{ mix('file') }} with the hashed file path
   let content = fs.readFileSync(path.join("src", file)).toString();
@@ -32,6 +32,10 @@ mix
         },
       }),
     ],
+  })
+  .then(() => {
+    const updatedContent = getHtml();
+    fs.writeFileSync("dist/index.html", updatedContent);
   });
 
 mix.browserSync({
@@ -41,14 +45,14 @@ mix.browserSync({
     {
       route: "/",
       handle: (req, res, next) => {
-        res.write(getIndexHtml());
+        res.write(getHtml());
         res.end();
       },
     },
     {
       route: "/colors",
       handle: (req, res, next) => {
-        res.write(getIndexHtml("colors.html"));
+        res.write(getHtml("colors.html"));
         res.end();
       },
     },
