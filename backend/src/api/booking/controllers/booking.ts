@@ -21,6 +21,7 @@ export default factories.createCoreController(
       const data = (await this.sanitizeInput(ctx.request.body.data, ctx)) as {
         time_slots?: any[];
       };
+      strapi.service("api::booking.booking").clean(data);
 
       let filterResult: any = {};
       if (data.time_slots) {
@@ -50,6 +51,7 @@ export default factories.createCoreController(
       const data = (await this.sanitizeInput(ctx.request.body.data, ctx)) as {
         time_slots?: any[];
       };
+      strapi.service("api::booking.booking").clean(data);
 
       let filterResult: any = {};
       if (data.time_slots) {

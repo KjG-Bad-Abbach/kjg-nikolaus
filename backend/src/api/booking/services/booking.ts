@@ -7,9 +7,66 @@ import { RichTextBlocksToHtmlRenderer } from "../../../utils/RichTextBlocksToHtm
 import { RichTextBlocksToMarkdownRenderer } from "../../../utils/RichTextBlocksToMarkdownRenderer";
 import { ParameterReplacer } from "../../../utils/ParameterReplacer";
 
+function trim(value) {
+  // also clean soft hyphen: \u00AD
+  return (value || "").replace(/^[\s\u00AD]+|\u00AD+|[\s\u00AD]+$/g, "");
+}
+
 export default factories.createCoreService(
   "api::booking.booking",
   ({ strapi }) => ({
+    clean(booking: any) {
+      if (booking.contact_person?.first_name) {
+        booking.contact_person.first_name = trim(
+          booking.contact_person.first_name
+        );
+      }
+      if (booking.contact_person?.last_name) {
+        booking.contact_person.last_name = trim(
+          booking.contact_person.last_name
+        );
+      }
+      if (booking.contact_person?.email) {
+        booking.contact_person.email = trim(booking.contact_person.email);
+      }
+      if (booking.contact_person?.phone_number) {
+        booking.contact_person.phone_number = trim(
+          booking.contact_person.phone_number
+        );
+      }
+      if (booking.location?.street) {
+        booking.location.street = trim(booking.location.street);
+      }
+      if (booking.location?.house_number) {
+        booking.location.house_number = trim(booking.location.house_number);
+      }
+      if (booking.location?.zip_code) {
+        booking.location.zip_code = trim(booking.location.zip_code);
+      }
+      if (booking.location?.place) {
+        booking.location.place = trim(booking.location.place);
+      }
+      if (booking.present_location) {
+        booking.present_location = trim(booking.present_location);
+      }
+      if (booking.children) {
+        for (const child of booking.children) {
+          if (child?.name) {
+            child.name = trim(child.name);
+          }
+          if (child?.identification_trait) {
+            child.identification_trait = trim(child.identification_trait);
+          }
+          if (child?.speech) {
+            child.speech = trim(child.speech);
+          }
+        }
+      }
+      if (booking.additional_notes) {
+        booking.additional_notes = trim(booking.additional_notes);
+      }
+    },
+
     async addHistoryEntry(bookingId: string, change?: any) {
       try {
         if (!bookingId) {

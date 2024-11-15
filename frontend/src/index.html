@@ -604,6 +604,11 @@
                   placeholder="Vorname"
                   :readonly="!canEditAnything"
                 />
+                <div
+                  x-show="validationMessages['booking.contact_person.first_name']"
+                  class="mx-2 mt-2 text-left text-sm text-rust"
+                  x-text="validationMessages['booking.contact_person.first_name']"
+                ></div>
               </div>
 
               <div>
@@ -622,6 +627,11 @@
                   placeholder="Nachname"
                   :readonly="!canEditAnything"
                 />
+                <div
+                  x-show="validationMessages['booking.contact_person.last_name']"
+                  class="mx-2 mt-2 text-left text-sm text-rust"
+                  x-text="validationMessages['booking.contact_person.last_name']"
+                ></div>
               </div>
 
               <div>
@@ -640,6 +650,11 @@
                   placeholder="example@example.com"
                   :readonly="!canEditAnything"
                 />
+                <div
+                  x-show="validationMessages['booking.contact_person.email']"
+                  class="mx-2 mt-2 text-left text-sm text-rust"
+                  x-text="validationMessages['booking.contact_person.email']"
+                ></div>
               </div>
 
               <div>
@@ -658,6 +673,11 @@
                   placeholder="0123 4567890"
                   :readonly="!canEditAnything"
                 />
+                <div
+                  x-show="validationMessages['booking.contact_person.phone_number']"
+                  class="mx-2 mt-2 text-left text-sm text-rust"
+                  x-text="validationMessages['booking.contact_person.phone_number']"
+                ></div>
               </div>
 
               <!-- Submit Button -->
@@ -668,6 +688,12 @@
                 >
                   Speichern & Weiter
                 </button>
+                <div
+                  x-show="Object.keys(validationMessages).length > 0"
+                  class="mx-2 mt-2 text-left text-sm text-rust"
+                >
+                  Bitte überprüfe deine Eingaben.
+                </div>
               </div>
             </form>
           </div>
@@ -716,6 +742,11 @@
                   placeholder="Straße"
                   :readonly="!canEditRoutePlanning"
                 />
+                <div
+                  x-show="validationMessages['booking.location.street']"
+                  class="mx-2 mt-2 text-left text-sm text-rust"
+                  x-text="validationMessages['booking.location.street']"
+                ></div>
               </div>
               <div>
                 <label
@@ -733,6 +764,11 @@
                   placeholder="Hausnummer"
                   :readonly="!canEditRoutePlanning"
                 />
+                <div
+                  x-show="validationMessages['booking.location.house_number']"
+                  class="mx-2 mt-2 text-left text-sm text-rust"
+                  x-text="validationMessages['booking.location.house_number']"
+                ></div>
               </div>
               <div>
                 <label
@@ -752,6 +788,11 @@
                   oninput="if(this.value.length > 5) this.value = this.value.slice(0,5)"
                   :readonly="!canEditRoutePlanning"
                 />
+                <div
+                  x-show="validationMessages['booking.location.zip_code']"
+                  class="mx-2 mt-2 text-left text-sm text-rust"
+                  x-text="validationMessages['booking.location.zip_code']"
+                ></div>
               </div>
               <div>
                 <label
@@ -769,6 +810,11 @@
                   placeholder="Ort"
                   :readonly="!canEditRoutePlanning"
                 />
+                <div
+                  x-show="validationMessages['booking.location.place']"
+                  class="mx-2 mt-2 text-left text-sm text-rust"
+                  x-text="validationMessages['booking.location.place']"
+                ></div>
               </div>
               <div>
                 <label
@@ -816,6 +862,11 @@
                   placeholder="Wo können wir die Geschenke finden?"
                   :readonly="!canEditAnything"
                 />
+                <div
+                  x-show="validationMessages['booking.present_location']"
+                  class="mx-2 mt-2 text-left text-sm text-rust"
+                  x-text="validationMessages['booking.present_location']"
+                ></div>
               </div>
 
               <!-- Submit Button -->
@@ -826,6 +877,12 @@
                 >
                   Speichern & Weiter
                 </button>
+                <div
+                  x-show="Object.keys(validationMessages).length > 0"
+                  class="mx-2 mt-2 text-left text-sm text-rust"
+                >
+                  Bitte überprüfe deine Eingaben.
+                </div>
               </div>
             </form>
           </div>
@@ -1006,6 +1063,12 @@
                 >
                   Speichern & Weiter
                 </button>
+                <div
+                  x-show="Object.keys(validationMessages).length > 0"
+                  class="mx-2 mt-2 text-left text-sm text-rust"
+                >
+                  Bitte überprüfe deine Eingaben.
+                </div>
               </div>
             </form>
           </div>
@@ -1109,6 +1172,11 @@
                       placeholder="Name des Kindes"
                       :readonly="!canEditAnything"
                     />
+                    <div
+                      x-show="validationMessages[`booking.children[${index}].name`]"
+                      class="mx-2 mt-2 text-left text-sm text-rust"
+                      x-text="validationMessages[`booking.children[${index}].name`]"
+                    ></div>
                   </div>
 
                   <div>
@@ -1126,6 +1194,11 @@
                       placeholder="Alter, Haarfarbe, Größe, ..."
                       :readonly="!canEditAnything"
                     />
+                    <div
+                      x-show="validationMessages[`booking.children[${index}].identification_trait`]"
+                      class="mx-2 mt-2 text-left text-sm text-rust"
+                      x-text="validationMessages[`booking.children[${index}].identification_trait`]"
+                    ></div>
                   </div>
 
                   <div>
@@ -1151,6 +1224,11 @@
                       placeholder="Rede für den Nikolaus"
                       :readonly="!canEditAnything"
                     ></textarea>
+                    <div
+                      x-show="validationMessages[`booking.children[${index}].speech`]"
+                      class="mx-2 mt-2 text-left text-sm text-rust"
+                      x-text="validationMessages[`booking.children[${index}].speech`]"
+                    ></div>
                   </div>
                   <button
                     x-show="canEditAnything"
@@ -1202,6 +1280,11 @@
                   placeholder="Weitere Hinweise für den Nikolaus"
                   :readonly="!canEditAnything"
                 ></textarea>
+                <div
+                  x-show="validationMessages['booking.additional_notes']"
+                  class="mx-2 mt-2 text-left text-sm text-rust"
+                  x-text="validationMessages['booking.additional_notes']"
+                ></div>
               </div>
 
               <!-- Submit Button -->
@@ -1212,6 +1295,12 @@
                 >
                   Speichern & Weiter
                 </button>
+                <div
+                  x-show="Object.keys(validationMessages).length > 0"
+                  class="mx-2 mt-2 text-left text-sm text-rust"
+                >
+                  Bitte überprüfe deine Eingaben.
+                </div>
               </div>
             </form>
 
@@ -1673,8 +1762,13 @@
         });
       }
 
+      function trim(value) {
+        // also clean soft hyphen: \u00AD
+        return (value || "").replace(/^[\s\u00AD]+|\u00AD+|[\s\u00AD]+$/g, "");
+      }
+
       function isFilled(value) {
-        return value?.trim() ? true : false;
+        return trim(value) ? true : false;
       }
 
       const currentYear = new Date().getFullYear();
@@ -1872,6 +1966,7 @@
           },
           isLoading: false,
           error: null,
+          validationMessages: {},
           errorCloseCallback: null,
           closeError() {
             this.error = null;
@@ -1888,6 +1983,7 @@
           async setStep(step) {
             // ToDo: check if inputs have changed and saving is needed
             if (this.canJumpToAnyStep) {
+              this.validationMessages = {};
               this.step = step;
               if (step === 2) {
                 await this.fetchTimeSlots();
@@ -2119,7 +2215,45 @@
             }
             this.isLoading = true;
             this.error = null;
+            this.validationMessages = {};
             try {
+              // clean input
+              this.booking.contact_person.first_name = trim(
+                this.booking.contact_person.first_name,
+              );
+              this.booking.contact_person.last_name = trim(
+                this.booking.contact_person.last_name,
+              );
+              this.booking.contact_person.email = trim(
+                this.booking.contact_person.email,
+              );
+              this.booking.contact_person.phone_number = trim(
+                this.booking.contact_person.phone_number,
+              );
+
+              // check if required fields filled
+              if (!isFilled(this.booking.contact_person.first_name)) {
+                this.validationMessages["booking.contact_person.first_name"] =
+                  "Eingabe ist erforderlich.";
+              }
+              if (!isFilled(this.booking.contact_person.last_name)) {
+                this.validationMessages["booking.contact_person.last_name"] =
+                  "Eingabe ist erforderlich.";
+              }
+              if (!isFilled(this.booking.contact_person.email)) {
+                this.validationMessages["booking.contact_person.email"] =
+                  "Eingabe ist erforderlich.";
+              }
+              if (!isFilled(this.booking.contact_person.phone_number)) {
+                this.validationMessages["booking.contact_person.phone_number"] =
+                  "Eingabe ist erforderlich.";
+              }
+
+              // exit on validation errors
+              if (Object.keys(this.validationMessages).length) {
+                return;
+              }
+
               const hadBookingId = !!this.bookingId;
 
               const response = await sendRequest({
@@ -2145,8 +2279,9 @@
               await this.setStep(1);
             } catch (error) {
               console.error(error);
-              this.isLoading = false;
               this.error = error;
+            } finally {
+              this.isLoading = false;
             }
           },
 
@@ -2180,7 +2315,44 @@
             }
             this.isLoading = true;
             this.error = null;
+            this.validationMessages = {};
             try {
+              // clean input
+              this.booking.location.street = trim(this.booking.location.street);
+              this.booking.location.house_number = trim(
+                this.booking.location.house_number,
+              );
+              this.booking.location.zip_code = trim(
+                this.booking.location.zip_code,
+              );
+              this.booking.location.place = trim(this.booking.location.place);
+              this.booking.present_location = trim(
+                this.booking.present_location,
+              );
+
+              // check if required fields filled
+              if (!isFilled(this.booking.location.street)) {
+                this.validationMessages["booking.location.street"] =
+                  "Eingabe ist erforderlich.";
+              }
+              if (!isFilled(this.booking.location.house_number)) {
+                this.validationMessages["booking.location.house_number"] =
+                  "Eingabe ist erforderlich.";
+              }
+              if (!isFilled(this.booking.location.zip_code)) {
+                this.validationMessages["booking.location.zip_code"] =
+                  "Eingabe ist erforderlich.";
+              }
+              if (!isFilled(this.booking.location.place)) {
+                this.validationMessages["booking.location.place"] =
+                  "Eingabe ist erforderlich.";
+              }
+
+              // exit on validation errors
+              if (Object.keys(this.validationMessages).length) {
+                return;
+              }
+
               const response = await sendRequest({
                 url: `/api/bookings/${this.bookingId}`,
                 method: "PUT",
@@ -2197,8 +2369,9 @@
               await this.setStep(2);
             } catch (error) {
               console.error(error);
-              this.isLoading = false;
               this.error = error;
+            } finally {
+              this.isLoading = false;
             }
           },
 
@@ -2276,7 +2449,19 @@
             }
             this.isLoading = true;
             this.error = null;
+            this.validationMessages = {};
             try {
+              // clean input
+              // (nothing to do here)
+
+              // check if required fields filled
+              // (nothing to do here)
+
+              // exit on validation errors
+              if (Object.keys(this.validationMessages).length) {
+                return;
+              }
+
               this.booking.time_slots = this.selectedTimeSlotIds;
 
               const response = await sendRequest({
@@ -2294,7 +2479,6 @@
               await this.setStep(3);
             } catch (error) {
               console.error(error);
-              this.isLoading = false;
               if (
                 error.status.code === 409 /*Conflict*/ &&
                 error.body?.error?.details?.meta?.concurrencyTimeSlotsError
@@ -2310,6 +2494,8 @@
               } else {
                 this.error = error;
               }
+            } finally {
+              this.isLoading = false;
             }
           },
 
@@ -2360,7 +2546,31 @@
             }
             this.isLoading = true;
             this.error = null;
+            this.validationMessages = {};
             try {
+              // clean input
+              for (const child of this.booking.children) {
+                child.name = trim(child.name);
+                child.identification_trait = trim(child.identification_trait);
+                child.speech = trim(child.speech);
+              }
+              this.booking.additional_notes = trim(
+                this.booking.additional_notes,
+              );
+
+              // check if required fields filled
+              this.booking.children.forEach((child, index) => {
+                if (!isFilled(child.name)) {
+                  this.validationMessages[`booking.children[${index}].name`] =
+                    "Eingabe ist erforderlich.";
+                }
+              });
+
+              // exit on validation errors
+              if (Object.keys(this.validationMessages).length) {
+                return;
+              }
+
               const children = this.booking.children.map((child) => ({
                 name: child.name,
                 identification_trait: child.identification_trait,
@@ -2383,8 +2593,9 @@
               await this.setStep(4);
             } catch (error) {
               console.error(error);
-              this.isLoading = false;
               this.error = error;
+            } finally {
+              this.isLoading = false;
             }
           },
         }));
