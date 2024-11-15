@@ -1739,7 +1739,7 @@
             } else if (typeof obj[key] === "string") {
               obj[key] = newObj[key].toString();
             } else if (typeof obj[key] === "object" && obj[key] !== null) {
-              // if property is object, call the function recursively
+              // If property is object, call the function recursively
               updateExistingObjectKeys(obj[key], newObj[key]);
             } else {
               obj[key] = clone(newObj[key]);
@@ -1758,7 +1758,7 @@
           } else if (typeof obj[key] === "string") {
             obj[key] = (obj[key] + " " + newObj[key]).trim();
           } else if (typeof obj[key] === "object" && obj[key] !== null) {
-            // if property is object, call the function recursively
+            // If property is object, call the function recursively
             extendExistingObjectKeys(obj[key], newObj[key]);
           } else {
             throw new Error("Unknown key type");
@@ -1767,7 +1767,7 @@
       }
 
       function trim(value) {
-        // also clean soft hyphen: \u00AD
+        // Also clean soft hyphen: \u00AD
         return (value || "").replace(/^[\s\u00AD]+|\u00AD+|[\s\u00AD]+$/g, "");
       }
 
@@ -1838,9 +1838,9 @@
             link: "text-blue-600 hover:underline",
             code: "bg-gray-100 rounded px-1 font-mono",
           };
-          // extend defaultClasses with provided classes (overwrites existing ones)
+          // Extend defaultClasses with provided classes (overwrites existing ones)
           updateExistingObjectKeys(this.defaultClasses, defaultClasses);
-          // extend defaultClasses with provided classes (adds new ones)
+          // Extend defaultClasses with provided classes (adds new ones)
           extendExistingObjectKeys(
             this.defaultClasses,
             defaultClasses.extend || {},
@@ -2301,7 +2301,7 @@
             this.error = null;
             this.validationMessages = {};
             try {
-              // clean input
+              // Clean input
               this.booking.contact_person.first_name = trim(
                 this.booking.contact_person.first_name,
               );
@@ -2315,7 +2315,7 @@
                 this.booking.contact_person.phone_number,
               );
 
-              // check if required fields filled
+              // Check if required fields filled
               if (!isFilled(this.booking.contact_person.first_name)) {
                 this.validationMessages["booking.contact_person.first_name"] =
                   "Eingabe ist erforderlich.";
@@ -2333,7 +2333,7 @@
                   "Eingabe ist erforderlich.";
               }
 
-              // exit on validation errors
+              // Exit on validation errors
               if (Object.keys(this.validationMessages).length) {
                 return;
               }
@@ -2402,7 +2402,7 @@
             this.error = null;
             this.validationMessages = {};
             try {
-              // clean input
+              // Clean input
               this.booking.location.street = trim(this.booking.location.street);
               this.booking.location.house_number = trim(
                 this.booking.location.house_number,
@@ -2415,7 +2415,7 @@
                 this.booking.present_location,
               );
 
-              // check if required fields filled
+              // Check if required fields filled
               if (!isFilled(this.booking.location.street)) {
                 this.validationMessages["booking.location.street"] =
                   "Eingabe ist erforderlich.";
@@ -2433,7 +2433,7 @@
                   "Eingabe ist erforderlich.";
               }
 
-              // exit on validation errors
+              // Exit on validation errors
               if (Object.keys(this.validationMessages).length) {
                 return;
               }
@@ -2537,13 +2537,13 @@
             this.error = null;
             this.validationMessages = {};
             try {
-              // clean input
-              // (nothing to do here)
+              // Clean input
+              // (Nothing to do here)
 
-              // check if required fields filled
-              // (nothing to do here)
+              // Check if required fields filled
+              // (Nothing to do here)
 
-              // exit on validation errors
+              // Exit on validation errors
               if (Object.keys(this.validationMessages).length) {
                 return;
               }
@@ -2635,7 +2635,7 @@
             this.error = null;
             this.validationMessages = {};
             try {
-              // clean input
+              // Clean input
               for (const child of this.booking.children) {
                 child.name = trim(child.name);
                 child.identification_trait = trim(child.identification_trait);
@@ -2645,7 +2645,7 @@
                 this.booking.additional_notes,
               );
 
-              // check if required fields filled
+              // Check if required fields filled
               this.booking.children.forEach((child, index) => {
                 if (!isFilled(child.name)) {
                   this.validationMessages[`booking.children[${index}].name`] =
@@ -2653,7 +2653,7 @@
                 }
               });
 
-              // exit on validation errors
+              // Exit on validation errors
               if (Object.keys(this.validationMessages).length) {
                 return;
               }
