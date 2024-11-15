@@ -1404,7 +1404,13 @@ export default factories.createCoreService(
           <html lang="de">
             <head>
               <meta charset="UTF-8" />
+
+              <!-- disable dark mode: https://stackoverflow.com/a/70579292 -->
+              <meta name="color-scheme" content="light">
+              <meta name="supported-color-schemes" content="light">
+
               <title>${subject}</title>
+
               <style>
                 ${css}
               </style>
