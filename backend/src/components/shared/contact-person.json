@@ -20,7 +20,7 @@
     "phone_number": {
       "type": "string",
       "maxLength": 50,
-      "regex": "^\\+?\\(?[0-9]+\\)?[-\\s\\.0-9]+$"
+      "regex": "^\\+?[-\\s\\.0-9]+$"
     },
     "email": {
       "type": "email",

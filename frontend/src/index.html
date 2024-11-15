@@ -2208,6 +2208,25 @@
             }
           },
 
+          // Extract validation messages from error object
+          errorToValidationMessages(body) {
+            const errors = body?.error?.details?.errors;
+            if (!errors?.length) {
+              return;
+            }
+            for (const err of errors) {
+              const path = err.path.join(".");
+              let msg = err.message.startsWith(path + " ")
+                ? err.message.substring((path + " ").length)
+                : err.message;
+              if (msg === 'must match the following: "/^\\+?[-\\s\\.0-9]+$/"') {
+                msg =
+                  "Die Telefonnummer muss im Format '01234 56789', '01234 567-89', '+49 123 456789' oder '0049 123 456789' sein.";
+              }
+              this.validationMessages["booking." + path] = msg;
+            }
+          },
+
           // Step 0: Submit Contact Details
           async submitContactDetails() {
             if (this.isLoading) {
@@ -2280,6 +2299,7 @@
             } catch (error) {
               console.error(error);
               this.error = error;
+              this.errorToValidationMessages(error.body);
             } finally {
               this.isLoading = false;
             }
@@ -2370,6 +2390,7 @@
             } catch (error) {
               console.error(error);
               this.error = error;
+              this.errorToValidationMessages(error.body);
             } finally {
               this.isLoading = false;
             }
@@ -2493,6 +2514,7 @@
                 this.errorCloseCallback = async () => await this.init();
               } else {
                 this.error = error;
+                this.errorToValidationMessages(error.body);
               }
             } finally {
               this.isLoading = false;
@@ -2594,6 +2616,7 @@
             } catch (error) {
               console.error(error);
               this.error = error;
+              this.errorToValidationMessages(error.body);
             } finally {
               this.isLoading = false;
             }
