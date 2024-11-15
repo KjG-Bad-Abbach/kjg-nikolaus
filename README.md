@@ -3,8 +3,8 @@
 In the Strapi backend `Content Manager` -> `Single Types` -> `Config` configure the basic configuration:
 
 - `api_token`: see below how to create an [API Token](#-create-an-api-token)
-- `base_url`: this is the web URL for the tool and is used for link generation in emails
-- `api_base_url`: this is the API URL the frontend will use to make API calls
+- `base_url`: this is the web URL for the tool and is used for link generation in emails (i. e. `https://nikolaus.kjg-bad-abbach.de`)
+- `api_base_url`: this is the API URL the frontend will use to make API calls (i. e. `https://nikolaus.kjg-bad-abbach.de`)
 - `max_time_slots`: this is the number of concurrent reservations per available slot booking
   - Example:
     - A Time-slot from `17:00-17:30` has `max_bookings = 4` (there are 4 Nikolaus, they can visit 4 families in parallel at the same time)
@@ -77,8 +77,8 @@ Create an [API Token](#-create-an-api-token) that is allowed to create Time-slot
 
 Then send the HTTP-POST requests to the server. Keep in mind that the timestamp with `...Z` uses the universal UTC timezone and you must convert it to your timezone i. e. Europe/Berlin. During conversion keep in mind, that we have a timezone switch from summer to winter in October, so the time-offset at your current time may not apply in December.
 
-- `start`: the start time of the Time-slot is in ISO 8601 format (YYYY-MM-DDTHH:MM:SS.SSSZ), for example: `2024-12-05T19:30:00.000Z`
-- `end`: the end time of the Time-slot is in ISO 8601 format (YYYY-MM-DDTHH:MM:SS.SSSZ), for example: `2024-12-05T20:00:00.000Z`
+- `start`: the start time of the Time-slot is in ISO 8601 format (YYYY-MM-DDTHH:MM+01:00), for example: `2024-12-05T19:30+01:00` in CET (German winter time is `+01:00` from UTC)
+- `end`: the end time of the Time-slot is in ISO 8601 format (YYYY-MM-DDTHH:MM+01:00), for example: `2024-12-05T20:00+01:00` in CET (German winter time is `+01:00` from UTC)
 
 ```rest
 POST http://localhost:1337/api/time-slots
@@ -87,8 +87,8 @@ Content-Type: application/json
 
 {
     "data": {
-        "start": "2024-12-05T19:30:00.000Z",
-        "end": "2024-12-05T20:00:00.000Z",
+        "start": "2024-12-05T19:30+01:00",
+        "end": "2024-12-05T20:00+01:00",
         "max_bookings": 3
     }
 }
@@ -104,13 +104,13 @@ Content-Type: application/json
 {
     "data": [
         {
-            "start": "2024-12-05T19:30:00.000Z",
-            "end": "2024-12-05T20:00:00.000Z",
+            "start": "2024-12-05T19:30+01:00",
+            "end": "2024-12-05T20:00+01:00",
             "max_bookings": 3
         },
         {
-            "start": "2024-12-05T20:00:00.000Z",
-            "end": "2024-12-05T20:30:00.000Z",
+            "start": "2024-12-05T20:00+01:00",
+            "end": "2024-12-05T20:30+01:00",
             "max_bookings": 3
         }
     ]

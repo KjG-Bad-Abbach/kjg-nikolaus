@@ -1566,9 +1566,11 @@
             method: method,
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${API_TOKEN}`,
             },
           };
+          if (API_TOKEN) {
+            options.headers.Authorization = `Bearer ${API_TOKEN}`;
+          }
 
           // If body is provided, stringify it and attach to the options
           if (body) {
@@ -1576,7 +1578,10 @@
           }
 
           // Send the fetch request
-          const response = await fetch(`${API_BASE_URL}/api/${url}`, options);
+          const response = await fetch(
+            `${API_BASE_URL ? API_BASE_URL : ""}/api/${url}`,
+            options,
+          );
 
           // Handle non-OK responses (status codes outside of 200-299)
           if (!response.ok) {
