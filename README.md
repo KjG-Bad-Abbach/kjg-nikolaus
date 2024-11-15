@@ -61,6 +61,11 @@ In the Strapi backend `Content Manager` -> `Single Types` -> `Config` configure 
     - `{{phone_number}}`
     - `{{email}}`
 
+Make the config available for Public users with the following rights under `Settings` -> `Users & Permissions Plugin` -> `Roles` -> edit `Public`
+
+- `Permissions` for `Config`:
+  - `find`
+
 ## ⏰ Create the Time-slots
 
 - `start`: the start time of the Time-slot
@@ -129,6 +134,7 @@ Authorization: Bearer {{$dotenv REST_HISTORY_API_TOKEN}}
 ## 🔑 Create an API Token
 
 Generate an API token with the following rights under `Settings` -> `Global Settings` -> `API Tokens` -> `New`
+
 - `Token type`: `Custom`
 - `Permissions` for `Config`:
   - `find`
