@@ -2008,6 +2008,36 @@
         }
       }
 
+      // Handle unsaved changes during browser window closing
+      let checkHasUnsavedChangesCallback = null; // Callback to check for unsaved changes
+
+      // Function to register a callback for checking unsaved changes
+      function registerCheckHasUnsavedChangesCallback(callback) {
+        checkHasUnsavedChangesCallback = callback;
+      }
+
+      // Function to handle unsaved changes
+      function handleUnsavedChanges(event, action) {
+        if (
+          checkHasUnsavedChangesCallback &&
+          checkHasUnsavedChangesCallback()
+        ) {
+          const confirmationMessage = `Es gibt ungespeicherte Änderungen. Möchten Sie die Seite wirklich ${action}?`;
+          event.returnValue = confirmationMessage; // Standard for most browsers
+          return confirmationMessage; // For some older browsers
+        }
+      }
+
+      // Event listener for beforeunload
+      window.addEventListener("beforeunload", (event) =>
+        handleUnsavedChanges(event, "verlassen"),
+      );
+
+      // Event listener for page reload
+      window.addEventListener("popstate", (event) =>
+        handleUnsavedChanges(event, "neu laden"),
+      );
+
       document.addEventListener("alpine:init", () => {
         Alpine.data("bookingForm", () => ({
           options: {
@@ -2148,6 +2178,9 @@
             this.isLoading = true;
             this.error = null;
             this.booking = this.bookingEmpty();
+            registerCheckHasUnsavedChangesCallback(() =>
+              this.bookingHasChanges(),
+            );
             try {
               if (!this.options.id) {
                 const response = await sendRequest({
