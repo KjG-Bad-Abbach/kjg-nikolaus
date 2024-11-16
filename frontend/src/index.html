@@ -604,11 +604,15 @@
                   placeholder="Vorname"
                   :readonly="!canEditAnything"
                 />
-                <div
-                  x-show="validationMessages['booking.contact_person.first_name']"
-                  class="mx-2 mt-2 text-left text-sm text-rust"
-                  x-text="validationMessages['booking.contact_person.first_name']"
-                ></div>
+                <template
+                  x-for="(message, index) in validationMessages['booking.contact_person.first_name'] || []"
+                  :key="index"
+                >
+                  <div
+                    class="mx-2 mt-2 text-left text-sm text-rust"
+                    x-text="message"
+                  ></div
+                ></template>
               </div>
 
               <div>
@@ -627,11 +631,15 @@
                   placeholder="Nachname"
                   :readonly="!canEditAnything"
                 />
-                <div
-                  x-show="validationMessages['booking.contact_person.last_name']"
-                  class="mx-2 mt-2 text-left text-sm text-rust"
-                  x-text="validationMessages['booking.contact_person.last_name']"
-                ></div>
+                <template
+                  x-for="(message, index) in validationMessages['booking.contact_person.last_name'] || []"
+                  :key="index"
+                >
+                  <div
+                    class="mx-2 mt-2 text-left text-sm text-rust"
+                    x-text="message"
+                  ></div
+                ></template>
               </div>
 
               <div>
@@ -650,11 +658,15 @@
                   placeholder="example@example.com"
                   :readonly="!canEditAnything"
                 />
-                <div
-                  x-show="validationMessages['booking.contact_person.email']"
-                  class="mx-2 mt-2 text-left text-sm text-rust"
-                  x-text="validationMessages['booking.contact_person.email']"
-                ></div>
+                <template
+                  x-for="(message, index) in validationMessages['booking.contact_person.email'] || []"
+                  :key="index"
+                >
+                  <div
+                    class="mx-2 mt-2 text-left text-sm text-rust"
+                    x-text="message"
+                  ></div
+                ></template>
               </div>
 
               <div>
@@ -673,11 +685,15 @@
                   placeholder="0123 4567890"
                   :readonly="!canEditAnything"
                 />
-                <div
-                  x-show="validationMessages['booking.contact_person.phone_number']"
-                  class="mx-2 mt-2 text-left text-sm text-rust"
-                  x-text="validationMessages['booking.contact_person.phone_number']"
-                ></div>
+                <template
+                  x-for="(message, index) in validationMessages['booking.contact_person.phone_number'] || []"
+                  :key="index"
+                >
+                  <div
+                    class="mx-2 mt-2 text-left text-sm text-rust"
+                    x-text="message"
+                  ></div
+                ></template>
               </div>
 
               <!-- Submit Button -->
@@ -742,11 +758,15 @@
                   placeholder="Straße"
                   :readonly="!canEditRoutePlanning"
                 />
-                <div
-                  x-show="validationMessages['booking.location.street']"
-                  class="mx-2 mt-2 text-left text-sm text-rust"
-                  x-text="validationMessages['booking.location.street']"
-                ></div>
+                <template
+                  x-for="(message, index) in validationMessages['booking.location.street'] || []"
+                  :key="index"
+                >
+                  <div
+                    class="mx-2 mt-2 text-left text-sm text-rust"
+                    x-text="message"
+                  ></div
+                ></template>
               </div>
               <div>
                 <label
@@ -764,11 +784,15 @@
                   placeholder="Hausnummer"
                   :readonly="!canEditRoutePlanning"
                 />
-                <div
-                  x-show="validationMessages['booking.location.house_number']"
-                  class="mx-2 mt-2 text-left text-sm text-rust"
-                  x-text="validationMessages['booking.location.house_number']"
-                ></div>
+                <template
+                  x-for="(message, index) in validationMessages['booking.location.house_number'] || []"
+                  :key="index"
+                >
+                  <div
+                    class="mx-2 mt-2 text-left text-sm text-rust"
+                    x-text="message"
+                  ></div
+                ></template>
               </div>
               <div>
                 <label
@@ -788,11 +812,15 @@
                   oninput="if(this.value.length > 5) this.value = this.value.slice(0,5)"
                   :readonly="!canEditRoutePlanning"
                 />
-                <div
-                  x-show="validationMessages['booking.location.zip_code']"
-                  class="mx-2 mt-2 text-left text-sm text-rust"
-                  x-text="validationMessages['booking.location.zip_code']"
-                ></div>
+                <template
+                  x-for="(message, index) in validationMessages['booking.location.zip_code'] || []"
+                  :key="index"
+                >
+                  <div
+                    class="mx-2 mt-2 text-left text-sm text-rust"
+                    x-text="message"
+                  ></div
+                ></template>
               </div>
               <div>
                 <label
@@ -810,11 +838,15 @@
                   placeholder="Ort"
                   :readonly="!canEditRoutePlanning"
                 />
-                <div
-                  x-show="validationMessages['booking.location.place']"
-                  class="mx-2 mt-2 text-left text-sm text-rust"
-                  x-text="validationMessages['booking.location.place']"
-                ></div>
+                <template
+                  x-for="(message, index) in validationMessages['booking.location.place'] || []"
+                  :key="index"
+                >
+                  <div
+                    class="mx-2 mt-2 text-left text-sm text-rust"
+                    x-text="message"
+                  ></div
+                ></template>
               </div>
               <div>
                 <label
@@ -862,11 +894,15 @@
                   placeholder="Wo können wir die Geschenke finden?"
                   :readonly="!canEditAnything"
                 />
-                <div
-                  x-show="validationMessages['booking.present_location']"
-                  class="mx-2 mt-2 text-left text-sm text-rust"
-                  x-text="validationMessages['booking.present_location']"
-                ></div>
+                <template
+                  x-for="(message, index) in validationMessages['booking.present_location'] || []"
+                  :key="index"
+                >
+                  <div
+                    class="mx-2 mt-2 text-left text-sm text-rust"
+                    x-text="message"
+                  ></div
+                ></template>
               </div>
 
               <!-- Submit Button -->
@@ -1172,11 +1208,15 @@
                       placeholder="Name des Kindes"
                       :readonly="!canEditAnything"
                     />
-                    <div
-                      x-show="validationMessages[`booking.children[${index}].name`]"
-                      class="mx-2 mt-2 text-left text-sm text-rust"
-                      x-text="validationMessages[`booking.children[${index}].name`]"
-                    ></div>
+                    <template
+                      x-for="(message, index) in validationMessages[`booking.children[${index}].name`] || []"
+                      :key="index"
+                    >
+                      <div
+                        class="mx-2 mt-2 text-left text-sm text-rust"
+                        x-text="message"
+                      ></div
+                    ></template>
                   </div>
 
                   <div>
@@ -1194,11 +1234,15 @@
                       placeholder="Alter, Haarfarbe, Größe, ..."
                       :readonly="!canEditAnything"
                     />
-                    <div
-                      x-show="validationMessages[`booking.children[${index}].identification_trait`]"
-                      class="mx-2 mt-2 text-left text-sm text-rust"
-                      x-text="validationMessages[`booking.children[${index}].identification_trait`]"
-                    ></div>
+                    <template
+                      x-for="(message, index) in validationMessages[`booking.children[${index}].identification_trait`] || []"
+                      :key="index"
+                    >
+                      <div
+                        class="mx-2 mt-2 text-left text-sm text-rust"
+                        x-text="message"
+                      ></div
+                    ></template>
                   </div>
 
                   <div>
@@ -1224,11 +1268,15 @@
                       placeholder="Rede für den Nikolaus"
                       :readonly="!canEditAnything"
                     ></textarea>
-                    <div
-                      x-show="validationMessages[`booking.children[${index}].speech`]"
-                      class="mx-2 mt-2 text-left text-sm text-rust"
-                      x-text="validationMessages[`booking.children[${index}].speech`]"
-                    ></div>
+                    <template
+                      x-for="(message, index) in validationMessages[`booking.children[${index}].speech`] || []"
+                      :key="index"
+                    >
+                      <div
+                        class="mx-2 mt-2 text-left text-sm text-rust"
+                        x-text="message"
+                      ></div
+                    ></template>
                   </div>
                   <button
                     x-show="canEditAnything"
@@ -1280,11 +1328,15 @@
                   placeholder="Weitere Hinweise für den Nikolaus"
                   :readonly="!canEditAnything"
                 ></textarea>
-                <div
-                  x-show="validationMessages['booking.additional_notes']"
-                  class="mx-2 mt-2 text-left text-sm text-rust"
-                  x-text="validationMessages['booking.additional_notes']"
-                ></div>
+                <template
+                  x-for="(message, index) in validationMessages['booking.additional_notes'] || []"
+                  :key="index"
+                >
+                  <div
+                    class="mx-2 mt-2 text-left text-sm text-rust"
+                    x-text="message"
+                  ></div
+                ></template>
               </div>
 
               <!-- Submit Button -->
@@ -2288,7 +2340,10 @@
                 msg =
                   "Die Telefonnummer muss im Format '01234 56789', '01234 567-89', '+49 123 456789' oder '0049 123 456789' sein.";
               }
-              this.validationMessages["booking." + path] = msg;
+              if (!this.validationMessages["booking." + path]) {
+                this.validationMessages["booking." + path] = [];
+              }
+              this.validationMessages["booking." + path].push(msg);
             }
           },
 
