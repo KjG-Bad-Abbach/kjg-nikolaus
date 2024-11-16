@@ -97,7 +97,7 @@
             <button
               x-show="canJumpToAnyStep"
               @click="step > 0 ? setStep(step - 1) : null"
-              class="flex-none cursor-pointer select-none py-2 font-bold text-calypso"
+              class="flex-none cursor-pointer select-none py-2 font-bold text-calypso focus:outline-none focus:ring-2 focus:ring-java-500 focus:ring-opacity-50"
               :class="step <= 0 ? 'opacity-50 cursor-not-allowed' : 'hover:text-calypso-950'"
               :disabled="step <= 0"
               aria-hidden="true"
@@ -186,7 +186,7 @@
             <button
               x-show="canJumpToAnyStep"
               @click="step < steps.length - 1 ? setStep(step + 1) : null"
-              class="flex-none cursor-pointer select-none py-2 font-bold text-calypso"
+              class="flex-none cursor-pointer select-none py-2 font-bold text-calypso focus:outline-none focus:ring-2 focus:ring-java-500 focus:ring-opacity-50"
               :class="step >= steps.length - 1 ? 'opacity-50 cursor-not-allowed' : 'hover:text-calypso-950'"
               :disabled="step >= steps.length - 1"
               aria-hidden="true"
@@ -1057,7 +1057,7 @@
                       x-show="canEditRoutePlanning"
                       :disabled="!canEditRoutePlanning"
                       @click="updateTimeSlot(slotId, false)"
-                      class="text-gray-500 hover:text-gray-700"
+                      class="text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-java-500 focus:ring-opacity-50"
                       x-cloak
                     >
                       <svg
@@ -1283,7 +1283,7 @@
                     :disabled="!canEditAnything"
                     type="button"
                     @click="removeChild(index)"
-                    class="mt-2 rounded bg-red-500 px-3 py-1 text-sm font-bold text-white hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300 focus:ring-opacity-50"
+                    class="mt-2 rounded bg-red-500 px-3 py-1 text-sm font-bold text-white hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-rust focus:ring-opacity-50"
                     x-cloak
                   >
                     Kind entfernen
@@ -1361,7 +1361,7 @@
               <button
                 type="button"
                 @click="setStep(4)"
-                class="w-full rounded border-2 border-atlantis px-4 py-2 font-bold text-atlantis hover:border-surfie-green hover:text-surfie-green focus:outline-none focus:ring-2 focus:ring-atlantis focus:ring-opacity-50"
+                class="w-full rounded border-2 border-atlantis px-4 py-2 font-bold text-atlantis hover:border-surfie-green hover:text-surfie-green focus:outline-none focus:ring-2 focus:ring-java focus:ring-opacity-50"
               >
                 Aktuell überspringen (nicht speichern)
               </button>
@@ -1681,7 +1681,7 @@
               x-show="askToReload"
               @click="reload()"
               type="button"
-              class="rounded border-2 border-gray-400 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600"
+              class="rounded border-2 border-gray-400 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 focus:outline-none focus:ring-2 focus:ring-java-500 focus:ring-opacity-50"
               x-cloak
             >
               Erneut versuchen
@@ -1690,7 +1690,7 @@
               x-show="!askToReload"
               @click="closeError()"
               type="button"
-              class="rounded border-2 border-gray-400 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600"
+              class="rounded border-2 border-gray-400 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 focus:outline-none focus:ring-2 focus:ring-java-500 focus:ring-opacity-50"
               x-cloak
             >
               OK
