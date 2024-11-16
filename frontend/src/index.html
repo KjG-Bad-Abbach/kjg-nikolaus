@@ -2144,38 +2144,79 @@
           booking: {},
           bookingLoadedFromDatabase: {},
           bookingHasChanges() {
+            const log = (...args) => {
+              const result = args[args.length - 1];
+              if (result) {
+                console.log(...args);
+              }
+              return result;
+            };
+
             const hasChanges = (current, database) => {
               if (Array.isArray(current)) {
                 if (current.length !== (database || []).length) {
-                  return true;
+                  return log("array-size", current, database, true);
                 }
-                return current.some((x, index) => {
-                  const currentValue = x;
-                  const databaseValue = (database || [])[index];
-                  return hasChanges(currentValue, databaseValue);
-                });
+                return log(
+                  "array",
+                  current,
+                  database,
+                  current.some((x, index) => {
+                    const currentValue = x;
+                    const databaseValue = (database || [])[index];
+                    return log(
+                      "array-item",
+                      index,
+                      currentValue,
+                      databaseValue,
+                      hasChanges(currentValue, databaseValue),
+                    );
+                  }),
+                );
               } else if (typeof current === "object" && current) {
                 const currentKeys = Object.keys(current);
-                return currentKeys.some((key) => {
-                  const currentValue =
-                    key === "time_slots"
-                      ? this.selectedTimeSlotIds.sort()
-                      : current[key];
-                  const databaseValue =
-                    key === "time_slots"
-                      ? ((database || {})[key] || [])
-                          .map((x) => x.documentId)
-                          .sort()
-                      : (database || {})[key];
-                  return hasChanges(currentValue, databaseValue);
-                });
+                return log(
+                  "object",
+                  current,
+                  database,
+                  currentKeys.some((key) => {
+                    const currentValue =
+                      key === "time_slots"
+                        ? this.selectedTimeSlotIds.sort()
+                        : current[key];
+                    const databaseValue =
+                      key === "time_slots"
+                        ? ((database || {})[key] || [])
+                            .map((x) => x.documentId)
+                            .sort()
+                        : (database || {})[key];
+                    return log(
+                      "object-item",
+                      key,
+                      currentValue,
+                      databaseValue,
+                      hasChanges(currentValue, databaseValue),
+                    );
+                  }),
+                );
               } else if (typeof current === "string") {
-                return trim(current) !== trim(database);
+                return log(
+                  "string",
+                  current,
+                  database,
+                  trim(current) !== trim(database),
+                );
               }
-              return current !== database;
+              return log("other", current, database, current !== database);
             };
 
-            return hasChanges(this.booking, this.bookingLoadedFromDatabase);
+            log("hasChanges");
+            log(JSON.stringify(this.booking));
+            log(JSON.stringify(this.bookingLoadedFromDatabase));
+            return log(
+              "end",
+              hasChanges(this.booking, this.bookingLoadedFromDatabase),
+            );
           },
 
           async init() {
