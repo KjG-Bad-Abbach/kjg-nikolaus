@@ -1794,8 +1794,8 @@
             } else if (obj[key] instanceof Date) {
               obj[key] = new Date(newObj[key]);
             } else if (typeof obj[key] === "string") {
-              obj[key] = newObj[key].toString();
-            } else if (typeof obj[key] === "object" && obj[key] !== null) {
+              obj[key] = (newObj[key] || "").toString();
+            } else if (typeof obj[key] === "object" && obj[key]) {
               // If property is object, call the function recursively
               updateExistingObjectKeys(obj[key], newObj[key]);
             } else {
@@ -1813,8 +1813,8 @@
           if (Array.isArray(obj[key]) && Array.isArray(newObj[key])) {
             obj[key] = obj[key].concat(newObj[key]);
           } else if (typeof obj[key] === "string") {
-            obj[key] = (obj[key] + " " + newObj[key]).trim();
-          } else if (typeof obj[key] === "object" && obj[key] !== null) {
+            obj[key] = (obj[key] + " " + (newObj[key] || "")).trim();
+          } else if (typeof obj[key] === "object" && obj[key]) {
             // If property is object, call the function recursively
             extendExistingObjectKeys(obj[key], newObj[key]);
           } else {
@@ -2154,16 +2154,18 @@
                   const databaseValue = (database || [])[index];
                   return hasChanges(currentValue, databaseValue);
                 });
-              } else if (typeof current === "object") {
+              } else if (typeof current === "object" && current) {
                 const currentKeys = Object.keys(current);
                 return currentKeys.some((key) => {
                   const currentValue =
                     key === "time_slots"
-                      ? this.selectedTimeSlotIds
+                      ? this.selectedTimeSlotIds.sort()
                       : current[key];
                   const databaseValue =
                     key === "time_slots"
-                      ? ((database || {})[key] || []).map((x) => x.documentId)
+                      ? ((database || {})[key] || [])
+                          .map((x) => x.documentId)
+                          .sort()
                       : (database || {})[key];
                   return hasChanges(currentValue, databaseValue);
                 });
