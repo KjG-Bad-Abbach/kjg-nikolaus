@@ -1647,7 +1647,12 @@
             </strong>
           </div>
 
-          <div x-data="{ open: false }" class="mt-4">
+          <div
+            x-show="error?.status || error?.body"
+            x-data="{ open: false }"
+            class="mt-4"
+            x-cloak
+          >
             <a
               x-on:click="open = !open"
               :class="{ 'font-bold': open }"
