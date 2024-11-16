@@ -2506,6 +2506,7 @@
                 this.view = "steps";
                 await this.init();
               } else {
+                this.bookingLoadedFromDatabase = clone(this.booking);
                 this.view = "email-verification-needed";
               }
               await this.setStep(1);
