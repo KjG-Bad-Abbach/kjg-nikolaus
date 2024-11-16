@@ -2072,27 +2072,27 @@
           step: 0,
           canJumpToAnyStep: false,
           async setStep(step) {
-            let fetchedTimeSlots = false;
-            // Check if inputs have changed and saving is needed
-            if (this.bookingHasChanges()) {
-              if (
-                !confirm(
-                  "Wenn Sie fortfahren, werden Ihre Änderungen verloren gehen. Fortfahren?",
-                )
-              ) {
-                return;
-              }
-              // Reset data to database values
-              this.booking = this.bookingEmpty();
-              updateExistingObjectKeys(
-                this.booking,
-                clone(this.bookingLoadedFromDatabase),
-              );
-              this.fetchTimeSlots();
-              fetchedTimeSlots = true;
-            }
-
             if (this.canJumpToAnyStep) {
+              let fetchedTimeSlots = false;
+              // Check if inputs have changed and saving is needed
+              if (this.bookingHasChanges()) {
+                if (
+                  !confirm(
+                    "Wenn Sie fortfahren, werden Ihre Änderungen verloren gehen. Fortfahren?",
+                  )
+                ) {
+                  return;
+                }
+                // Reset data to database values
+                this.booking = this.bookingEmpty();
+                updateExistingObjectKeys(
+                  this.booking,
+                  clone(this.bookingLoadedFromDatabase),
+                );
+                this.fetchTimeSlots();
+                fetchedTimeSlots = true;
+              }
+
               this.validationMessages = {};
               this.step = step;
               if (step === 2 && !fetchedTimeSlots) {
@@ -2206,6 +2206,15 @@
                   database,
                   trim(current) !== trim(database),
                 );
+              } else if (
+                (current === null ||
+                  current === undefined ||
+                  (typeof current === "string" && !isFilled(current))) &&
+                (database === null ||
+                  database === undefined ||
+                  (typeof database === "string" && !isFilled(database)))
+              ) {
+                return log("null-or-empty", current, database, false);
               }
               return log("other", current, database, current !== database);
             };
