@@ -2462,20 +2462,23 @@
 
               // Check if required fields filled
               if (!isFilled(this.booking.contact_person.first_name)) {
-                this.validationMessages["booking.contact_person.first_name"] =
-                  "Eingabe ist erforderlich.";
+                this.validationMessages["booking.contact_person.first_name"] = [
+                  "Eingabe ist erforderlich.",
+                ];
               }
               if (!isFilled(this.booking.contact_person.last_name)) {
-                this.validationMessages["booking.contact_person.last_name"] =
-                  "Eingabe ist erforderlich.";
+                this.validationMessages["booking.contact_person.last_name"] = [
+                  "Eingabe ist erforderlich.",
+                ];
               }
               if (!isFilled(this.booking.contact_person.email)) {
-                this.validationMessages["booking.contact_person.email"] =
-                  "Eingabe ist erforderlich.";
+                this.validationMessages["booking.contact_person.email"] = [
+                  "Eingabe ist erforderlich.",
+                ];
               }
               if (!isFilled(this.booking.contact_person.phone_number)) {
                 this.validationMessages["booking.contact_person.phone_number"] =
-                  "Eingabe ist erforderlich.";
+                  ["Eingabe ist erforderlich."];
               }
 
               // Exit on validation errors
@@ -2562,20 +2565,24 @@
 
               // Check if required fields filled
               if (!isFilled(this.booking.location.street)) {
-                this.validationMessages["booking.location.street"] =
-                  "Eingabe ist erforderlich.";
+                this.validationMessages["booking.location.street"] = [
+                  "Eingabe ist erforderlich.",
+                ];
               }
               if (!isFilled(this.booking.location.house_number)) {
-                this.validationMessages["booking.location.house_number"] =
-                  "Eingabe ist erforderlich.";
+                this.validationMessages["booking.location.house_number"] = [
+                  "Eingabe ist erforderlich.",
+                ];
               }
               if (!isFilled(this.booking.location.zip_code)) {
-                this.validationMessages["booking.location.zip_code"] =
-                  "Eingabe ist erforderlich.";
+                this.validationMessages["booking.location.zip_code"] = [
+                  "Eingabe ist erforderlich.",
+                ];
               }
               if (!isFilled(this.booking.location.place)) {
-                this.validationMessages["booking.location.place"] =
-                  "Eingabe ist erforderlich.";
+                this.validationMessages["booking.location.place"] = [
+                  "Eingabe ist erforderlich.",
+                ];
               }
 
               // Exit on validation errors
@@ -2793,8 +2800,9 @@
               // Check if required fields filled
               this.booking.children.forEach((child, index) => {
                 if (!isFilled(child.name)) {
-                  this.validationMessages[`booking.children[${index}].name`] =
-                    "Eingabe ist erforderlich.";
+                  this.validationMessages[`booking.children[${index}].name`] = [
+                    "Eingabe ist erforderlich.",
+                  ];
                 }
               });
 
