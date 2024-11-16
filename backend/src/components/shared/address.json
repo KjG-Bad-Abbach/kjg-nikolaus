@@ -22,7 +22,7 @@
       "required": true,
       "maxLength": 5,
       "minLength": 5,
-      "regex": "^\\d{5}$"
+      "regex": "^[0-9]*$"
     },
     "place": {
       "type": "string",

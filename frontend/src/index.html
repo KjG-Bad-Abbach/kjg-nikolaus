@@ -807,9 +807,9 @@
                   class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
                   x-model="booking.location.zip_code"
                   max="99999"
-                  min="10000"
+                  min="00000"
                   placeholder="PLZ"
-                  oninput="if(this.value.length > 5) this.value = this.value.slice(0,5)"
+                  oninput="this.value = this.value.slice(0, 5)"
                   :readonly="!canEditRoutePlanning"
                 />
                 <template
