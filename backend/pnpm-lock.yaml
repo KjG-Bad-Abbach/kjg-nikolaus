@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@strapi/plugin-cloud':
-        specifier: 5.4.0
-        version: 5.4.0(oucozgoumbpfxdieo7g2odedby)
+        specifier: 5.4.1
+        version: 5.4.1(oucozgoumbpfxdieo7g2odedby)
       '@strapi/plugin-users-permissions':
         specifier: 5.4.0
         version: 5.4.0(gqfl6jhgb7xxi3k3t3b7karrji)
@@ -1552,8 +1552,8 @@ packages:
     resolution: {integrity: sha512-tYWE0cfqLpqcnKcH18Ngi5mRU0a+o/nIyy7zux3KY2ErXySISx7YpL9KIiZ+Jmet6HTmpoybwrUIS2UyK/HVww==}
     engines: {node: '>=18.0.0 <=22.x.x', npm: '>=6.0.0'}
 
-  '@strapi/plugin-cloud@5.4.0':
-    resolution: {integrity: sha512-w/pAA+mKy6KPHTNFYns84q6IRr5mIWqIuzjXUF9Tf6daxrAXu6e0tX5gNn4DhWBvd2A8yuAN/6vRPB+XdBL5HQ==}
+  '@strapi/plugin-cloud@5.4.1':
+    resolution: {integrity: sha512-c+3QQiZTptBbmetzX/KofT5QVhz1ZS62fqmEvb+oAED+ddZP6K7kXzP4PWYq2wKRoOJYtEVkiMYOZSAv31MuqA==}
     engines: {node: '>=18.0.0 <=22.x.x', npm: '>=6.0.0'}
     peerDependencies:
       '@strapi/strapi': ^5.0.0
@@ -8011,7 +8011,7 @@ snapshots:
       qs: 6.11.1
       sift: 16.0.1
 
-  '@strapi/plugin-cloud@5.4.0(oucozgoumbpfxdieo7g2odedby)':
+  '@strapi/plugin-cloud@5.4.1(oucozgoumbpfxdieo7g2odedby)':
     dependencies:
       '@strapi/design-system': 2.0.0-rc.12(@babel/runtime@7.26.0)(@codemirror/autocomplete@6.18.3(@codemirror/language@6.10.3)(@codemirror/state@6.4.1)(@codemirror/view@6.34.3)(@lezer/common@1.2.3))(@codemirror/language@6.10.3)(@codemirror/lint@6.8.2)(@codemirror/search@6.5.7)(@codemirror/state@6.4.1)(@codemirror/theme-one-dark@6.1.2)(@codemirror/view@6.34.3)(@strapi/icons@2.0.0-rc.12(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-components@6.1.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1)))(@types/react-dom@18.3.1)(@types/react@18.3.12)(codemirror@5.65.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-components@6.1.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       '@strapi/icons': 2.0.0-rc.12(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-components@6.1.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
