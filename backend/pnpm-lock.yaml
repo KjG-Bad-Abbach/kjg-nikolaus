@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@strapi/plugin-cloud':
-        specifier: 5.7.0
-        version: 5.7.0(ghc3rvmiicxxvi4rlkaunhbsjq)
+        specifier: 5.8.0
+        version: 5.8.0(ghc3rvmiicxxvi4rlkaunhbsjq)
       '@strapi/plugin-graphql':
         specifier: ^5.7.0
         version: 5.7.0(nxv5hktffn5ykhrr7rzdabdkma)
@@ -1727,8 +1727,8 @@ packages:
     resolution: {integrity: sha512-f4aBJeEMxdq+20YTUiN58JAmQ81dauJRUlY8ielJ6XBdfKCzuClUXQTUFa4lUnqJB4JMaRRxOdrtWGpu1Zbevw==}
     engines: {node: '>=18.0.0 <=22.x.x', npm: '>=6.0.0'}
 
-  '@strapi/plugin-cloud@5.7.0':
-    resolution: {integrity: sha512-7hksJVb9/Dff/SLRh/sEHj+UA8IA65yacHSJMyyNfEdmqyIiRT37ZHl/QNewzCstq+kkp4Q32qD/iZi9OgXC2g==}
+  '@strapi/plugin-cloud@5.8.0':
+    resolution: {integrity: sha512-4vQ8NqZT/SAWGyTHgSQ3csNRcn3wNXaJdw01arfMXvAdT8Rh0EjYKggQ54eyx+gTsKWfN2hl4kncweMRTkYRpw==}
     engines: {node: '>=18.0.0 <=22.x.x', npm: '>=6.0.0'}
     peerDependencies:
       '@strapi/strapi': ^5.0.0
@@ -8561,7 +8561,7 @@ snapshots:
       qs: 6.11.1
       sift: 16.0.1
 
-  '@strapi/plugin-cloud@5.7.0(ghc3rvmiicxxvi4rlkaunhbsjq)':
+  '@strapi/plugin-cloud@5.8.0(ghc3rvmiicxxvi4rlkaunhbsjq)':
     dependencies:
       '@strapi/design-system': 2.0.0-rc.14(@babel/runtime@7.26.0)(@codemirror/autocomplete@6.18.4)(@codemirror/language@6.10.8)(@codemirror/lint@6.8.4)(@codemirror/search@6.5.8)(@codemirror/state@6.5.1)(@codemirror/theme-one-dark@6.1.2)(@codemirror/view@6.36.2)(@strapi/icons@2.0.0-rc.14(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-components@6.1.14(react-dom@18.3.1(react@18.3.1))(react@18.3.1)))(@types/react-dom@18.3.5(@types/react@18.3.18))(@types/react@18.3.18)(codemirror@5.65.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-components@6.1.14(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       '@strapi/icons': 2.0.0-rc.14(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-components@6.1.14(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
