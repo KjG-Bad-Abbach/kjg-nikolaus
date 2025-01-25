@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@strapi/plugin-cloud':
-        specifier: 5.8.0
-        version: 5.8.0(k2scbzmns5or6bqhbp47c6bmhu)
+        specifier: 5.8.1
+        version: 5.8.1(k2scbzmns5or6bqhbp47c6bmhu)
       '@strapi/plugin-graphql':
         specifier: ^5.8.0
         version: 5.8.0(2yoaylg2y3t63ryibz4pczkuwy)
@@ -1727,8 +1727,8 @@ packages:
     resolution: {integrity: sha512-4hxaaLgv3Rtge58ZL9YaTTb/XzM7AzgWiZQYTzRT5scaJpR9FvfC5a0eETEXa8glZRpeChl69hJ4+lOplExiWg==}
     engines: {node: '>=18.0.0 <=22.x.x', npm: '>=6.0.0'}
 
-  '@strapi/plugin-cloud@5.8.0':
-    resolution: {integrity: sha512-4vQ8NqZT/SAWGyTHgSQ3csNRcn3wNXaJdw01arfMXvAdT8Rh0EjYKggQ54eyx+gTsKWfN2hl4kncweMRTkYRpw==}
+  '@strapi/plugin-cloud@5.8.1':
+    resolution: {integrity: sha512-PivvbiHrrNkdGWap/YdOi5cLSS8/l5IfLyHzTbd+HWCY8e9ghBxdlpsW7un/Q75s6jNhj4SRQIjhc0aQSAGxEg==}
     engines: {node: '>=18.0.0 <=22.x.x', npm: '>=6.0.0'}
     peerDependencies:
       '@strapi/strapi': ^5.0.0
@@ -4249,6 +4249,7 @@ packages:
 
   lodash.get@4.4.2:
     resolution: {integrity: sha512-z+Uw/vLuy6gQe8cfaFWD7p0wVv8fJl3mbzXh33RS+0oW2wvUqiRXiQ69gLWSLpgB5/6sU+r6BlQR0MBILadqTQ==}
+    deprecated: This package is deprecated. Use the optional chaining (?.) operator instead.
 
   lodash.isplainobject@4.0.6:
     resolution: {integrity: sha512-oSXzaWypCMHkPC3NvBEaPHf0KsA5mvPrOPgQWDsbg8n7orZ290M0BmC/jgRZ4vcJ6DTAhjrsSYgdsW/F+MFOBA==}
@@ -8571,7 +8572,7 @@ snapshots:
       qs: 6.11.1
       sift: 16.0.1
 
-  '@strapi/plugin-cloud@5.8.0(k2scbzmns5or6bqhbp47c6bmhu)':
+  '@strapi/plugin-cloud@5.8.1(k2scbzmns5or6bqhbp47c6bmhu)':
     dependencies:
       '@strapi/design-system': 2.0.0-rc.14(@babel/runtime@7.26.0)(@codemirror/autocomplete@6.18.4)(@codemirror/language@6.10.8)(@codemirror/lint@6.8.4)(@codemirror/search@6.5.8)(@codemirror/state@6.5.1)(@codemirror/theme-one-dark@6.1.2)(@codemirror/view@6.36.2)(@strapi/icons@2.0.0-rc.14(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-components@6.1.14(react-dom@18.3.1(react@18.3.1))(react@18.3.1)))(@types/react-dom@18.3.5(@types/react@18.3.18))(@types/react@18.3.18)(codemirror@5.65.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-components@6.1.14(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       '@strapi/icons': 2.0.0-rc.14(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-components@6.1.14(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
