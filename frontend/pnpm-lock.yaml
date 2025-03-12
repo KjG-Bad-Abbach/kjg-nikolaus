@@ -13,7 +13,7 @@ importers:
         version: 3.14.8
     devDependencies:
       autoprefixer:
-        specifier: ^10.4.20
+        specifier: ^10.4.21
         version: 10.4.21(postcss@8.5.3)
       browser-sync:
         specifier: ^3.0.3
