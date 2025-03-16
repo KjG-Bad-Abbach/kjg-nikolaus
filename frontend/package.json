@@ -27,6 +27,6 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "alpinejs": "^3.14.8"
+    "alpinejs": "^3.14.9"
   }
 }
