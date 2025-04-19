@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@strapi/plugin-cloud':
-        specifier: 5.12.4
-        version: 5.12.4(28e5253947cd0b55a829247d525e89fc)
+        specifier: 5.12.5
+        version: 5.12.5(28e5253947cd0b55a829247d525e89fc)
       '@strapi/plugin-graphql':
         specifier: ^5.12.4
         version: 5.12.4(300f86e218c23c46bc5fcf057c05781d)
@@ -1711,8 +1711,8 @@ packages:
     resolution: {integrity: sha512-qaUPVHvpzHd8wYBG6GEmX6fHdbiPmuZ6YaM3DeGQCpBpYZNTSIP/Bs71K1bhuZ+aG9Cn0j4/ZO9qAUm4BDsRKA==}
     engines: {node: '>=18.0.0 <=22.x.x', npm: '>=6.0.0'}
 
-  '@strapi/plugin-cloud@5.12.4':
-    resolution: {integrity: sha512-FLVnXqkESCGPksYrfhLRNLinWJwG49YruYWQohIlENV92F/4QaWBDR57tK4ZE50qO2QEtaDMik22z7M46pz1ZQ==}
+  '@strapi/plugin-cloud@5.12.5':
+    resolution: {integrity: sha512-wTCppTGHzdbbgPjibrUKhHmIl0lY0PMr944rvJj37F/7AqKkG03jDZk6KazoJ0n5oMMlHkuX34xNP9mrw16bpA==}
     engines: {node: '>=18.0.0 <=22.x.x', npm: '>=6.0.0'}
     peerDependencies:
       '@strapi/strapi': ^5.0.0
@@ -3297,6 +3297,7 @@ packages:
 
   formidable@2.1.2:
     resolution: {integrity: sha512-CM3GuJ57US06mlpQ47YcunuUZ9jpm8Vx+P2CGt2j7HpgkKZO/DJYQ0Bobim8G6PFQmK5lOqOOdUXboU+h73A4g==}
+    deprecated: 'ACTION REQUIRED: SWITCH TO v3 - v1 and v2 are VULNERABLE! v1 is DEPRECATED FOR OVER 2 YEARS! Use formidable@latest or try formidable-mini for fresh projects'
 
   formik@2.4.5:
     resolution: {integrity: sha512-Gxlht0TD3vVdzMDHwkiNZqJ7Mvg77xQNfmBRrNtvzcHZs72TJppSTDKHpImCMJZwcWPBJ8jSQQ95GJzXFf1nAQ==}
@@ -8358,7 +8359,7 @@ snapshots:
       qs: 6.11.1
       sift: 16.0.1
 
-  '@strapi/plugin-cloud@5.12.4(28e5253947cd0b55a829247d525e89fc)':
+  '@strapi/plugin-cloud@5.12.5(28e5253947cd0b55a829247d525e89fc)':
     dependencies:
       '@strapi/design-system': 2.0.0-rc.21(@babel/runtime@7.27.0)(@codemirror/autocomplete@6.18.6)(@codemirror/language@6.11.0)(@codemirror/lint@6.8.5)(@codemirror/search@6.5.10)(@codemirror/state@6.5.2)(@codemirror/theme-one-dark@6.1.2)(@codemirror/view@6.36.5)(@strapi/icons@2.0.0-rc.21(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-components@6.1.17(react-dom@18.3.1(react@18.3.1))(react@18.3.1)))(@types/react-dom@18.3.6(@types/react@18.3.20))(@types/react@18.3.20)(codemirror@5.65.19)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-components@6.1.17(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       '@strapi/icons': 2.0.0-rc.21(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-components@6.1.17(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
