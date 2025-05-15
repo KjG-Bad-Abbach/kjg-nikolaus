@@ -1,5 +1,5 @@
 # Use Node.js LTS version
-FROM node:22.15.0-slim
+FROM node:22.15.1-slim
 
 # Set working directory
 WORKDIR /app
