@@ -16,7 +16,7 @@
   "devDependencies": {
     "autoprefixer": "^10.4.21",
     "browser-sync": "^3.0.4",
-    "browser-sync-webpack-plugin": "^2.3.0",
+    "browser-sync-webpack-plugin": "^2.4.0",
     "laravel-mix": "^6.0.49",
     "mix-tailwindcss": "^1.3.0",
     "postcss": "^8.5.4",
