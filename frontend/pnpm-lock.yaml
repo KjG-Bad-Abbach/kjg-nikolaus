@@ -721,8 +721,8 @@ packages:
   '@types/node-forge@1.3.13':
     resolution: {integrity: sha512-zePQJSW5QkwSHKRApqWCVKeKoSOt4xvEnLENZPjyvm9Ezdf/EyDeJM7jqLzOwjVICQQzvLZ63T55MKdJB5H6ww==}
 
-  '@types/node@24.0.13':
-    resolution: {integrity: sha512-Qm9OYVOFHFYg3wJoTSrz80hoec5Lia/dPp84do3X7dZvLikQvM1YpmvTBEdIr/e+U8HTkFjLHLnl78K/qjf+jQ==}
+  '@types/node@24.0.15':
+    resolution: {integrity: sha512-oaeTSbCef7U/z7rDeJA138xpG3NuKc64/rZ2qmUFkFJmnMsAPaluIifqyWd8hSSMxyP9oie3dLAqYPblag9KgA==}
 
   '@types/parse-json@4.0.2':
     resolution: {integrity: sha512-dISoDXWWQwUquiKsyZ4Ng+HX2KsPL7LyHKHQwgGFEA3IaKac4Obd+h2a/a6waisAoepJlBcx9paWqjA8/HVjCw==}
@@ -840,8 +840,8 @@ packages:
     resolution: {integrity: sha512-PYAthTa2m2VKxuvSD3DPC/Gy+U+sOA1LAuT8mkmRuvw+NACSaeXEQ+NHcVF7rONl6qcaxV3Uuemwawk+7+SJLw==}
     engines: {node: '>= 0.6'}
 
-  acorn-import-phases@1.0.3:
-    resolution: {integrity: sha512-jtKLnfoOzm28PazuQ4dVBcE9Jeo6ha1GAJvq3N0LlNOszmTfx+wSycBehn+FN0RnyeR77IBxN/qVYMw0Rlj0Xw==}
+  acorn-import-phases@1.0.4:
+    resolution: {integrity: sha512-wKmbr/DDiIXzEOiWrTTUcDm24kQ2vGfZQvM2fwg2vXqR5uW6aapr7ObPtj1th32b9u90/Pf4AItvdTh42fBmVQ==}
     engines: {node: '>=10.13.0'}
     peerDependencies:
       acorn: ^8.14.0
@@ -1180,8 +1180,8 @@ packages:
     resolution: {integrity: sha512-AF3r7P5dWxL8MxyITRMlORQNaOA2IkAFaTr4k7BUumjPtRpGDTZpl0Pb1XCO6JeDCBdp126Cgs9sMxqSjgYyRg==}
     engines: {node: '>= 0.6'}
 
-  compression@1.8.0:
-    resolution: {integrity: sha512-k6WLKfunuqCYD3t6AsuPGvQWaKwuLLh2/xHNcX4qE+vIfDNXpSqnrhwA7O53R7WVQUnt8dVAIW+YHr7xTgOgGA==}
+  compression@1.8.1:
+    resolution: {integrity: sha512-9mAqGPHLakhCLeNyxPkK4xVo746zQ/czLH1Ky+vkitMnWfWZps8r0qXuwhwizagCRttsL4lfG4pIOvaWLpAP0w==}
     engines: {node: '>= 0.8.0'}
 
   concat-map@0.0.1:
@@ -1453,8 +1453,8 @@ packages:
   ee-first@1.1.1:
     resolution: {integrity: sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==}
 
-  electron-to-chromium@1.5.182:
-    resolution: {integrity: sha512-Lv65Btwv9W4J9pyODI6EWpdnhfvrve/us5h1WspW8B2Fb0366REPtY3hX7ounk1CkV/TBjWCEvCBBbYbmV0qCA==}
+  electron-to-chromium@1.5.187:
+    resolution: {integrity: sha512-cl5Jc9I0KGUoOoSbxvTywTa40uspGJt/BDBoDLoxJRSBpWh4FFXBsjNRHfQrONsV/OoEjDfHUmZQa2d6Ze4YgA==}
 
   elliptic@6.6.1:
     resolution: {integrity: sha512-RaddvvMatK2LJHqFJ+YA4WysVN5Ita9E35botqIYspQ4TkRAlCicdzKOjlyv/1Za5RyTNn7di//eEV0uTAfe3g==}
@@ -1660,8 +1660,8 @@ packages:
   fs-extra@3.0.1:
     resolution: {integrity: sha512-V3Z3WZWVUYd8hoCL5xfXJCaHWYzmtwW5XWYSlLgERi8PWd8bx1kUHUk8L1BT57e49oKnDDD180mjfrHc1yA9rg==}
 
-  fs-monkey@1.0.6:
-    resolution: {integrity: sha512-b1FMfwetIKymC0eioW7mTywihSQE4oLzQn1dB6rZB5fx/3NpNEdAWeCSMB+60/AeT0TCXsxzAlcYVEFCTAksWg==}
+  fs-monkey@1.1.0:
+    resolution: {integrity: sha512-QMUezzXWII9EV5aTFXW1UBVUO77wYPpjqIF8/AviUCThNeSYZykpoTixUeaNNBwmCev0AMDWMAni+f8Hxb1IFw==}
 
   fs.realpath@1.0.0:
     resolution: {integrity: sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==}
@@ -2297,8 +2297,8 @@ packages:
     resolution: {integrity: sha512-oVlzkg3ENAhCk2zdv7IJwd/QUD4z2RxRwpkcGY8psCVcCYZNq4wYnVWALHM+brtuJjePWiYF/ClmuDr8Ch5+kg==}
     engines: {node: '>= 0.8'}
 
-  on-headers@1.0.2:
-    resolution: {integrity: sha512-pZAE+FJLoyITytdqK0U5s+FIpjN0JP3OzFi/u8Rx+EV5/W+JTWGXG8xFzevE7AjBfDqHv/8vL8qQsIhHnqRkrA==}
+  on-headers@1.1.0:
+    resolution: {integrity: sha512-737ZY3yNnXy37FHkQxPzt4UZ2UWPWiCZWLvFZ4fu5cueciegX0zGPnrlY6bwRg4FdQOe9YU8MkmJwGhoMybl8A==}
     engines: {node: '>= 0.8'}
 
   once@1.4.0:
@@ -4248,29 +4248,29 @@ snapshots:
   '@types/body-parser@1.19.6':
     dependencies:
       '@types/connect': 3.4.38
-      '@types/node': 24.0.13
+      '@types/node': 24.0.15
 
   '@types/bonjour@3.5.13':
     dependencies:
-      '@types/node': 24.0.13
+      '@types/node': 24.0.15
 
   '@types/clean-css@4.2.11':
     dependencies:
-      '@types/node': 24.0.13
+      '@types/node': 24.0.15
       source-map: 0.6.1
 
   '@types/connect-history-api-fallback@1.5.4':
     dependencies:
       '@types/express-serve-static-core': 5.0.7
-      '@types/node': 24.0.13
+      '@types/node': 24.0.15
 
   '@types/connect@3.4.38':
     dependencies:
-      '@types/node': 24.0.13
+      '@types/node': 24.0.15
 
   '@types/cors@2.8.19':
     dependencies:
-      '@types/node': 24.0.13
+      '@types/node': 24.0.15
 
   '@types/eslint-scope@3.7.7':
     dependencies:
@@ -4286,14 +4286,14 @@ snapshots:
 
   '@types/express-serve-static-core@4.19.6':
     dependencies:
-      '@types/node': 24.0.13
+      '@types/node': 24.0.15
       '@types/qs': 6.14.0
       '@types/range-parser': 1.2.7
       '@types/send': 0.17.5
 
   '@types/express-serve-static-core@5.0.7':
     dependencies:
-      '@types/node': 24.0.13
+      '@types/node': 24.0.15
       '@types/qs': 6.14.0
       '@types/range-parser': 1.2.7
       '@types/send': 0.17.5
@@ -4308,13 +4308,13 @@ snapshots:
   '@types/glob@7.2.0':
     dependencies:
       '@types/minimatch': 6.0.0
-      '@types/node': 24.0.13
+      '@types/node': 24.0.15
 
   '@types/http-errors@2.0.5': {}
 
   '@types/http-proxy@1.17.16':
     dependencies:
-      '@types/node': 24.0.13
+      '@types/node': 24.0.15
 
   '@types/imagemin-gifsicle@7.0.4':
     dependencies:
@@ -4335,7 +4335,7 @@ snapshots:
 
   '@types/imagemin@9.0.1':
     dependencies:
-      '@types/node': 24.0.13
+      '@types/node': 24.0.15
 
   '@types/json-schema@7.0.15': {}
 
@@ -4347,9 +4347,9 @@ snapshots:
 
   '@types/node-forge@1.3.13':
     dependencies:
-      '@types/node': 24.0.13
+      '@types/node': 24.0.15
 
-  '@types/node@24.0.13':
+  '@types/node@24.0.15':
     dependencies:
       undici-types: 7.8.0
 
@@ -4364,7 +4364,7 @@ snapshots:
   '@types/send@0.17.5':
     dependencies:
       '@types/mime': 1.3.5
-      '@types/node': 24.0.13
+      '@types/node': 24.0.15
 
   '@types/serve-index@1.9.4':
     dependencies:
@@ -4373,18 +4373,18 @@ snapshots:
   '@types/serve-static@1.15.8':
     dependencies:
       '@types/http-errors': 2.0.5
-      '@types/node': 24.0.13
+      '@types/node': 24.0.15
       '@types/send': 0.17.5
 
   '@types/sockjs@0.3.36':
     dependencies:
-      '@types/node': 24.0.13
+      '@types/node': 24.0.15
 
   '@types/svgo@1.3.6': {}
 
   '@types/ws@8.18.1':
     dependencies:
-      '@types/node': 24.0.13
+      '@types/node': 24.0.15
 
   '@vue/reactivity@3.1.5':
     dependencies:
@@ -4492,7 +4492,7 @@ snapshots:
       mime-types: 2.1.35
       negotiator: 0.6.3
 
-  acorn-import-phases@1.0.3(acorn@8.15.0):
+  acorn-import-phases@1.0.4(acorn@8.15.0):
     dependencies:
       acorn: 8.15.0
 
@@ -4783,7 +4783,7 @@ snapshots:
   browserslist@4.25.1:
     dependencies:
       caniuse-lite: 1.0.30001727
-      electron-to-chromium: 1.5.182
+      electron-to-chromium: 1.5.187
       node-releases: 2.0.19
       update-browserslist-db: 1.1.3(browserslist@4.25.1)
 
@@ -4916,13 +4916,13 @@ snapshots:
     dependencies:
       mime-db: 1.54.0
 
-  compression@1.8.0:
+  compression@1.8.1:
     dependencies:
       bytes: 3.1.2
       compressible: 2.0.18
       debug: 2.6.9
       negotiator: 0.6.4
-      on-headers: 1.0.2
+      on-headers: 1.1.0
       safe-buffer: 5.2.1
       vary: 1.1.2
     transitivePeerDependencies:
@@ -5235,7 +5235,7 @@ snapshots:
 
   ee-first@1.1.1: {}
 
-  electron-to-chromium@1.5.182: {}
+  electron-to-chromium@1.5.187: {}
 
   elliptic@6.6.1:
     dependencies:
@@ -5274,7 +5274,7 @@ snapshots:
   engine.io@6.6.4:
     dependencies:
       '@types/cors': 2.8.19
-      '@types/node': 24.0.13
+      '@types/node': 24.0.15
       accepts: 1.3.8
       base64id: 2.0.0
       cookie: 0.7.2
@@ -5490,7 +5490,7 @@ snapshots:
       jsonfile: 3.0.1
       universalify: 0.1.2
 
-  fs-monkey@1.0.6: {}
+  fs-monkey@1.1.0: {}
 
   fs.realpath@1.0.0: {}
 
@@ -5805,7 +5805,7 @@ snapshots:
 
   jest-worker@27.5.1:
     dependencies:
-      '@types/node': 24.0.13
+      '@types/node': 24.0.15
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
@@ -5984,7 +5984,7 @@ snapshots:
 
   memfs@3.5.3:
     dependencies:
-      fs-monkey: 1.0.6
+      fs-monkey: 1.1.0
 
   merge-descriptors@1.0.3: {}
 
@@ -6157,7 +6157,7 @@ snapshots:
     dependencies:
       ee-first: 1.1.1
 
-  on-headers@1.0.2: {}
+  on-headers@1.1.0: {}
 
   once@1.4.0:
     dependencies:
@@ -7220,7 +7220,7 @@ snapshots:
       bonjour-service: 1.3.0
       chokidar: 3.6.0
       colorette: 2.0.20
-      compression: 1.8.0
+      compression: 1.8.1
       connect-history-api-fallback: 2.0.0
       default-gateway: 6.0.3
       express: 4.21.2
@@ -7275,7 +7275,7 @@ snapshots:
       '@webassemblyjs/wasm-edit': 1.14.1
       '@webassemblyjs/wasm-parser': 1.14.1
       acorn: 8.15.0
-      acorn-import-phases: 1.0.3(acorn@8.15.0)
+      acorn-import-phases: 1.0.4(acorn@8.15.0)
       browserslist: 4.25.1
       chrome-trace-event: 1.0.4
       enhanced-resolve: 5.18.2
