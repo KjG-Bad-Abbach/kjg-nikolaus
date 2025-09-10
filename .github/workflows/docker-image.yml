@@ -83,14 +83,14 @@ jobs:
       # This step generates an artifact attestation for the image, which is an unforgeable statement about where and how it was built. It increases supply chain security for people who consume the image. For more information, see "[AUTOTITLE](/actions/security-guides/using-artifact-attestations-to-establish-provenance-for-builds)."
       - name: Generate artifact attestation for Backend
         if: github.event_name != 'pull_request' && env.ATTEST_BUILD == 'true'
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v3
         with:
           subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_BASE_NAME}}/backend
           subject-digest: ${{ steps.pushBackend.outputs.digest }}
           push-to-registry: true
       - name: Generate artifact attestation for Frontend
         if: github.event_name != 'pull_request' && env.ATTEST_BUILD == 'true'
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v3
         with:
           subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_BASE_NAME}}/frontend
           subject-digest: ${{ steps.pushFrontend.outputs.digest }}
