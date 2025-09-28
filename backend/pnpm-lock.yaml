@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@strapi/plugin-cloud':
-        specifier: 5.23.6
-        version: 5.23.6(4831e55927789ebe22b02dca0de4bfc3)
+        specifier: 5.24.1
+        version: 5.24.1(4831e55927789ebe22b02dca0de4bfc3)
       '@strapi/plugin-graphql':
         specifier: ^5.24.1
         version: 5.24.1(629b5e114d14acc605769ad1a356161a)
@@ -1769,8 +1769,8 @@ packages:
     resolution: {integrity: sha512-56QS8EFGfofxLXzHGa41yaT7z1hUrCIH5bwt0+ZPWkXdKVn5CqO/g+9insaJ12g4u+tnpeMUXEX3enNRxFPfog==}
     engines: {node: '>=18.0.0 <=22.x.x', npm: '>=6.0.0'}
 
-  '@strapi/plugin-cloud@5.23.6':
-    resolution: {integrity: sha512-wEhnZIqCPFpYd1zd/qamA9JSkEdjoynW0C6Hm5GEG6b0iHjaPDOkUV8o8GF1B9D47KSWdK5YOOWo8DqsxZBhUA==}
+  '@strapi/plugin-cloud@5.24.1':
+    resolution: {integrity: sha512-Wd6rF1nY8bms5SZ0gp+5MEn+beRggRYuT1M8BxRnJw482XvyMeYqiTCdPq1Vnr8kLeKruW8P/gfr2LbeW6QABg==}
     engines: {node: '>=18.0.0 <=22.x.x', npm: '>=6.0.0'}
     peerDependencies:
       '@strapi/admin': ^5.0.0
@@ -6776,18 +6776,6 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  '@formatjs/intl@2.10.0(typescript@5.4.4)':
-    dependencies:
-      '@formatjs/ecma402-abstract': 1.18.2
-      '@formatjs/fast-memoize': 2.2.0
-      '@formatjs/icu-messageformat-parser': 2.7.6
-      '@formatjs/intl-displaynames': 6.6.6
-      '@formatjs/intl-listformat': 7.5.5
-      intl-messageformat: 10.5.11
-      tslib: 2.8.1
-    optionalDependencies:
-      typescript: 5.4.4
-
   '@formatjs/intl@2.10.0(typescript@5.9.2)':
     dependencies:
       '@formatjs/ecma402-abstract': 1.18.2
@@ -8388,7 +8376,7 @@ snapshots:
       qs: 6.11.1
       sift: 16.0.1
 
-  '@strapi/plugin-cloud@5.23.6(4831e55927789ebe22b02dca0de4bfc3)':
+  '@strapi/plugin-cloud@5.24.1(4831e55927789ebe22b02dca0de4bfc3)':
     dependencies:
       '@strapi/admin': 5.24.1(@babel/runtime@7.28.4)(@codemirror/autocomplete@6.18.7)(@codemirror/language@6.11.3)(@codemirror/lint@6.8.5)(@codemirror/search@6.5.11)(@codemirror/state@6.5.2)(@codemirror/theme-one-dark@6.1.3)(@codemirror/view@6.38.2)(@strapi/data-transfer@5.24.1(@types/node@22.18.6)(pg@8.16.3)(typescript@5.4.4))(@types/hoist-non-react-statics@3.3.7(@types/react@18.3.24))(@types/node@22.18.6)(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(codemirror@5.65.20)(debug@4.3.4)(pg@8.16.3)(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)(redux@4.2.1)(styled-components@6.1.19(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       '@strapi/design-system': 2.0.0-rc.29(@babel/runtime@7.28.4)(@codemirror/autocomplete@6.18.7)(@codemirror/language@6.11.3)(@codemirror/lint@6.8.5)(@codemirror/search@6.5.11)(@codemirror/state@6.5.2)(@codemirror/theme-one-dark@6.1.3)(@codemirror/view@6.38.2)(@strapi/icons@2.0.0-rc.29(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-components@6.1.19(react-dom@18.3.1(react@18.3.1))(react@18.3.1)))(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(codemirror@5.65.20)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-components@6.1.19(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
@@ -12192,7 +12180,7 @@ snapshots:
     dependencies:
       '@formatjs/ecma402-abstract': 1.18.2
       '@formatjs/icu-messageformat-parser': 2.7.6
-      '@formatjs/intl': 2.10.0(typescript@5.4.4)
+      '@formatjs/intl': 2.10.0(typescript@5.9.2)
       '@formatjs/intl-displaynames': 6.6.6
       '@formatjs/intl-listformat': 7.5.5
       '@types/hoist-non-react-statics': 3.3.7(@types/react@18.3.24)
