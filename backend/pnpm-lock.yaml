@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@strapi/plugin-cloud':
-        specifier: 5.24.1
-        version: 5.24.1(32126b9f977034f56acd2d240a7feaad)
+        specifier: 5.24.2
+        version: 5.24.2(32126b9f977034f56acd2d240a7feaad)
       '@strapi/plugin-graphql':
         specifier: ^5.24.1
         version: 5.24.1(477a89e4f4f9a9f5889d3733f54facf1)
@@ -1657,6 +1657,7 @@ packages:
   '@strapi/admin@5.24.1':
     resolution: {integrity: sha512-MOgyyblkE0FtmPVxIpLKEC74Ulkskz0A68U1k0Iq0tCmJy4XAEgMwAfJdw+mLJ7M7ZWYYqcl8ZIITTO2ckcbHg==}
     engines: {node: '>=18.0.0 <=22.x.x', npm: '>=6.0.0'}
+    deprecated: This version is deprecated and should not be used.
     peerDependencies:
       '@strapi/data-transfer': ^5.0.0
       react: ^17.0.0 || ^18.0.0
@@ -1667,11 +1668,13 @@ packages:
   '@strapi/cloud-cli@5.24.1':
     resolution: {integrity: sha512-lPDDDcn5buMLHtAbXdAIWqTu5RVjiRscKt77SaOFm0MPEXFk+Fat29DCPMIMNgLCoWPqv27am0jZMekDOkB2mw==}
     engines: {node: '>=18.0.0 <=22.x.x', npm: '>=6.0.0'}
+    deprecated: This version is deprecated and should not be used.
     hasBin: true
 
   '@strapi/content-manager@5.24.1':
     resolution: {integrity: sha512-Rt9yiG9fHecwIrwovFGaoc3/FOOQgQSU3wbVZMKuYcBV+oasTUPIMK5A9yrKoSBhVwKMV8XfArnWW4gYMQdV9g==}
     engines: {node: '>=18.0.0 <=22.x.x', npm: '>=6.0.0'}
+    deprecated: This version is deprecated and should not be used.
     peerDependencies:
       '@strapi/admin': ^5.0.0
       react: ^17.0.0 || ^18.0.0
@@ -1682,6 +1685,7 @@ packages:
   '@strapi/content-releases@5.24.1':
     resolution: {integrity: sha512-WbyfpiITJKRiD1DUvg8uwjQQ1ihzJ+r0H92AbQbcXvGxR7+S+eN3lJkJg0IknMxz1OzPt7i8rmAcDlVmmLyJzg==}
     engines: {node: '>=18.0.0 <=22.x.x', npm: '>=6.0.0'}
+    deprecated: This version is deprecated and should not be used.
     peerDependencies:
       '@strapi/admin': ^5.0.0
       '@strapi/content-manager': ^5.0.0
@@ -1693,6 +1697,7 @@ packages:
   '@strapi/content-type-builder@5.24.1':
     resolution: {integrity: sha512-Ayq51V+kRvkNRBGDXSKyYYG1qisFHOBhqCgPGAq5vEXYO5Iysh9lbDwd3fnOZjo2AnFSBeEhaQtpyr/W4JfgvA==}
     engines: {node: '>=18.0.0 <=22.x.x', npm: '>=6.0.0'}
+    deprecated: This version is deprecated and should not be used.
     peerDependencies:
       '@strapi/admin': ^5.0.0
       react: ^17.0.0 || ^18.0.0
@@ -1703,14 +1708,17 @@ packages:
   '@strapi/core@5.24.1':
     resolution: {integrity: sha512-7BAoUWixMjalFikX8ZKacRc1P723QUVYnLdsEG6phs33neXuN59LY8VfWo4bmus8ugQLoIZIcd5/nOJPn3nPgw==}
     engines: {node: '>=18.0.0 <=22.x.x', npm: '>=6.0.0'}
+    deprecated: This version is deprecated and should not be used.
 
   '@strapi/data-transfer@5.24.1':
     resolution: {integrity: sha512-+4n/sru1p5DQKI4+fJ1bJzAqj4xmvRWpK1CNEboWnt3gPmNr/atDTqkSSsp6zGYc3hCG0XUD74HlwJgVvih/Wg==}
     engines: {node: '>=18.0.0 <=22.x.x', npm: '>=6.0.0'}
+    deprecated: This version is deprecated and should not be used.
 
   '@strapi/database@5.24.1':
     resolution: {integrity: sha512-chf7HoO0CG3UxAeTCJZFYTr9JbbbmVNUO2f80wXcUw3p25hjuecaBhbVT0HTKw5k0gDMWKxTMeoP+/aEJwt8Cg==}
     engines: {node: '>=18.0.0 <=22.x.x', npm: '>=6.0.0'}
+    deprecated: This version is deprecated and should not be used.
 
   '@strapi/design-system@2.0.0-rc.29':
     resolution: {integrity: sha512-Up8wGVdo1mvTK/F/u7qEgHn298rRaitBI+hn0RgtU90CynLO+Lo+b2mo7aGY+ZRk6hYp7xkXBW9fgS+DrnDNZA==}
@@ -1723,6 +1731,7 @@ packages:
   '@strapi/email@5.24.1':
     resolution: {integrity: sha512-rXpDTOHZb/2Wrp8PJ1lvsYZtf/n1nmDiFENBWRP94sQXxHxCcKkOVsC4UUSIqw2VoPlApDYy/d71JlSuy6FkBw==}
     engines: {node: '>=18.0.0 <=22.x.x', npm: '>=6.0.0'}
+    deprecated: This version is deprecated and should not be used.
     peerDependencies:
       '@strapi/admin': ^5.0.0
       koa: ^2.15.2
@@ -1734,10 +1743,12 @@ packages:
   '@strapi/generators@5.24.1':
     resolution: {integrity: sha512-Eyt4UuhSIpb4IsWl81ZcaOLb9TuSPrU6aqfky4xGqZw6st/BIBvM6GSPMyMSAsbgriQQO8cRKZ/Qmz7LNuC1MA==}
     engines: {node: '>=18.0.0 <=22.x.x', npm: '>=6.0.0'}
+    deprecated: This version is deprecated and should not be used.
 
   '@strapi/i18n@5.24.1':
     resolution: {integrity: sha512-kg2vU17nB9GVANetlFlwgJ1raHP6yfcFSPcX8g9viBLv/vdI0q8jvUzwNItpyqaFPqXUv06JvW5tUMr0xDi8SA==}
     engines: {node: '>=18.0.0 <=22.x.x', npm: '>=6.0.0'}
+    deprecated: This version is deprecated and should not be used.
     peerDependencies:
       '@strapi/admin': ^5.0.0
       '@strapi/content-manager': ^5.0.0
@@ -1756,17 +1767,20 @@ packages:
   '@strapi/logger@5.24.1':
     resolution: {integrity: sha512-lJs5LVtYGbwdZY1KVaWJmWJmdbD7eJcjFZ3QPAOvxwvYxeJ/jNqCgLG+7/ykldM1c/DWz7ulCh5ggMMi5YUeSQ==}
     engines: {node: '>=18.0.0 <=22.x.x', npm: '>=6.0.0'}
+    deprecated: This version is deprecated and should not be used.
 
   '@strapi/openapi@5.24.1':
     resolution: {integrity: sha512-FEgXeBdZ8Zk44LUAnftKwjyosZYzlmA076CzkTLTmHk/bb/SgPApLntz+3efponiKvzOf/+AtrR9qPVkJ4unsg==}
     engines: {node: '>=18.0.0 <=22.x.x', npm: '>=6.0.0'}
+    deprecated: This version is deprecated and should not be used.
 
   '@strapi/permissions@5.24.1':
     resolution: {integrity: sha512-56QS8EFGfofxLXzHGa41yaT7z1hUrCIH5bwt0+ZPWkXdKVn5CqO/g+9insaJ12g4u+tnpeMUXEX3enNRxFPfog==}
     engines: {node: '>=18.0.0 <=22.x.x', npm: '>=6.0.0'}
+    deprecated: This version is deprecated and should not be used.
 
-  '@strapi/plugin-cloud@5.24.1':
-    resolution: {integrity: sha512-Wd6rF1nY8bms5SZ0gp+5MEn+beRggRYuT1M8BxRnJw482XvyMeYqiTCdPq1Vnr8kLeKruW8P/gfr2LbeW6QABg==}
+  '@strapi/plugin-cloud@5.24.2':
+    resolution: {integrity: sha512-V1HCygrguvhjDPGM5Sx653m0m5+9sgjuBPMnvjt89lV1ACMPsfEXsP73QSqRB7ddsIpvxib4wpcGJX9pZOF3Hg==}
     engines: {node: '>=18.0.0 <=22.x.x', npm: '>=6.0.0'}
     peerDependencies:
       '@strapi/admin': ^5.0.0
@@ -1779,6 +1793,7 @@ packages:
   '@strapi/plugin-graphql@5.24.1':
     resolution: {integrity: sha512-xEKkLdrfhbBiJ3eld7FDjAl6SneDdsLNdYFRxp1UyyUipYXS0xjFPIsFwOjG7mpbD6CQoZ2q0EPnXOLzoEnd6w==}
     engines: {node: '>=18.0.0 <=22.x.x', npm: '>=6.0.0'}
+    deprecated: This version is deprecated and should not be used.
     peerDependencies:
       '@strapi/strapi': ^5.0.0
       react: ^17.0.0 || ^18.0.0
@@ -1789,6 +1804,7 @@ packages:
   '@strapi/plugin-users-permissions@5.24.1':
     resolution: {integrity: sha512-j7sENpp/RkXSRsDz2/iR5eIaOYXtZaqMXAFTGnTopbQVZvKmMeWVRhNMzIc6x2L5W6QHz4/CDKtrHSbDdZMANQ==}
     engines: {node: '>=18.0.0 <=22.x.x', npm: '>=6.0.0'}
+    deprecated: This version is deprecated and should not be used.
     peerDependencies:
       '@strapi/strapi': ^5.0.0
       react: ^17.0.0 || ^18.0.0
@@ -1799,18 +1815,22 @@ packages:
   '@strapi/provider-email-nodemailer@5.24.1':
     resolution: {integrity: sha512-Rh1Nuebn48Pb4rXwwSjShIxn9kf5dg2UPTwYk6RVhgbahTT1ApuCMYJ/BHnbLZLqFQ9qDzMzI6c0gSfZpFxlcA==}
     engines: {node: '>=18.0.0 <=22.x.x', npm: '>=6.0.0'}
+    deprecated: This version is deprecated and should not be used.
 
   '@strapi/provider-email-sendmail@5.24.1':
     resolution: {integrity: sha512-58ZQG2/oBgFaLWxcvxTNbKckfqCW3gCt+NVPFv5+1+TpjVT6qusgmuarz8JitV55IUv0EqgMC661Vog/whe7cA==}
     engines: {node: '>=18.0.0 <=22.x.x', npm: '>=6.0.0'}
+    deprecated: This version is deprecated and should not be used.
 
   '@strapi/provider-upload-local@5.24.1':
     resolution: {integrity: sha512-dT0ErSlWpSffBw/pYaM6cT50E8Y5I/68U2SlGYfFBUx+p3lOgtKSr4n0SLDgIslyoyGvDnz0Du5oHR8wuK4KDQ==}
     engines: {node: '>=18.0.0 <=22.x.x', npm: '>=6.0.0'}
+    deprecated: This version is deprecated and should not be used.
 
   '@strapi/review-workflows@5.24.1':
     resolution: {integrity: sha512-Pe3oUBkp5BUK644EziMk2ruHSh9kjnHCqzWHNyYBZtBjiN0EehAFEOLYNkGsFKqFV8ywhBBTSAtFoLXNwLr8gg==}
     engines: {node: '>=18.0.0 <=22.x.x', npm: '>=6.0.0'}
+    deprecated: This version is deprecated and should not be used.
     peerDependencies:
       '@strapi/admin': ^5.0.0
       '@strapi/content-manager': ^5.0.0
@@ -1822,6 +1842,7 @@ packages:
   '@strapi/strapi@5.24.1':
     resolution: {integrity: sha512-MqGCrGIBCSXXYftDwqkaPdXxK//veP57ZOrSR78ZvKL+KS+AkGhed1tiFbHNtgA8HDSyofTb/QtxSg2W7q0bsg==}
     engines: {node: '>=18.0.0 <=22.x.x', npm: '>=6.0.0'}
+    deprecated: This version is deprecated and should not be used.
     hasBin: true
     peerDependencies:
       react: ^17.0.0 || ^18.0.0
@@ -1832,10 +1853,12 @@ packages:
   '@strapi/types@5.24.1':
     resolution: {integrity: sha512-X6BRR0WYeX1Tf72w2ByKNJHul8wgefO3ypV7O054uOuSmbTT5608ICcGcM7h6dhC+JhCCwiSYpA2ijkCtf1mvQ==}
     engines: {node: '>=18.0.0 <=22.x.x', npm: '>=6.0.0'}
+    deprecated: This version is deprecated and should not be used.
 
   '@strapi/typescript-utils@5.24.1':
     resolution: {integrity: sha512-Yr0bqIzzgivuOmqnn4Em7kodABWQEPzWrOvs6j7hVYHV+sy2tY1pLM+kJpxv45HMJ7JDhdfLvDwLzK6cj5e/JA==}
     engines: {node: '>=18.0.0 <=22.x.x', npm: '>=6.0.0'}
+    deprecated: This version is deprecated and should not be used.
 
   '@strapi/ui-primitives@2.0.0-rc.29':
     resolution: {integrity: sha512-jLVuK0BMEG11INhdNgEuzvRQovxSEgcJ0BKCmOf4i5V2nygtliaBmhqy1bsu4sz+D/pEP4ZZLjjHzEnqr0XYoQ==}
@@ -1846,6 +1869,7 @@ packages:
   '@strapi/upload@5.24.1':
     resolution: {integrity: sha512-S/a2WTLICrjZUVZsl2jKuY6e0/WLYjlNPX8uUmJ7t4rIqaIzqZMLYptLi1EH5dS+gp9T5EquD30Bv+TSGSiG/Q==}
     engines: {node: '>=18.0.0 <=22.x.x', npm: '>=6.0.0'}
+    deprecated: This version is deprecated and should not be used.
     peerDependencies:
       '@strapi/admin': ^5.0.0
       react: ^17.0.0 || ^18.0.0
@@ -1856,6 +1880,7 @@ packages:
   '@strapi/utils@5.24.1':
     resolution: {integrity: sha512-oCYHtpwJzM5qBK5TU/K+D21lwwMCsJww+wv9XqlgEfytGZsWx6cu9+LnBds1742WZSTyGCGiM2MppZRFlOHCrw==}
     engines: {node: '>=18.0.0 <=22.x.x', npm: '>=6.0.0'}
+    deprecated: This version is deprecated and should not be used.
 
   '@swc/core-darwin-arm64@1.13.5':
     resolution: {integrity: sha512-lKNv7SujeXvKn16gvQqUQI5DdyY8v7xcoO3k06/FJbHJS90zEwZdQiMNRiqpYw/orU543tPaWgz7cIYWhbopiQ==}
@@ -8370,7 +8395,7 @@ snapshots:
       qs: 6.11.1
       sift: 16.0.1
 
-  '@strapi/plugin-cloud@5.24.1(32126b9f977034f56acd2d240a7feaad)':
+  '@strapi/plugin-cloud@5.24.2(32126b9f977034f56acd2d240a7feaad)':
     dependencies:
       '@strapi/admin': 5.24.1(@babel/runtime@7.28.4)(@codemirror/autocomplete@6.19.0)(@codemirror/language@6.11.3)(@codemirror/lint@6.8.5)(@codemirror/search@6.5.11)(@codemirror/state@6.5.2)(@codemirror/theme-one-dark@6.1.3)(@codemirror/view@6.38.4)(@strapi/data-transfer@5.24.1(@types/node@22.18.6)(pg@8.16.3)(typescript@5.4.4))(@types/hoist-non-react-statics@3.3.7(@types/react@18.3.24))(@types/node@22.18.6)(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(codemirror@5.65.20)(debug@4.3.4)(pg@8.16.3)(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)(redux@4.2.1)(styled-components@6.1.19(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       '@strapi/design-system': 2.0.0-rc.29(@babel/runtime@7.28.4)(@codemirror/autocomplete@6.19.0)(@codemirror/language@6.11.3)(@codemirror/lint@6.8.5)(@codemirror/search@6.5.11)(@codemirror/state@6.5.2)(@codemirror/theme-one-dark@6.1.3)(@codemirror/view@6.38.4)(@strapi/icons@2.0.0-rc.29(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-components@6.1.19(react-dom@18.3.1(react@18.3.1))(react@18.3.1)))(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(codemirror@5.65.20)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(styled-components@6.1.19(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
