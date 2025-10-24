@@ -9,6 +9,8 @@ Install dependencies with `pnpm install` run separately in `backend/` and `front
 ## Coding Style & Naming Conventions
 Backend code uses TypeScript with 2-space indentation, named exports, and camelCase function/variable names (see `backend/src/utils/ParameterReplacer.ts`). Create new Strapi components in PascalCase directories under `src/api`. Frontend code relies on Tailwind utility classes; keep custom CSS scoped under `.app` and prefer semantic HTML fragments. Format frontend assets with `pnpm exec prettier --write src`, and avoid mixing Yarn/NPM commands—stick with `pnpm`.
 
+Preserve all existing inline or block comments when editing code. Add comments to newly written sections only when they convey intent or describe structure beyond what the surrounding code already suggests; skip comments that simply restate the code.
+
 ## Testing Guidelines
 Automated tests are not yet in place. Document the manual flows you exercised (e.g., booking creation, verification email, slot reassignment) in your pull request. When you add non-trivial logic, scaffold integration coverage under a new `backend/tests/` folder and capture edge cases with fixture data in `database/`. Validate UI changes against the running backend at `http://localhost:3000` and confirm notification output through Mailhog.
 
