@@ -17,3 +17,6 @@ Follow the existing conventional-commit style with optional emoji, such as `feat
 
 ## Configuration & Security Notes
 Never commit real secrets; copy `.env.example` to `.env` locally and share credentials through the team vault. When backend schema changes require data resets, mention whether contributors must run `docker compose down -v` in the pull-request description. Rotate Strapi API tokens after demos.
+
+## Environment Notes
+If a command is missing from the default `PATH`, prepend `PATH="$MY_PATH"` when running it to include the Nix store binaries; for example, use `PATH="$MY_PATH" which pnpm`.
