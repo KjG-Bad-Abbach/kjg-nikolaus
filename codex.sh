@@ -8,7 +8,7 @@ done
 
 # build command string (uncomment the next line to pass CONFIG too)
 # cmd="codex --config $(printf '%q' "$CONFIG")"
-cmd="codex"
+cmd="MY_PATH=\"\$PATH\" codex"
 if (( ${#escaped_args[@]} )); then
     joined="${escaped_args[*]}"
     cmd+=" $joined"
