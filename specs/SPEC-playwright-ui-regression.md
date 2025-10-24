@@ -32,7 +32,8 @@
 - Children and additional-notes flows validated for add/remove, validation, and persistence.
 - Error handling (network failure modal, unsaved changes prompt, email verification resend) is exercised via Playwright mocks or fixture scenarios.
 - Suite runs headless in CI (Chromium) in <10 minutes and locally supports headed debugging; reports (HTML + JUnit) persisted.
-- Data seeding/cleanup automated via Strapi admin API or seed scripts so tests are idempotent and do not leak bookings/time-slots.
+- Frontend exposes a test-only API override hook so Playwright can stub responses without real HTTP requests; when present, the hook logs a single console warning per page load and the wizard relies on the provided stub data.
+- Data seeding/cleanup automated via either the Strapi admin API **or** the hook-backed in-memory fixtures so tests are idempotent and do not leak bookings/time-slots.
 
 ## Non-goals
 
@@ -66,7 +67,7 @@
   - Scenario builders for: empty booking, pre-filled booking, nearly-full time slot, expired deadlines, network failure (via route interception).
   - Ensure cleanup in `afterEach`/`afterAll` by tracking created document IDs.
 - **Selector strategy**: add `data-testid` attributes under a `qa-` namespace; for example `data-testid="contact-first-name"`, `data-testid="step-progress-contact"`, `data-testid="error-modal"`.
-- **Network interception**: leverage Playwright’s `page.route` for forced failures (e.g., simulate 500) and concurrency conflicts by orchestrating backend fixture state prior to form submission.
+- **Network interception / hook**: introduce a guarded escape hatch in `frontend/src/index.html` (`window.__bookingTestApi`). When defined, `sendRequest` delegates to the hook; tests install an in-memory implementation via `page.addInitScript`. The hook emits a single console warning on first use per page to signal override. Existing `fetch` path remains untouched for production/manual runs.
 - **CI integration**:
   - Extend `docker-compose.yml` or add `scripts/start-test-stack.sh` to boot Strapi + frontend headless.
   - GitHub Action job: install deps, run migrations/seed, run `pnpm --filter frontend exec playwright install --with-deps` followed by tests on every PR, upload HTML/JUnit artifacts, capture videos on failure.
