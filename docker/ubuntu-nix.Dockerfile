@@ -21,13 +21,11 @@ RUN apt-get update \
 ENV LANG=en_US.UTF-8 \
     LC_ALL=en_US.UTF-8
 
-ARG USERNAME=developer
-ARG USER_UID=1001
-ARG USER_GID=1001
+ARG USERNAME=ubuntu
+ARG USER_UID=1000
+ARG USER_GID=1000
 
-RUN groupadd --gid ${USER_GID} ${USERNAME} \
-    && useradd --uid ${USER_UID} --gid ${USER_GID} --create-home --shell /bin/bash ${USERNAME} \
-    && echo "${USERNAME} ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/${USERNAME} \
+RUN echo "${USERNAME} ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/${USERNAME} \
     && mkdir -p /nix \
     && chown ${USERNAME}:${USERNAME} /nix
 
@@ -41,7 +39,7 @@ SHELL ["/bin/bash", "-c"]
 RUN curl -L https://nixos.org/nix/install -o /tmp/install-nix.sh \
     && sudo -u ${USERNAME} sh /tmp/install-nix.sh --no-daemon \
     && rm /tmp/install-nix.sh \
-    && echo ". ${HOME}/.nix-profile/etc/profile.d/nix.sh" >> /home/developer/.bashrc
+    && echo ". ${HOME}/.nix-profile/etc/profile.d/nix.sh" >> ${HOME}/.bashrc
 
 WORKDIR /workspace
 CMD ["/bin/bash"]
