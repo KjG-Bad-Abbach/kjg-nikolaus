@@ -150,7 +150,8 @@ test.describe('UI States & Edge Cases', () => {
     const scenario = createResumeScenario();
     const slotA = scenario.timeSlots[0].documentId;
     const slotB = scenario.timeSlots[1].documentId;
-    scenario.bookings[0].time_slots = [{ documentId: slotA }, { documentId: slotB }];
+    const slotC = scenario.timeSlots[2].documentId;
+    scenario.bookings[0].time_slots = [{ documentId: slotA }, { documentId: slotB }, { documentId: slotC }];
     scenario.bookings[0].children = [
       {
         name: 'Mila',

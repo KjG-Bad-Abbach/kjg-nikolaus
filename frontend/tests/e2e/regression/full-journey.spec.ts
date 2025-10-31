@@ -44,8 +44,10 @@ test.describe('Full Journey', () => {
     await wizard.jumpToStep('time-slot');
     const slotA = scenario.timeSlots[0].documentId;
     const slotB = scenario.timeSlots[1].documentId;
+    const slotC = scenario.timeSlots[2].documentId;
     await wizard.timeSlotStep().toggleSlot(slotA);
     await wizard.timeSlotStep().toggleSlot(slotB);
+    await wizard.timeSlotStep().toggleSlot(slotC);
     await wizard.timeSlotStep().submit();
 
     await wizard.jumpToStep('children');

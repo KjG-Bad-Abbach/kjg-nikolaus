@@ -61,10 +61,14 @@ test.describe('Address & Time Slots', () => {
     await wizard.timeSlotStep().expectSelected(primarySlot);
     await wizard.timeSlotStep().expectSelected(secondarySlot);
 
-    const thirdSlot = existingSlot;
+    // Re-select the original slot to reach the configured max slots (3)
+    await wizard.timeSlotStep().toggleSlot(existingSlot);
+    await wizard.timeSlotStep().expectSelected(existingSlot);
+
+    const extraSlot = scenario.timeSlots[3].documentId;
     await expect(
       page
-        .getByTestId(`qa-time-slot-${thirdSlot}`)
+        .getByTestId(`qa-time-slot-${extraSlot}`)
         .locator('input[type="checkbox"]'),
     ).toBeDisabled();
 

@@ -1,26 +1,104 @@
-import { BookingRecord, BookingScenario, ChildData, ConfigData, ContactPerson, LocationData, ScenarioFailure, TimeSlotRecord } from './types';
+import { BookingRecord, BookingScenario, ChildData, ConfigBlockNode, ConfigData, ContactPerson, LocationData, ScenarioFailure, TimeSlotRecord } from './types';
 
 const BASE_ROUTE_DEADLINE = '2030-11-20T22:00:00.000Z';
 const BASE_FINAL_DEADLINE = '2030-12-01T22:00:00.000Z';
 
+const introductionText: ConfigBlockNode[] = [
+  {
+    type: 'paragraph',
+    children: [{ text: 'Ho Ho Ho' }],
+  },
+  {
+    type: 'paragraph',
+    children: [
+      {
+        text: 'Auch dieses Jahr kommt der Nikolaus wieder! Am 5. und 6. Dezember 2024 jeweils ab 17:30 Uhr fliegen er und seine Engel zu euch nach Hause. Natürlich auf Spendenbasis. Alle Spenden fließen zu 100% in die Kinder- und Jugendarbeit der KjG Bad Abbach.',
+      },
+    ],
+  },
+  {
+    type: 'paragraph',
+    children: [
+      {
+        text: 'In der Adventszeit ist es Tradition, dass der heilige Nikolaus Kinder besucht und Lob und Tadel aus seinem goldenen Buch vorliest. Als KjG bieten wir diesen Nikolausdienst für Familien an. Der Nikolaus erhält im Vorfeld Informationen zu den Kindern, sodass das goldene Buch individuell gefüllt werden kann. Eine solche Information sollte den Namen, ein eindeutiges Identifikationsmerkmal sowie Lob und ggf. Tadel enthalten. Ebenso wird im Vorfeld mitgeteilt, wo sich die Geschenke befinden.',
+      },
+    ],
+  },
+  {
+    type: 'paragraph',
+    children: [
+      {
+        text: 'Der Besuch dauert in etwa 10-20 Minuten. Bitte erwarte in dieser kurzen Zeit keine pädagogischen Wunder. Nutze die Gelegenheit deine Kinder zu loben und einen oder maximal zwei Verbesserungsimpulse zu geben. Unser Nikolaus hat immer einen Engel dabei, die Buchung eines Krampus oder Knecht Rupprecht ist nicht möglich.',
+      },
+    ],
+  },
+  {
+    type: 'paragraph',
+    children: [
+      {
+        text: "Wenn alle Informationen erfolgreich eingetragen wurden, dann steht einem erfolgreichen Nikolaus-Besuch nichts mehr im Wege und ihr bekommt im Schritt 'Kontrolle' eine entsprechende Meldung mit einem grünen Haken.",
+      },
+    ],
+  },
+];
+
+const verificationEmailBodyTemplate: ConfigBlockNode[] = [
+  {
+    type: 'heading1',
+    children: [{ text: 'E-Mail erfolgreich verifiziert!' }],
+  },
+  {
+    type: 'paragraph',
+    children: [{ text: 'Hallo {{first_name}} {{last_name}},' }],
+  },
+  {
+    type: 'paragraph',
+    children: [
+      {
+        text: 'vielen Dank für die Verifizierung deiner E-Mail-Adresse. Du kannst jetzt deine Buchung vervollständigen, indem du alle erforderlichen Informationen eingibst.',
+      },
+    ],
+  },
+  {
+    type: 'paragraph',
+    children: [
+      {
+        text: 'Nutze den untenstehenden Link, um deine Buchung jederzeit aufzurufen, zu überprüfen und zu bearbeiten:',
+      },
+    ],
+  },
+  {
+    type: 'paragraph',
+    children: [{ text: "{{button('Buchung vervollständigen/bearbeiten')}}" }],
+  },
+  {
+    type: 'paragraph',
+    children: [
+      {
+        text: 'Bitte stelle sicher, dass du alle erforderlichen Felder für eine erfolgreiche Buchung ausfüllst.',
+      },
+    ],
+  },
+  {
+    type: 'paragraph',
+    children: [{ text: 'Deine KjG Bad Abbach.' }],
+  },
+];
+
 const defaultConfig = (): ConfigData => ({
   id: 1,
   show_search_for_time_slots: true,
-  max_time_slots: 2,
+  max_time_slots: 3,
   route_planning_deadline: BASE_ROUTE_DEADLINE,
   final_deadline: BASE_FINAL_DEADLINE,
-  introduction_text: [
-    {
-      type: 'paragraph',
-      children: [
-        {
-          text: 'Automatisierte Testsicherung für den Nikolaus-Buchungsassistenten.',
-        },
-      ],
-    },
-  ],
-  privacy_policy_link: 'https://example.com/datenschutz',
-  legal_notice_link: 'https://example.com/impressum',
+  base_url: 'http://localhost:4173',
+  api_base_url: 'http://localhost:1337',
+  introduction_text: introductionText,
+  privacy_policy_link: 'https://kjg-bad-abbach.de/datenschutz/',
+  legal_notice_link: 'https://kjg-bad-abbach.de/impressum/',
+  api_token: 'sample-admin-token',
+  verification_email_subject_template: 'E-Mail verifiziert - Vervollständige deine Buchung',
+  verification_email_body_template: verificationEmailBodyTemplate,
 });
 
 const defaultContact = (): ContactPerson => ({
