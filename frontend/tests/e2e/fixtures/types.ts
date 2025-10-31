@@ -41,11 +41,14 @@ export interface ConfigData {
   max_time_slots: number;
   route_planning_deadline: string;
   final_deadline: string;
+  base_url: string;
+  api_base_url: string;
   introduction_text: ConfigBlockNode[];
   privacy_policy_link?: string;
   legal_notice_link?: string;
   api_token?: string;
-  api_base_url?: string;
+  verification_email_subject_template: string;
+  verification_email_body_template: ConfigBlockNode[];
 }
 
 export interface TimeSlotRecord {
