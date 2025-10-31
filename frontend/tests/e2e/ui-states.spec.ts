@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { createBaseScenario, createReadOnlyScenario, createResumeScenario, withFailures } from './fixtures/scenarioFactory';
 import { registerScenario } from './fixtures/registerHook';
+import { recordScenarioCoverage } from './fixtures/scenarioCoverage';
 import { WizardPage } from './pages/wizardPage';
 
 test.describe('UI States & Edge Cases', () => {
@@ -47,6 +48,7 @@ test.describe('UI States & Edge Cases', () => {
       });
     });
     const wizard = new WizardPage(page);
+    recordScenarioCoverage('intro');
 
     await wizard.goto();
     await expect(page.getByTestId('qa-loading')).toBeVisible();
@@ -59,6 +61,7 @@ test.describe('UI States & Edge Cases', () => {
     const scenario = createBaseScenario();
     await registerScenario(page, scenario);
     const wizard = new WizardPage(page);
+    recordScenarioCoverage('resume');
 
     await wizard.goto();
     await wizard.startWizard();
@@ -73,6 +76,7 @@ test.describe('UI States & Edge Cases', () => {
     const scenario = createResumeScenario();
     await registerScenario(page, scenario);
     const wizard = new WizardPage(page);
+    recordScenarioCoverage('resume');
 
     await wizard.goto('?id=booking-existing');
     await wizard.jumpToStep('contact');
@@ -99,6 +103,7 @@ test.describe('UI States & Edge Cases', () => {
     const scenario = createReadOnlyScenario();
     await registerScenario(page, scenario);
     const wizard = new WizardPage(page);
+    recordScenarioCoverage('readOnly', 'addressDeadline');
 
     await wizard.goto('?id=booking-existing');
 
@@ -116,6 +121,7 @@ test.describe('UI States & Edge Cases', () => {
     const scenario = createResumeScenario();
     await registerScenario(page, scenario);
     const wizard = new WizardPage(page);
+    recordScenarioCoverage('timeSlot');
 
     await wizard.goto('?id=booking-existing');
     await wizard.jumpToStep('time-slot');
@@ -138,6 +144,7 @@ test.describe('UI States & Edge Cases', () => {
     scenario.config.show_search_for_time_slots = false;
     await registerScenario(page, scenario);
     const wizard = new WizardPage(page);
+    recordScenarioCoverage('timeSlot');
 
     await wizard.goto('?id=booking-existing');
     await wizard.jumpToStep('time-slot');
@@ -161,6 +168,7 @@ test.describe('UI States & Edge Cases', () => {
     ];
     await registerScenario(page, scenario);
     const wizard = new WizardPage(page);
+    recordScenarioCoverage('summary');
 
     await wizard.goto('?id=booking-existing');
     await wizard.jumpToStep('summary');
@@ -183,6 +191,7 @@ test.describe('UI States & Edge Cases', () => {
     ]);
     await registerScenario(page, scenario);
     const wizard = new WizardPage(page);
+    recordScenarioCoverage('timeSlot', 'errorModal');
 
     await wizard.goto('?id=booking-existing');
 
@@ -218,6 +227,7 @@ test.describe('UI States & Edge Cases', () => {
     ]);
     await registerScenario(page, scenario);
     const wizard = new WizardPage(page);
+    recordScenarioCoverage('contact', 'errorModal');
 
     await wizard.goto();
     await wizard.startWizard();

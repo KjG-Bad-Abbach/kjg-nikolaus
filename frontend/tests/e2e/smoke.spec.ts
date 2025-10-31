@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { createBaseScenario } from './fixtures/scenarioFactory';
 import { registerScenario } from './fixtures/registerHook';
+import { recordScenarioCoverage } from './fixtures/scenarioCoverage';
 import { WizardPage } from './pages/wizardPage';
 import { TestDataClient } from './fixtures/testDataClient';
 
@@ -24,6 +25,7 @@ test.describe('Smoke Flow', () => {
     const scenario = createBaseScenario();
     await registerScenario(page, scenario);
     const wizard = new WizardPage(page);
+    recordScenarioCoverage('intro');
 
     await wizard.goto();
     await expect(page.getByTestId('qa-view-intro')).toBeVisible();
@@ -38,6 +40,7 @@ test.describe('Smoke Flow', () => {
     await registerScenario(page, scenario);
     const wizard = new WizardPage(page);
     const client = new TestDataClient(page);
+    recordScenarioCoverage('intro', 'contact', 'addressDeadline', 'timeSlot');
 
     await wizard.goto();
     await wizard.startWizard();

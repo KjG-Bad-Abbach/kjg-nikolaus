@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { createBaseScenario } from '../fixtures/scenarioFactory';
 import { registerScenario } from '../fixtures/registerHook';
+import { recordScenarioCoverage } from '../fixtures/scenarioCoverage';
 import { WizardPage } from '../pages/wizardPage';
 import { TestDataClient } from '../fixtures/testDataClient';
 
@@ -25,6 +26,7 @@ test.describe('Full Journey', () => {
     await registerScenario(page, scenario);
     const wizard = new WizardPage(page);
     const client = new TestDataClient(page);
+    recordScenarioCoverage('fullJourney', 'intro', 'contact', 'addressDeadline', 'timeSlot', 'children', 'summary');
 
     await wizard.goto();
     await wizard.startWizard();
