@@ -42,8 +42,6 @@ function replaceInAny(
     typeof input === "symbol"
   ) {
     return input;
-  } else if (typeof input === "string") {
-    return replaceInString(`${input}`, parameters);
   } else if (typeof input === "object" && input !== null) {
     return Object.keys(input).reduce((acc, key) => {
       acc[key] = replaceInAny(input[key], parameters);
