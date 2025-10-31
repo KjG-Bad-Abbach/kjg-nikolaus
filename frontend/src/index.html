@@ -599,7 +599,11 @@
               werden)
             </p>
 
-            <form data-testid="qa-contact-form" class="space-y-6" @submit.prevent="submitContactDetails">
+            <form
+              data-testid="qa-contact-form"
+              class="space-y-6"
+              @submit.prevent="submitContactDetails"
+            >
               <div>
                 <label
                   for="first_name"
@@ -758,7 +762,11 @@
               werden)
             </p>
 
-            <form data-testid="qa-address-form" class="space-y-6" @submit.prevent="submitAddress">
+            <form
+              data-testid="qa-address-form"
+              class="space-y-6"
+              @submit.prevent="submitAddress"
+            >
               <div>
                 <label
                   for="street"
@@ -1105,7 +1113,11 @@
               </ul>
             </div>
 
-            <form data-testid="qa-time-slot-form" class="space-y-6" @submit.prevent="submitTimeSlots">
+            <form
+              data-testid="qa-time-slot-form"
+              class="space-y-6"
+              @submit.prevent="submitTimeSlots"
+            >
               <!-- If not all possible time-slots until options.max_time_slots are selected, show a warning -->
               <p
                 class="mt-4 text-rust"
@@ -1214,7 +1226,11 @@
               Bitte füge mindestens ein Kind hinzu.
             </p>
 
-            <form data-testid="qa-children-form" class="space-y-6" @submit.prevent="submitChildren">
+            <form
+              data-testid="qa-children-form"
+              class="space-y-6"
+              @submit.prevent="submitChildren"
+            >
               <!-- List of children -->
               <template x-for="(child, index) in booking.children" :key="index">
                 <div
@@ -1407,7 +1423,10 @@
 
         <!-- Step 4: Summary -->
         <template x-if="step === 4" x-cloak>
-          <div class="mx-auto w-full max-w-3xl p-4" data-testid="qa-step-panel-summary">
+          <div
+            class="mx-auto w-full max-w-3xl p-4"
+            data-testid="qa-step-panel-summary"
+          >
             <h2 class="mb-4 text-2xl font-bold text-calypso">
               Vielen Dank für deine Anmeldung.
             </h2>
@@ -2177,11 +2196,36 @@
             }
           },
           steps: [
-            { name: "Kontakt", testId: "contact", anyFilled: false, allFilled: false },
-            { name: "Adresse", testId: "address", anyFilled: false, allFilled: false },
-            { name: "Zeitslot", testId: "time-slot", anyFilled: false, allFilled: false },
-            { name: "Kinder", testId: "children", anyFilled: false, allFilled: false },
-            { name: "Kontrolle", testId: "summary", anyFilled: false, allFilled: false },
+            {
+              name: "Kontakt",
+              testId: "contact",
+              anyFilled: false,
+              allFilled: false,
+            },
+            {
+              name: "Adresse",
+              testId: "address",
+              anyFilled: false,
+              allFilled: false,
+            },
+            {
+              name: "Zeitslot",
+              testId: "time-slot",
+              anyFilled: false,
+              allFilled: false,
+            },
+            {
+              name: "Kinder",
+              testId: "children",
+              anyFilled: false,
+              allFilled: false,
+            },
+            {
+              name: "Kontrolle",
+              testId: "summary",
+              anyFilled: false,
+              allFilled: false,
+            },
           ],
           bookingId: null,
           canEditRoutePlanning: false,

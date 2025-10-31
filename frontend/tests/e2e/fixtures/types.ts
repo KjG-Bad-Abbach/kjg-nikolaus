@@ -61,14 +61,14 @@ export interface TimeSlotRecord {
 }
 
 export type FailureStage =
-  | 'config'
-  | 'contact-save'
-  | 'address-save'
-  | 'time-slot-save'
-  | 'children-save'
-  | 'send-verification'
-  | 'booking-fetch'
-  | 'time-slot-fetch';
+  | "config"
+  | "contact-save"
+  | "address-save"
+  | "time-slot-save"
+  | "children-save"
+  | "send-verification"
+  | "booking-fetch"
+  | "time-slot-fetch";
 
 export interface ScenarioFailure {
   stage: FailureStage;

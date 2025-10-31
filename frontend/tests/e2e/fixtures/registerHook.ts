@@ -1,13 +1,21 @@
-import { Page } from '@playwright/test';
-import { BookingRecord, BookingScenario, ScenarioFailure, TimeSlotRecord } from './types';
+import { Page } from "@playwright/test";
+import {
+  BookingRecord,
+  BookingScenario,
+  ScenarioFailure,
+  TimeSlotRecord,
+} from "./types";
 
-const HOOK_GLOBAL = '__bookingTestApi';
-const STORAGE_PREFIX = '__bookingTestApiState__';
+const HOOK_GLOBAL = "__bookingTestApi";
+const STORAGE_PREFIX = "__bookingTestApiState__";
 
 const serialize = (scenario: BookingScenario) => JSON.stringify(scenario);
 
-export const registerScenario = async (page: Page, scenario: BookingScenario) => {
-  page.on('dialog', (dialog) => dialog.accept());
+export const registerScenario = async (
+  page: Page,
+  scenario: BookingScenario,
+) => {
+  page.on("dialog", (dialog) => dialog.accept());
   const storageKey = `${STORAGE_PREFIX}${Date.now()}_${Math.random().toString(16).slice(2)}`;
 
   await page.addInitScript(
@@ -17,12 +25,12 @@ export const registerScenario = async (page: Page, scenario: BookingScenario) =>
         documentId: booking.documentId,
         contact_person: deepClone(booking.contact_person),
         location: deepClone(booking.location),
-        present_location: booking.present_location || '',
+        present_location: booking.present_location || "",
         children: deepClone(booking.children || []),
         time_slots: deepClone(booking.time_slots || []).map((slot: unknown) =>
-          typeof slot === 'string' ? { documentId: slot } : slot,
+          typeof slot === "string" ? { documentId: slot } : slot,
         ),
-        additional_notes: booking.additional_notes || '',
+        additional_notes: booking.additional_notes || "",
         email_resend_count: booking.email_resend_count || 0,
       });
 
@@ -33,14 +41,17 @@ export const registerScenario = async (page: Page, scenario: BookingScenario) =>
             return null;
           }
           return JSON.parse(stored) as {
-            config: BookingScenario['config'];
+            config: BookingScenario["config"];
             bookings: Record<string, BookingRecord>;
             timeSlots: TimeSlotRecord[];
             sequence: number;
             failures: ScenarioFailure[];
           };
         } catch (error) {
-          console.warn('[Nikolaus Booking] Failed to read persisted booking state', error);
+          console.warn(
+            "[Nikolaus Booking] Failed to read persisted booking state",
+            error,
+          );
           return null;
         }
       };
@@ -62,24 +73,31 @@ export const registerScenario = async (page: Page, scenario: BookingScenario) =>
 
       const persisted = loadPersistedState();
 
-      const state = (persisted
-        ? {
-            config: deepClone(persisted.config || initial.config),
-            bookings: Object.fromEntries(
-              Object.entries(persisted.bookings || {}).map(([id, booking]) => [
-                id,
-                normalizeBooking(booking as BookingRecord),
-              ]),
-            ),
-            timeSlots: deepClone(persisted.timeSlots || initial.timeSlots || []),
-            sequence:
-              typeof persisted.sequence === 'number'
-                ? persisted.sequence
-                : initial.nextBookingSeq || (initial.bookings?.length || 0) + 1,
-            failures: deepClone(persisted.failures || initial.failures || []),
-          }
-        : createInitialState()) as {
-        config: BookingScenario['config'];
+      const state = (
+        persisted
+          ? {
+              config: deepClone(persisted.config || initial.config),
+              bookings: Object.fromEntries(
+                Object.entries(persisted.bookings || {}).map(
+                  ([id, booking]) => [
+                    id,
+                    normalizeBooking(booking as BookingRecord),
+                  ],
+                ),
+              ),
+              timeSlots: deepClone(
+                persisted.timeSlots || initial.timeSlots || [],
+              ),
+              sequence:
+                typeof persisted.sequence === "number"
+                  ? persisted.sequence
+                  : initial.nextBookingSeq ||
+                    (initial.bookings?.length || 0) + 1,
+              failures: deepClone(persisted.failures || initial.failures || []),
+            }
+          : createInitialState()
+      ) as {
+        config: BookingScenario["config"];
         bookings: Record<string, BookingRecord>;
         timeSlots: TimeSlotRecord[];
         sequence: number;
@@ -99,7 +117,10 @@ export const registerScenario = async (page: Page, scenario: BookingScenario) =>
             }),
           );
         } catch (error) {
-          console.warn('[Nikolaus Booking] Failed to persist booking state', error);
+          console.warn(
+            "[Nikolaus Booking] Failed to persist booking state",
+            error,
+          );
         }
       };
 
@@ -107,7 +128,7 @@ export const registerScenario = async (page: Page, scenario: BookingScenario) =>
 
       const makeBookingId = () => `booking-${state.sequence++}`;
 
-      const maybeFail = (stage: ScenarioFailure['stage']) => {
+      const maybeFail = (stage: ScenarioFailure["stage"]) => {
         const idx = state.failures.findIndex((f) => f.stage === stage);
         if (idx >= 0) {
           const failure = state.failures[idx];
@@ -127,16 +148,19 @@ export const registerScenario = async (page: Page, scenario: BookingScenario) =>
         const booking = state.bookings[documentId];
         if (!booking) {
           const error = {
-            message: 'Booking not found',
-            status: { code: 404, text: 'Not Found' },
-            body: { error: { name: 'NotFoundError' } },
+            message: "Booking not found",
+            status: { code: 404, text: "Not Found" },
+            body: { error: { name: "NotFoundError" } },
           };
           throw error;
         }
         return booking;
       };
 
-      const mergeBooking = (booking: BookingRecord, payload: Partial<BookingRecord>) => {
+      const mergeBooking = (
+        booking: BookingRecord,
+        payload: Partial<BookingRecord>,
+      ) => {
         if (!payload) return;
         if (payload.contact_person) {
           booking.contact_person = {
@@ -158,7 +182,7 @@ export const registerScenario = async (page: Page, scenario: BookingScenario) =>
         }
         if (payload.time_slots) {
           booking.time_slots = payload.time_slots.map((slot) => {
-            if (typeof slot === 'string') {
+            if (typeof slot === "string") {
               return { documentId: slot } as { documentId: string };
             }
             return { documentId: (slot as { documentId: string }).documentId };
@@ -176,34 +200,34 @@ export const registerScenario = async (page: Page, scenario: BookingScenario) =>
 
       const handlers = {
         async getConfig() {
-          maybeFail('config');
+          maybeFail("config");
           return respond(state.config);
         },
         async listTimeSlots() {
-          maybeFail('time-slot-fetch');
+          maybeFail("time-slot-fetch");
           return respond(state.timeSlots);
         },
         async createBooking(body: { data: Partial<BookingRecord> }) {
-          maybeFail('contact-save');
+          maybeFail("contact-save");
           const documentId = makeBookingId();
           const booking = normalizeBooking({
             documentId,
             contact_person: {
-              first_name: '',
-              last_name: '',
-              email: '',
-              phone_number: '',
+              first_name: "",
+              last_name: "",
+              email: "",
+              phone_number: "",
             },
             location: {
-              street: '',
-              house_number: '',
-              zip_code: '',
-              place: '',
+              street: "",
+              house_number: "",
+              zip_code: "",
+              place: "",
             },
-            present_location: '',
+            present_location: "",
             children: [],
             time_slots: [],
-            additional_notes: '',
+            additional_notes: "",
             email_resend_count: 0,
             ...deepClone(body?.data || {}),
           });
@@ -218,25 +242,25 @@ export const registerScenario = async (page: Page, scenario: BookingScenario) =>
           const booking = ensureBooking(documentId);
           const payload = body?.data || {};
           if (payload.location) {
-            maybeFail('address-save');
+            maybeFail("address-save");
           }
           if (payload.time_slots) {
-            maybeFail('time-slot-save');
+            maybeFail("time-slot-save");
           }
           if (payload.children || payload.additional_notes !== undefined) {
-            maybeFail('children-save');
+            maybeFail("children-save");
           }
           mergeBooking(booking, deepClone(payload));
           persistState();
           return respond(booking);
         },
         async getBooking(documentId: string) {
-          maybeFail('booking-fetch');
+          maybeFail("booking-fetch");
           const booking = ensureBooking(documentId);
           return respond(booking);
         },
         async sendVerification(documentId: string) {
-          maybeFail('send-verification');
+          maybeFail("send-verification");
           const booking = ensureBooking(documentId);
           booking.email_resend_count = (booking.email_resend_count || 0) + 1;
           persistState();
@@ -245,40 +269,53 @@ export const registerScenario = async (page: Page, scenario: BookingScenario) =>
       };
 
       const parseUrl = (url: string) => {
-        const [path] = url.split('?');
+        const [path] = url.split("?");
         return path;
       };
 
-      const handleRequest = async ({ url, method, body }: { url: string; method: string; body?: unknown }) => {
+      const handleRequest = async ({
+        url,
+        method,
+        body,
+      }: {
+        url: string;
+        method: string;
+        body?: unknown;
+      }) => {
         const path = parseUrl(url);
-        if (method === 'GET' && path.startsWith('config')) {
+        if (method === "GET" && path.startsWith("config")) {
           return handlers.getConfig();
         }
-        if (method === 'GET' && path.startsWith('time-slots')) {
+        if (method === "GET" && path.startsWith("time-slots")) {
           return handlers.listTimeSlots();
         }
-        if (method === 'POST' && path === 'bookings') {
-          return handlers.createBooking(body as { data: Partial<BookingRecord> });
+        if (method === "POST" && path === "bookings") {
+          return handlers.createBooking(
+            body as { data: Partial<BookingRecord> },
+          );
         }
-        if (method === 'PUT' && path.startsWith('bookings/')) {
-          const [, id] = path.split('/');
-          return handlers.updateBooking(id, body as { data: Partial<BookingRecord> });
+        if (method === "PUT" && path.startsWith("bookings/")) {
+          const [, id] = path.split("/");
+          return handlers.updateBooking(
+            id,
+            body as { data: Partial<BookingRecord> },
+          );
         }
-        if (method === 'GET' && path.startsWith('bookings/')) {
-          const [, id] = path.split('/');
+        if (method === "GET" && path.startsWith("bookings/")) {
+          const [, id] = path.split("/");
           return handlers.getBooking(id);
         }
         if (
-          method === 'POST' &&
-          path.startsWith('bookings/') &&
-          path.endsWith('send-verification-email')
+          method === "POST" &&
+          path.startsWith("bookings/") &&
+          path.endsWith("send-verification-email")
         ) {
-          const [, id] = path.split('/');
+          const [, id] = path.split("/");
           return handlers.sendVerification(id);
         }
         throw {
           message: `Unhandled stub request for ${method} ${url}`,
-          status: { code: 400, text: 'Bad Request' },
+          status: { code: 400, text: "Bad Request" },
         };
       };
 

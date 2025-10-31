@@ -1,11 +1,11 @@
-import { expect, Page } from '@playwright/test';
+import { expect, Page } from "@playwright/test";
 
 export class TimeSlotStep {
   constructor(private readonly page: Page) {}
 
   async search(value: string) {
-    const search = this.page.getByTestId('qa-time-slot-search');
-    await search.fill('');
+    const search = this.page.getByTestId("qa-time-slot-search");
+    await search.fill("");
     await search.type(value);
   }
 
@@ -18,10 +18,12 @@ export class TimeSlotStep {
   }
 
   async submit() {
-    await this.page.getByTestId('qa-time-slot-submit').click();
+    await this.page.getByTestId("qa-time-slot-submit").click();
   }
 
   async expectSelected(slotId: string) {
-    await expect(this.page.getByTestId(`qa-selected-time-slot-${slotId}`)).toBeVisible();
+    await expect(
+      this.page.getByTestId(`qa-selected-time-slot-${slotId}`),
+    ).toBeVisible();
   }
 }

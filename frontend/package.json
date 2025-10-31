@@ -9,6 +9,8 @@
     "watch": "pnpm run clean && mix watch",
     "build": "pnpm run prod",
     "prod": "pnpm run clean && mix --production",
+    "format": "prettier --write .",
+    "lint": "prettier --check .",
     "test:e2e": "playwright test",
     "test:e2e:fast": "playwright test --project=chromium",
     "test:e2e:headed": "playwright test --headed",
