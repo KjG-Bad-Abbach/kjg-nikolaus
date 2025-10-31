@@ -1,4 +1,4 @@
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig, devices } from "@playwright/test";
 
 /**
  * Read environment variables from file.
@@ -8,17 +8,20 @@ import { defineConfig, devices } from '@playwright/test';
 // import path from 'path';
 // dotenv.config({ path: path.resolve(__dirname, '.env') });
 
-const baseURL = process.env.PLAYWRIGHT_BASE_URL?.trim() || 'http://127.0.0.1:4173';
+const baseURL =
+  process.env.PLAYWRIGHT_BASE_URL?.trim() || "http://127.0.0.1:4173";
 const isCI = !!process.env.CI;
 const headed = !!process.env.PLAYWRIGHT_HEADED;
 const parsedBase = new URL(baseURL);
-const basePort = Number(parsedBase.port || (parsedBase.protocol === 'https:' ? 443 : 80));
+const basePort = Number(
+  parsedBase.port || (parsedBase.protocol === "https:" ? 443 : 80),
+);
 
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-  testDir: './tests/e2e',
+  testDir: "./tests/e2e",
   timeout: 60_000,
   expect: {
     timeout: 5_000,
@@ -26,8 +29,8 @@ export default defineConfig({
       timeout: 15_000,
     },
   },
-  snapshotDir: './tests/e2e/__screenshots__',
-  snapshotPathTemplate: '{snapshotDir}/{arg}-{projectName}{ext}',
+  snapshotDir: "./tests/e2e/__screenshots__",
+  snapshotPathTemplate: "{snapshotDir}/{arg}-{projectName}{ext}",
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -38,9 +41,9 @@ export default defineConfig({
   workers: isCI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
-    ['list'],
-    ['html', { open: 'never', outputFolder: 'playwright-report' }],
-    ['junit', { outputFile: 'playwright-report/junit/results.xml' }],
+    ["list"],
+    ["html", { open: "never", outputFolder: "playwright-report" }],
+    ["junit", { outputFile: "playwright-report/junit/results.xml" }],
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
@@ -50,30 +53,30 @@ export default defineConfig({
     headless: headed ? false : true,
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: isCI ? 'retain-on-failure' : 'on-first-retry',
+    trace: isCI ? "retain-on-failure" : "on-first-retry",
 
-    video: 'retain-on-failure',
-    screenshot: 'only-on-failure',
+    video: "retain-on-failure",
+    screenshot: "only-on-failure",
     actionTimeout: 15_000,
     navigationTimeout: 20_000,
     viewport: { width: 1440, height: 900 },
   },
-  outputDir: 'test-results',
+  outputDir: "test-results",
 
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'chromium',
+      name: "chromium",
       use: {
-        ...devices['Desktop Chrome'],
+        ...devices["Desktop Chrome"],
         baseURL,
       },
     },
 
     {
-      name: 'firefox',
+      name: "firefox",
       use: {
-        ...devices['Desktop Firefox'],
+        ...devices["Desktop Firefox"],
         baseURL,
       },
     },
@@ -85,9 +88,9 @@ export default defineConfig({
 
     /* Test against mobile viewports. */
     {
-      name: 'chromium-mobile',
+      name: "chromium-mobile",
       use: {
-        ...devices['Pixel 5'],
+        ...devices["Pixel 5"],
         baseURL,
       },
     },

@@ -1,4 +1,4 @@
-import { expect, Page } from '@playwright/test';
+import { expect, Page } from "@playwright/test";
 
 export interface ChildInput {
   index: number;
@@ -11,16 +11,22 @@ export class ChildrenStep {
   constructor(private readonly page: Page) {}
 
   async addChild() {
-    await this.page.getByTestId('qa-add-child').click();
+    await this.page.getByTestId("qa-add-child").click();
   }
 
   async fillChild(input: ChildInput) {
-    await this.page.getByTestId(`qa-child-name-${input.index}`).fill(input.name);
+    await this.page
+      .getByTestId(`qa-child-name-${input.index}`)
+      .fill(input.name);
     if (input.identification) {
-      await this.page.getByTestId(`qa-child-identification-${input.index}`).fill(input.identification);
+      await this.page
+        .getByTestId(`qa-child-identification-${input.index}`)
+        .fill(input.identification);
     }
     if (input.speech) {
-      await this.page.getByTestId(`qa-child-speech-${input.index}`).fill(input.speech);
+      await this.page
+        .getByTestId(`qa-child-speech-${input.index}`)
+        .fill(input.speech);
     }
   }
 
@@ -29,18 +35,20 @@ export class ChildrenStep {
   }
 
   async fillNotes(notes: string) {
-    await this.page.getByTestId('qa-additional-notes').fill(notes);
+    await this.page.getByTestId("qa-additional-notes").fill(notes);
   }
 
   async submit() {
-    await this.page.getByTestId('qa-children-submit').click();
+    await this.page.getByTestId("qa-children-submit").click();
   }
 
   async skip() {
-    await this.page.getByTestId('qa-children-skip').click();
+    await this.page.getByTestId("qa-children-skip").click();
   }
 
   async expectChildCount(count: number) {
-    await expect(this.page.locator('[data-testid^="qa-child-name-"]')).toHaveCount(count);
+    await expect(
+      this.page.locator('[data-testid^="qa-child-name-"]'),
+    ).toHaveCount(count);
   }
 }

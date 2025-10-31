@@ -1,38 +1,38 @@
-import { expect, Locator, Page } from '@playwright/test';
-import { ContactStep } from './contactStep';
-import { AddressStep } from './addressStep';
-import { TimeSlotStep } from './timeSlotStep';
-import { ChildrenStep } from './childrenStep';
-import { SummaryPage } from './summaryPage';
-import { ErrorModal } from './errorModal';
+import { expect, Locator, Page } from "@playwright/test";
+import { ContactStep } from "./contactStep";
+import { AddressStep } from "./addressStep";
+import { TimeSlotStep } from "./timeSlotStep";
+import { ChildrenStep } from "./childrenStep";
+import { SummaryPage } from "./summaryPage";
+import { ErrorModal } from "./errorModal";
 
 const STEP_TARGETS: Record<string, string> = {
-  contact: 'qa-contact-form',
-  address: 'qa-address-form',
-  'time-slot': 'qa-time-slot-form',
-  children: 'qa-children-form',
-  summary: 'qa-step-panel-summary',
+  contact: "qa-contact-form",
+  address: "qa-address-form",
+  "time-slot": "qa-time-slot-form",
+  children: "qa-children-form",
+  summary: "qa-step-panel-summary",
 };
 
 export class WizardPage {
   constructor(public readonly page: Page) {}
 
-  async goto(query = '') {
+  async goto(query = "") {
     await this.page.goto(`/${query}`);
     await expect(this.root()).toBeVisible();
   }
 
   async resume(bookingId: string) {
     await this.goto(`?id=${bookingId}`);
-    await expect(this.page.getByTestId('qa-view-steps')).toBeVisible();
+    await expect(this.page.getByTestId("qa-view-steps")).toBeVisible();
   }
 
   root(): Locator {
-    return this.page.getByTestId('qa-booking-root');
+    return this.page.getByTestId("qa-booking-root");
   }
 
   introStartButton(): Locator {
-    return this.page.getByTestId('qa-intro-start');
+    return this.page.getByTestId("qa-intro-start");
   }
 
   async startWizard() {
