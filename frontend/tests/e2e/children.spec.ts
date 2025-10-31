@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { createBaseScenario, createEmptyChildrenBooking } from './fixtures/scenarioFactory';
 import { registerScenario } from './fixtures/registerHook';
+import { recordScenarioCoverage } from './fixtures/scenarioCoverage';
 import { WizardPage } from './pages/wizardPage';
 import { TestDataClient } from './fixtures/testDataClient';
 
@@ -27,6 +28,7 @@ test.describe('Children & Summary', () => {
 
     const wizard = new WizardPage(page);
     const client = new TestDataClient(page);
+    recordScenarioCoverage('children');
 
     await wizard.goto('?id=booking-children');
     await wizard.jumpToStep('children');
@@ -52,6 +54,7 @@ test.describe('Children & Summary', () => {
     scenario.bookings.push(createEmptyChildrenBooking());
     await registerScenario(page, scenario);
     const wizard = new WizardPage(page);
+    recordScenarioCoverage('children', 'summary');
 
     await wizard.goto('?id=booking-children');
     await wizard.jumpToStep('children');

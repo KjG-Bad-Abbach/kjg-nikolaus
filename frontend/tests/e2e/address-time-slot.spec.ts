@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { createReadOnlyScenario, createResumeScenario, withFailures } from './fixtures/scenarioFactory';
 import { registerScenario } from './fixtures/registerHook';
+import { recordScenarioCoverage } from './fixtures/scenarioCoverage';
 import { WizardPage } from './pages/wizardPage';
 import { TestDataClient } from './fixtures/testDataClient';
 
@@ -18,6 +19,7 @@ test.describe('Address & Time Slots', () => {
     await registerScenario(page, scenario);
     const wizard = new WizardPage(page);
     const client = new TestDataClient(page);
+    recordScenarioCoverage('addressDeadline');
 
     await wizard.goto('?id=booking-existing');
     await wizard.jumpToStep('address');
@@ -35,6 +37,7 @@ test.describe('Address & Time Slots', () => {
     const scenario = createReadOnlyScenario();
     await registerScenario(page, scenario);
     const wizard = new WizardPage(page);
+    recordScenarioCoverage('readOnly', 'addressDeadline');
 
     await wizard.goto('?id=booking-existing');
     await wizard.jumpToStep('address');
@@ -46,6 +49,7 @@ test.describe('Address & Time Slots', () => {
     await registerScenario(page, scenario);
     const wizard = new WizardPage(page);
     const client = new TestDataClient(page);
+    recordScenarioCoverage('timeSlot');
 
     await wizard.goto('?id=booking-existing');
     await wizard.jumpToStep('time-slot');
@@ -95,6 +99,7 @@ test.describe('Address & Time Slots', () => {
     ]);
     await registerScenario(page, scenario);
     const wizard = new WizardPage(page);
+    recordScenarioCoverage('timeSlot', 'errorModal');
 
     await wizard.goto('?id=booking-existing');
     await wizard.jumpToStep('time-slot');

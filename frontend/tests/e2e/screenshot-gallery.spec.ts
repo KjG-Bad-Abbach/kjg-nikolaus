@@ -4,6 +4,7 @@ import { mkdir } from 'fs/promises';
 import path from 'path';
 import { createBaseScenario, createReadOnlyScenario, withFailures } from './fixtures/scenarioFactory';
 import { registerScenario } from './fixtures/registerHook';
+import { recordScenarioCoverage } from './fixtures/scenarioCoverage';
 import { WizardPage } from './pages/wizardPage';
 import { TestDataClient } from './fixtures/testDataClient';
 
@@ -52,6 +53,7 @@ test.describe('Screenshot gallery', () => {
     await registerScenario(page, scenario);
     const wizard = new WizardPage(page);
     const client = new TestDataClient(page);
+    recordScenarioCoverage('intro', 'contact', 'addressDeadline', 'timeSlot', 'children', 'summary');
 
     await wizard.goto();
     await capture(page, '01-intro.png');
@@ -108,6 +110,7 @@ test.describe('Screenshot gallery', () => {
     const scenario = createReadOnlyScenario();
     await registerScenario(page, scenario);
     const wizard = new WizardPage(page);
+    recordScenarioCoverage('readOnly');
 
     await wizard.goto('?id=booking-existing');
     await wizard.jumpToStep('address');
@@ -129,6 +132,7 @@ test.describe('Screenshot gallery', () => {
     ]);
     await registerScenario(page, scenario);
     const wizard = new WizardPage(page);
+    recordScenarioCoverage('errorModal');
 
     await wizard.goto();
     await wizard.errorModal().expectVisible();
