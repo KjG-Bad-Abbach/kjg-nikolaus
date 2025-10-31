@@ -8,7 +8,7 @@
     <script defer src="{{ mix('/js/app.js') }}"></script>
   </head>
   <body
-    class="my-4 flex min-h-screen flex-col items-center justify-center bg-java"
+    class="bg-java my-4 flex min-h-screen flex-col items-center justify-center"
   >
     <!-- Main Container -->
     <div
@@ -17,11 +17,11 @@
       data-testid="qa-booking-root"
       x-init="updateCanEdit(); setInterval(() => updateCanEdit(), 1000)"
     >
-      <h1 class="mx-2 mb-4 text-4xl font-bold text-calypso">
+      <h1 class="text-calypso mx-2 mb-4 text-4xl font-bold">
         KjG Nikolaus Buchung
       </h1>
 
-      <p class="mx-2 text-lg text-calypso">
+      <p class="text-calypso mx-2 text-lg">
         Buche deinen persönlichen Nikolausbesuch mit der KjG Bad Abbach!
       </p>
 
@@ -38,7 +38,7 @@
           <button
             @click="view = 'steps'"
             data-testid="qa-intro-start"
-            class="rounded bg-atlantis px-6 py-2 font-bold text-white hover:bg-surfie-green focus:outline-none focus:ring-2 focus:ring-java focus:ring-opacity-50"
+            class="bg-atlantis hover:bg-surfie-green focus:ring-java focus:ring-opacity-50 rounded px-6 py-2 font-bold text-white focus:ring-2 focus:outline-none"
           >
             Jetzt anmelden
           </button>
@@ -46,7 +46,7 @@
       </div>
 
       <!-- Deadlines -->
-      <div class="mx-2 mt-4 text-calypso" data-testid="qa-deadlines">
+      <div class="text-calypso mx-2 mt-4" data-testid="qa-deadlines">
         <p class="font-bold">Wichtige Termine:</p>
         <p
           :class="canEditRoutePlanning ? '' : 'line-through text-calypso-700'"
@@ -79,7 +79,7 @@
         class="my-8 flex items-center justify-center"
         x-cloak
       >
-        <div class="h-12 w-12 animate-spin text-calypso">
+        <div class="text-calypso h-12 w-12 animate-spin">
           <svg
             fill="currentColor"
             viewBox="0 0 24 24"
@@ -99,7 +99,7 @@
       <!-- View for steps -->
       <div x-show="view === 'steps'" data-testid="qa-view-steps" x-cloak>
         <!-- Show Steps -->
-        <div class="mx-2 mb-4 mt-8">
+        <div class="mx-2 mt-8 mb-4">
           <h2 class="sr-only">Schritte</h2>
 
           <div class="flex items-center space-x-2 px-2">
@@ -107,7 +107,7 @@
             <button
               x-show="canJumpToAnyStep"
               @click="step > 0 ? setStep(step - 1) : null"
-              class="flex-none cursor-pointer select-none py-2 font-bold text-calypso focus:outline-none focus:ring-2 focus:ring-java-500 focus:ring-opacity-50"
+              class="text-calypso focus:ring-java-500 focus:ring-opacity-50 flex-none cursor-pointer py-2 font-bold select-none focus:ring-2 focus:outline-none"
               :class="step <= 0 ? 'opacity-50 cursor-not-allowed' : 'hover:text-calypso-950'"
               :disabled="step <= 0"
               aria-hidden="true"
@@ -133,11 +133,11 @@
 
             <!-- Step Progress Bar -->
             <div
-              class="relative flex-grow after:absolute after:inset-x-0 after:top-1/2 after:block after:h-0.5 after:-translate-y-1/2 after:rounded-lg after:bg-java-500"
+              class="after:bg-java-500 relative flex-grow after:absolute after:inset-x-0 after:top-1/2 after:block after:h-0.5 after:-translate-y-1/2 after:rounded-lg"
             >
               <ol
                 data-testid="qa-stepper"
-                class="relative z-10 flex justify-between text-sm font-medium text-calypso"
+                class="text-calypso relative z-10 flex justify-between text-sm font-medium"
               >
                 <!-- Loop through the steps -->
                 <template x-for="(x, index) in steps" :key="index">
@@ -145,7 +145,7 @@
                     x-on:click="setStep(index)"
                     :data-testid="'qa-step-' + x.testId"
                     :class="canJumpToAnyStep || step === index ? 'hover:text-calypso-950 cursor-pointer' : 'cursor-not-allowed'"
-                    class="group flex select-none items-center gap-1 bg-java p-1"
+                    class="group bg-java flex items-center gap-1 p-1 select-none"
                     :title="x.name"
                   >
                     <span
@@ -198,7 +198,7 @@
             <button
               x-show="canJumpToAnyStep"
               @click="step < steps.length - 1 ? setStep(step + 1) : null"
-              class="flex-none cursor-pointer select-none py-2 font-bold text-calypso focus:outline-none focus:ring-2 focus:ring-java-500 focus:ring-opacity-50"
+              class="text-calypso focus:ring-java-500 focus:ring-opacity-50 flex-none cursor-pointer py-2 font-bold select-none focus:ring-2 focus:outline-none"
               :class="step >= steps.length - 1 ? 'opacity-50 cursor-not-allowed' : 'hover:text-calypso-950'"
               :disabled="step >= steps.length - 1"
               aria-hidden="true"
@@ -232,7 +232,7 @@
             class="text-left"
             x-cloak
           >
-            <h3 class="flex items-center text-lg font-medium text-calypso">
+            <h3 class="text-calypso flex items-center text-lg font-medium">
               <span>Kontaktinformationen</span>
               <span
                 class="ml-2 size-6 cursor-pointer"
@@ -261,7 +261,7 @@
               <span x-text="booking.contact_person?.first_name"></span
               ><span
                 x-show="!isFilled(booking.contact_person?.first_name)"
-                class="italic text-rust"
+                class="text-rust italic"
                 x-cloak
                 >(Angabe fehlt, Deadline:
                 <span x-text="formatDateTime(options.final_deadline)"></span
@@ -273,7 +273,7 @@
               <span x-text="booking.contact_person?.last_name"></span
               ><span
                 x-show="!isFilled(booking.contact_person?.last_name)"
-                class="italic text-rust"
+                class="text-rust italic"
                 x-cloak
                 >(Angabe fehlt, Deadline:
                 <span x-text="formatDateTime(options.final_deadline)"></span
@@ -284,7 +284,7 @@
               E-Mail: <span x-text="booking.contact_person?.email"></span
               ><span
                 x-show="!isFilled(booking.contact_person?.email)"
-                class="italic text-rust"
+                class="text-rust italic"
                 x-cloak
                 >(Angabe fehlt, Deadline:
                 <span x-text="formatDateTime(options.final_deadline)"></span
@@ -296,7 +296,7 @@
               <span x-text="booking.contact_person?.phone_number"></span
               ><span
                 x-show="!isFilled(booking.contact_person?.phone_number)"
-                class="italic text-rust"
+                class="text-rust italic"
                 x-cloak
                 >(Angabe fehlt, Deadline:
                 <span x-text="formatDateTime(options.final_deadline)"></span
@@ -311,7 +311,7 @@
             class="text-left"
             x-cloak
           >
-            <h3 class="flex items-center text-lg font-medium text-calypso">
+            <h3 class="text-calypso flex items-center text-lg font-medium">
               <span>Adresse und Ort für Geschenke</span>
               <span
                 class="ml-2 size-6 cursor-pointer"
@@ -339,7 +339,7 @@
               Straße: <span x-text="booking.location?.street"></span
               ><span
                 x-show="!isFilled(booking.location?.street)"
-                class="italic text-rust"
+                class="text-rust italic"
                 x-cloak
                 >(Angabe fehlt, Deadline:
                 <span
@@ -353,7 +353,7 @@
               <span x-text="booking.location?.house_number"></span
               ><span
                 x-show="!isFilled(booking.location?.house_number)"
-                class="italic text-rust"
+                class="text-rust italic"
                 x-cloak
                 >(Angabe fehlt, Deadline:
                 <span
@@ -366,7 +366,7 @@
               PLZ: <span x-text="booking.location?.zip_code"></span
               ><span
                 x-show="!isFilled(booking.location?.zip_code)"
-                class="italic text-rust"
+                class="text-rust italic"
                 x-cloak
                 >(Angabe fehlt, Deadline:
                 <span
@@ -379,7 +379,7 @@
               Ort: <span x-text="booking.location?.place"></span
               ><span
                 x-show="!isFilled(booking.location?.place)"
-                class="italic text-rust"
+                class="text-rust italic"
                 x-cloak
                 >(Angabe fehlt, Deadline:
                 <span
@@ -393,7 +393,7 @@
               <span x-text="booking.present_location"></span
               ><span
                 x-show="!isFilled(booking.present_location)"
-                class="italic text-rust"
+                class="text-rust italic"
                 x-cloak
                 >(Angabe fehlt, Deadline:
                 <span x-text="formatDateTime(options.final_deadline)"></span
@@ -408,7 +408,7 @@
             class="text-left"
             x-cloak
           >
-            <h3 class="flex items-center text-lg font-medium text-calypso">
+            <h3 class="text-calypso flex items-center text-lg font-medium">
               <span>Ausgewählte Zeitslots</span>
               <span
                 class="ml-2 size-6 cursor-pointer"
@@ -441,7 +441,7 @@
               </template>
               <li
                 x-show="selectedTimeSlotIds.length === 0"
-                class="italic text-rust"
+                class="text-rust italic"
                 x-cloak
               >
                 (Angabe fehlt, Deadline:
@@ -452,7 +452,7 @@
               </li>
               <li
                 x-show="selectedTimeSlotIds.length > 0 && selectedTimeSlotIds.length < options.max_time_slots"
-                class="italic text-rust"
+                class="text-rust italic"
                 x-cloak
               >
                 (Bitte <span x-text="options.max_time_slots"></span> Zeitslots
@@ -471,7 +471,7 @@
             class="text-left"
             x-cloak
           >
-            <h3 class="flex items-center text-lg font-medium text-calypso">
+            <h3 class="text-calypso flex items-center text-lg font-medium">
               <span>Kinder</span>
               <span
                 class="ml-2 size-6 cursor-pointer"
@@ -506,7 +506,7 @@
                       Name: <span x-text="child.name"></span
                       ><span
                         x-show="!isFilled(child.name)"
-                        class="italic text-rust"
+                        class="text-rust italic"
                         x-cloak
                         >(Angabe fehlt, Deadline:
                         <span
@@ -521,7 +521,7 @@
                       Merkmal: <span x-text="child.identification_trait"></span
                       ><span
                         x-show="!isFilled(child.identification_trait)"
-                        class="italic text-rust"
+                        class="text-rust italic"
                         x-cloak
                         >(Angabe fehlt, Deadline:
                         <span
@@ -540,7 +540,7 @@
                     </div>
                     <span
                       x-show="!isFilled(child.speech)"
-                      class="italic text-rust"
+                      class="text-rust italic"
                       x-cloak
                       >(Angabe fehlt, Deadline:
                       <span
@@ -553,7 +553,7 @@
               </template>
               <li
                 x-show="booking.children.length <= 0"
-                class="italic text-rust"
+                class="text-rust italic"
                 x-cloak
               >
                 (Angabe fehlt, Deadline:
@@ -578,11 +578,11 @@
           <div
             class="mx-auto w-full max-w-3xl rounded-lg bg-white p-6 shadow-md"
           >
-            <h2 class="mb-4 text-2xl font-bold text-surfie-green">
+            <h2 class="text-surfie-green mb-4 text-2xl font-bold">
               Kontaktinformationen
             </h2>
 
-            <p class="italic text-gray-600">
+            <p class="text-gray-600 italic">
               Hinweis: Deadline für diese Angaben
               <span
                 x-text="formatDateTime(options.final_deadline)"
@@ -592,7 +592,7 @@
             </p>
             <p
               x-show="!canEditAnything"
-              class="mb-4 text-sm italic text-rust"
+              class="text-rust mb-4 text-sm italic"
               x-cloak
             >
               (Nach der Deadline können die Angaben nicht mehr bearbeitet
@@ -607,7 +607,7 @@
               <div>
                 <label
                   for="first_name"
-                  class="block text-left font-medium text-surfie-green"
+                  class="text-surfie-green block text-left font-medium"
                   >Vorname *</label
                 >
                 <input
@@ -615,7 +615,7 @@
                   id="first_name"
                   data-testid="qa-contact-first-name"
                   required
-                  class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
+                  class="focus:border-atlantis focus:ring-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
                   x-model="booking.contact_person.first_name"
                   maxlength="50"
                   placeholder="Vorname"
@@ -626,7 +626,7 @@
                   :key="index"
                 >
                   <div
-                    class="mx-2 mt-2 text-left text-sm text-rust"
+                    class="text-rust mx-2 mt-2 text-left text-sm"
                     x-text="message"
                   ></div
                 ></template>
@@ -635,7 +635,7 @@
               <div>
                 <label
                   for="last_name"
-                  class="block text-left font-medium text-surfie-green"
+                  class="text-surfie-green block text-left font-medium"
                   >Nachname *</label
                 >
                 <input
@@ -643,7 +643,7 @@
                   id="last_name"
                   data-testid="qa-contact-last-name"
                   required
-                  class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
+                  class="focus:border-atlantis focus:ring-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
                   x-model="booking.contact_person.last_name"
                   maxlength="50"
                   placeholder="Nachname"
@@ -654,7 +654,7 @@
                   :key="index"
                 >
                   <div
-                    class="mx-2 mt-2 text-left text-sm text-rust"
+                    class="text-rust mx-2 mt-2 text-left text-sm"
                     x-text="message"
                   ></div
                 ></template>
@@ -663,7 +663,7 @@
               <div>
                 <label
                   for="email"
-                  class="block text-left font-medium text-surfie-green"
+                  class="text-surfie-green block text-left font-medium"
                   >E-Mail *</label
                 >
                 <input
@@ -671,7 +671,7 @@
                   id="email"
                   data-testid="qa-contact-email"
                   required
-                  class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
+                  class="focus:border-atlantis focus:ring-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
                   x-model="booking.contact_person.email"
                   maxlength="100"
                   placeholder="example@example.com"
@@ -682,7 +682,7 @@
                   :key="index"
                 >
                   <div
-                    class="mx-2 mt-2 text-left text-sm text-rust"
+                    class="text-rust mx-2 mt-2 text-left text-sm"
                     x-text="message"
                   ></div
                 ></template>
@@ -691,7 +691,7 @@
               <div>
                 <label
                   for="phone_number"
-                  class="block text-left font-medium text-surfie-green"
+                  class="text-surfie-green block text-left font-medium"
                   >Telefonnummer *</label
                 >
                 <input
@@ -699,7 +699,7 @@
                   id="phone_number"
                   data-testid="qa-contact-phone"
                   required
-                  class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
+                  class="focus:border-atlantis focus:ring-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
                   x-model="booking.contact_person.phone_number"
                   maxlength="50"
                   placeholder="0123 4567890"
@@ -710,7 +710,7 @@
                   :key="index"
                 >
                   <div
-                    class="mx-2 mt-2 text-left text-sm text-rust"
+                    class="text-rust mx-2 mt-2 text-left text-sm"
                     x-text="message"
                   ></div
                 ></template>
@@ -721,13 +721,13 @@
                 <button
                   type="submit"
                   data-testid="qa-contact-submit"
-                  class="w-full rounded bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:outline-none focus:ring-2 focus:ring-java focus:ring-opacity-50"
+                  class="bg-atlantis hover:bg-surfie-green focus:ring-java focus:ring-opacity-50 w-full rounded px-4 py-2 font-bold text-white focus:ring-2 focus:outline-none"
                 >
                   Speichern & Weiter
                 </button>
                 <div
                   x-show="Object.keys(validationMessages).length > 0"
-                  class="mx-2 mt-2 text-left text-sm text-rust"
+                  class="text-rust mx-2 mt-2 text-left text-sm"
                 >
                   Bitte überprüfe deine Eingaben.
                 </div>
@@ -741,11 +741,11 @@
           <div
             class="mx-auto w-full max-w-3xl rounded-lg bg-white p-6 shadow-md"
           >
-            <h2 class="mb-4 text-2xl font-bold text-surfie-green">
+            <h2 class="text-surfie-green mb-4 text-2xl font-bold">
               Adresse und Ort für Geschenke
             </h2>
 
-            <p class="italic text-gray-600">
+            <p class="text-gray-600 italic">
               Hinweis: Deadline für diese Angaben
               <span
                 x-text="formatDateTime(options.route_planning_deadline)"
@@ -755,7 +755,7 @@
             </p>
             <p
               x-show="!canEditRoutePlanning"
-              class="mb-4 text-sm italic text-rust"
+              class="text-rust mb-4 text-sm italic"
               x-cloak
             >
               (Nach der Deadline können die Angaben nicht mehr bearbeitet
@@ -770,7 +770,7 @@
               <div>
                 <label
                   for="street"
-                  class="block text-left font-medium text-surfie-green"
+                  class="text-surfie-green block text-left font-medium"
                   >Straße *</label
                 >
                 <input
@@ -778,7 +778,7 @@
                   id="street"
                   data-testid="qa-address-street"
                   required
-                  class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
+                  class="focus:border-atlantis focus:ring-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
                   x-model="booking.location.street"
                   maxlength="100"
                   placeholder="Straße"
@@ -789,7 +789,7 @@
                   :key="index"
                 >
                   <div
-                    class="mx-2 mt-2 text-left text-sm text-rust"
+                    class="text-rust mx-2 mt-2 text-left text-sm"
                     x-text="message"
                   ></div
                 ></template>
@@ -797,7 +797,7 @@
               <div>
                 <label
                   for="house_number"
-                  class="block text-left font-medium text-surfie-green"
+                  class="text-surfie-green block text-left font-medium"
                   >Hausnummer *</label
                 >
                 <input
@@ -805,7 +805,7 @@
                   id="house_number"
                   data-testid="qa-address-house-number"
                   required
-                  class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
+                  class="focus:border-atlantis focus:ring-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
                   x-model="booking.location.house_number"
                   maxlength="10"
                   placeholder="Hausnummer"
@@ -816,7 +816,7 @@
                   :key="index"
                 >
                   <div
-                    class="mx-2 mt-2 text-left text-sm text-rust"
+                    class="text-rust mx-2 mt-2 text-left text-sm"
                     x-text="message"
                   ></div
                 ></template>
@@ -824,7 +824,7 @@
               <div>
                 <label
                   for="zip_code"
-                  class="block text-left font-medium text-surfie-green"
+                  class="text-surfie-green block text-left font-medium"
                   >PLZ *</label
                 >
                 <input
@@ -832,7 +832,7 @@
                   id="zip_code"
                   data-testid="qa-address-zip"
                   required
-                  class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
+                  class="focus:border-atlantis focus:ring-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
                   x-model="booking.location.zip_code"
                   max="99999"
                   min="00000"
@@ -845,7 +845,7 @@
                   :key="index"
                 >
                   <div
-                    class="mx-2 mt-2 text-left text-sm text-rust"
+                    class="text-rust mx-2 mt-2 text-left text-sm"
                     x-text="message"
                   ></div
                 ></template>
@@ -853,7 +853,7 @@
               <div>
                 <label
                   for="place"
-                  class="block text-left font-medium text-surfie-green"
+                  class="text-surfie-green block text-left font-medium"
                   >Ort *</label
                 >
                 <input
@@ -861,7 +861,7 @@
                   id="place"
                   data-testid="qa-address-place"
                   required
-                  class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
+                  class="focus:border-atlantis focus:ring-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
                   x-model="booking.location.place"
                   maxlength="100"
                   placeholder="Ort"
@@ -872,7 +872,7 @@
                   :key="index"
                 >
                   <div
-                    class="mx-2 mt-2 text-left text-sm text-rust"
+                    class="text-rust mx-2 mt-2 text-left text-sm"
                     x-text="message"
                   ></div
                 ></template>
@@ -880,10 +880,10 @@
               <div>
                 <label
                   for="present_location"
-                  class="block text-left font-medium text-surfie-green"
+                  class="text-surfie-green block text-left font-medium"
                   >Ort für Geschenke</label
                 >
-                <p class="text-left italic text-gray-600">
+                <p class="text-left text-gray-600 italic">
                   Hinweis: Diese Information kann auch später ergänzt werden.
                   Deadline für diese Angabe
                   <span
@@ -918,7 +918,7 @@
                   type="text"
                   id="present_location"
                   data-testid="qa-address-present-location"
-                  class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
+                  class="focus:border-atlantis focus:ring-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
                   x-model="booking.present_location"
                   maxlength="200"
                   placeholder="Wo können wir die Geschenke finden?"
@@ -929,7 +929,7 @@
                   :key="index"
                 >
                   <div
-                    class="mx-2 mt-2 text-left text-sm text-rust"
+                    class="text-rust mx-2 mt-2 text-left text-sm"
                     x-text="message"
                   ></div
                 ></template>
@@ -940,13 +940,13 @@
                 <button
                   type="submit"
                   data-testid="qa-address-submit"
-                  class="w-full rounded bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:outline-none focus:ring-2 focus:ring-java focus:ring-opacity-50"
+                  class="bg-atlantis hover:bg-surfie-green focus:ring-java focus:ring-opacity-50 w-full rounded px-4 py-2 font-bold text-white focus:ring-2 focus:outline-none"
                 >
                   Speichern & Weiter
                 </button>
                 <div
                   x-show="Object.keys(validationMessages).length > 0"
-                  class="mx-2 mt-2 text-left text-sm text-rust"
+                  class="text-rust mx-2 mt-2 text-left text-sm"
                 >
                   Bitte überprüfe deine Eingaben.
                 </div>
@@ -962,7 +962,7 @@
           >
             <h2
               x-show="canEditRoutePlanning"
-              class="mb-4 text-2xl font-bold text-surfie-green"
+              class="text-surfie-green mb-4 text-2xl font-bold"
               x-cloak
             >
               Wähle
@@ -974,13 +974,13 @@
             </h2>
             <h2
               x-show="!canEditRoutePlanning"
-              class="mb-4 text-2xl font-bold text-surfie-green"
+              class="text-surfie-green mb-4 text-2xl font-bold"
               x-cloak
             >
               Ausgewählte Zeitslots
             </h2>
 
-            <p class="italic text-gray-600">
+            <p class="text-gray-600 italic">
               Hinweis: Deadline für diese Angaben
               <span
                 x-text="formatDateTime(options.route_planning_deadline)"
@@ -990,7 +990,7 @@
             </p>
             <p
               x-show="!canEditRoutePlanning"
-              class="mb-4 text-sm italic text-rust"
+              class="text-rust mb-4 text-sm italic"
               x-cloak
             >
               (Nach der Deadline können die Angaben nicht mehr bearbeitet
@@ -998,7 +998,7 @@
             </p>
 
             <p
-              class="mt-2 text-rust"
+              class="text-rust mt-2"
               x-show="canEditRoutePlanning && selectedTimeSlotIds.length >= options.max_time_slots"
               x-cloak
             >
@@ -1007,13 +1007,13 @@
             </p>
 
             <div
-              class="mb-4 mt-2"
+              class="mt-2 mb-4"
               x-show="options.show_search_for_time_slots"
               x-cloak
             >
               <input
                 type="text"
-                class="w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
+                class="focus:border-atlantis focus:ring-atlantis w-full rounded-md border border-gray-300 p-2 shadow-sm"
                 x-model="timeSlotSearchQuery"
                 placeholder="Suche nach Zeitslots..."
                 data-testid="qa-time-slot-search"
@@ -1027,7 +1027,7 @@
               >
                 <div>
                   <h4
-                    class="mb-2 text-lg font-medium text-surfie-green"
+                    class="text-surfie-green mb-2 text-lg font-medium"
                     x-text="date"
                   ></h4>
                   <div class="grid grid-cols-1 gap-1 sm:grid-cols-2">
@@ -1047,19 +1047,19 @@
                       >
                         <input
                           type="checkbox"
-                          class="form-checkbox peer h-5 w-5 text-calypso"
+                          class="form-checkbox peer text-calypso h-5 w-5"
                           :value="slot.id"
                           @change="updateTimeSlot(slot.id)"
                           x-model="slot.isSelected"
                           :disabled="(selectedTimeSlotIds.length >= options.max_time_slots && !selectedTimeSlotIds.includes(slot.id)) || (slot.available_reservations <= 0)"
                         />
                         <span
-                          class="ml-2 select-none text-gray-800 peer-disabled:text-gray-300"
+                          class="ml-2 text-gray-800 select-none peer-disabled:text-gray-300"
                           x-text="slot.label"
                         ></span>
                         <span
                           x-show="slot.available_reservations <= 0"
-                          class="ml-2 text-sm text-sun-400"
+                          class="text-sun-400 ml-2 text-sm"
                           x-cloak
                           >ausgebucht</span
                         >
@@ -1073,7 +1073,7 @@
             <div x-show="selectedTimeSlotIds.length > 0" class="mt-6" x-cloak>
               <h4
                 x-show="canEditRoutePlanning"
-                class="mb-2 text-lg font-medium text-surfie-green"
+                class="text-surfie-green mb-2 text-lg font-medium"
                 x-cloak
               >
                 Ausgewählte Zeitslots:
@@ -1092,7 +1092,7 @@
                       :disabled="!canEditRoutePlanning"
                       @click="updateTimeSlot(slotId, false)"
                       :data-testid="'qa-remove-selected-slot-' + slotId"
-                      class="text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-java-500 focus:ring-opacity-50"
+                      class="focus:ring-java-500 focus:ring-opacity-50 text-gray-500 hover:text-gray-700 focus:ring-2 focus:outline-none"
                       x-cloak
                     >
                       <svg
@@ -1120,7 +1120,7 @@
             >
               <!-- If not all possible time-slots until options.max_time_slots are selected, show a warning -->
               <p
-                class="mt-4 text-rust"
+                class="text-rust mt-4"
                 x-show="canEditRoutePlanning && selectedTimeSlotIds.length < options.max_time_slots"
                 x-cloak
               >
@@ -1135,13 +1135,13 @@
                 <button
                   type="submit"
                   data-testid="qa-time-slot-submit"
-                  class="w-full rounded bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:outline-none focus:ring-2 focus:ring-java focus:ring-opacity-50"
+                  class="bg-atlantis hover:bg-surfie-green focus:ring-java focus:ring-opacity-50 w-full rounded px-4 py-2 font-bold text-white focus:ring-2 focus:outline-none"
                 >
                   Speichern & Weiter
                 </button>
                 <div
                   x-show="Object.keys(validationMessages).length > 0"
-                  class="mx-2 mt-2 text-left text-sm text-rust"
+                  class="text-rust mx-2 mt-2 text-left text-sm"
                 >
                   Bitte überprüfe deine Eingaben.
                 </div>
@@ -1155,9 +1155,9 @@
           <div
             class="mx-auto w-full max-w-3xl rounded-lg bg-white p-6 shadow-md"
           >
-            <h2 class="mb-4 text-2xl font-bold text-surfie-green">Kinder</h2>
+            <h2 class="text-surfie-green mb-4 text-2xl font-bold">Kinder</h2>
 
-            <p class="italic text-gray-600">
+            <p class="text-gray-600 italic">
               Hinweis: Die Informationen zu den Kindern können auch später
               ergänzt werden. Deadline für diese Angaben
               <span
@@ -1168,7 +1168,7 @@
             </p>
             <p
               x-show="!canEditAnything"
-              class="mb-4 text-sm italic text-rust"
+              class="text-rust mb-4 text-sm italic"
               x-cloak
             >
               (Nach der Deadline können die Angaben nicht mehr bearbeitet
@@ -1219,7 +1219,7 @@
             </div>
 
             <p
-              class="mt-2 text-rust"
+              class="text-rust mt-2"
               x-show="canEditAnything && booking.children.length <= 0"
               x-cloak
             >
@@ -1239,7 +1239,7 @@
                   <div>
                     <label
                       :for="'child-name-' + index"
-                      class="block text-left font-medium text-surfie-green"
+                      class="text-surfie-green block text-left font-medium"
                       >Name *</label
                     >
                     <input
@@ -1248,7 +1248,7 @@
                       type="text"
                       required
                       maxlength="50"
-                      class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
+                      class="focus:border-atlantis focus:ring-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
                       x-model="child.name"
                       placeholder="Name des Kindes"
                       :readonly="!canEditAnything"
@@ -1258,7 +1258,7 @@
                       :key="index"
                     >
                       <div
-                        class="mx-2 mt-2 text-left text-sm text-rust"
+                        class="text-rust mx-2 mt-2 text-left text-sm"
                         x-text="message"
                       ></div
                     ></template>
@@ -1267,7 +1267,7 @@
                   <div>
                     <label
                       :for="'child-identification-' + index"
-                      class="block text-left font-medium text-surfie-green"
+                      class="text-surfie-green block text-left font-medium"
                       >Identifikationsmerkmal</label
                     >
                     <input
@@ -1275,7 +1275,7 @@
                       :data-testid="'qa-child-identification-' + index"
                       type="text"
                       maxlength="250"
-                      class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
+                      class="focus:border-atlantis focus:ring-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
                       x-model="child.identification_trait"
                       placeholder="Alter, Haarfarbe, Größe, ..."
                       :readonly="!canEditAnything"
@@ -1285,7 +1285,7 @@
                       :key="index"
                     >
                       <div
-                        class="mx-2 mt-2 text-left text-sm text-rust"
+                        class="text-rust mx-2 mt-2 text-left text-sm"
                         x-text="message"
                       ></div
                     ></template>
@@ -1294,7 +1294,7 @@
                   <div>
                     <label
                       :for="'child-speech-' + index"
-                      class="block text-left font-medium text-surfie-green"
+                      class="text-surfie-green block text-left font-medium"
                       >Rede</label
                     >
                     <div
@@ -1309,7 +1309,7 @@
                     <textarea
                       :id="'child-speech-' + index"
                       :data-testid="'qa-child-speech-' + index"
-                      class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
+                      class="focus:border-atlantis focus:ring-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
                       x-model="child.speech"
                       rows="8"
                       placeholder="Rede für den Nikolaus"
@@ -1320,7 +1320,7 @@
                       :key="index"
                     >
                       <div
-                        class="mx-2 mt-2 text-left text-sm text-rust"
+                        class="text-rust mx-2 mt-2 text-left text-sm"
                         x-text="message"
                       ></div
                     ></template>
@@ -1331,7 +1331,7 @@
                     type="button"
                     @click="removeChild(index)"
                     :data-testid="'qa-remove-child-' + index"
-                    class="mt-2 rounded bg-red-500 px-3 py-1 text-sm font-bold text-white hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-rust focus:ring-opacity-50"
+                    class="focus:ring-rust focus:ring-opacity-50 mt-2 rounded bg-red-500 px-3 py-1 text-sm font-bold text-white hover:bg-red-600 focus:ring-2 focus:outline-none"
                     x-cloak
                   >
                     Kind entfernen
@@ -1346,7 +1346,7 @@
                   @click="addChild"
                   :disabled="!canEditAnything"
                   data-testid="qa-add-child"
-                  class="rounded bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:outline-none focus:ring-2 focus:ring-java focus:ring-opacity-50"
+                  class="bg-atlantis hover:bg-surfie-green focus:ring-java focus:ring-opacity-50 rounded px-4 py-2 font-bold text-white focus:ring-2 focus:outline-none"
                 >
                   Kind hinzufügen
                 </button>
@@ -1356,7 +1356,7 @@
               <div>
                 <label
                   for="additional_notes"
-                  class="block text-left font-medium text-surfie-green"
+                  class="text-surfie-green block text-left font-medium"
                   >Sonstige Beachtungen</label
                 >
                 <div
@@ -1372,7 +1372,7 @@
                 <textarea
                   id="additional_notes"
                   data-testid="qa-additional-notes"
-                  class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
+                  class="focus:border-atlantis focus:ring-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
                   x-model="booking.additional_notes"
                   rows="4"
                   placeholder="Weitere Hinweise für den Nikolaus"
@@ -1383,7 +1383,7 @@
                   :key="index"
                 >
                   <div
-                    class="mx-2 mt-2 text-left text-sm text-rust"
+                    class="text-rust mx-2 mt-2 text-left text-sm"
                     x-text="message"
                   ></div
                 ></template>
@@ -1394,13 +1394,13 @@
                 <button
                   type="submit"
                   data-testid="qa-children-submit"
-                  class="w-full rounded bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:outline-none focus:ring-2 focus:ring-java focus:ring-opacity-50"
+                  class="bg-atlantis hover:bg-surfie-green focus:ring-java focus:ring-opacity-50 w-full rounded px-4 py-2 font-bold text-white focus:ring-2 focus:outline-none"
                 >
                   Speichern & Weiter
                 </button>
                 <div
                   x-show="Object.keys(validationMessages).length > 0"
-                  class="mx-2 mt-2 text-left text-sm text-rust"
+                  class="text-rust mx-2 mt-2 text-left text-sm"
                 >
                   Bitte überprüfe deine Eingaben.
                 </div>
@@ -1413,7 +1413,7 @@
                 type="button"
                 @click="setStep(4)"
                 data-testid="qa-children-skip"
-                class="w-full rounded border-2 border-atlantis px-4 py-2 font-bold text-atlantis hover:border-surfie-green hover:text-surfie-green focus:outline-none focus:ring-2 focus:ring-java focus:ring-opacity-50"
+                class="border-atlantis text-atlantis hover:border-surfie-green hover:text-surfie-green focus:ring-java focus:ring-opacity-50 w-full rounded border-2 px-4 py-2 font-bold focus:ring-2 focus:outline-none"
               >
                 Aktuell überspringen (nicht speichern)
               </button>
@@ -1427,7 +1427,7 @@
             class="mx-auto w-full max-w-3xl p-4"
             data-testid="qa-step-panel-summary"
           >
-            <h2 class="mb-4 text-2xl font-bold text-calypso">
+            <h2 class="text-calypso mb-4 text-2xl font-bold">
               Vielen Dank für deine Anmeldung.
             </h2>
 
@@ -1440,7 +1440,7 @@
             >
               <div class="flex-shrink-0">
                 <svg
-                  class="h-6 w-6 text-atlantis"
+                  class="text-atlantis h-6 w-6"
                   fill="currentColor"
                   viewBox="0 0 24 24"
                   xmlns="http://www.w3.org/2000/svg"
@@ -1460,7 +1460,7 @@
             <!-- Route planning is missing -->
             <div
               x-show="!isRoutePlanningFilled"
-              class="mb-4 flex items-start gap-2 text-left text-rust"
+              class="text-rust mb-4 flex items-start gap-2 text-left"
               data-testid="qa-summary-route-missing"
               x-cloak
             >
@@ -1494,7 +1494,7 @@
             <!-- Something is missing -->
             <div
               x-show="!isEverythingFilled"
-              class="mb-4 flex items-start gap-2 text-left text-rust"
+              class="text-rust mb-4 flex items-start gap-2 text-left"
               data-testid="qa-summary-details-missing"
               x-cloak
             >
@@ -1538,7 +1538,7 @@
             </p>
             <div
               x-show="isEverythingFilled"
-              class="my-6 flex items-center justify-center text-atlantis"
+              class="text-atlantis my-6 flex items-center justify-center"
               data-testid="qa-summary-checkmark"
               x-cloak
             >
@@ -1559,7 +1559,7 @@
             </div>
 
             <!-- Info -->
-            <div class="mb-4 flex items-start gap-2 text-left text-calypso">
+            <div class="text-calypso mb-4 flex items-start gap-2 text-left">
               <div class="flex-shrink-0">
                 <svg
                   class="h-6 w-6"
@@ -1582,7 +1582,7 @@
               </p>
             </div>
 
-            <div class="mb-4 flex items-start gap-2 text-left text-calypso">
+            <div class="text-calypso mb-4 flex items-start gap-2 text-left">
               <div class="flex-shrink-0">
                 <svg
                   class="h-6 w-6"
@@ -1614,7 +1614,7 @@
           class="mx-auto mt-8 w-full max-w-3xl rounded-lg bg-white p-6 shadow-md"
           data-testid="qa-email-verification"
         >
-          <h2 class="mb-4 text-2xl font-bold text-surfie-green">
+          <h2 class="text-surfie-green mb-4 text-2xl font-bold">
             E-Mail-Verifizierung
           </h2>
 
@@ -1638,7 +1638,7 @@
               type="button"
               x-on:click="sendEmailVerification"
               data-testid="qa-email-resend"
-              class="w-full rounded bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:outline-none focus:ring-2 focus:ring-java focus:ring-opacity-50"
+              class="bg-atlantis hover:bg-surfie-green focus:ring-java focus:ring-opacity-50 w-full rounded px-4 py-2 font-bold text-white focus:ring-2 focus:outline-none"
             >
               E-Mail erneut senden
             </button>
@@ -1685,7 +1685,7 @@
         x-transition:leave="transition ease-in duration-200"
         x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0"
-        class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+        class="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black"
         @click.self="closeError()"
         x-cloak
       >
@@ -1750,7 +1750,7 @@
               @click="reload()"
               type="button"
               data-testid="qa-error-retry"
-              class="rounded border-2 border-gray-400 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 focus:outline-none focus:ring-2 focus:ring-java-500 focus:ring-opacity-50"
+              class="focus:ring-java-500 focus:ring-opacity-50 rounded border-2 border-gray-400 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 focus:ring-2 focus:outline-none"
               x-cloak
             >
               Erneut versuchen
@@ -1760,7 +1760,7 @@
               @click="closeError()"
               type="button"
               data-testid="qa-error-dismiss"
-              class="rounded border-2 border-gray-400 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 focus:outline-none focus:ring-2 focus:ring-java-500 focus:ring-opacity-50"
+              class="focus:ring-java-500 focus:ring-opacity-50 rounded border-2 border-gray-400 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 focus:ring-2 focus:outline-none"
               x-cloak
             >
               OK
