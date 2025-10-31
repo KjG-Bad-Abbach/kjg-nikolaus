@@ -26,7 +26,7 @@ Establish an initial Playwright UI test that captures and publishes deterministi
 ## Goals (Acceptance criteria)
 
 - A single Playwright test (`frontend/tests/e2e/homepage-smoke.spec.ts`) loads the booking entry page and captures a full-page screenshot after the hero content renders.
-- Running `pnpm exec playwright test homepage-smoke` locally or in CI produces a named screenshot artifact stored under `frontend/tests/e2e/__screenshots__/homepage-smoke-chromium.png`.
+- Running `pnpm test:e2e:fast homepage-smoke` locally or in CI produces a named screenshot artifact stored under `frontend/tests/e2e/__screenshots__/homepage-smoke-chromium.png`.
 - CI pipeline uploads the screenshot and the associated Playwright HTML report as job artifacts that can be downloaded for review.
 - Visual baseline is version-controlled, and test failure occurs when the screenshot diff exceeds Playwright's default threshold (0.2%).
 - Screenshot captures stabilise the on-page current date (freeze or mask) so baseline churn comes only from intentional UI changes.
@@ -56,13 +56,13 @@ Establish an initial Playwright UI test that captures and publishes deterministi
 - **Test placement**: create `frontend/tests/e2e/homepage-smoke.spec.ts` using Playwright test runner, tagging with `@screenshot` for future filtering.
 - **Baseline storage**: check in `frontend/tests/e2e/__screenshots__/homepage-smoke-chromium.png` and ensure `.gitignore` permits `.png` baselines but ignores Playwright output directories (`test-results/`, `playwright-report/`).
 - **Config updates**: adjust `playwright.config.ts` with `snapshotDir` pointing to `frontend/tests/e2e/__screenshots__` and set `expect: { toHaveScreenshot: { timeout: 15000 } }`.
-- **CI workflow**: add a `frontend-playwright-screenshot` job invoking `pnpm install` + `pnpm exec playwright test homepage-smoke`; on completion, upload `playwright-report` and `test-results` via workflow artifacts.
-- **Local developer workflow**: update docs to run `pnpm exec playwright test homepage-smoke --update-snapshots` after UI changes, and `pnpm exec playwright show-report` to review results.
+- **CI workflow**: add a `frontend-playwright-screenshot` job invoking `pnpm install` + `pnpm test:e2e:fast homepage-smoke`; on completion, upload `playwright-report` and `test-results` via workflow artifacts.
+- **Local developer workflow**: update docs to run `pnpm test:e2e:fast homepage-smoke --update-snapshots` after UI changes, and `pnpm exec playwright show-report` to review results.
 
 ```mermaid
 flowchart LR
     A[Developer pushes branch] --> B[CI: Install frontend deps]
-    B --> C[CI: Run pnpm exec playwright test homepage-smoke]
+    B --> C[CI: Run pnpm test:e2e:fast homepage-smoke]
     C --> D{Diff?}
     D -- No --> E[Publish artifacts<br/>playwright-report + screenshots]
     D -- Yes --> F[Mark job failed<br/>attach diff images]

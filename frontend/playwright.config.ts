@@ -22,7 +22,12 @@ export default defineConfig({
   timeout: 60_000,
   expect: {
     timeout: 5_000,
+    toHaveScreenshot: {
+      timeout: 15_000,
+    },
   },
+  snapshotDir: './tests/e2e/__screenshots__',
+  snapshotPathTemplate: '{snapshotDir}/{arg}-{projectName}{ext}',
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -51,7 +56,7 @@ export default defineConfig({
     screenshot: 'only-on-failure',
     actionTimeout: 15_000,
     navigationTimeout: 20_000,
-    viewport: { width: 1280, height: 720 },
+    viewport: { width: 1440, height: 900 },
   },
   outputDir: 'test-results',
 
