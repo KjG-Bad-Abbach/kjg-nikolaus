@@ -2,6 +2,8 @@ import { expect, test } from "@playwright/test";
 import { createBaseScenario } from "../fixtures/scenarioFactory";
 import { registerScenario } from "../fixtures/registerHook";
 import { recordScenarioCoverage } from "../fixtures/scenarioCoverage";
+import { captureScreenshot, freezeDate } from "../fixtures/visual";
+import { expectDeadlinesEditable } from "../utils/deadlineAssertions";
 import { WizardPage } from "../pages/wizardPage";
 import { TestDataClient } from "../fixtures/testDataClient";
 
@@ -37,17 +39,21 @@ test.describe("Full Journey", () => {
       "children",
       "summary",
     );
+    await freezeDate(page);
 
     await wizard.goto();
+    await expectDeadlinesEditable(page);
     await wizard.startWizard();
     await wizard.contactStep().fill(CONTACT);
     await wizard.contactStep().submit();
     await wizard.contactStep().expectVerificationViewVisible();
+    await expectDeadlinesEditable(page);
 
     const stateAfterContact = await client.getState();
     const bookingId = Object.keys(stateAfterContact.bookings).pop()!;
 
     await wizard.resume(bookingId);
+    await expectDeadlinesEditable(page);
 
     await wizard.jumpToStep("address");
     await wizard.addressStep().fill(ADDRESS);
@@ -76,6 +82,7 @@ test.describe("Full Journey", () => {
     await expect(page.getByTestId("qa-step-panel-summary")).toBeVisible();
     await wizard.summaryPage().expectNoMissingNotices();
     await wizard.summaryPage().expectAllComplete();
+    await captureScreenshot(page, "full-journey-summary.png");
 
     await client.expectBookingField(
       bookingId,

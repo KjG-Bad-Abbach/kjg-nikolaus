@@ -5,6 +5,8 @@ import {
 } from "./fixtures/scenarioFactory";
 import { registerScenario } from "./fixtures/registerHook";
 import { recordScenarioCoverage } from "./fixtures/scenarioCoverage";
+import { captureScreenshot, freezeDate } from "./fixtures/visual";
+import { expectDeadlinesEditable } from "./utils/deadlineAssertions";
 import { WizardPage } from "./pages/wizardPage";
 import { TestDataClient } from "./fixtures/testDataClient";
 
@@ -32,19 +34,23 @@ test.describe("Children & Summary", () => {
     const wizard = new WizardPage(page);
     const client = new TestDataClient(page);
     recordScenarioCoverage("children");
+    await freezeDate(page);
 
     await wizard.goto("?id=booking-children");
+    await expectDeadlinesEditable(page);
     await wizard.jumpToStep("children");
 
     await wizard.childrenStep().addChild();
     await wizard.childrenStep().fillChild(CHILD);
     await wizard.childrenStep().addChild();
     await wizard.childrenStep().fillChild(CHILD_TWO);
+    await captureScreenshot(page, "children-multiple.png");
 
     await wizard.childrenStep().removeChild(0);
     await wizard
       .childrenStep()
       .fillNotes("Bitte achtet auf den Hund im Garten.");
+    await captureScreenshot(page, "children-notes.png");
     await wizard.childrenStep().submit();
 
     await client.expectBookingField(
@@ -62,13 +68,16 @@ test.describe("Children & Summary", () => {
     await registerScenario(page, scenario);
     const wizard = new WizardPage(page);
     recordScenarioCoverage("children", "summary");
+    await freezeDate(page);
 
     await wizard.goto("?id=booking-children");
+    await expectDeadlinesEditable(page);
     await wizard.jumpToStep("children");
     await wizard.childrenStep().skip();
 
     await expect(page.getByTestId("qa-step-panel-summary")).toBeVisible();
     await wizard.summaryPage().expectMissingRoute();
     await wizard.summaryPage().expectMissingDetails();
+    await captureScreenshot(page, "children-summary.png");
   });
 });

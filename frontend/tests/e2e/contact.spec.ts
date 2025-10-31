@@ -2,6 +2,8 @@ import { expect, test } from "@playwright/test";
 import { createBaseScenario } from "./fixtures/scenarioFactory";
 import { registerScenario } from "./fixtures/registerHook";
 import { recordScenarioCoverage } from "./fixtures/scenarioCoverage";
+import { captureScreenshot, freezeDate } from "./fixtures/visual";
+import { expectDeadlinesEditable } from "./utils/deadlineAssertions";
 import { WizardPage } from "./pages/wizardPage";
 import { TestDataClient } from "./fixtures/testDataClient";
 
@@ -19,10 +21,15 @@ test.describe("Contact Step", () => {
     const wizard = new WizardPage(page);
     const client = new TestDataClient(page);
     recordScenarioCoverage("contact");
+    await freezeDate(page);
 
     await wizard.goto();
+    await expectDeadlinesEditable(page);
     await wizard.startWizard();
     await wizard.contactStep().submit();
+    await captureScreenshot(page, "contact-missing-fields.png", {
+      preserveFocus: true,
+    });
 
     await expect(page.getByTestId("qa-contact-first-name")).toBeFocused();
     const nativeMessage = await page
@@ -40,13 +47,17 @@ test.describe("Contact Step", () => {
     const wizard = new WizardPage(page);
     const client = new TestDataClient(page);
     recordScenarioCoverage("contact");
+    await freezeDate(page);
 
     await wizard.goto();
+    await expectDeadlinesEditable(page);
     await wizard.startWizard();
     await wizard.contactStep().fill(CONTACT);
+    await captureScreenshot(page, "contact-filled.png");
     await wizard.contactStep().submit();
 
     await wizard.contactStep().expectVerificationViewVisible();
+    await captureScreenshot(page, "contact-verification.png");
 
     const stateAfterCreate = await client.getState();
     const bookingIds = Object.keys(stateAfterCreate.bookings);
