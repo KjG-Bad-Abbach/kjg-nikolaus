@@ -11,6 +11,7 @@
     "prod": "pnpm run clean && mix --production",
     "format": "prettier --write .",
     "lint": "prettier --check .",
+    "test:unit": "vitest run --coverage",
     "test:e2e": "playwright test",
     "test:e2e:fast": "playwright test --project=chromium",
     "test:e2e:headed": "playwright test --headed",
@@ -22,6 +23,8 @@
   "license": "ISC",
   "devDependencies": {
     "@playwright/test": "^1.56.1",
+    "@types/node": "^22.18.13",
+    "@vitest/coverage-v8": "^4.0.6",
     "autoprefixer": "^10.4.21",
     "browser-sync": "^3.0.4",
     "browser-sync-webpack-plugin": "^2.4.0",
@@ -30,10 +33,11 @@
     "postcss": "^8.5.6",
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.7.1",
-    "serve": "^14.2.1",
-    "tailwindcss": "^3.4.18",
+    "serve": "^14.2.5",
+    "tailwindcss": "^4.1.16",
+    "vitest": "^4.0.6",
     "webpack": "^5.102.1",
-    "webpack-cli": "^5.1.4"
+    "webpack-cli": "^6.0.1"
   },
   "dependencies": {
     "alpinejs": "^3.15.1"
