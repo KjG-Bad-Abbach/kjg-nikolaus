@@ -7,6 +7,11 @@ import {
 } from "./fixtures/scenarioFactory";
 import { registerScenario } from "./fixtures/registerHook";
 import { recordScenarioCoverage } from "./fixtures/scenarioCoverage";
+import { captureScreenshot, freezeDate } from "./fixtures/visual";
+import {
+  expectDeadlinesEditable,
+  expectDeadlinesLocked,
+} from "./utils/deadlineAssertions";
 import { WizardPage } from "./pages/wizardPage";
 
 test.describe("UI States & Edge Cases", () => {
@@ -60,12 +65,15 @@ test.describe("UI States & Edge Cases", () => {
     });
     const wizard = new WizardPage(page);
     recordScenarioCoverage("intro");
+    await freezeDate(page);
 
     await wizard.goto();
     await expect(page.getByTestId("qa-loading")).toBeVisible();
     await expect(page.getByTestId("qa-loading")).toBeHidden();
     await expect(page.getByTestId("qa-view-intro")).toBeHidden();
     await expect(page.getByTestId("qa-view-steps")).toBeVisible();
+    await expectDeadlinesEditable(page);
+    await captureScreenshot(page, "ui-loading-skip-intro.png");
   });
 
   test("prevents jumping to later steps before booking is created", async ({
@@ -75,14 +83,17 @@ test.describe("UI States & Edge Cases", () => {
     await registerScenario(page, scenario);
     const wizard = new WizardPage(page);
     recordScenarioCoverage("resume");
+    await freezeDate(page);
 
     await wizard.goto();
+    await expectDeadlinesEditable(page);
     await wizard.startWizard();
 
     await page.getByTestId("qa-step-address").click();
 
     await expect(page.getByTestId("qa-contact-form")).toBeVisible();
     await expect(page.getByTestId("qa-address-form")).toBeHidden();
+    await captureScreenshot(page, "ui-prevent-jump.png");
   });
 
   test("prompts about unsaved changes when navigating steps in resume flow", async ({
@@ -92,8 +103,10 @@ test.describe("UI States & Edge Cases", () => {
     await registerScenario(page, scenario);
     const wizard = new WizardPage(page);
     recordScenarioCoverage("resume");
+    await freezeDate(page);
 
     await wizard.goto("?id=booking-existing");
+    await expectDeadlinesEditable(page);
     await wizard.jumpToStep("contact");
     await page.getByTestId("qa-contact-phone").fill("+49 111 222222");
 
@@ -103,6 +116,7 @@ test.describe("UI States & Edge Cases", () => {
     });
     await page.getByTestId("qa-step-address").click();
     await expect(page.getByTestId("qa-contact-form")).toBeVisible();
+    await captureScreenshot(page, "ui-unsaved-dialog.png");
 
     page.removeAllListeners("dialog");
     await page.once("dialog", async (dialog) => {
@@ -110,6 +124,7 @@ test.describe("UI States & Edge Cases", () => {
     });
     await page.getByTestId("qa-step-address").click();
     await expect(page.getByTestId("qa-address-form")).toBeVisible();
+    await captureScreenshot(page, "ui-unsaved-accepted.png");
 
     page.on("dialog", (dialog) => dialog.accept());
   });
@@ -121,8 +136,10 @@ test.describe("UI States & Edge Cases", () => {
     await registerScenario(page, scenario);
     const wizard = new WizardPage(page);
     recordScenarioCoverage("readOnly", "addressDeadline");
+    await freezeDate(page);
 
     await wizard.goto("?id=booking-existing");
+    await expectDeadlinesLocked(page);
 
     await expect(page.getByTestId("qa-deadline-route-planning")).toHaveClass(
       /line-through/,
@@ -136,6 +153,7 @@ test.describe("UI States & Edge Cases", () => {
     await wizard.jumpToStep("children");
     await expect(page.getByTestId("qa-child-name-0")).not.toBeEditable();
     await expect(page.getByTestId("qa-additional-notes")).not.toBeEditable();
+    await captureScreenshot(page, "ui-deadline-lock.png");
   });
 
   test("allows removing selected time slots and warns when below max selection", async ({
@@ -145,9 +163,11 @@ test.describe("UI States & Edge Cases", () => {
     await registerScenario(page, scenario);
     const wizard = new WizardPage(page);
     recordScenarioCoverage("timeSlot");
+    await freezeDate(page);
 
     await wizard.goto("?id=booking-existing");
     await wizard.jumpToStep("time-slot");
+    await expectDeadlinesEditable(page);
 
     const slotToAdd = scenario.timeSlots[1].documentId;
     await wizard.timeSlotStep().toggleSlot(slotToAdd);
@@ -164,6 +184,7 @@ test.describe("UI States & Edge Cases", () => {
     await expect(page.getByTestId("qa-time-slot-form")).toContainText(
       "Bitte wähle mindestens",
     );
+    await captureScreenshot(page, "ui-time-slot-warning.png");
   });
 
   test("hides time-slot search input when disabled in config", async ({
@@ -174,12 +195,15 @@ test.describe("UI States & Edge Cases", () => {
     await registerScenario(page, scenario);
     const wizard = new WizardPage(page);
     recordScenarioCoverage("timeSlot");
+    await freezeDate(page);
 
     await wizard.goto("?id=booking-existing");
+    await expectDeadlinesEditable(page);
     await wizard.jumpToStep("time-slot");
 
     await expect(page.getByTestId("qa-time-slot-search")).toBeHidden();
     await expect(page.getByTestId("qa-time-slot-form")).toBeVisible();
+    await captureScreenshot(page, "ui-search-hidden.png");
   });
 
   test("shows route-complete summary banner while other details are missing", async ({
@@ -204,12 +228,15 @@ test.describe("UI States & Edge Cases", () => {
     await registerScenario(page, scenario);
     const wizard = new WizardPage(page);
     recordScenarioCoverage("summary");
+    await freezeDate(page);
 
     await wizard.goto("?id=booking-existing");
+    await expectDeadlinesEditable(page);
     await wizard.jumpToStep("summary");
 
     await expect(page.getByTestId("qa-summary-route-complete")).toBeVisible();
     await expect(page.getByTestId("qa-summary-details-missing")).toBeVisible();
+    await captureScreenshot(page, "ui-summary-route-complete.png");
   });
 
   test("displays error modal details for failed time-slot fetch", async ({
@@ -229,18 +256,18 @@ test.describe("UI States & Edge Cases", () => {
     await registerScenario(page, scenario);
     const wizard = new WizardPage(page);
     recordScenarioCoverage("timeSlot", "errorModal");
+    await freezeDate(page);
 
     await wizard.goto("?id=booking-existing");
+    await expectDeadlinesEditable(page);
 
     await wizard.errorModal().expectVisible();
     const codeBlock = page.locator("code").first();
     const detailsToggle = page.getByTestId("qa-error-details-toggle");
-    if (await detailsToggle.isVisible()) {
-      await wizard.errorModal().openDetails();
-      await expect(codeBlock).toContainText("TIME_SLOT_FETCH_FAILED");
-    } else {
-      await expect(detailsToggle).toBeHidden();
-    }
+    await expect(detailsToggle).toBeVisible();
+    await wizard.errorModal().openDetails();
+    await expect(codeBlock).toContainText("TIME_SLOT_FETCH_FAILED");
+    await captureScreenshot(page, "ui-error-time-slot.png");
     await wizard.errorModal().dismiss();
     await expect(page.getByTestId("qa-error-modal")).toBeHidden();
 
@@ -267,8 +294,10 @@ test.describe("UI States & Edge Cases", () => {
     await registerScenario(page, scenario);
     const wizard = new WizardPage(page);
     recordScenarioCoverage("contact", "errorModal");
+    await freezeDate(page);
 
     await wizard.goto();
+    await expectDeadlinesEditable(page);
     await wizard.startWizard();
     await wizard.contactStep().fill({
       firstName: "Jara",
@@ -278,6 +307,7 @@ test.describe("UI States & Edge Cases", () => {
     });
     await wizard.contactStep().submit();
     await wizard.contactStep().expectVerificationViewVisible();
+    await expectDeadlinesEditable(page);
 
     await wizard.contactStep().resendVerification();
     await wizard.errorModal().expectVisible();
@@ -289,6 +319,7 @@ test.describe("UI States & Edge Cases", () => {
       await wizard.errorModal().openDetails();
       await expect(page.locator("code").first()).toContainText("SEND_FAIL");
     }
+    await captureScreenshot(page, "ui-resend-error.png");
     await wizard.errorModal().dismiss();
     await expect(page.getByTestId("qa-email-verification")).toBeVisible();
   });
@@ -299,14 +330,19 @@ test.describe("UI States & Edge Cases", () => {
     withoutLinks.config.privacy_policy_link = null;
     await registerScenario(page, withoutLinks);
     const wizard = new WizardPage(page);
+    await freezeDate(page);
 
     await wizard.goto();
+    await expectDeadlinesEditable(page);
     await expect(page.locator("a", { hasText: "Impressum" })).toBeHidden();
     await expect(page.locator("a", { hasText: "Datenschutz" })).toBeHidden();
+    await captureScreenshot(page, "ui-footer-hidden.png");
 
     const withLinks = createBaseScenario();
     await registerScenario(page, withLinks);
+    await freezeDate(page);
     await wizard.goto();
+    await expectDeadlinesEditable(page);
     await expect(page.locator("a", { hasText: "Impressum" })).toHaveAttribute(
       "href",
       withLinks.config.legal_notice_link!,
@@ -315,5 +351,6 @@ test.describe("UI States & Edge Cases", () => {
       "href",
       withLinks.config.privacy_policy_link!,
     );
+    await captureScreenshot(page, "ui-footer-visible.png");
   });
 });

@@ -10,11 +10,17 @@ export class TimeSlotStep {
   }
 
   async toggleSlot(slotId: string) {
-    await this.page.getByTestId(`qa-time-slot-${slotId}`).click();
+    const slot = this.page.getByTestId(`qa-time-slot-${slotId}`);
+    await expect(slot).toBeVisible();
+    await slot.click();
   }
 
   async removeSelected(slotId: string) {
-    await this.page.getByTestId(`qa-remove-selected-slot-${slotId}`).click();
+    const removeButton = this.page.getByTestId(
+      `qa-remove-selected-slot-${slotId}`,
+    );
+    await expect(removeButton).toBeVisible();
+    await removeButton.click();
   }
 
   async submit() {

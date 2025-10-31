@@ -2797,7 +2797,17 @@
             } catch (error) {
               console.error(error);
               this.isLoading = oldIsLoading;
-              this.error = error.message || "Failed to fetch time-slots";
+              if (error && typeof error === "object") {
+                this.error = {
+                  message: error.message || "Failed to fetch time-slots",
+                  status: error.status,
+                  body: error.body,
+                };
+              } else {
+                this.error = {
+                  message: error || "Failed to fetch time-slots",
+                };
+              }
             }
           },
 
