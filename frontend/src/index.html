@@ -14,6 +14,7 @@
     <div
       class="mx-auto w-full max-w-3xl text-center"
       x-data="bookingForm"
+      data-testid="qa-booking-root"
       x-init="updateCanEdit(); setInterval(() => updateCanEdit(), 1000)"
     >
       <h1 class="mx-2 mb-4 text-4xl font-bold text-calypso">
@@ -27,6 +28,7 @@
       <!-- Introduction Text -->
       <div
         x-show="view === 'intro'"
+        data-testid="qa-view-intro"
         class="mx-2 my-8 space-y-6 rounded-lg bg-white p-6 text-left shadow-md"
         x-cloak
       >
@@ -35,6 +37,7 @@
         <div class="text-center">
           <button
             @click="view = 'steps'"
+            data-testid="qa-intro-start"
             class="rounded bg-atlantis px-6 py-2 font-bold text-white hover:bg-surfie-green focus:outline-none focus:ring-2 focus:ring-java focus:ring-opacity-50"
           >
             Jetzt anmelden
@@ -43,9 +46,12 @@
       </div>
 
       <!-- Deadlines -->
-      <div class="mx-2 mt-4 text-calypso">
+      <div class="mx-2 mt-4 text-calypso" data-testid="qa-deadlines">
         <p class="font-bold">Wichtige Termine:</p>
-        <p :class="canEditRoutePlanning ? '' : 'line-through text-calypso-700'">
+        <p
+          :class="canEditRoutePlanning ? '' : 'line-through text-calypso-700'"
+          data-testid="qa-deadline-route-planning"
+        >
           Adresse und Zeitslots:
           <span
             x-text="formatDateTime(options.route_planning_deadline)"
@@ -53,7 +59,10 @@
           ></span>
           <span class="text-sm">(wichtig für Routenplanung)</span>
         </p>
-        <p :class="canEditAnything ? '' : 'line-through text-calypso-700'">
+        <p
+          :class="canEditAnything ? '' : 'line-through text-calypso-700'"
+          data-testid="qa-deadline-final"
+        >
           Finale Deadline:
           <span
             x-text="formatDateTime(options.final_deadline)"
@@ -66,6 +75,7 @@
       <!-- Loading Spinner -->
       <div
         x-show="isLoading"
+        data-testid="qa-loading"
         class="my-8 flex items-center justify-center"
         x-cloak
       >
@@ -87,7 +97,7 @@
       </div>
 
       <!-- View for steps -->
-      <div x-show="view === 'steps'" x-cloak>
+      <div x-show="view === 'steps'" data-testid="qa-view-steps" x-cloak>
         <!-- Show Steps -->
         <div class="mx-2 mb-4 mt-8">
           <h2 class="sr-only">Schritte</h2>
@@ -126,12 +136,14 @@
               class="relative flex-grow after:absolute after:inset-x-0 after:top-1/2 after:block after:h-0.5 after:-translate-y-1/2 after:rounded-lg after:bg-java-500"
             >
               <ol
+                data-testid="qa-stepper"
                 class="relative z-10 flex justify-between text-sm font-medium text-calypso"
               >
                 <!-- Loop through the steps -->
                 <template x-for="(x, index) in steps" :key="index">
                   <li
                     x-on:click="setStep(index)"
+                    :data-testid="'qa-step-' + x.testId"
                     :class="canJumpToAnyStep || step === index ? 'hover:text-calypso-950 cursor-pointer' : 'cursor-not-allowed'"
                     class="group flex select-none items-center gap-1 bg-java p-1"
                     :title="x.name"
@@ -587,7 +599,7 @@
               werden)
             </p>
 
-            <form class="space-y-6" @submit.prevent="submitContactDetails">
+            <form data-testid="qa-contact-form" class="space-y-6" @submit.prevent="submitContactDetails">
               <div>
                 <label
                   for="first_name"
@@ -597,6 +609,7 @@
                 <input
                   type="text"
                   id="first_name"
+                  data-testid="qa-contact-first-name"
                   required
                   class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
                   x-model="booking.contact_person.first_name"
@@ -624,6 +637,7 @@
                 <input
                   type="text"
                   id="last_name"
+                  data-testid="qa-contact-last-name"
                   required
                   class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
                   x-model="booking.contact_person.last_name"
@@ -651,6 +665,7 @@
                 <input
                   type="email"
                   id="email"
+                  data-testid="qa-contact-email"
                   required
                   class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
                   x-model="booking.contact_person.email"
@@ -678,6 +693,7 @@
                 <input
                   type="tel"
                   id="phone_number"
+                  data-testid="qa-contact-phone"
                   required
                   class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
                   x-model="booking.contact_person.phone_number"
@@ -700,6 +716,7 @@
               <div x-show="canEditAnything" class="mt-6" x-cloak>
                 <button
                   type="submit"
+                  data-testid="qa-contact-submit"
                   class="w-full rounded bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:outline-none focus:ring-2 focus:ring-java focus:ring-opacity-50"
                 >
                   Speichern & Weiter
@@ -741,7 +758,7 @@
               werden)
             </p>
 
-            <form class="space-y-6" @submit.prevent="submitAddress">
+            <form data-testid="qa-address-form" class="space-y-6" @submit.prevent="submitAddress">
               <div>
                 <label
                   for="street"
@@ -751,6 +768,7 @@
                 <input
                   type="text"
                   id="street"
+                  data-testid="qa-address-street"
                   required
                   class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
                   x-model="booking.location.street"
@@ -777,6 +795,7 @@
                 <input
                   type="text"
                   id="house_number"
+                  data-testid="qa-address-house-number"
                   required
                   class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
                   x-model="booking.location.house_number"
@@ -803,6 +822,7 @@
                 <input
                   type="number"
                   id="zip_code"
+                  data-testid="qa-address-zip"
                   required
                   class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
                   x-model="booking.location.zip_code"
@@ -831,6 +851,7 @@
                 <input
                   type="text"
                   id="place"
+                  data-testid="qa-address-place"
                   required
                   class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
                   x-model="booking.location.place"
@@ -888,6 +909,7 @@
                 <input
                   type="text"
                   id="present_location"
+                  data-testid="qa-address-present-location"
                   class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
                   x-model="booking.present_location"
                   maxlength="200"
@@ -909,6 +931,7 @@
               <div x-show="canEditAnything" class="mt-6" x-cloak>
                 <button
                   type="submit"
+                  data-testid="qa-address-submit"
                   class="w-full rounded bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:outline-none focus:ring-2 focus:ring-java focus:ring-opacity-50"
                 >
                   Speichern & Weiter
@@ -985,6 +1008,7 @@
                 class="w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
                 x-model="timeSlotSearchQuery"
                 placeholder="Suche nach Zeitslots..."
+                data-testid="qa-time-slot-search"
               />
             </div>
 
@@ -1010,6 +1034,7 @@
                           'border-2': slot.isSelected,
                           'm-0.5': !slot.isSelected,
                         }"
+                        :data-testid="'qa-time-slot-' + slot.id"
                         class="flex items-center rounded-lg border p-3 shadow-sm"
                       >
                         <input
@@ -1048,6 +1073,7 @@
               <ul class="space-y-2">
                 <template x-for="slotId in selectedTimeSlotIds" :key="slotId">
                   <li
+                    :data-testid="'qa-selected-time-slot-' + slotId"
                     class="flex items-center justify-between rounded-md bg-gray-100 p-2"
                   >
                     <span
@@ -1057,6 +1083,7 @@
                       x-show="canEditRoutePlanning"
                       :disabled="!canEditRoutePlanning"
                       @click="updateTimeSlot(slotId, false)"
+                      :data-testid="'qa-remove-selected-slot-' + slotId"
                       class="text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-java-500 focus:ring-opacity-50"
                       x-cloak
                     >
@@ -1078,7 +1105,7 @@
               </ul>
             </div>
 
-            <form class="space-y-6" @submit.prevent="submitTimeSlots">
+            <form data-testid="qa-time-slot-form" class="space-y-6" @submit.prevent="submitTimeSlots">
               <!-- If not all possible time-slots until options.max_time_slots are selected, show a warning -->
               <p
                 class="mt-4 text-rust"
@@ -1095,6 +1122,7 @@
               <div x-show="canEditRoutePlanning" class="mt-6" x-cloak>
                 <button
                   type="submit"
+                  data-testid="qa-time-slot-submit"
                   class="w-full rounded bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:outline-none focus:ring-2 focus:ring-java focus:ring-opacity-50"
                 >
                   Speichern & Weiter
@@ -1186,7 +1214,7 @@
               Bitte füge mindestens ein Kind hinzu.
             </p>
 
-            <form class="space-y-6" @submit.prevent="submitChildren">
+            <form data-testid="qa-children-form" class="space-y-6" @submit.prevent="submitChildren">
               <!-- List of children -->
               <template x-for="(child, index) in booking.children" :key="index">
                 <div
@@ -1200,6 +1228,7 @@
                     >
                     <input
                       :id="'child-name-' + index"
+                      :data-testid="'qa-child-name-' + index"
                       type="text"
                       required
                       maxlength="50"
@@ -1227,6 +1256,7 @@
                     >
                     <input
                       :id="'child-identification-' + index"
+                      :data-testid="'qa-child-identification-' + index"
                       type="text"
                       maxlength="250"
                       class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
@@ -1262,6 +1292,7 @@
                     </div>
                     <textarea
                       :id="'child-speech-' + index"
+                      :data-testid="'qa-child-speech-' + index"
                       class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
                       x-model="child.speech"
                       rows="8"
@@ -1283,6 +1314,7 @@
                     :disabled="!canEditAnything"
                     type="button"
                     @click="removeChild(index)"
+                    :data-testid="'qa-remove-child-' + index"
                     class="mt-2 rounded bg-red-500 px-3 py-1 text-sm font-bold text-white hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-rust focus:ring-opacity-50"
                     x-cloak
                   >
@@ -1297,6 +1329,7 @@
                   type="button"
                   @click="addChild"
                   :disabled="!canEditAnything"
+                  data-testid="qa-add-child"
                   class="rounded bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:outline-none focus:ring-2 focus:ring-java focus:ring-opacity-50"
                 >
                   Kind hinzufügen
@@ -1322,6 +1355,7 @@
                 </div>
                 <textarea
                   id="additional_notes"
+                  data-testid="qa-additional-notes"
                   class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
                   x-model="booking.additional_notes"
                   rows="4"
@@ -1343,6 +1377,7 @@
               <div x-show="canEditAnything" class="mt-6" x-cloak>
                 <button
                   type="submit"
+                  data-testid="qa-children-submit"
                   class="w-full rounded bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:outline-none focus:ring-2 focus:ring-java focus:ring-opacity-50"
                 >
                   Speichern & Weiter
@@ -1361,6 +1396,7 @@
               <button
                 type="button"
                 @click="setStep(4)"
+                data-testid="qa-children-skip"
                 class="w-full rounded border-2 border-atlantis px-4 py-2 font-bold text-atlantis hover:border-surfie-green hover:text-surfie-green focus:outline-none focus:ring-2 focus:ring-java focus:ring-opacity-50"
               >
                 Aktuell überspringen (nicht speichern)
@@ -1371,7 +1407,7 @@
 
         <!-- Step 4: Summary -->
         <template x-if="step === 4" x-cloak>
-          <div class="mx-auto w-full max-w-3xl p-4">
+          <div class="mx-auto w-full max-w-3xl p-4" data-testid="qa-step-panel-summary">
             <h2 class="mb-4 text-2xl font-bold text-calypso">
               Vielen Dank für deine Anmeldung.
             </h2>
@@ -1380,6 +1416,7 @@
             <div
               x-show="isRoutePlanningFilled && !isEverythingFilled"
               class="mb-4 flex items-start gap-2 text-left text-gray-700"
+              data-testid="qa-summary-route-complete"
               x-cloak
             >
               <div class="flex-shrink-0">
@@ -1405,6 +1442,7 @@
             <div
               x-show="!isRoutePlanningFilled"
               class="mb-4 flex items-start gap-2 text-left text-rust"
+              data-testid="qa-summary-route-missing"
               x-cloak
             >
               <div class="flex-shrink-0">
@@ -1438,6 +1476,7 @@
             <div
               x-show="!isEverythingFilled"
               class="mb-4 flex items-start gap-2 text-left text-rust"
+              data-testid="qa-summary-details-missing"
               x-cloak
             >
               <div class="flex-shrink-0">
@@ -1470,12 +1509,18 @@
             </div>
 
             <!-- Success -->
-            <p x-show="isEverythingFilled" class="mb-4 text-gray-700" x-cloak>
+            <p
+              x-show="isEverythingFilled"
+              class="mb-4 text-gray-700"
+              data-testid="qa-summary-all-complete"
+              x-cloak
+            >
               Wir haben alle erforderlichen Informationen erhalten.
             </p>
             <div
               x-show="isEverythingFilled"
               class="my-6 flex items-center justify-center text-atlantis"
+              data-testid="qa-summary-checkmark"
               x-cloak
             >
               <svg
@@ -1548,6 +1593,7 @@
       <template x-if="view === 'email-verification-needed'" x-cloak>
         <div
           class="mx-auto mt-8 w-full max-w-3xl rounded-lg bg-white p-6 shadow-md"
+          data-testid="qa-email-verification"
         >
           <h2 class="mb-4 text-2xl font-bold text-surfie-green">
             E-Mail-Verifizierung
@@ -1572,6 +1618,7 @@
             <button
               type="button"
               x-on:click="sendEmailVerification"
+              data-testid="qa-email-resend"
               class="w-full rounded bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:outline-none focus:ring-2 focus:ring-java focus:ring-opacity-50"
             >
               E-Mail erneut senden
@@ -1627,6 +1674,7 @@
         <div
           class="max-h-[95vh] w-full max-w-lg overflow-y-auto rounded-lg border-s-4 border-red-500 bg-red-50 p-8 text-left shadow-2xl"
           role="alert"
+          data-testid="qa-error-modal"
         >
           <div class="flex items-center gap-2 text-red-800">
             <svg
@@ -1656,6 +1704,7 @@
             <a
               x-on:click="open = !open"
               :class="{ 'font-bold': open }"
+              data-testid="qa-error-details-toggle"
               class="cursor-pointer text-red-700 underline"
               >Details</a
             >
@@ -1681,6 +1730,7 @@
               x-show="askToReload"
               @click="reload()"
               type="button"
+              data-testid="qa-error-retry"
               class="rounded border-2 border-gray-400 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 focus:outline-none focus:ring-2 focus:ring-java-500 focus:ring-opacity-50"
               x-cloak
             >
@@ -1690,6 +1740,7 @@
               x-show="!askToReload"
               @click="closeError()"
               type="button"
+              data-testid="qa-error-dismiss"
               class="rounded border-2 border-gray-400 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 focus:outline-none focus:ring-2 focus:ring-java-500 focus:ring-opacity-50"
               x-cloak
             >
@@ -1701,11 +1752,36 @@
     </div>
 
     <script>
+      const BOOKING_TEST_API_HOOK = "__bookingTestApi";
+      let bookingTestApiWarningShown = false;
+
       async function sendRequest({ url, method = "GET", body = null }) {
         let passthroughErrors = false;
         try {
+          const originalUrl = url;
           // Prepare URL (trim leading slash and trim api/ prefix)
           url = url.replace(/^\/?(?:api\/)?/g, "");
+
+          const hook = window?.[BOOKING_TEST_API_HOOK];
+          if (hook && typeof hook.handleRequest === "function") {
+            if (!bookingTestApiWarningShown) {
+              bookingTestApiWarningShown = true;
+              console.warn(
+                "[Nikolaus Booking] window.__bookingTestApi override is active; HTTP requests are being stubbed.",
+              );
+            }
+            try {
+              return await hook.handleRequest({
+                url,
+                method,
+                body: body ? clone(body) : null,
+                originalUrl,
+              });
+            } catch (hookError) {
+              passthroughErrors = true;
+              throw hookError;
+            }
+          }
 
           // Prepare the fetch options
           const options = {
@@ -2101,11 +2177,11 @@
             }
           },
           steps: [
-            { name: "Kontakt", anyFilled: false, allFilled: false },
-            { name: "Adresse", anyFilled: false, allFilled: false },
-            { name: "Zeitslot", anyFilled: false, allFilled: false },
-            { name: "Kinder", anyFilled: false, allFilled: false },
-            { name: "Kontrolle", anyFilled: false, allFilled: false },
+            { name: "Kontakt", testId: "contact", anyFilled: false, allFilled: false },
+            { name: "Adresse", testId: "address", anyFilled: false, allFilled: false },
+            { name: "Zeitslot", testId: "time-slot", anyFilled: false, allFilled: false },
+            { name: "Kinder", testId: "children", anyFilled: false, allFilled: false },
+            { name: "Kontrolle", testId: "summary", anyFilled: false, allFilled: false },
           ],
           bookingId: null,
           canEditRoutePlanning: false,
