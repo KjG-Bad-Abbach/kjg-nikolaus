@@ -158,16 +158,25 @@ The entire `frontend/src/index.html` booking wizard has been reviewed end-to-end
 ## Test Plan
 
 - **Smoke**: Landing page loads, intro text rendered, wizard transitions to stepper (`smoke.spec.ts`).
+- **Loading & intro states**: Spinner (`qa-loading`) appears during initial config fetch, clears once data resolves; when `introduction_text` is empty the wizard skips straight to `qa-view-steps`.
 - **Contact step**: Required-field validation, phone/email formatting error messaging, successful submission triggers verification view then step advance after reload.
 - **Resume flow**: Start with seeded booking ID; ensures query parameter preloads data, step badges reflect completion, unsaved-changes prompt triggers on navigation.
+- **Stepper navigation guard**: New bookings cannot jump ahead—verify `qa-step-*` clicks/arrow buttons are inert until `canJumpToAnyStep` is true, and cancelling the unsaved-changes dialog keeps the user on the current step.
 - **Address step**: Required validations, optional fields, post-save persistence, read-only state once route-planning deadline passed, summary flag toggles.
+- **Deadlines banner**: With expired deadlines ensure `qa-deadline-route-planning` and `qa-deadline-final` render with the `line-through` class while edit controls stay disabled.
 - **Time-slot step**:
   - Availability rendering grouped by day, search filter, max selection enforcement, removal UI, concurrency conflict (simulate by overbooking).
   - Deadline lock: verify cannot toggle when deadline passed.
+  - Selected slot chips (`qa-selected-time-slot-*`) can be removed via `qa-remove-selected-slot-*`; summary warning for “Bitte … Zeitslots auswählen” shows when count < `options.max_time_slots`.
+  - When `show_search_for_time_slots` is false, the search input stays hidden and the grouped list still renders all slots.
 - **Children step**: Add/remove child, validation for missing name, speech persistence, additional notes optional, skip button path, deadline lock.
+- **Final-deadline lock**: In read-only mode confirm children form controls and additional-notes textarea are non-editable yet summary still reflects stored data.
 - **Summary**: Visual cues for incomplete sections, legal notice/privacy links visibility, final status toggles after deadlines, email verification resend card.
+- **Route-complete banner**: Scenario with address/time slots filled but other data missing should surface `qa-summary-route-complete` alongside remaining warnings.
 - **Error handling**: Modal content for network/offline, detail toggle, retry button reloads data, closing error resets state.
+- **Error modal controls**: Expand details via `qa-error-details-toggle`, dismiss without retry (`qa-error-dismiss`), and cover failures from time-slot fetch plus the resend-verification endpoint.
 - **Footer**: Current year render, legal/privacy links, data deletion text.
+- **Footer toggles**: When config omits legal/privacy URLs the corresponding links stay hidden; when present they open in new tab via target assertions.
 - **Cross-browser/responsive**: Minimal path executed under Firefox/WebKit in scheduled builds and under mobile viewport to catch layout regressions.
 - Collect Playwright traces/videos on failure and HTML report on every run.
 
