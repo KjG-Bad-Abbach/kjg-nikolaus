@@ -1,4 +1,4 @@
-function updateExistingObjectKeys(
+export function updateExistingObjectKeys(
   obj: { [key: string]: any },
   newObj: { [key: string]: any }
 ) {
@@ -20,7 +20,7 @@ function updateExistingObjectKeys(
   });
 }
 
-function extendExistingObjectKeys(
+export function extendExistingObjectKeys(
   obj: { [key: string]: any },
   newObj: { [key: string]: any }
 ) {
