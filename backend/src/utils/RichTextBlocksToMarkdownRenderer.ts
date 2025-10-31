@@ -2,7 +2,7 @@ type Options = { escape?: "lacy" | "strict" };
 
 export class RichTextBlocksToMarkdownRenderer {
   content: any[];
-  unorderedListLevels: ["-", "*", "+"];
+  unorderedListLevels = ["-", "*", "+"] as ["-", "*", "+"];
   options: Options;
 
   constructor(content: any[], options?: Options) {
