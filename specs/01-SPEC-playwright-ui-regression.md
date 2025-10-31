@@ -46,7 +46,7 @@
 ## Decision
 
 - Implement Playwright v1.48+ (use latest) with TypeScript in `frontend/tests/e2e`, using page-object helpers and test fixtures to orchestrate Strapi data and runtime configuration.
-- Integrate Playwright run into CI (GitHub Actions or existing pipeline) gating every pull request; expose `pnpm exec playwright test` scripts in frontend package.json.
+- Integrate Playwright run into CI (GitHub Actions or existing pipeline) gating every pull request.
 - Add `data-testid` hooks to critical DOM nodes to stabilise selectors while keeping user-facing markup unchanged and reusing them post-framework migration.
 - Standardise fixtures on fixed, deterministic timestamps reflecting key deadlines so assertions remain stable across runs.
 - Provide local HTTP stubs around the Strapi Admin/Database REST API to create, mutate, and tear down bookings/config/time-slots without requiring direct database access.
