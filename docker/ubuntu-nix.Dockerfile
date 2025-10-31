@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1.7
-FROM ubuntu:24.04
+FROM mcr.microsoft.com/playwright:v1.56.1
 
-LABEL org.opencontainers.image.description="Ubuntu base image with Nix package manager preinstalled"
+LABEL org.opencontainers.image.description="Playwright base image with Nix package manager preinstalled"
 
 ENV DEBIAN_FRONTEND=noninteractive \
     TZ=Etc/UTC
