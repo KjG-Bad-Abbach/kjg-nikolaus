@@ -2,8 +2,9 @@
 set -euo pipefail
 
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-IMAGE_NAME="${IMAGE_NAME:-kjg-ubuntu-nix}"
-CONTAINER_NAME="${CONTAINER_NAME:-kjg-ubuntu-nix-dev}"
+PROJECT_NAME="${PROJECT_NAME:-$(basename $PROJECT_ROOT)}"
+IMAGE_NAME="${IMAGE_NAME:-ubuntu-nix-$PROJECT_NAME}"
+CONTAINER_NAME="${CONTAINER_NAME:-ubuntu-nix-$PROJECT_NAME-dev}"
 DOCKERFILE_REL="${DOCKERFILE_REL:-docker/ubuntu-nix.Dockerfile}" # allow overrides if needed
 DOCKERFILE_PATH="${PROJECT_ROOT}/${DOCKERFILE_REL}"
 
