@@ -12,7 +12,7 @@
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "format": "prettier --write .",
     "lint": "prettier --check . && eslint .",
-    "test:unit": "vitest",
+    "test:unit": "vitest --browser.headless",
     "test": "pnpm test:unit --run && pnpm test:e2e",
     "test:e2e": "playwright test",
     "storybook": "storybook dev -p 6006",
