@@ -493,7 +493,7 @@ This walkthrough demonstrates the complete TDD process for a simple component.
 **Step 1: Create Test File** (`lib/components/LoadingSpinner.svelte.spec.ts`)
 
 ```typescript
-import { page } from '@vitest/browser/context';
+import { page } from 'vitest/browser';
 import { describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import LoadingSpinner from './LoadingSpinner.svelte';
@@ -644,7 +644,7 @@ For each subsequent component, follow the same pattern:
 
 ```typescript
 // 1. Test file: ComponentName.svelte.spec.ts
-import { page } from '@vitest/browser/context';
+import { page } from 'vitest/browser';
 import { describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import ComponentName from './ComponentName.svelte';
