@@ -32,6 +32,9 @@ else
     --name "${CONTAINER_NAME}" \
     -v "${PROJECT_ROOT}:/workspace" \
     -v "${HOME}/.codex:/home/ubuntu/.codex" \
+    -v "${HOME}/.claude:/home/ubuntu/.claude" \
+    -v "${HOME}/.claude.json:/home/ubuntu/.claude.json" \
+    -v "${HOME}/.claude.json.backup:/home/ubuntu/.claude.json.backup" \
     -w /workspace \
     "${IMAGE_NAME}" \
     "${@:-/bin/bash}"

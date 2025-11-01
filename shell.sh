@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-nix-shell -p codex nodejs pnpm
+NIXPKGS_ALLOW_UNFREE=1 nix-shell -p codex claude-code nodejs pnpm
