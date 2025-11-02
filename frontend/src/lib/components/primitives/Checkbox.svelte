@@ -2,7 +2,7 @@
   import type { HTMLInputAttributes } from 'svelte/elements';
 
   interface CheckboxProps extends HTMLInputAttributes {
-    label: string;
+    label?: string;
     id: string;
   }
 
@@ -21,7 +21,9 @@
 
 <div class="flex items-center">
   <input type="checkbox" {id} {checked} {disabled} class={combinedClasses} {...restProps} />
-  <label for={id} class="ml-2 text-gray-800 select-none peer-disabled:text-gray-300">
-    {label}
-  </label>
+  {#if label}
+    <label for={id} class="ml-2 text-gray-800 select-none peer-disabled:text-gray-300">
+      {label}
+    </label>
+  {/if}
 </div>

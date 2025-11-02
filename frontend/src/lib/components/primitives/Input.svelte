@@ -2,7 +2,7 @@
   import type { HTMLInputAttributes } from 'svelte/elements';
 
   interface InputProps extends HTMLInputAttributes {
-    label: string;
+    label?: string;
     id: string;
     error?: string;
   }
@@ -24,9 +24,11 @@
 </script>
 
 <div class="space-y-1">
-  <label for={id} class="block text-sm font-medium text-gray-700">
-    {label}
-  </label>
+  {#if label}
+    <label for={id} class="block text-sm font-medium text-gray-700">
+      {label}
+    </label>
+  {/if}
   <input {id} {type} {readonly} class={combinedClasses} {...restProps} />
   {#if error}
     <p class="text-sm text-rust">{error}</p>

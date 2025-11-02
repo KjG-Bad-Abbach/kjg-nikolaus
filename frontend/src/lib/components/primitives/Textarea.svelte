@@ -2,7 +2,7 @@
   import type { HTMLTextareaAttributes } from 'svelte/elements';
 
   interface TextareaProps extends HTMLTextareaAttributes {
-    label: string;
+    label?: string;
     id: string;
     error?: string;
   }
@@ -24,9 +24,11 @@
 </script>
 
 <div class="space-y-1">
-  <label for={id} class="block text-sm font-medium text-gray-700">
-    {label}
-  </label>
+  {#if label}
+    <label for={id} class="block text-sm font-medium text-gray-700">
+      {label}
+    </label>
+  {/if}
   <textarea {id} {readonly} {rows} class={combinedClasses} {...restProps}></textarea>
   {#if error}
     <p class="text-sm text-rust">{error}</p>
