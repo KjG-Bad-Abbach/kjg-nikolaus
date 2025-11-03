@@ -130,7 +130,7 @@ export async function sendRequest<T = unknown>({
           code: response.status,
           text: response.statusText,
         },
-        body: responseBody,
+        body: responseBody as ApiError['body'],
       };
 
       passthroughErrors = true;

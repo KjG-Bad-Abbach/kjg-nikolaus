@@ -90,5 +90,21 @@ export interface ApiError {
     code: number;
     text: string;
   };
-  body?: unknown;
+  body?: {
+    error?: {
+      name?: string;
+      details?: {
+        errors?: Array<{
+          path: string[];
+          message: string;
+        }>;
+      };
+    };
+    message?: string;
+    fileName?: string;
+    lineNumber?: number;
+    columnNumber?: number;
+    cause?: unknown;
+    stack?: string[];
+  } & Record<string, unknown>;
 }
