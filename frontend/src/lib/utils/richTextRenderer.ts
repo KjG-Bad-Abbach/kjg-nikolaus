@@ -7,6 +7,9 @@
 import type { RichTextNode } from '$lib/types/booking';
 import { extendExistingObjectKeys, updateExistingObjectKeys } from './object';
 
+// Re-export RichTextNode type for convenience
+export type { RichTextNode };
+
 export interface RichTextClasses {
   heading1?: string;
   heading2?: string;
