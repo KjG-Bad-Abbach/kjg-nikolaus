@@ -1,6 +1,7 @@
 import { optionsStore } from './optionsStore.svelte';
 import { bookingStore } from './bookingStore.svelte';
 import { isFilled } from '$lib/utils/string';
+import { SvelteDate } from 'svelte/reactivity';
 
 /**
  * Derived stores and computed values
@@ -12,14 +13,14 @@ class DerivedStores {
    * Can edit route planning (deadline not passed)
    */
   get canEditRoutePlanning(): boolean {
-    return new Date() < optionsStore.route_planning_deadline;
+    return new SvelteDate() < optionsStore.route_planning_deadline;
   }
 
   /**
    * Can edit anything (final deadline not passed)
    */
   get canEditAnything(): boolean {
-    return new Date() < optionsStore.final_deadline;
+    return new SvelteDate() < optionsStore.final_deadline;
   }
 
   /**
@@ -82,3 +83,4 @@ class DerivedStores {
 }
 
 export const derivedStores = new DerivedStores();
+export type { DerivedStores };

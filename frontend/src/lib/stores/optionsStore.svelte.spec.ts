@@ -1,5 +1,6 @@
 import { describe, expect, it, beforeEach } from 'vitest';
 import { optionsStore } from './optionsStore.svelte';
+import { SvelteDate } from 'svelte/reactivity';
 
 describe('optionsStore', () => {
   beforeEach(() => {
@@ -10,8 +11,10 @@ describe('optionsStore', () => {
     expect(optionsStore.id).toBe(null);
     expect(optionsStore.show_search_for_time_slots).toBe(false);
     expect(optionsStore.max_time_slots).toBe(3);
-    expect(optionsStore.route_planning_deadline).toEqual(new Date('2004-11-27T23:59:59+01:00'));
-    expect(optionsStore.final_deadline).toEqual(new Date('2004-12-01T23:59:59+01:00'));
+    expect(optionsStore.route_planning_deadline).toEqual(
+      new SvelteDate('2004-11-27T23:59:59+01:00'),
+    );
+    expect(optionsStore.final_deadline).toEqual(new SvelteDate('2004-12-01T23:59:59+01:00'));
     expect(optionsStore.introduction_text).toEqual([]);
     expect(optionsStore.privacy_policy_link).toBe(null);
     expect(optionsStore.legal_notice_link).toBe(null);
@@ -30,14 +33,14 @@ describe('optionsStore', () => {
   });
 
   it('should update route_planning_deadline', () => {
-    const newDeadline = new Date('2024-12-05T23:59:59+01:00');
+    const newDeadline = new SvelteDate('2024-12-05T23:59:59+01:00');
     optionsStore.update({ route_planning_deadline: newDeadline });
 
     expect(optionsStore.route_planning_deadline).toEqual(newDeadline);
   });
 
   it('should update final_deadline', () => {
-    const newDeadline = new Date('2024-12-10T23:59:59+01:00');
+    const newDeadline = new SvelteDate('2024-12-10T23:59:59+01:00');
     optionsStore.update({ final_deadline: newDeadline });
 
     expect(optionsStore.final_deadline).toEqual(newDeadline);

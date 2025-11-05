@@ -166,3 +166,4 @@ class BookingStore {
 }
 
 export const bookingStore = new BookingStore();
+export type { BookingStore };

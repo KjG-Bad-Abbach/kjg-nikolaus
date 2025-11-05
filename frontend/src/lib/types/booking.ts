@@ -3,6 +3,8 @@
  * Migrated from Alpine.js frontend to Svelte
  */
 
+import type { SvelteDate } from 'svelte/reactivity';
+
 export interface ContactPerson {
   first_name: string;
   last_name: string;
@@ -61,10 +63,11 @@ export interface RichTextNode {
 
 export interface Config {
   id: string;
+  documentId?: string;
   show_search_for_time_slots: boolean;
   max_time_slots: number;
-  route_planning_deadline: Date;
-  final_deadline: Date;
+  route_planning_deadline: SvelteDate;
+  final_deadline: SvelteDate;
   introduction_text: RichTextNode[];
   privacy_policy_link: string | null;
   legal_notice_link: string | null;
@@ -108,3 +111,6 @@ export interface ApiError {
     stack?: string[];
   } & Record<string, unknown>;
 }
+
+// Re-export DerivedStores from stores for convenience in tests
+export type { DerivedStores } from '$lib/stores/derivedStores.svelte';

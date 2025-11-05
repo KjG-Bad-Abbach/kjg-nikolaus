@@ -1,4 +1,5 @@
 import type { RichTextNode } from '$lib/utils/richTextRenderer';
+import { SvelteDate } from 'svelte/reactivity';
 
 /**
  * Configuration options store
@@ -9,8 +10,8 @@ export interface Options {
   id: string | null;
   show_search_for_time_slots: boolean;
   max_time_slots: number;
-  route_planning_deadline: Date;
-  final_deadline: Date;
+  route_planning_deadline: SvelteDate;
+  final_deadline: SvelteDate;
   introduction_text: RichTextNode[];
   privacy_policy_link: string | null;
   legal_notice_link: string | null;
@@ -20,8 +21,8 @@ class OptionsStore {
   id = $state<string | null>(null);
   show_search_for_time_slots = $state(false);
   max_time_slots = $state(3);
-  route_planning_deadline = $state(new Date('2004-11-27T23:59:59+01:00'));
-  final_deadline = $state(new Date('2004-12-01T23:59:59+01:00'));
+  route_planning_deadline = $state(new SvelteDate('2004-11-27T23:59:59+01:00'));
+  final_deadline = $state(new SvelteDate('2004-12-01T23:59:59+01:00'));
   introduction_text = $state<RichTextNode[]>([]);
   privacy_policy_link = $state<string | null>(null);
   legal_notice_link = $state<string | null>(null);
@@ -49,8 +50,8 @@ class OptionsStore {
     this.id = null;
     this.show_search_for_time_slots = false;
     this.max_time_slots = 3;
-    this.route_planning_deadline = new Date('2004-11-27T23:59:59+01:00');
-    this.final_deadline = new Date('2004-12-01T23:59:59+01:00');
+    this.route_planning_deadline = new SvelteDate('2004-11-27T23:59:59+01:00');
+    this.final_deadline = new SvelteDate('2004-12-01T23:59:59+01:00');
     this.introduction_text = [];
     this.privacy_policy_link = null;
     this.legal_notice_link = null;
@@ -58,3 +59,4 @@ class OptionsStore {
 }
 
 export const optionsStore = new OptionsStore();
+export type { OptionsStore };

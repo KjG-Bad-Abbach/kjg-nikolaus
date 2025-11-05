@@ -2,6 +2,7 @@ import { describe, expect, it, beforeEach } from 'vitest';
 import { derivedStores } from './derivedStores.svelte';
 import { optionsStore } from './optionsStore.svelte';
 import { bookingStore } from './bookingStore.svelte';
+import { SvelteDate } from 'svelte/reactivity';
 
 describe('derivedStores', () => {
   beforeEach(() => {
@@ -11,7 +12,7 @@ describe('derivedStores', () => {
 
   describe('canEditRoutePlanning', () => {
     it('should return true when route planning deadline is in future', () => {
-      const futureDate = new Date();
+      const futureDate = new SvelteDate();
       futureDate.setDate(futureDate.getDate() + 7);
       optionsStore.update({ route_planning_deadline: futureDate });
 
@@ -19,7 +20,7 @@ describe('derivedStores', () => {
     });
 
     it('should return false when route planning deadline is in past', () => {
-      const pastDate = new Date('2004-11-27T23:59:59+01:00');
+      const pastDate = new SvelteDate('2004-11-27T23:59:59+01:00');
       optionsStore.update({ route_planning_deadline: pastDate });
 
       expect(derivedStores.canEditRoutePlanning).toBe(false);
@@ -28,7 +29,7 @@ describe('derivedStores', () => {
 
   describe('canEditAnything', () => {
     it('should return true when final deadline is in future', () => {
-      const futureDate = new Date();
+      const futureDate = new SvelteDate();
       futureDate.setDate(futureDate.getDate() + 7);
       optionsStore.update({ final_deadline: futureDate });
 
@@ -36,7 +37,7 @@ describe('derivedStores', () => {
     });
 
     it('should return false when final deadline is in past', () => {
-      const pastDate = new Date('2004-12-01T23:59:59+01:00');
+      const pastDate = new SvelteDate('2004-12-01T23:59:59+01:00');
       optionsStore.update({ final_deadline: pastDate });
 
       expect(derivedStores.canEditAnything).toBe(false);

@@ -63,3 +63,4 @@ class ValidationStore {
 }
 
 export const validationStore = new ValidationStore();
+export type { ValidationStore };

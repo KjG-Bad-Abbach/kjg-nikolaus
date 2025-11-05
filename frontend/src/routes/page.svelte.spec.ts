@@ -2,6 +2,7 @@ import { page } from 'vitest/browser';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import Page from './+page.svelte';
+import { SvelteDate } from 'svelte/reactivity';
 
 // Mock the API client
 vi.mock('$lib/api/client', () => ({
@@ -22,8 +23,8 @@ describe('/+page.svelte', () => {
         id: '1',
         show_search_for_time_slots: false,
         max_time_slots: 3,
-        route_planning_deadline: new Date('2024-12-01').toISOString(),
-        final_deadline: new Date('2024-12-05').toISOString(),
+        route_planning_deadline: new SvelteDate('2024-12-01').toISOString(),
+        final_deadline: new SvelteDate('2024-12-05').toISOString(),
         introduction_text: [],
         privacy_policy_link: null,
         legal_notice_link: null,

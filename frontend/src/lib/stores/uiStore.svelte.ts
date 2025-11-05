@@ -175,3 +175,4 @@ class UIStore {
 }
 
 export const uiStore = new UIStore();
+export type { UIStore, Step };
