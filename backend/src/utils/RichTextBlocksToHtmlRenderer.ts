@@ -80,14 +80,14 @@ export class RichTextBlocksToHtmlRenderer {
       orderedList: "",
       orderedListLevels: [
         "list-decimal",
-        "list-[lower-alpha]",
-        "list-[lower-roman]",
+        "list-lower-alpha",
+        "list-lower-roman",
       ],
       unorderedList: "",
       unorderedListLevels: ["list-disc", "list-circle", "list-square"],
       listItem: "mb-1",
       link: "text-blue-600 hover:underline",
-      code: "bg-gray-100 rounded px-1 font-mono",
+      code: "bg-gray-100 rounded-sm px-1 font-mono",
     };
     // extend defaultClasses with provided classes (overwrites existing ones)
     updateExistingObjectKeys(this.defaultClasses, defaultClasses);

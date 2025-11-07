@@ -174,7 +174,7 @@ describe("booking wizard helpers", () => {
     expect(html).toMatch(/<ol class="[^"]*list-\[lower-alpha]/);
     expect(html).toMatch(/<ul class="[^"]*list-square/);
     expect(html).toMatch(
-      /<code class="bg-gray-100 rounded px-1 font-mono">Code<\/code>/,
+      /<code class="bg-gray-100 rounded-sm px-1 font-mono">Code<\/code>/,
     );
     expect(html).toContain("<strong");
     expect(html).toContain("<em");
