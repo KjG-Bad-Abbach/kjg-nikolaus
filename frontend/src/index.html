@@ -38,7 +38,7 @@
           <button
             @click="view = 'steps'"
             data-testid="qa-intro-start"
-            class="bg-atlantis hover:bg-surfie-green focus:ring-java focus:ring-opacity-50 rounded px-6 py-2 font-bold text-white focus:ring-2 focus:outline-none"
+            class="bg-atlantis hover:bg-surfie-green focus:ring-java focus:ring-opacity-50 rounded-sm px-6 py-2 font-bold text-white focus:ring-2 focus:outline-hidden"
           >
             Jetzt anmelden
           </button>
@@ -107,7 +107,7 @@
             <button
               x-show="canJumpToAnyStep"
               @click="step > 0 ? setStep(step - 1) : null"
-              class="text-calypso focus:ring-java-500 focus:ring-opacity-50 flex-none cursor-pointer py-2 font-bold select-none focus:ring-2 focus:outline-none"
+              class="text-calypso focus:ring-java-500 focus:ring-opacity-50 flex-none cursor-pointer py-2 font-bold select-none focus:ring-2 focus:outline-hidden"
               :class="step <= 0 ? 'opacity-50 cursor-not-allowed' : 'hover:text-calypso-950'"
               :disabled="step <= 0"
               aria-hidden="true"
@@ -133,7 +133,7 @@
 
             <!-- Step Progress Bar -->
             <div
-              class="after:bg-java-500 relative flex-grow after:absolute after:inset-x-0 after:top-1/2 after:block after:h-0.5 after:-translate-y-1/2 after:rounded-lg"
+              class="after:bg-java-500 relative grow after:absolute after:inset-x-0 after:top-1/2 after:block after:h-0.5 after:-translate-y-1/2 after:rounded-lg"
             >
               <ol
                 data-testid="qa-stepper"
@@ -198,7 +198,7 @@
             <button
               x-show="canJumpToAnyStep"
               @click="step < steps.length - 1 ? setStep(step + 1) : null"
-              class="text-calypso focus:ring-java-500 focus:ring-opacity-50 flex-none cursor-pointer py-2 font-bold select-none focus:ring-2 focus:outline-none"
+              class="text-calypso focus:ring-java-500 focus:ring-opacity-50 flex-none cursor-pointer py-2 font-bold select-none focus:ring-2 focus:outline-hidden"
               :class="step >= steps.length - 1 ? 'opacity-50 cursor-not-allowed' : 'hover:text-calypso-950'"
               :disabled="step >= steps.length - 1"
               aria-hidden="true"
@@ -615,7 +615,7 @@
                   id="first_name"
                   data-testid="qa-contact-first-name"
                   required
-                  class="focus:border-atlantis focus:ring-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
+                  class="focus:border-atlantis focus:ring-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-xs"
                   x-model="booking.contact_person.first_name"
                   maxlength="50"
                   placeholder="Vorname"
@@ -643,7 +643,7 @@
                   id="last_name"
                   data-testid="qa-contact-last-name"
                   required
-                  class="focus:border-atlantis focus:ring-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
+                  class="focus:border-atlantis focus:ring-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-xs"
                   x-model="booking.contact_person.last_name"
                   maxlength="50"
                   placeholder="Nachname"
@@ -671,7 +671,7 @@
                   id="email"
                   data-testid="qa-contact-email"
                   required
-                  class="focus:border-atlantis focus:ring-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
+                  class="focus:border-atlantis focus:ring-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-xs"
                   x-model="booking.contact_person.email"
                   maxlength="100"
                   placeholder="example@example.com"
@@ -699,7 +699,7 @@
                   id="phone_number"
                   data-testid="qa-contact-phone"
                   required
-                  class="focus:border-atlantis focus:ring-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
+                  class="focus:border-atlantis focus:ring-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-xs"
                   x-model="booking.contact_person.phone_number"
                   maxlength="50"
                   placeholder="0123 4567890"
@@ -717,11 +717,11 @@
               </div>
 
               <!-- Submit Button -->
-              <div x-show="canEditAnything" class="mt-6" x-cloak>
+              <div x-show="canEditAnything" x-cloak>
                 <button
                   type="submit"
                   data-testid="qa-contact-submit"
-                  class="bg-atlantis hover:bg-surfie-green focus:ring-java focus:ring-opacity-50 w-full rounded px-4 py-2 font-bold text-white focus:ring-2 focus:outline-none"
+                  class="bg-atlantis hover:bg-surfie-green focus:ring-java focus:ring-opacity-50 w-full rounded-sm px-4 py-2 font-bold text-white focus:ring-2 focus:outline-hidden"
                 >
                   Speichern & Weiter
                 </button>
@@ -778,7 +778,7 @@
                   id="street"
                   data-testid="qa-address-street"
                   required
-                  class="focus:border-atlantis focus:ring-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
+                  class="focus:border-atlantis focus:ring-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-xs"
                   x-model="booking.location.street"
                   maxlength="100"
                   placeholder="Straße"
@@ -805,7 +805,7 @@
                   id="house_number"
                   data-testid="qa-address-house-number"
                   required
-                  class="focus:border-atlantis focus:ring-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
+                  class="focus:border-atlantis focus:ring-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-xs"
                   x-model="booking.location.house_number"
                   maxlength="10"
                   placeholder="Hausnummer"
@@ -832,7 +832,7 @@
                   id="zip_code"
                   data-testid="qa-address-zip"
                   required
-                  class="focus:border-atlantis focus:ring-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
+                  class="focus:border-atlantis focus:ring-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-xs"
                   x-model="booking.location.zip_code"
                   max="99999"
                   min="00000"
@@ -861,7 +861,7 @@
                   id="place"
                   data-testid="qa-address-place"
                   required
-                  class="focus:border-atlantis focus:ring-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
+                  class="focus:border-atlantis focus:ring-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-xs"
                   x-model="booking.location.place"
                   maxlength="100"
                   placeholder="Ort"
@@ -918,7 +918,7 @@
                   type="text"
                   id="present_location"
                   data-testid="qa-address-present-location"
-                  class="focus:border-atlantis focus:ring-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
+                  class="focus:border-atlantis focus:ring-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-xs"
                   x-model="booking.present_location"
                   maxlength="200"
                   placeholder="Wo können wir die Geschenke finden?"
@@ -936,11 +936,11 @@
               </div>
 
               <!-- Submit Button -->
-              <div x-show="canEditAnything" class="mt-6" x-cloak>
+              <div x-show="canEditAnything" x-cloak>
                 <button
                   type="submit"
                   data-testid="qa-address-submit"
-                  class="bg-atlantis hover:bg-surfie-green focus:ring-java focus:ring-opacity-50 w-full rounded px-4 py-2 font-bold text-white focus:ring-2 focus:outline-none"
+                  class="bg-atlantis hover:bg-surfie-green focus:ring-java focus:ring-opacity-50 w-full rounded-sm px-4 py-2 font-bold text-white focus:ring-2 focus:outline-hidden"
                 >
                   Speichern & Weiter
                 </button>
@@ -1013,7 +1013,7 @@
             >
               <input
                 type="text"
-                class="focus:border-atlantis focus:ring-atlantis w-full rounded-md border border-gray-300 p-2 shadow-sm"
+                class="focus:border-atlantis focus:ring-atlantis w-full rounded-md border border-gray-300 p-2 shadow-xs"
                 x-model="timeSlotSearchQuery"
                 placeholder="Suche nach Zeitslots..."
                 data-testid="qa-time-slot-search"
@@ -1043,7 +1043,7 @@
                           'm-0.5': !slot.isSelected,
                         }"
                         :data-testid="'qa-time-slot-' + slot.id"
-                        class="flex items-center rounded-lg border p-3 shadow-sm"
+                        class="flex items-center rounded-lg border p-3 shadow-xs"
                       >
                         <input
                           type="checkbox"
@@ -1092,7 +1092,7 @@
                       :disabled="!canEditRoutePlanning"
                       @click="updateTimeSlot(slotId, false)"
                       :data-testid="'qa-remove-selected-slot-' + slotId"
-                      class="focus:ring-java-500 focus:ring-opacity-50 text-gray-500 hover:text-gray-700 focus:ring-2 focus:outline-none"
+                      class="focus:ring-java-500 focus:ring-opacity-50 text-gray-500 hover:text-gray-700 focus:ring-2 focus:outline-hidden"
                       x-cloak
                     >
                       <svg
@@ -1115,7 +1115,7 @@
 
             <form
               data-testid="qa-time-slot-form"
-              class="space-y-6"
+              class="mt-6 space-y-6"
               @submit.prevent="submitTimeSlots"
             >
               <!-- If not all possible time-slots until options.max_time_slots are selected, show a warning -->
@@ -1131,11 +1131,11 @@
               </p>
 
               <!-- Submit Button -->
-              <div x-show="canEditRoutePlanning" class="mt-6" x-cloak>
+              <div x-show="canEditRoutePlanning" x-cloak>
                 <button
                   type="submit"
                   data-testid="qa-time-slot-submit"
-                  class="bg-atlantis hover:bg-surfie-green focus:ring-java focus:ring-opacity-50 w-full rounded px-4 py-2 font-bold text-white focus:ring-2 focus:outline-none"
+                  class="bg-atlantis hover:bg-surfie-green focus:ring-java focus:ring-opacity-50 w-full rounded-sm px-4 py-2 font-bold text-white focus:ring-2 focus:outline-hidden"
                 >
                   Speichern & Weiter
                 </button>
@@ -1219,7 +1219,7 @@
             </div>
 
             <p
-              class="text-rust mt-2"
+              class="text-rust mt-6"
               x-show="canEditAnything && booking.children.length <= 0"
               x-cloak
             >
@@ -1228,7 +1228,7 @@
 
             <form
               data-testid="qa-children-form"
-              class="space-y-6"
+              class="mt-6 space-y-6"
               @submit.prevent="submitChildren"
             >
               <!-- List of children -->
@@ -1248,7 +1248,7 @@
                       type="text"
                       required
                       maxlength="50"
-                      class="focus:border-atlantis focus:ring-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
+                      class="focus:border-atlantis focus:ring-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-xs"
                       x-model="child.name"
                       placeholder="Name des Kindes"
                       :readonly="!canEditAnything"
@@ -1275,7 +1275,7 @@
                       :data-testid="'qa-child-identification-' + index"
                       type="text"
                       maxlength="250"
-                      class="focus:border-atlantis focus:ring-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
+                      class="focus:border-atlantis focus:ring-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-xs"
                       x-model="child.identification_trait"
                       placeholder="Alter, Haarfarbe, Größe, ..."
                       :readonly="!canEditAnything"
@@ -1309,7 +1309,7 @@
                     <textarea
                       :id="'child-speech-' + index"
                       :data-testid="'qa-child-speech-' + index"
-                      class="focus:border-atlantis focus:ring-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
+                      class="focus:border-atlantis focus:ring-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-xs"
                       x-model="child.speech"
                       rows="8"
                       placeholder="Rede für den Nikolaus"
@@ -1331,7 +1331,7 @@
                     type="button"
                     @click="removeChild(index)"
                     :data-testid="'qa-remove-child-' + index"
-                    class="focus:ring-rust focus:ring-opacity-50 mt-2 rounded bg-red-500 px-3 py-1 text-sm font-bold text-white hover:bg-red-600 focus:ring-2 focus:outline-none"
+                    class="focus:ring-rust focus:ring-opacity-50 mt-2 rounded-sm bg-red-500 px-3 py-1 text-sm font-bold text-white hover:bg-red-600 focus:ring-2 focus:outline-hidden"
                     x-cloak
                   >
                     Kind entfernen
@@ -1346,7 +1346,7 @@
                   @click="addChild"
                   :disabled="!canEditAnything"
                   data-testid="qa-add-child"
-                  class="bg-atlantis hover:bg-surfie-green focus:ring-java focus:ring-opacity-50 rounded px-4 py-2 font-bold text-white focus:ring-2 focus:outline-none"
+                  class="bg-atlantis hover:bg-surfie-green focus:ring-java focus:ring-opacity-50 rounded-sm px-4 py-2 font-bold text-white focus:ring-2 focus:outline-hidden"
                 >
                   Kind hinzufügen
                 </button>
@@ -1372,7 +1372,7 @@
                 <textarea
                   id="additional_notes"
                   data-testid="qa-additional-notes"
-                  class="focus:border-atlantis focus:ring-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
+                  class="focus:border-atlantis focus:ring-atlantis mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-xs"
                   x-model="booking.additional_notes"
                   rows="4"
                   placeholder="Weitere Hinweise für den Nikolaus"
@@ -1390,11 +1390,11 @@
               </div>
 
               <!-- Submit Button -->
-              <div x-show="canEditAnything" class="mt-6" x-cloak>
+              <div x-show="canEditAnything" x-cloak>
                 <button
                   type="submit"
                   data-testid="qa-children-submit"
-                  class="bg-atlantis hover:bg-surfie-green focus:ring-java focus:ring-opacity-50 w-full rounded px-4 py-2 font-bold text-white focus:ring-2 focus:outline-none"
+                  class="bg-atlantis hover:bg-surfie-green focus:ring-java focus:ring-opacity-50 w-full rounded-sm px-4 py-2 font-bold text-white focus:ring-2 focus:outline-hidden"
                 >
                   Speichern & Weiter
                 </button>
@@ -1413,7 +1413,7 @@
                 type="button"
                 @click="setStep(4)"
                 data-testid="qa-children-skip"
-                class="border-atlantis text-atlantis hover:border-surfie-green hover:text-surfie-green focus:ring-java focus:ring-opacity-50 w-full rounded border-2 px-4 py-2 font-bold focus:ring-2 focus:outline-none"
+                class="border-atlantis text-atlantis hover:border-surfie-green hover:text-surfie-green focus:ring-java focus:ring-opacity-50 w-full rounded-sm border-2 px-4 py-2 font-bold focus:ring-2 focus:outline-hidden"
               >
                 Aktuell überspringen (nicht speichern)
               </button>
@@ -1438,7 +1438,7 @@
               data-testid="qa-summary-route-complete"
               x-cloak
             >
-              <div class="flex-shrink-0">
+              <div class="shrink-0">
                 <svg
                   class="text-atlantis h-6 w-6"
                   fill="currentColor"
@@ -1464,7 +1464,7 @@
               data-testid="qa-summary-route-missing"
               x-cloak
             >
-              <div class="flex-shrink-0">
+              <div class="shrink-0">
                 <svg
                   class="h-6 w-6"
                   fill="currentColor"
@@ -1498,7 +1498,7 @@
               data-testid="qa-summary-details-missing"
               x-cloak
             >
-              <div class="flex-shrink-0">
+              <div class="shrink-0">
                 <svg
                   class="h-6 w-6"
                   fill="currentColor"
@@ -1560,7 +1560,7 @@
 
             <!-- Info -->
             <div class="text-calypso mb-4 flex items-start gap-2 text-left">
-              <div class="flex-shrink-0">
+              <div class="shrink-0">
                 <svg
                   class="h-6 w-6"
                   fill="currentColor"
@@ -1583,7 +1583,7 @@
             </div>
 
             <div class="text-calypso mb-4 flex items-start gap-2 text-left">
-              <div class="flex-shrink-0">
+              <div class="shrink-0">
                 <svg
                   class="h-6 w-6"
                   fill="currentColor"
@@ -1638,7 +1638,7 @@
               type="button"
               x-on:click="sendEmailVerification"
               data-testid="qa-email-resend"
-              class="bg-atlantis hover:bg-surfie-green focus:ring-java focus:ring-opacity-50 w-full rounded px-4 py-2 font-bold text-white focus:ring-2 focus:outline-none"
+              class="bg-atlantis hover:bg-surfie-green focus:ring-java focus:ring-opacity-50 w-full rounded-sm px-4 py-2 font-bold text-white focus:ring-2 focus:outline-hidden"
             >
               E-Mail erneut senden
             </button>
@@ -1700,7 +1700,7 @@
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               fill="currentColor"
-              class="size-5 flex-shrink-0"
+              class="size-5 shrink-0"
             >
               <path
                 fill-rule="evenodd"
@@ -1750,7 +1750,7 @@
               @click="reload()"
               type="button"
               data-testid="qa-error-retry"
-              class="focus:ring-java-500 focus:ring-opacity-50 rounded border-2 border-gray-400 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 focus:ring-2 focus:outline-none"
+              class="focus:ring-java-500 focus:ring-opacity-50 rounded-sm border-2 border-gray-400 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 focus:ring-2 focus:outline-hidden"
               x-cloak
             >
               Erneut versuchen
@@ -1760,7 +1760,7 @@
               @click="closeError()"
               type="button"
               data-testid="qa-error-dismiss"
-              class="focus:ring-java-500 focus:ring-opacity-50 rounded border-2 border-gray-400 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 focus:ring-2 focus:outline-none"
+              class="focus:ring-java-500 focus:ring-opacity-50 rounded-sm border-2 border-gray-400 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 focus:ring-2 focus:outline-hidden"
               x-cloak
             >
               OK
@@ -1981,14 +1981,14 @@
             orderedList: "",
             orderedListLevels: [
               "list-decimal",
-              "list-[lower-alpha]",
-              "list-[lower-roman]",
+              "list-lower-alpha",
+              "list-lower-roman",
             ],
             unorderedList: "",
             unorderedListLevels: ["list-disc", "list-circle", "list-square"],
             listItem: "mb-1",
             link: "text-blue-600 hover:underline",
-            code: "bg-gray-100 rounded px-1 font-mono",
+            code: "bg-gray-100 rounded-sm px-1 font-mono",
           };
           // Extend defaultClasses with provided classes (overwrites existing ones)
           updateExistingObjectKeys(this.defaultClasses, defaultClasses);

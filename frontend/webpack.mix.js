@@ -2,7 +2,6 @@ const fs = require("fs");
 const path = require("path");
 const webpack = require("webpack");
 const mix = require("laravel-mix");
-require("mix-tailwindcss");
 
 function getHtml(file = "index.html") {
   const hashes = JSON.parse(fs.readFileSync("dist/mix-manifest.json"));
@@ -19,8 +18,7 @@ mix
   .js("src/js/app.js", "js")
   .sourceMaps()
   // .sass('src/sass/app.scss', 'css')
-  .postCss("src/css/app.css", "css")
-  .tailwind()
+  .postCss("src/css/app.css", "css", [require("@tailwindcss/postcss")])
   .setPublicPath("dist")
   .version()
   .webpackConfig({

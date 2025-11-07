@@ -1,3 +1,191 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  /* https://uicolors.app/create */
+  /* (or https://palettte.app) */
+  /* (or https://colorbox.io) */
+
+  /* --color-blue: #00b6be; */
+  /* --color-blue-light: #00b6be; */
+
+  --color-java-50: #ebfffc;
+  --color-java-100: #cdfffa;
+  --color-java-200: #a1fffa;
+  --color-java-300: #60fff9;
+  --color-java-400: #18f8f4;
+  --color-java-500: #00dedd;
+  --color-java-600: #00b6be;
+  --color-java: #00b6be;
+  --color-java-700: #088d96;
+  --color-java-800: #10707a;
+  --color-java-900: #125d67;
+  --color-java-950: #053e47;
+
+  /* --color-blue-dark: #006d84; */
+
+  --color-calypso-50: #e8fffd;
+  --color-calypso-100: #c5fffb;
+  --color-calypso-200: #92fff8;
+  --color-calypso-300: #47fff3;
+  --color-calypso-400: #00fff9;
+  --color-calypso-500: #00e7ff;
+  --color-calypso-600: #00b6d7;
+  --color-calypso-700: #008fac;
+  --color-calypso-800: #006d84;
+  --color-calypso: #006d84;
+  --color-calypso-900: #055d74;
+  --color-calypso-950: #003e51;
+
+  /* --color-orange: #f58220; */
+  /* --color-orange-light: #f58220; */
+
+  --color-flush-orange-50: #fff8ed;
+  --color-flush-orange-100: #feefd6;
+  --color-flush-orange-200: #fcdbac;
+  --color-flush-orange-300: #fac177;
+  --color-flush-orange-400: #f79b40;
+  --color-flush-orange-500: #f58220;
+  --color-flush-orange: #f58220;
+  --color-flush-orange-600: #e66410;
+  --color-flush-orange-700: #bf4b0f;
+  --color-flush-orange-800: #973c15;
+  --color-flush-orange-900: #7a3314;
+  --color-flush-orange-950: #421808;
+
+  /* --color-orange-dark: #952d4f; */
+
+  --color-camelot-50: #fbf4f7;
+  --color-camelot-100: #f9eaf2;
+  --color-camelot-200: #f5d5e5;
+  --color-camelot-300: #eeb3cf;
+  --color-camelot-400: #e284ae;
+  --color-camelot-500: #d55f90;
+  --color-camelot-600: #c24070;
+  --color-camelot-700: #a72f58;
+  --color-camelot-800: #952d4f;
+  --color-camelot: #952d4f;
+  --color-camelot-900: #742740;
+  --color-camelot-950: #461122;
+
+  /* --color-pink: #f05b83; */
+  /* --color-pink-light: #f05b83; */
+
+  --color-brink-pink-50: #fff1f3;
+  --color-brink-pink-100: #fee5e9;
+  --color-brink-pink-200: #fccfd8;
+  --color-brink-pink-300: #faa7b9;
+  --color-brink-pink-400: #f67694;
+  --color-brink-pink-500: #f05b83;
+  --color-brink-pink: #f05b83;
+  --color-brink-pink-600: #da245e;
+  --color-brink-pink-700: #b8184f;
+  --color-brink-pink-800: #9a1748;
+  --color-brink-pink-900: #841743;
+  --color-brink-pink-950: #4a0721;
+
+  /* --color-pink-dark: #5f316c; */
+
+  --color-bossanova-50: #faf7fc;
+  --color-bossanova-100: #f5edfa;
+  --color-bossanova-200: #ebdbf3;
+  --color-bossanova-300: #ddbee9;
+  --color-bossanova-400: #c897db;
+  --color-bossanova-500: #af6dc8;
+  --color-bossanova-600: #944eab;
+  --color-bossanova-700: #7b3e8d;
+  --color-bossanova-800: #5f316c;
+  --color-bossanova: #5f316c;
+  --color-bossanova-900: #562f60;
+  --color-bossanova-950: #35153d;
+
+  /* --color-green: #a6ce39; */
+  /* --color-green-light: #a6ce39; */
+
+  --color-atlantis-50: #f8fbea;
+  --color-atlantis-100: #eef6d1;
+  --color-atlantis-200: #deefa7;
+  --color-atlantis-300: #c6e274;
+  --color-atlantis-400: #a6ce39;
+  --color-atlantis: #a6ce39;
+  --color-atlantis-500: #8fb72b;
+  --color-atlantis-600: #6f921e;
+  --color-atlantis-700: #54701b;
+  --color-atlantis-800: #45591b;
+  --color-atlantis-900: #3a4c1b;
+  --color-atlantis-950: #1d290a;
+
+  /* --color-green-dark: #007576; */
+
+  --color-surfie-green-50: #edfffd;
+  --color-surfie-green-100: #c2fffb;
+  --color-surfie-green-200: #84fffa;
+  --color-surfie-green-300: #3ffff7;
+  --color-surfie-green-400: #08f9ed;
+  --color-surfie-green-500: #00dcd2;
+  --color-surfie-green-600: #00b2ae;
+  --color-surfie-green-700: #008d8b;
+  --color-surfie-green-800: #007576;
+  --color-surfie-green: #007576;
+  --color-surfie-green-900: #065b5b;
+  --color-surfie-green-950: #003538;
+
+  /* --color-brown: #fcaf17; */
+  /* --color-brown-light: #fcaf17; */
+
+  --color-sun-50: #fffaeb;
+  --color-sun-100: #fef0c7;
+  --color-sun-200: #fedf89;
+  --color-sun-300: #fdc94c;
+  --color-sun-400: #fcaf17;
+  --color-sun: #fcaf17;
+  --color-sun-500: #f6910a;
+  --color-sun-600: #da6b05;
+  --color-sun-700: #b54908;
+  --color-sun-800: #93380d;
+  --color-sun-900: #792f0e;
+  --color-sun-950: #451603;
+
+  /* --color-brown-dark: #ab4217; */
+
+  --color-rust-50: #fef7ee;
+  --color-rust-100: #fcedd8;
+  --color-rust-200: #f8d7b0;
+  --color-rust-300: #f4ba7d;
+  --color-rust-400: #ee9349;
+  --color-rust-500: #ea7625;
+  --color-rust-600: #db5d1b;
+  --color-rust-700: #ab4217;
+  --color-rust: #ab4217;
+  --color-rust-800: #91391b;
+  --color-rust-900: #753119;
+  --color-rust-950: #3f160b;
+
+  /* --color-gray-dark: #273444; */
+  /* --color-gray: #8492a6; */
+  /* --color-gray-light: #d3dce6; */
+
+  --list-style-type-decimal: decimal;
+  --list-style-type-lower-alpha: lower-alpha;
+  --list-style-type-lower-roman: lower-roman;
+  --list-style-type-disc: disc;
+  --list-style-type-circle: circle;
+  --list-style-type-square: square;
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
