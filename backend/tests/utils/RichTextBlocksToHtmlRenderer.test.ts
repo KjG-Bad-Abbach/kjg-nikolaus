@@ -78,10 +78,10 @@ describe("RichTextBlocksToHtmlRenderer", () => {
       '<h2 class="custom-heading">Overview</h2>'
     );
     expect(html).toContain(
-      '<p class="custom-p"><span class="line-through"><span class="underline"><em class="italic"><strong class="font-bold"><code class="bg-gray-100 rounded px-1 font-mono">inline</code></strong></em></span></span></p>'
+      '<p class="custom-p"><span class="line-through"><span class="underline"><em class="italic"><strong class="font-bold"><code class="bg-gray-100 rounded-sm px-1 font-mono">inline</code></strong></em></span></span></p>'
     );
     expect(html).toContain(
-      '<ol class="mb-4 ml-4 list-inside  list-[lower-alpha]"><li class="mb-1">first</li></ol>'
+      '<ol class="mb-4 ml-4 list-inside  list-lower-alpha"><li class="mb-1">first</li></ol>'
     );
     expect(html).toContain(
       '<ul class="mb-4 ml-4 list-inside  list-disc"><li class="mb-1">second</li></ul>'
