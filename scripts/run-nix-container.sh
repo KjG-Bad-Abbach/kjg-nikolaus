@@ -35,6 +35,7 @@ else
     -v "${HOME}/.claude:/home/ubuntu/.claude" \
     -v "${HOME}/.claude.json:/home/ubuntu/.claude.json" \
     -v "${HOME}/.claude.json.backup:/home/ubuntu/.claude.json.backup" \
+    -p 6006:6006 \
     -w /workspace \
     "${IMAGE_NAME}" \
     "${@:-/bin/bash}"
