@@ -43,7 +43,7 @@ importers:
         version: 4.0.8(@types/debug@4.1.12)(@types/node@22.19.0)(terser@5.44.1)
     devDependencies:
       '@types/node':
-        specifier: ^22.18.13
+        specifier: ^22.19.0
         version: 22.19.0
       '@types/react':
         specifier: ^18.3.26
