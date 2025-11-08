@@ -27,7 +27,7 @@
   Horizontal progress bar with step indicators
 -->
 <div
-  class="relative flex-grow after:absolute after:inset-x-0 after:top-1/2 after:block after:h-0.5 after:-translate-y-1/2 after:rounded-lg after:bg-java-500"
+  class="relative grow after:absolute after:inset-x-0 after:top-1/2 after:block after:h-0.5 after:-translate-y-1/2 after:rounded-lg after:bg-java-500"
 >
   <ol
     data-testid="qa-stepper"

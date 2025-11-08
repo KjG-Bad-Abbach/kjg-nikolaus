@@ -145,7 +145,7 @@
     <div class="mt-2 mb-4">
       <input
         type="text"
-        class="w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
+        class="w-full rounded-md border border-gray-300 p-2 shadow-xs focus:border-atlantis focus:ring-atlantis"
         bind:value={searchQuery}
         placeholder="Suche nach Zeitslots..."
         data-testid="qa-time-slot-search"
@@ -165,7 +165,7 @@
                 class:border-atlantis={isSlotSelected(slot.id)}
                 class:border-2={isSlotSelected(slot.id)}
                 class:m-0.5={!isSlotSelected(slot.id)}
-                class="flex items-center rounded-lg border p-3 shadow-sm"
+                class="flex items-center rounded-lg border p-3 shadow-xs"
                 data-testid={`qa-time-slot-${slot.id}`}
               >
                 <input
@@ -204,7 +204,7 @@
                 onclick={() => removeTimeSlot(slotId)}
                 data-testid={`qa-remove-selected-slot-${slotId}`}
                 aria-label="Zeitslot entfernen"
-                class="focus:ring-opacity-50 text-gray-500 hover:text-gray-700 focus:ring-2 focus:ring-java-500 focus:outline-none"
+                class="focus:ring-opacity-50 text-gray-500 hover:text-gray-700 focus:ring-2 focus:ring-java-500 focus:outline-hidden"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -226,7 +226,7 @@
     </div>
   {/if}
 
-  <form data-testid="qa-time-slot-form" class="space-y-6" onsubmit={onSubmit}>
+  <form data-testid="qa-time-slot-form" class="mt-6 space-y-6" onsubmit={onSubmit}>
     {#if canEditRoutePlanning && isUnderMin}
       <p class="mt-4 text-rust">
         Bitte wähle mindestens <span>{maxTimeSlots}</span> Zeitslots. Damit wir eine bestmögliche Fahrroute
@@ -236,11 +236,11 @@
 
     <!-- Submit Button -->
     {#if canEditRoutePlanning}
-      <div class="mt-6">
+      <div>
         <button
           type="submit"
           data-testid="qa-time-slot-submit"
-          class="focus:ring-opacity-50 w-full rounded bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:ring-2 focus:ring-java focus:outline-none"
+          class="focus:ring-opacity-50 w-full rounded-sm bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:ring-2 focus:ring-java focus:outline-hidden"
         >
           Speichern & Weiter
         </button>

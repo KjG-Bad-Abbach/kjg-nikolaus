@@ -38,7 +38,7 @@
 
 <Story name="In Icon Button">
   <button
-    class="inline-flex size-8 items-center justify-center rounded hover:bg-gray-100"
+    class="inline-flex size-8 items-center justify-center rounded-sm hover:bg-gray-100"
     title="Edit"
   >
     <EditIcon sizeClass="size-5" />
@@ -47,7 +47,7 @@
 
 <Story name="In Action Button">
   <button
-    class="inline-flex items-center gap-2 rounded border border-gray-300 px-3 py-2 hover:bg-gray-50"
+    class="inline-flex items-center gap-2 rounded-sm border border-gray-300 px-3 py-2 hover:bg-gray-50"
   >
     <EditIcon sizeClass="size-5" />
     <span>Edit Profile</span>
@@ -55,7 +55,7 @@
 </Story>
 
 <Story name="In Table Row">
-  <div class="flex items-center justify-between rounded border border-gray-300 p-3">
+  <div class="flex items-center justify-between rounded-sm border border-gray-300 p-3">
     <div>
       <div class="font-medium">John Doe</div>
       <div class="text-sm text-gray-500">john.doe@example.com</div>

@@ -18,7 +18,7 @@
   }: TextareaProps = $props();
 
   const baseClasses =
-    'mt-1 block w-full rounded-md border p-2 shadow-sm focus:border-atlantis focus:ring-atlantis';
+    'mt-1 block w-full rounded-md border p-2 shadow-xs focus:border-atlantis focus:ring-atlantis';
   const errorClass = error ? 'border-rust' : 'border-gray-300';
   const combinedClasses = `${baseClasses} ${errorClass} ${className}`.trim();
 </script>

@@ -38,7 +38,7 @@
 
 <Story name="In Navigation Button">
   <button
-    class="inline-flex items-center gap-2 rounded bg-java px-4 py-2 text-white hover:bg-java-700"
+    class="inline-flex items-center gap-2 rounded-sm bg-java px-4 py-2 text-white hover:bg-java-700"
   >
     <ChevronLeft sizeClass="size-5" />
     <span>Previous</span>
@@ -48,7 +48,7 @@
 <Story name="In Pagination">
   <div class="flex gap-2">
     <button
-      class="flex size-8 items-center justify-center rounded border border-gray-300 hover:bg-gray-100"
+      class="flex size-8 items-center justify-center rounded-sm border border-gray-300 hover:bg-gray-100"
     >
       <ChevronLeft sizeClass="size-5" />
     </button>

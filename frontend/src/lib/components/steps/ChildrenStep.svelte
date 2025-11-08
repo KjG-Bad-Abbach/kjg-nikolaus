@@ -114,10 +114,10 @@
   </div>
 
   {#if canEditAnything && hasNoChildren}
-    <p class="mt-2 text-rust">Bitte füge mindestens ein Kind hinzu.</p>
+    <p class="mt-6 text-rust">Bitte füge mindestens ein Kind hinzu.</p>
   {/if}
 
-  <form data-testid="qa-children-form" class="space-y-6" onsubmit={onSubmit}>
+  <form data-testid="qa-children-form" class="mt-6 space-y-6" onsubmit={onSubmit}>
     <!-- List of children -->
     {#each localChildren as child, index (index)}
       <div class="space-y-4 rounded-lg border border-gray-300 bg-gray-100 p-4">
@@ -131,7 +131,7 @@
             type="text"
             required
             maxlength="50"
-            class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
+            class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-xs focus:border-atlantis focus:ring-atlantis"
             bind:value={child.name}
             oninput={handleChange}
             placeholder="Name des Kindes"
@@ -152,7 +152,7 @@
             data-testid={`qa-child-identification-${index}`}
             type="text"
             maxlength="250"
-            class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
+            class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-xs focus:border-atlantis focus:ring-atlantis"
             bind:value={child.identification_trait}
             oninput={handleChange}
             placeholder="Alter, Haarfarbe, Größe, ..."
@@ -178,7 +178,7 @@
           <textarea
             id={`child-speech-${index}`}
             data-testid={`qa-child-speech-${index}`}
-            class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
+            class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-xs focus:border-atlantis focus:ring-atlantis"
             bind:value={child.speech}
             oninput={handleChange}
             rows="8"
@@ -194,7 +194,7 @@
             type="button"
             onclick={() => removeChild(index)}
             data-testid={`qa-remove-child-${index}`}
-            class="focus:ring-opacity-50 mt-2 rounded bg-red-500 px-3 py-1 text-sm font-bold text-white hover:bg-red-600 focus:ring-2 focus:ring-rust focus:outline-none"
+            class="focus:ring-opacity-50 mt-2 rounded-sm bg-red-500 px-3 py-1 text-sm font-bold text-white hover:bg-red-600 focus:ring-2 focus:ring-rust focus:outline-hidden"
           >
             Kind entfernen
           </button>
@@ -209,7 +209,7 @@
           type="button"
           onclick={addChild}
           data-testid="qa-add-child"
-          class="focus:ring-opacity-50 rounded bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:ring-2 focus:ring-java focus:outline-none"
+          class="focus:ring-opacity-50 rounded-sm bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:ring-2 focus:ring-java focus:outline-hidden"
         >
           Kind hinzufügen
         </button>
@@ -233,7 +233,7 @@
       <textarea
         id="additional_notes"
         data-testid="qa-additional-notes"
-        class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
+        class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-xs focus:border-atlantis focus:ring-atlantis"
         bind:value={localAdditionalNotes}
         oninput={handleChange}
         rows="4"
@@ -247,11 +247,11 @@
 
     <!-- Submit Button -->
     {#if canEditAnything}
-      <div class="mt-6">
+      <div>
         <button
           type="submit"
           data-testid="qa-children-submit"
-          class="focus:ring-opacity-50 w-full rounded bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:ring-2 focus:ring-java focus:outline-none"
+          class="focus:ring-opacity-50 w-full rounded-sm bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:ring-2 focus:ring-java focus:outline-hidden"
         >
           Speichern & Weiter
         </button>

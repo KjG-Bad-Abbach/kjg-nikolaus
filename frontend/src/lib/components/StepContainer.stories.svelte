@@ -43,7 +43,7 @@
 </script>
 
 {#snippet stepContent()}
-  <div class="rounded-lg bg-white p-4 shadow">
+  <div class="rounded-lg bg-white p-4 shadow-sm">
     <p class="text-gray-600">This is the content for the current step.</p>
     <p class="mt-2 text-sm text-gray-500">You can customize this content in the Playground.</p>
   </div>

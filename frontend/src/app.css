@@ -3,9 +3,13 @@
 @plugin '@tailwindcss/typography';
 
 @theme {
-  /* Custom color palette migrated from frontend-alpine.js */
+  /* https://uicolors.app/create */
+  /* (or https://palettte.app) */
+  /* (or https://colorbox.io) */
 
   /* Java - Blue */
+  /* --color-blue: #00b6be; */
+  /* --color-blue-light: #00b6be; */
   --color-java-50: #ebfffc;
   --color-java-100: #cdfffa;
   --color-java-200: #a1fffa;
@@ -20,6 +24,7 @@
   --color-java-950: #053e47;
 
   /* Calypso - Blue Dark */
+  /* --color-blue-dark: #006d84; */
   --color-calypso-50: #e8fffd;
   --color-calypso-100: #c5fffb;
   --color-calypso-200: #92fff8;
@@ -34,6 +39,8 @@
   --color-calypso-950: #003e51;
 
   /* Flush Orange - Orange */
+  /* --color-orange: #f58220; */
+  /* --color-orange-light: #f58220; */
   --color-flush-orange-50: #fff8ed;
   --color-flush-orange-100: #feefd6;
   --color-flush-orange-200: #fcdbac;
@@ -48,6 +55,7 @@
   --color-flush-orange-950: #421808;
 
   /* Camelot - Orange Dark */
+  /* --color-orange-dark: #952d4f; */
   --color-camelot-50: #fbf4f7;
   --color-camelot-100: #f9eaf2;
   --color-camelot-200: #f5d5e5;
@@ -62,6 +70,8 @@
   --color-camelot-950: #461122;
 
   /* Brink Pink - Pink */
+  /* --color-pink: #f05b83; */
+  /* --color-pink-light: #f05b83; */
   --color-brink-pink-50: #fff1f3;
   --color-brink-pink-100: #fee5e9;
   --color-brink-pink-200: #fccfd8;
@@ -76,6 +86,7 @@
   --color-brink-pink-950: #4a0721;
 
   /* Bossanova - Pink Dark */
+  /* --color-pink-dark: #5f316c; */
   --color-bossanova-50: #faf7fc;
   --color-bossanova-100: #f5edfa;
   --color-bossanova-200: #ebdbf3;
@@ -90,6 +101,8 @@
   --color-bossanova-950: #35153d;
 
   /* Atlantis - Green */
+  /* --color-green: #a6ce39; */
+  /* --color-green-light: #a6ce39; */
   --color-atlantis-50: #f8fbea;
   --color-atlantis-100: #eef6d1;
   --color-atlantis-200: #deefa7;
@@ -104,6 +117,7 @@
   --color-atlantis-950: #1d290a;
 
   /* Surfie Green - Green Dark */
+  /* --color-green-dark: #007576; */
   --color-surfie-green-50: #edfffd;
   --color-surfie-green-100: #c2fffb;
   --color-surfie-green-200: #84fffa;
@@ -118,6 +132,8 @@
   --color-surfie-green-950: #003538;
 
   /* Sun - Brown */
+  /* --color-brown: #fcaf17; */
+  /* --color-brown-light: #fcaf17; */
   --color-sun-50: #fffaeb;
   --color-sun-100: #fef0c7;
   --color-sun-200: #fedf89;
@@ -132,6 +148,7 @@
   --color-sun-950: #451603;
 
   /* Rust - Brown Dark */
+  /* --color-brown-dark: #ab4217; */
   --color-rust-50: #fef7ee;
   --color-rust-100: #fcedd8;
   --color-rust-200: #f8d7b0;
@@ -145,6 +162,11 @@
   --color-rust-900: #753119;
   --color-rust-950: #3f160b;
 
+  /* Gray Shades */
+  /* --color-gray-dark: #273444; */
+  /* --color-gray: #8492a6; */
+  /* --color-gray-light: #d3dce6; */
+
   /* Custom list style types */
   --list-style-type-decimal: decimal;
   --list-style-type-lower-alpha: lower-alpha;
@@ -152,4 +174,22 @@
   --list-style-type-disc: disc;
   --list-style-type-circle: circle;
   --list-style-type-square: square;
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
 }

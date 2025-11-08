@@ -34,7 +34,7 @@ describe('Textarea', () => {
     expect(textarea?.classList.contains('rounded-md')).toBe(true);
     expect(textarea?.classList.contains('border')).toBe(true);
     expect(textarea?.classList.contains('p-2')).toBe(true);
-    expect(textarea?.classList.contains('shadow-sm')).toBe(true);
+    expect(textarea?.classList.contains('shadow-xs')).toBe(true);
     expect(textarea?.classList.contains('focus:border-atlantis')).toBe(true);
     expect(textarea?.classList.contains('focus:ring-atlantis')).toBe(true);
   });

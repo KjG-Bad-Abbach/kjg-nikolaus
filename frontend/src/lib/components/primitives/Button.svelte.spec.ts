@@ -30,12 +30,12 @@ describe('Button', () => {
     });
 
     const button = container.querySelector('button');
-    expect(button?.classList.contains('rounded')).toBe(true);
+    expect(button?.classList.contains('rounded-sm')).toBe(true);
     expect(button?.classList.contains('px-4')).toBe(true);
     expect(button?.classList.contains('py-2')).toBe(true);
     expect(button?.classList.contains('font-bold')).toBe(true);
     expect(button?.classList.contains('focus:ring-2')).toBe(true);
-    expect(button?.classList.contains('focus:outline-none')).toBe(true);
+    expect(button?.classList.contains('focus:outline-hidden')).toBe(true);
     expect(button?.classList.contains('focus:ring-java')).toBe(true);
     expect(button?.classList.contains('focus:ring-opacity-50')).toBe(true);
   });
@@ -180,7 +180,7 @@ describe('Button', () => {
 
     const button = container.querySelector('button');
     expect(button?.classList.contains('custom-button')).toBe(true);
-    expect(button?.classList.contains('rounded')).toBe(true);
+    expect(button?.classList.contains('rounded-sm')).toBe(true);
   });
 
   it('should not be disabled by default', async () => {

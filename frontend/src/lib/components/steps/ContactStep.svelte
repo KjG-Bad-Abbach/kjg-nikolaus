@@ -78,7 +78,7 @@
         id="first_name"
         data-testid="qa-contact-first-name"
         required
-        class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
+        class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-xs focus:border-atlantis focus:ring-atlantis"
         bind:value={first_name}
         oninput={handleChange}
         maxlength="50"
@@ -98,7 +98,7 @@
         id="last_name"
         data-testid="qa-contact-last-name"
         required
-        class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
+        class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-xs focus:border-atlantis focus:ring-atlantis"
         bind:value={last_name}
         oninput={handleChange}
         maxlength="50"
@@ -117,7 +117,7 @@
         id="email"
         data-testid="qa-contact-email"
         required
-        class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
+        class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-xs focus:border-atlantis focus:ring-atlantis"
         bind:value={email}
         oninput={handleChange}
         maxlength="100"
@@ -138,7 +138,7 @@
         id="phone_number"
         data-testid="qa-contact-phone"
         required
-        class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
+        class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-xs focus:border-atlantis focus:ring-atlantis"
         bind:value={phone_number}
         oninput={handleChange}
         maxlength="50"
@@ -152,11 +152,11 @@
 
     <!-- Submit Button -->
     {#if canEdit}
-      <div class="mt-6">
+      <div>
         <button
           type="submit"
           data-testid="qa-contact-submit"
-          class="focus:ring-opacity-50 w-full rounded bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:ring-2 focus:ring-java focus:outline-none"
+          class="focus:ring-opacity-50 w-full rounded-sm bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:ring-2 focus:ring-java focus:outline-hidden"
         >
           Speichern & Weiter
         </button>

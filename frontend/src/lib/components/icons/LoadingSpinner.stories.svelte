@@ -51,13 +51,13 @@
 <Story name="Blue Spinner" args={{ colorClass: 'text-java' }} />
 
 <Story name="White Spinner">
-  <div class="rounded bg-gray-800 p-8">
+  <div class="rounded-sm bg-gray-800 p-8">
     <LoadingSpinner colorClass="text-white" />
   </div>
 </Story>
 
 <Story name="Small White Spinner">
-  <div class="inline-flex rounded bg-gray-800 p-4">
+  <div class="inline-flex rounded-sm bg-gray-800 p-4">
     <LoadingSpinner sizeClass="size-5" colorClass="text-white" />
   </div>
 </Story>
@@ -69,7 +69,7 @@
 </Story>
 
 <Story name="In Button">
-  <button class="inline-flex items-center gap-2 rounded bg-java px-4 py-2 text-white" disabled>
+  <button class="inline-flex items-center gap-2 rounded-sm bg-java px-4 py-2 text-white" disabled>
     <LoadingSpinner sizeClass="size-5" colorClass="text-white" />
     <span>Loading...</span>
   </button>
@@ -83,7 +83,7 @@
 </Story>
 
 <Story name="Card Loading State">
-  <div class="rounded border border-gray-300 p-6">
+  <div class="rounded-sm border border-gray-300 p-6">
     <div class="flex flex-col items-center gap-4">
       <LoadingSpinner sizeClass="size-10" />
       <p class="text-gray-600">Loading your data...</p>

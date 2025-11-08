@@ -62,7 +62,7 @@
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           fill="currentColor"
-          class="size-5 flex-shrink-0"
+          class="size-5 shrink-0"
         >
           <path
             fill-rule="evenodd"
@@ -113,7 +113,7 @@
             type="button"
             onclick={onRetry}
             data-testid="qa-error-retry"
-            class="focus:ring-opacity-50 rounded border-2 border-gray-400 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 focus:ring-2 focus:ring-java-500 focus:outline-none"
+            class="focus:ring-opacity-50 rounded-sm border-2 border-gray-400 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 focus:ring-2 focus:ring-java-500 focus:outline-hidden"
           >
             Erneut versuchen
           </button>
@@ -122,7 +122,7 @@
             type="button"
             onclick={onClose}
             data-testid="qa-error-dismiss"
-            class="focus:ring-opacity-50 rounded border-2 border-gray-400 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 focus:ring-2 focus:ring-java-500 focus:outline-none"
+            class="focus:ring-opacity-50 rounded-sm border-2 border-gray-400 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 focus:ring-2 focus:ring-java-500 focus:outline-hidden"
           >
             OK
           </button>

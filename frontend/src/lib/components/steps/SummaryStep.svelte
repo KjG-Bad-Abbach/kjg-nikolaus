@@ -33,7 +33,7 @@
       class="mb-4 flex items-start gap-2 text-left text-gray-700"
       data-testid="qa-summary-route-complete"
     >
-      <div class="flex-shrink-0">
+      <div class="shrink-0">
         <svg
           class="h-6 w-6 text-atlantis"
           fill="currentColor"
@@ -59,7 +59,7 @@
       class="mb-4 flex items-start gap-2 text-left text-rust"
       data-testid="qa-summary-route-missing"
     >
-      <div class="flex-shrink-0">
+      <div class="shrink-0">
         <svg
           class="h-6 w-6"
           fill="currentColor"
@@ -89,7 +89,7 @@
       class="mb-4 flex items-start gap-2 text-left text-rust"
       data-testid="qa-summary-details-missing"
     >
-      <div class="flex-shrink-0">
+      <div class="shrink-0">
         <svg
           class="h-6 w-6"
           fill="currentColor"
@@ -143,7 +143,7 @@
 
   <!-- Info -->
   <div class="mb-4 flex items-start gap-2 text-left text-calypso">
-    <div class="flex-shrink-0">
+    <div class="shrink-0">
       <svg
         class="h-6 w-6"
         fill="currentColor"
@@ -166,7 +166,7 @@
   </div>
 
   <div class="mb-4 flex items-start gap-2 text-left text-calypso">
-    <div class="flex-shrink-0">
+    <div class="shrink-0">
       <svg
         class="h-6 w-6"
         fill="currentColor"

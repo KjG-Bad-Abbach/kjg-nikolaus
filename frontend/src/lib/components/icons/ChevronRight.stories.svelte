@@ -38,7 +38,7 @@
 
 <Story name="In Navigation Button">
   <button
-    class="inline-flex items-center gap-2 rounded bg-java px-4 py-2 text-white hover:bg-java-700"
+    class="inline-flex items-center gap-2 rounded-sm bg-java px-4 py-2 text-white hover:bg-java-700"
   >
     <span>Next</span>
     <ChevronRight sizeClass="size-5" />
@@ -47,7 +47,7 @@
 
 <Story name="In List Item">
   <div
-    class="flex items-center justify-between rounded border border-gray-300 p-3 hover:bg-gray-50"
+    class="flex items-center justify-between rounded-sm border border-gray-300 p-3 hover:bg-gray-50"
   >
     <span>View details</span>
     <div class="text-gray-400">

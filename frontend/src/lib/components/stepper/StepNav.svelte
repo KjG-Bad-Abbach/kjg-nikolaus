@@ -45,7 +45,7 @@
   <!-- Previous Step Button -->
   <button
     onclick={handlePrevious}
-    class="focus:ring-opacity-50 flex-none cursor-pointer py-2 font-bold text-calypso select-none focus:ring-2 focus:ring-java-500 focus:outline-none"
+    class="focus:ring-opacity-50 flex-none cursor-pointer py-2 font-bold text-calypso select-none focus:ring-2 focus:ring-java-500 focus:outline-hidden"
     class:hidden={!canJumpToAnyStep}
     class:opacity-50={isFirstStep}
     class:cursor-not-allowed={isFirstStep}
@@ -66,7 +66,7 @@
   <!-- Next Step Button -->
   <button
     onclick={handleNext}
-    class="focus:ring-opacity-50 flex-none cursor-pointer py-2 font-bold text-calypso select-none focus:ring-2 focus:ring-java-500 focus:outline-none"
+    class="focus:ring-opacity-50 flex-none cursor-pointer py-2 font-bold text-calypso select-none focus:ring-2 focus:ring-java-500 focus:outline-hidden"
     class:hidden={!canJumpToAnyStep}
     class:opacity-50={isLastStep}
     class:cursor-not-allowed={isLastStep}

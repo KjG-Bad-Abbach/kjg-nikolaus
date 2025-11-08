@@ -41,7 +41,7 @@ describe('Input', () => {
     expect(input?.classList.contains('rounded-md')).toBe(true);
     expect(input?.classList.contains('border')).toBe(true);
     expect(input?.classList.contains('p-2')).toBe(true);
-    expect(input?.classList.contains('shadow-sm')).toBe(true);
+    expect(input?.classList.contains('shadow-xs')).toBe(true);
     expect(input?.classList.contains('focus:border-atlantis')).toBe(true);
     expect(input?.classList.contains('focus:ring-atlantis')).toBe(true);
   });

@@ -102,7 +102,7 @@
         id="street"
         data-testid="qa-address-street"
         required
-        class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
+        class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-xs focus:border-atlantis focus:ring-atlantis"
         bind:value={street}
         oninput={handleChange}
         maxlength="100"
@@ -123,7 +123,7 @@
         id="house_number"
         data-testid="qa-address-house-number"
         required
-        class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
+        class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-xs focus:border-atlantis focus:ring-atlantis"
         bind:value={house_number}
         oninput={handleChange}
         maxlength="10"
@@ -142,7 +142,7 @@
         id="zip_code"
         data-testid="qa-address-zip"
         required
-        class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
+        class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-xs focus:border-atlantis focus:ring-atlantis"
         bind:value={zip_code}
         oninput={handleZipInput}
         max="99999"
@@ -162,7 +162,7 @@
         id="place"
         data-testid="qa-address-place"
         required
-        class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
+        class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-xs focus:border-atlantis focus:ring-atlantis"
         bind:value={place}
         oninput={handleChange}
         maxlength="100"
@@ -202,7 +202,7 @@
         type="text"
         id="present_location"
         data-testid="qa-address-present-location"
-        class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-atlantis focus:ring-atlantis"
+        class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-xs focus:border-atlantis focus:ring-atlantis"
         bind:value={present_location}
         oninput={handleChange}
         maxlength="200"
@@ -216,11 +216,11 @@
 
     <!-- Submit Button -->
     {#if canEditAnything}
-      <div class="mt-6">
+      <div>
         <button
           type="submit"
           data-testid="qa-address-submit"
-          class="focus:ring-opacity-50 w-full rounded bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:ring-2 focus:ring-java focus:outline-none"
+          class="focus:ring-opacity-50 w-full rounded-sm bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:ring-2 focus:ring-java focus:outline-hidden"
         >
           Speichern & Weiter
         </button>
