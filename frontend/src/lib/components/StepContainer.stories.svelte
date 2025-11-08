@@ -42,6 +42,24 @@
   ];
 </script>
 
+{#snippet stepContent()}
+  <div class="rounded-lg bg-white p-4 shadow">
+    <p class="text-gray-600">This is the content for the current step.</p>
+    <p class="mt-2 text-sm text-gray-500">You can customize this content in the Playground.</p>
+  </div>
+{/snippet}
+
+<Story
+  name="Playground"
+  args={{
+    currentStep: 1,
+    steps: sampleSteps,
+    canJumpToAnyStep: true,
+    onStepChange: (step) => console.log('Navigate to step:', step),
+    children: stepContent,
+  }}
+/>
+
 <Story
   name="First Step"
   args={{
@@ -117,15 +135,3 @@
     onStepChange: (step) => console.log('Navigate to step:', step),
   }}
 />
-
-<!-- Interactive demo -->
-<Story name="Interactive">
-  <div class="p-4">
-    <StepContainer
-      currentStep={1}
-      steps={sampleSteps}
-      canJumpToAnyStep={true}
-      onStepChange={(step) => alert(`Navigating to step ${step + 1}`)}
-    />
-  </div>
-</Story>

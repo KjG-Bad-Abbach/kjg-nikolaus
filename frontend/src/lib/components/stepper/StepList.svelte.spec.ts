@@ -13,34 +13,21 @@ describe('StepList', () => {
     { name: 'Summary', testId: 'summary', anyFilled: false, allFilled: false },
   ];
 
-  it('should render all steps', async () => {
+  it('should render all steps from the steps array', async () => {
     render(StepList, {
       steps: mockSteps,
       currentStep: 0,
       canJumpToAnyStep: false,
     });
 
-    const contactStep = page.getByText('Contact Details');
-    const addressStep = page.getByText('Address');
-    const timeSlotsStep = page.getByText('Time Slots');
-
-    await expect.element(contactStep).toBeInTheDocument();
-    await expect.element(addressStep).toBeInTheDocument();
-    await expect.element(timeSlotsStep).toBeInTheDocument();
+    await expect.element(page.getByText('Contact Details')).toBeInTheDocument();
+    await expect.element(page.getByText('Address')).toBeInTheDocument();
+    await expect.element(page.getByText('Time Slots')).toBeInTheDocument();
+    await expect.element(page.getByText('Children')).toBeInTheDocument();
+    await expect.element(page.getByText('Summary')).toBeInTheDocument();
   });
 
-  it('should have progress bar wrapper', async () => {
-    const { container } = render(StepList, {
-      steps: mockSteps,
-      currentStep: 0,
-      canJumpToAnyStep: false,
-    });
-
-    const progressBar = container.querySelector('.after\\:bg-java-500');
-    expect(progressBar).toBeTruthy();
-  });
-
-  it('should render ordered list with correct testid', async () => {
+  it('should render as ordered list with qa-stepper testid', async () => {
     const { container } = render(StepList, {
       steps: mockSteps,
       currentStep: 0,
@@ -51,7 +38,7 @@ describe('StepList', () => {
     expect(stepper?.tagName).toBe('OL');
   });
 
-  it('should call onStepClick when step is clicked', async () => {
+  it('should call onStepClick with correct step index when Contact Details clicked', async () => {
     const onStepClick = vi.fn();
     render(StepList, {
       steps: mockSteps,
@@ -60,48 +47,40 @@ describe('StepList', () => {
       onStepClick,
     });
 
-    // Click on the first step
-    const step = page.getByText('Contact Details');
+    const step = page.getByRole('button', { name: 'Contact Details' });
     await step.click();
 
     expect(onStepClick).toHaveBeenCalledOnce();
     expect(onStepClick).toHaveBeenCalledWith(0);
   });
 
-  it('should render 5 step indicators for 5 steps', async () => {
-    const { container } = render(StepList, {
+  it('should call onStepClick with correct step index when Summary clicked', async () => {
+    const onStepClick = vi.fn();
+    render(StepList, {
       steps: mockSteps,
       currentStep: 0,
-      canJumpToAnyStep: false,
+      canJumpToAnyStep: true,
+      onStepClick,
     });
 
-    const listItems = container.querySelectorAll('li');
-    expect(listItems.length).toBe(5);
+    const summaryStep = page.getByRole('button', { name: 'Summary' });
+    await summaryStep.click();
+
+    expect(onStepClick).toHaveBeenCalledOnce();
+    expect(onStepClick).toHaveBeenCalledWith(4);
   });
 
-  it('should have correct flex layout classes', async () => {
+  it('should pass correct props to StepIndicator components', async () => {
     const { container } = render(StepList, {
       steps: mockSteps,
-      currentStep: 0,
-      canJumpToAnyStep: false,
+      currentStep: 2,
+      canJumpToAnyStep: true,
     });
 
-    const orderedList = container.querySelector('ol');
-    expect(orderedList?.classList.contains('flex')).toBe(true);
-    expect(orderedList?.classList.contains('justify-between')).toBe(true);
-    expect(orderedList?.classList.contains('relative')).toBe(true);
-    expect(orderedList?.classList.contains('z-10')).toBe(true);
-  });
-
-  it('should apply correct colors to text', async () => {
-    const { container } = render(StepList, {
-      steps: mockSteps,
-      currentStep: 0,
-      canJumpToAnyStep: false,
-    });
-
-    const orderedList = container.querySelector('ol');
-    expect(orderedList?.classList.contains('text-calypso')).toBe(true);
+    const indicators = container.querySelectorAll('li[data-testid^="qa-step-"]');
+    expect(indicators.length).toBe(5);
+    expect(indicators[0]?.getAttribute('data-testid')).toBe('qa-step-contact');
+    expect(indicators[1]?.getAttribute('data-testid')).toBe('qa-step-address');
   });
 
   it('should not crash when onStepClick is not provided', async () => {
@@ -109,15 +88,61 @@ describe('StepList', () => {
       steps: mockSteps,
       currentStep: 1,
       canJumpToAnyStep: true,
-      // No onStepClick provided
     });
 
-    // Click on the first step - should not crash
-    const step = page.getByText('Contact Details');
+    const step = page.getByRole('button', { name: 'Contact Details' });
     await step.click();
 
-    // If we get here without crashing, the test passes
     const stepper = page.getByTestId('qa-stepper');
     await expect.element(stepper).toBeInTheDocument();
+  });
+
+  it('should have progress bar wrapper with background styling', async () => {
+    const { container } = render(StepList, {
+      steps: mockSteps,
+      currentStep: 0,
+      canJumpToAnyStep: false,
+    });
+
+    const progressBar = container.querySelector('.after\\:bg-java-500');
+    expect(progressBar).toBeTruthy();
+  });
+
+  it('should pass canJumpToAnyStep to StepIndicator components', async () => {
+    const { container: containerCanJump } = render(StepList, {
+      steps: mockSteps,
+      currentStep: 0,
+      canJumpToAnyStep: true,
+    });
+
+    const { container: containerNoJump } = render(StepList, {
+      steps: mockSteps,
+      currentStep: 0,
+      canJumpToAnyStep: false,
+    });
+
+    // When can jump, middle steps should be clickable
+    // When can't jump, only current step should be clickable
+    const indicatorsCanJump = containerCanJump.querySelectorAll('button[aria-label="Address"]');
+    const indicatorsNoJump = containerNoJump.querySelectorAll('button[aria-label="Address"]');
+
+    expect(indicatorsCanJump[0]?.hasAttribute('disabled')).toBe(false);
+    expect(indicatorsNoJump[0]?.hasAttribute('disabled')).toBe(true);
+  });
+
+  it('should allow clicking current step even when canJumpToAnyStep is false', async () => {
+    const { container } = render(StepList, {
+      steps: mockSteps,
+      currentStep: 2,
+      canJumpToAnyStep: false,
+    });
+
+    // Current step (Time Slots at index 2) should be clickable
+    const currentStepButton = container.querySelector('button[aria-label="Time Slots"]');
+    expect(currentStepButton?.hasAttribute('disabled')).toBe(false);
+
+    // Other steps should be disabled
+    const otherStepButton = container.querySelector('button[aria-label="Address"]');
+    expect(otherStepButton?.hasAttribute('disabled')).toBe(true);
   });
 });

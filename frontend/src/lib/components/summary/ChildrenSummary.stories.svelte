@@ -8,6 +8,9 @@
     tags: ['autodocs'],
     argTypes: {
       onEdit: { action: 'edit' },
+      children: { control: 'object' },
+      additionalNotes: { control: 'text' },
+      finalDeadline: { control: 'date' },
     },
   });
 
@@ -36,10 +39,51 @@
       speech: 'Max war dieses Jahr besonders fleißig',
     },
   ];
+
+  const manyChildren = [
+    ...completeChildren,
+    {
+      id: '3',
+      name: 'Sophie',
+      identification_trait: 'Rotes Kleid',
+      speech: 'Sophie hat allen Kindern geholfen',
+    },
+    {
+      id: '4',
+      name: 'Leon',
+      identification_trait: 'Blaue Mütze',
+      speech: 'Leon hat fleißig Klavier geübt',
+    },
+    {
+      id: '5',
+      name: 'Hannah',
+      identification_trait: 'Zopf',
+      speech: 'Hannah war sehr hilfsbereit',
+    },
+  ];
+
+  const childWithLongSpeech = [
+    {
+      id: '1',
+      name: 'Max',
+      identification_trait: 'Blaue Augen',
+      speech:
+        'Max war dieses Jahr besonders fleißig und hat seinen Eltern und Geschwistern geholfen. Er hat seine Hausaufgaben immer pünktlich erledigt und war sehr ordentlich. Außerdem hat er sich um seine kleinere Schwester gekümmert und war ein Vorbild für alle anderen Kinder.',
+    },
+  ];
 </script>
 
 <Story
-  name="Complete"
+  name="Playground"
+  args={{
+    children: completeChildren,
+    additionalNotes: '',
+    finalDeadline,
+  }}
+/>
+
+<Story
+  name="Two Children Complete"
   args={{
     children: completeChildren,
     additionalNotes: '',
@@ -57,7 +101,17 @@
 />
 
 <Story
-  name="Incomplete"
+  name="With Long Additional Notes"
+  args={{
+    children: completeChildren,
+    additionalNotes:
+      'Bitte klingeln Sie zweimal und warten Sie kurz. Die Kinder sind sehr aufgeregt und werden zur Tür rennen. Der Hund sollte weggesperrt sein, aber bitte vorsichtig sein. Die Geschenke sollten unter dem Weihnachtsbaum im Wohnzimmer abgelegt werden.',
+    finalDeadline,
+  }}
+/>
+
+<Story
+  name="Child with Missing Fields"
   args={{
     children: incompleteChildren,
     additionalNotes: '',
@@ -66,7 +120,7 @@
 />
 
 <Story
-  name="Empty"
+  name="No Children (Empty List)"
   args={{
     children: [],
     additionalNotes: '',
@@ -79,6 +133,33 @@
   args={{
     children: [completeChildren[0]],
     additionalNotes: '',
+    finalDeadline,
+  }}
+/>
+
+<Story
+  name="Many Children (5 Children)"
+  args={{
+    children: manyChildren,
+    additionalNotes: '',
+    finalDeadline,
+  }}
+/>
+
+<Story
+  name="Child with Long Speech (Truncation Test)"
+  args={{
+    children: childWithLongSpeech,
+    additionalNotes: '',
+    finalDeadline,
+  }}
+/>
+
+<Story
+  name="Many Children with Notes"
+  args={{
+    children: manyChildren,
+    additionalNotes: 'Alle Kinder sind sehr aufgeregt. Bitte um 18:00 Uhr kommen.',
     finalDeadline,
   }}
 />

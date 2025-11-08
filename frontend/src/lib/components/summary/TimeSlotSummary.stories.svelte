@@ -8,6 +8,9 @@
     tags: ['autodocs'],
     argTypes: {
       onEdit: { action: 'edit' },
+      selectedTimeSlots: { control: 'object' },
+      maxTimeSlots: { control: 'number' },
+      routePlanningDeadline: { control: 'date' },
     },
   });
 
@@ -37,10 +40,28 @@
       label: 'Fr 5.12. 21:30 - 22:30 Uhr',
     },
   ];
+
+  const manyTimeSlots = [
+    ...timeSlots,
+    {
+      id: '4',
+      documentId: 'doc4',
+      start: '2024-12-06T17:00:00+01:00',
+      end: '2024-12-06T18:00:00+01:00',
+      label: 'Sa 6.12. 17:00 - 18:00 Uhr',
+    },
+    {
+      id: '5',
+      documentId: 'doc5',
+      start: '2024-12-06T18:00:00+01:00',
+      end: '2024-12-06T19:00:00+01:00',
+      label: 'Sa 6.12. 18:00 - 19:00 Uhr',
+    },
+  ];
 </script>
 
 <Story
-  name="Complete (3 of 3)"
+  name="Playground"
   args={{
     selectedTimeSlots: timeSlots,
     maxTimeSlots,
@@ -49,7 +70,16 @@
 />
 
 <Story
-  name="Incomplete (1 of 3)"
+  name="All Slots Selected (3 of 3)"
+  args={{
+    selectedTimeSlots: timeSlots,
+    maxTimeSlots,
+    routePlanningDeadline,
+  }}
+/>
+
+<Story
+  name="One Slot Selected (1 of 3)"
   args={{
     selectedTimeSlots: [timeSlots[0]],
     maxTimeSlots,
@@ -58,7 +88,7 @@
 />
 
 <Story
-  name="Empty (0 of 3)"
+  name="No Slots Selected (0 of 3)"
   args={{
     selectedTimeSlots: [],
     maxTimeSlots,
@@ -67,10 +97,46 @@
 />
 
 <Story
-  name="Partial (2 of 3)"
+  name="Two Slots Selected (2 of 3)"
   args={{
     selectedTimeSlots: [timeSlots[0], timeSlots[1]],
     maxTimeSlots,
+    routePlanningDeadline,
+  }}
+/>
+
+<Story
+  name="Many Slots - 5 Selected (maxTimeSlots 5)"
+  args={{
+    selectedTimeSlots: manyTimeSlots,
+    maxTimeSlots: 5,
+    routePlanningDeadline,
+  }}
+/>
+
+<Story
+  name="Many Slots - Incomplete (3 of 5)"
+  args={{
+    selectedTimeSlots: timeSlots,
+    maxTimeSlots: 5,
+    routePlanningDeadline,
+  }}
+/>
+
+<Story
+  name="Single Slot System - Complete (1 of 1)"
+  args={{
+    selectedTimeSlots: [timeSlots[0]],
+    maxTimeSlots: 1,
+    routePlanningDeadline,
+  }}
+/>
+
+<Story
+  name="Single Slot System - Empty (0 of 1)"
+  args={{
+    selectedTimeSlots: [],
+    maxTimeSlots: 1,
     routePlanningDeadline,
   }}
 />

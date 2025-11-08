@@ -85,6 +85,14 @@
 </script>
 
 <Story
+  name="Playground"
+  args={{
+    introductionText: sampleIntroText,
+    onStart: () => console.log('Start clicked'),
+  }}
+/>
+
+<Story
   name="Default"
   args={{
     introductionText: sampleIntroText,

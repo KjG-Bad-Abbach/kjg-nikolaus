@@ -8,6 +8,8 @@
     tags: ['autodocs'],
     argTypes: {
       onEdit: { action: 'edit' },
+      contactPerson: { control: 'object' },
+      finalDeadline: { control: 'date' },
     },
   });
 
@@ -33,10 +35,17 @@
     email: '',
     phone_number: '',
   };
+
+  const partialContact = {
+    first_name: 'Emma',
+    last_name: 'Schmidt',
+    email: '',
+    phone_number: '',
+  };
 </script>
 
 <Story
-  name="Complete"
+  name="Playground"
   args={{
     contactPerson: completeContact,
     finalDeadline,
@@ -44,7 +53,15 @@
 />
 
 <Story
-  name="Incomplete"
+  name="All Fields Complete"
+  args={{
+    contactPerson: completeContact,
+    finalDeadline,
+  }}
+/>
+
+<Story
+  name="Some Fields Missing"
   args={{
     contactPerson: incompleteContact,
     finalDeadline,
@@ -52,7 +69,7 @@
 />
 
 <Story
-  name="Empty"
+  name="All Fields Empty"
   args={{
     contactPerson: emptyContact,
     finalDeadline,
@@ -60,9 +77,9 @@
 />
 
 <Story
-  name="On Summary Step"
+  name="Only Name Provided"
   args={{
-    contactPerson: completeContact,
+    contactPerson: partialContact,
     finalDeadline,
   }}
 />

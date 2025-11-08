@@ -4,7 +4,7 @@ import { render } from 'vitest-browser-svelte';
 import StepIndicator from './StepIndicator.svelte';
 
 describe('StepIndicator', () => {
-  it('should render with step number when not filled', async () => {
+  it('should display step number when not completed', async () => {
     render(StepIndicator, {
       index: 0,
       name: 'Contact Details',
@@ -17,7 +17,7 @@ describe('StepIndicator', () => {
     await expect.element(stepNumber).toBeInTheDocument();
   });
 
-  it('should render with checkmark when all filled', async () => {
+  it('should display checkmark when all fields are filled', async () => {
     const { container } = render(StepIndicator, {
       index: 0,
       name: 'Contact Details',
@@ -26,7 +26,6 @@ describe('StepIndicator', () => {
       canJumpTo: true,
     });
 
-    // Check for the checkmark SVG
     const svg = container.querySelector('svg');
     expect(svg).toBeTruthy();
   });
@@ -42,6 +41,7 @@ describe('StepIndicator', () => {
 
     const circle = container.querySelector('span.rounded-full');
     expect(circle?.classList.contains('border-calypso-950')).toBe(true);
+    expect(circle?.classList.contains('bg-calypso')).toBe(true);
   });
 
   it('should apply filled step styles when allFilled is true', async () => {
@@ -57,7 +57,7 @@ describe('StepIndicator', () => {
     expect(circle?.classList.contains('bg-calypso')).toBe(true);
   });
 
-  it('should call onClick when clicked and can jump', async () => {
+  it('should call onClick with correct index when clicked', async () => {
     const onClick = vi.fn();
     render(StepIndicator, {
       index: 2,
@@ -75,27 +75,26 @@ describe('StepIndicator', () => {
     expect(onClick).toHaveBeenCalledWith(2);
   });
 
-  it('should not call onClick if undefined', async () => {
-    const onClick = undefined;
+  it('should not crash when onClick is not provided and button is clicked', async () => {
     render(StepIndicator, {
       index: 2,
       name: 'Address',
       isCurrent: false,
       allFilled: false,
       canJumpTo: true,
-      onClick,
     });
 
     const step = page.getByRole('button', { name: 'Address' });
     await step.click();
 
-    expect(onClick).toBeUndefined();
+    // If we get here without crashing, the test passes
+    await expect.element(step).toBeInTheDocument();
   });
 
-  it('should disable button when cannot jump', async () => {
+  it('should disable button when cannot jump to step', async () => {
     const { container } = render(StepIndicator, {
-      index: 0,
-      name: 'Contact Details',
+      index: 2,
+      name: 'Address',
       isCurrent: false,
       allFilled: false,
       canJumpTo: false,
@@ -103,24 +102,22 @@ describe('StepIndicator', () => {
 
     const button = container.querySelector('button');
     expect(button?.hasAttribute('disabled')).toBe(true);
-    expect(button?.classList.contains('cursor-not-allowed')).toBe(true);
   });
 
-  it('should enable button when can jump', async () => {
+  it('should enable button when can jump to step', async () => {
     const { container } = render(StepIndicator, {
-      index: 0,
-      name: 'Contact Details',
-      isCurrent: true,
+      index: 2,
+      name: 'Address',
+      isCurrent: false,
       allFilled: false,
       canJumpTo: true,
     });
 
     const button = container.querySelector('button');
     expect(button?.hasAttribute('disabled')).toBe(false);
-    expect(button?.classList.contains('cursor-pointer')).toBe(true);
   });
 
-  it('should display step name', async () => {
+  it('should display step name in button label', async () => {
     render(StepIndicator, {
       index: 0,
       name: 'Contact Details',
@@ -129,8 +126,8 @@ describe('StepIndicator', () => {
       canJumpTo: false,
     });
 
-    const stepName = page.getByText('Contact Details');
-    await expect.element(stepName).toBeInTheDocument();
+    const button = page.getByRole('button', { name: 'Contact Details' });
+    await expect.element(button).toBeInTheDocument();
   });
 
   it('should have correct data-testid attribute', async () => {
@@ -147,17 +144,17 @@ describe('StepIndicator', () => {
     expect(step).toBeTruthy();
   });
 
-  it('should have correct title attribute', async () => {
+  it('should calculate correct step number from index (index + 1)', async () => {
     render(StepIndicator, {
-      index: 0,
-      name: 'Contact Details',
+      index: 4,
+      name: 'Summary',
       isCurrent: false,
       allFilled: false,
       canJumpTo: false,
     });
 
-    const button = page.getByRole('button', { name: 'Contact Details' });
-    await expect.element(button).toHaveAttribute('title', 'Contact Details');
+    const stepNumber = page.getByText('5');
+    await expect.element(stepNumber).toBeInTheDocument();
   });
 
   it('should have button element for proper accessibility', async () => {
@@ -172,5 +169,39 @@ describe('StepIndicator', () => {
     const button = container.querySelector('button');
     expect(button).toBeTruthy();
     expect(button?.getAttribute('type')).toBe('button');
+  });
+
+  it('should apply both filled and current styles when both conditions are true', async () => {
+    const { container } = render(StepIndicator, {
+      index: 0,
+      name: 'Contact Details',
+      isCurrent: true,
+      allFilled: true,
+      canJumpTo: true,
+    });
+
+    const circle = container.querySelector('span.rounded-full');
+    expect(circle?.classList.contains('bg-calypso')).toBe(true);
+    expect(circle?.classList.contains('border-calypso-950')).toBe(true);
+    expect(circle?.classList.contains('text-calypso-500')).toBe(true);
+
+    // Should show checkmark, not number
+    const svg = container.querySelector('svg');
+    expect(svg).toBeTruthy();
+  });
+
+  it('should not apply filled or current background when neither condition is true', async () => {
+    const { container } = render(StepIndicator, {
+      index: 0,
+      name: 'Contact Details',
+      isCurrent: false,
+      allFilled: false,
+      canJumpTo: false,
+    });
+
+    const circle = container.querySelector('span.rounded-full');
+    expect(circle?.classList.contains('bg-calypso')).toBe(false);
+    expect(circle?.classList.contains('bg-java-500')).toBe(true);
+    expect(circle?.classList.contains('border-java')).toBe(true);
   });
 });

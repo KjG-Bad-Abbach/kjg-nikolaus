@@ -7,30 +7,32 @@
     title: 'Components/Steps/ContactStep',
     tags: ['autodocs'],
     argTypes: {
-      canEdit: { control: 'boolean' },
+      'contactPerson.first_name': {
+        control: 'text',
+        description: 'First name of the contact person',
+      },
+      'contactPerson.last_name': {
+        control: 'text',
+        description: 'Last name of the contact person',
+      },
+      'contactPerson.email': {
+        control: 'text',
+        description: 'Email address',
+      },
+      'contactPerson.phone_number': {
+        control: 'text',
+        description: 'Phone number',
+      },
+      canEdit: {
+        control: 'boolean',
+        description: 'Whether the form can be edited',
+      },
     },
   });
 </script>
 
 <Story
-  name="Default (Empty)"
-  args={{
-    contactPerson: {
-      first_name: '',
-      last_name: '',
-      email: '',
-      phone_number: '',
-    },
-    finalDeadline: new Date('2024-12-05T19:30:00+01:00'),
-    canEdit: true,
-    validationMessages: {},
-    onChange: () => {},
-    onSubmit: () => {},
-  }}
-/>
-
-<Story
-  name="Filled"
+  name="Playground"
   args={{
     contactPerson: {
       first_name: 'Max',
@@ -47,7 +49,43 @@
 />
 
 <Story
-  name="With Validation Errors"
+  name="Empty Form"
+  args={{
+    contactPerson: {
+      first_name: '',
+      last_name: '',
+      email: '',
+      phone_number: '',
+    },
+    finalDeadline: new Date('2024-12-05T19:30:00+01:00'),
+    canEdit: true,
+    validationMessages: {},
+    onChange: () => {},
+    onSubmit: () => {},
+  }}
+/>
+
+<Story
+  name="With Single Validation Error"
+  args={{
+    contactPerson: {
+      first_name: '',
+      last_name: 'Mustermann',
+      email: 'max@example.com',
+      phone_number: '+49 123 456789',
+    },
+    finalDeadline: new Date('2024-12-05T19:30:00+01:00'),
+    canEdit: true,
+    validationMessages: {
+      'booking.contact_person.first_name': ['Vorname ist erforderlich'],
+    },
+    onChange: () => {},
+    onSubmit: () => {},
+  }}
+/>
+
+<Story
+  name="With Multiple Validation Errors"
   args={{
     contactPerson: {
       first_name: '',
@@ -89,13 +127,13 @@
 />
 
 <Story
-  name="Partially Filled"
+  name="With Very Long Values"
   args={{
     contactPerson: {
-      first_name: 'Max',
-      last_name: '',
-      email: 'max@example.com',
-      phone_number: '',
+      first_name: 'Maximilian-Alexander-Ferdinand',
+      last_name: 'Mustermann-Beispielmann-Testperson',
+      email: 'very.long.email.address.with.multiple.parts@example-domain-name.com',
+      phone_number: '+49 (0) 123 / 456789-0',
     },
     finalDeadline: new Date('2024-12-05T19:30:00+01:00'),
     canEdit: true,

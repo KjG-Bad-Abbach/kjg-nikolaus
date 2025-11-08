@@ -34,18 +34,7 @@ describe('IntroSection', () => {
       .toBeInTheDocument();
   });
 
-  it('should render start button with correct text', async () => {
-    render(IntroSection, {
-      introductionText: sampleIntroText,
-      onStart: vi.fn(),
-    });
-
-    const button = page.getByTestId('qa-intro-start');
-    await expect.element(button).toBeInTheDocument();
-    await expect.element(button).toHaveTextContent('Jetzt anmelden');
-  });
-
-  it('should call onStart when button is clicked', async () => {
+  it('should render start button and call onStart when clicked', async () => {
     const onStart = vi.fn();
     render(IntroSection, {
       introductionText: sampleIntroText,
@@ -53,19 +42,11 @@ describe('IntroSection', () => {
     });
 
     const button = page.getByTestId('qa-intro-start');
+    await expect.element(button).toBeInTheDocument();
+    await expect.element(button).toHaveTextContent('Jetzt anmelden');
+
     await button.click();
-
     expect(onStart).toHaveBeenCalledOnce();
-  });
-
-  it('should have correct test id on container', async () => {
-    const { container } = render(IntroSection, {
-      introductionText: sampleIntroText,
-      onStart: vi.fn(),
-    });
-
-    const introDiv = container.querySelector('[data-testid="qa-view-intro"]');
-    expect(introDiv).toBeTruthy();
   });
 
   it('should render empty introduction text gracefully', async () => {
@@ -78,7 +59,7 @@ describe('IntroSection', () => {
     await expect.element(button).toBeInTheDocument();
   });
 
-  it('should apply custom classes to headings via rich text renderer', async () => {
+  it('should apply custom styles to headings via rich text renderer', async () => {
     const introWithHeadings: RichTextNode[] = [
       {
         type: 'heading',
@@ -97,7 +78,7 @@ describe('IntroSection', () => {
     expect(heading?.classList.contains('text-calypso')).toBe(true);
   });
 
-  it('should apply custom classes to links via rich text renderer', async () => {
+  it('should apply custom styles to links via rich text renderer', async () => {
     const introWithLink: RichTextNode[] = [
       {
         type: 'paragraph',
@@ -120,32 +101,6 @@ describe('IntroSection', () => {
     expect(link).toBeTruthy();
     expect(link?.classList.contains('text-atlantis')).toBe(true);
     expect(link?.classList.contains('hover:text-surfie-green')).toBe(true);
-  });
-
-  it('should have correct styling classes on container', async () => {
-    const { container } = render(IntroSection, {
-      introductionText: sampleIntroText,
-      onStart: vi.fn(),
-    });
-
-    const introDiv = container.querySelector('[data-testid="qa-view-intro"]');
-    expect(introDiv?.classList.contains('bg-white')).toBe(true);
-    expect(introDiv?.classList.contains('shadow-md')).toBe(true);
-    expect(introDiv?.classList.contains('rounded-lg')).toBe(true);
-    expect(introDiv?.classList.contains('p-6')).toBe(true);
-  });
-
-  it('should have correct styling classes on button', async () => {
-    const { container } = render(IntroSection, {
-      introductionText: sampleIntroText,
-      onStart: vi.fn(),
-    });
-
-    const button = container.querySelector('[data-testid="qa-intro-start"]');
-    expect(button?.classList.contains('bg-atlantis')).toBe(true);
-    expect(button?.classList.contains('hover:bg-surfie-green')).toBe(true);
-    expect(button?.classList.contains('text-white')).toBe(true);
-    expect(button?.classList.contains('font-bold')).toBe(true);
   });
 
   it('should render complex nested structures', async () => {

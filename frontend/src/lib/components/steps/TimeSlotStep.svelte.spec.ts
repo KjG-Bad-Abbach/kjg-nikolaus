@@ -445,4 +445,50 @@ describe('TimeSlotStep', () => {
       .element(page.getByRole('heading', { level: 4 }).filter({ hasText: /Fr 6\.12\./ }))
       .toBeInTheDocument();
   });
+
+  it('should handle selecting a slot with non-existent ID in selected list', async () => {
+    // Edge case: selectedTimeSlotIds contains an ID not in availableTimeSlots
+    render(TimeSlotStep, {
+      availableTimeSlots,
+      selectedTimeSlotIds: ['1', 'non-existent-id'],
+      maxTimeSlots: 3,
+      routePlanningDeadline,
+      canEditRoutePlanning: true,
+      showSearch: false,
+      validationMessages: {},
+      onChange: vi.fn(),
+      onSubmit: vi.fn(),
+    });
+
+    // Should render selected slot for ID '1'
+    await expect.element(page.getByTestId('qa-selected-time-slot-1')).toBeInTheDocument();
+    // Should render selected slot for non-existent ID (with empty label)
+    await expect
+      .element(page.getByTestId('qa-selected-time-slot-non-existent-id'))
+      .toBeInTheDocument();
+  });
+
+  it('should show only selected slots in readonly mode', async () => {
+    render(TimeSlotStep, {
+      availableTimeSlots,
+      selectedTimeSlotIds: ['1', '3'],
+      maxTimeSlots: 3,
+      routePlanningDeadline,
+      canEditRoutePlanning: false,
+      showSearch: false,
+      validationMessages: {},
+      onChange: vi.fn(),
+      onSubmit: vi.fn(),
+    });
+
+    // Should not render checkbox grid in readonly mode
+    await expect.element(page.getByTestId('qa-time-slot-1')).not.toBeInTheDocument();
+
+    // Should show selected slots
+    await expect.element(page.getByTestId('qa-selected-time-slot-1')).toBeInTheDocument();
+    await expect.element(page.getByTestId('qa-selected-time-slot-3')).toBeInTheDocument();
+
+    // Should not show remove buttons in readonly mode
+    await expect.element(page.getByTestId('qa-remove-selected-slot-1')).not.toBeInTheDocument();
+  });
 });

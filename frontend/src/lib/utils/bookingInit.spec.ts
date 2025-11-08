@@ -407,6 +407,43 @@ describe('bookingInit', () => {
       expect(mockBookingStore.setSelectedTimeSlotIds).toHaveBeenCalledWith(['slot-1', 'slot-2']);
     });
 
+    it('should handle booking with undefined time slots', async () => {
+      const { loadBooking, loadTimeSlots } = await import('./bookingApi');
+      const mockBooking: Booking = {
+        documentId: 'booking-1',
+        contact_person: {
+          first_name: 'Max',
+          last_name: 'Mustermann',
+          email: 'max@example.com',
+          phone_number: '+49 123',
+        },
+        location: {
+          street: 'Hauptstraße',
+          house_number: '123',
+          zip_code: '12345',
+          place: 'München',
+        },
+        present_location: 'Wohnzimmer',
+        time_slots: undefined as unknown as Booking['time_slots'],
+        children: [],
+        additional_notes: '',
+      };
+
+      vi.mocked(loadBooking).mockResolvedValue(mockBooking);
+      vi.mocked(loadTimeSlots).mockResolvedValue([]);
+
+      await loadBookingData({
+        bookingId: 'booking-1',
+        uiStore: mockUIStore,
+        optionsStore: mockOptionsStore,
+        bookingStore: mockBookingStore,
+        validationStore: mockValidationStore,
+        derivedStores: mockDerivedStores,
+      });
+
+      expect(mockBookingStore.setSelectedTimeSlotIds).toHaveBeenCalledWith([]);
+    });
+
     it('should not load when already loading', async () => {
       mockUIStore.isLoading = true;
 

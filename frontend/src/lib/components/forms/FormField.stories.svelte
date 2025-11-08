@@ -8,10 +8,36 @@
     component: FormField,
     title: 'Components/Forms/FormField',
     tags: ['autodocs'],
+    argTypes: {
+      label: { control: 'text' },
+      htmlFor: { control: 'text' },
+      errors: { control: 'object' },
+      testId: { control: 'text' },
+    },
   });
 </script>
 
-<Story name="Default with Input">
+{#snippet defaultInputSnippet()}
+  <Input
+    id="playground-input"
+    type="text"
+    placeholder="Enter your input"
+    data-testid="qa-playground"
+  />
+{/snippet}
+
+<Story
+  name="Playground"
+  args={{
+    label: 'First Name *',
+    htmlFor: 'playground-input',
+    errors: [],
+    testId: undefined,
+    children: defaultInputSnippet,
+  }}
+/>
+
+<Story name="Default">
   <FormField label="First Name *" htmlFor="first-name">
     <Input
       id="first-name"
@@ -19,6 +45,12 @@
       placeholder="Enter your first name"
       data-testid="qa-first-name"
     />
+  </FormField>
+</Story>
+
+<Story name="With TestId">
+  <FormField label="Email *" htmlFor="email" testId="qa-email-field">
+    <Input id="email" type="email" placeholder="Enter your email" data-testid="qa-email" />
   </FormField>
 </Story>
 
@@ -43,6 +75,34 @@
   </FormField>
 </Story>
 
+<Story name="With Many Errors">
+  <FormField
+    label="Username *"
+    htmlFor="username"
+    errors={[
+      'Username is required',
+      'Username must be at least 3 characters',
+      'Username can only contain letters, numbers, and underscores',
+      'Username cannot start with a number',
+      'Username is already taken',
+    ]}
+  >
+    <Input id="username" type="text" placeholder="Enter username" data-testid="qa-username" />
+  </FormField>
+</Story>
+
+<Story name="With Long Error Message">
+  <FormField
+    label="API Key *"
+    htmlFor="api-key"
+    errors={[
+      'The API key format is invalid. It must be a 64-character hexadecimal string starting with "sk_" followed by 61 alphanumeric characters. Please check the documentation for the correct format.',
+    ]}
+  >
+    <Input id="api-key" type="text" placeholder="Enter API key" data-testid="qa-api-key" />
+  </FormField>
+</Story>
+
 <Story name="With Textarea">
   <FormField label="Additional Notes" htmlFor="notes">
     <Textarea
@@ -54,7 +114,28 @@
   </FormField>
 </Story>
 
-<Story name="Multiple Fields">
+<Story name="Without Children">
+  <FormField label="Empty Field" htmlFor="empty-field" />
+</Story>
+
+<Story name="Without Children With Errors">
+  <FormField
+    label="Missing Input"
+    htmlFor="missing"
+    errors={['This field is required', 'Input element is missing']}
+  />
+</Story>
+
+<Story name="Long Label">
+  <FormField
+    label="Please provide your complete residential address including street name, house number, postal code, city, and country for shipping purposes *"
+    htmlFor="long-label"
+  >
+    <Input id="long-label" type="text" placeholder="Enter address" data-testid="qa-long-label" />
+  </FormField>
+</Story>
+
+<Story name="Multiple Fields Form">
   <div class="space-y-6">
     <FormField label="First Name *" htmlFor="first-name">
       <Input id="first-name" type="text" placeholder="First name" data-testid="qa-first-name" />
@@ -67,11 +148,14 @@
     <FormField label="Email *" htmlFor="email" errors={['Please enter a valid email address']}>
       <Input id="email" type="email" placeholder="Email" data-testid="qa-email" />
     </FormField>
-  </div>
-</Story>
 
-<Story name="Required Field">
-  <FormField label="Phone Number *" htmlFor="phone">
-    <Input id="phone" type="tel" placeholder="+49 123 456789" required data-testid="qa-phone" />
-  </FormField>
+    <FormField label="Comments" htmlFor="comments">
+      <Textarea
+        id="comments"
+        placeholder="Optional comments..."
+        rows={3}
+        data-testid="qa-comments"
+      />
+    </FormField>
+  </div>
 </Story>

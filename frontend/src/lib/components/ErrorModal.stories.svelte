@@ -36,6 +36,11 @@
   };
 </script>
 
+<Story
+  name="Playground"
+  args={{ error: detailedError, onClose: () => {}, onRetry: () => {}, askToReload: false }}
+/>
+
 <Story name="Simple Error" args={{ error: simpleError, onClose: () => {}, askToReload: false }} />
 
 <Story

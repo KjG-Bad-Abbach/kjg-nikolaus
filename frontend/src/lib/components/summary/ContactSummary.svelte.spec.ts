@@ -87,18 +87,7 @@ describe('ContactSummary', () => {
     expect(onEdit).toHaveBeenCalledOnce();
   });
 
-  it('should be visible when step is not 0 and anyFilled is true', async () => {
-    const { container } = render(ContactSummary, {
-      contactPerson: completeContact,
-      finalDeadline,
-      onEdit: vi.fn(),
-    });
-
-    const summaryDiv = container.querySelector('.text-left');
-    expect(summaryDiv).toBeTruthy();
-  });
-
-  it('should handle null/undefined contact person fields gracefully', async () => {
+  it('should show missing field warnings for all empty fields', async () => {
     const nullContact = {
       first_name: '',
       last_name: '',
@@ -112,8 +101,12 @@ describe('ContactSummary', () => {
       onEdit: vi.fn(),
     });
 
-    const heading = page.getByRole('heading', { level: 3 });
-    await expect.element(heading).toBeInTheDocument();
+    // Should show 4 warnings (one for each field)
+    const warnings = page.getByText('Angabe fehlt', { exact: false });
+    await expect.element(warnings.nth(0)).toBeInTheDocument();
+    await expect.element(warnings.nth(1)).toBeInTheDocument();
+    await expect.element(warnings.nth(2)).toBeInTheDocument();
+    await expect.element(warnings.nth(3)).toBeInTheDocument();
   });
 
   it('should show all field labels correctly', async () => {
@@ -127,5 +120,55 @@ describe('ContactSummary', () => {
     await expect.element(page.getByText('Nachname:', { exact: false })).toBeInTheDocument();
     await expect.element(page.getByText('E-Mail:', { exact: false })).toBeInTheDocument();
     await expect.element(page.getByText('Telefonnummer:', { exact: false })).toBeInTheDocument();
+  });
+
+  it('should show missing field warning for empty last name', async () => {
+    const incompleteContact: ContactPerson = {
+      ...completeContact,
+      last_name: '',
+    };
+
+    render(ContactSummary, {
+      contactPerson: incompleteContact,
+      finalDeadline,
+      onEdit: vi.fn(),
+    });
+
+    const warning = page.getByText('Nachname:', { exact: false }).getByText('Angabe fehlt', {
+      exact: false,
+    });
+    await expect.element(warning).toBeInTheDocument();
+  });
+
+  it('should show missing field warning for empty email', async () => {
+    const incompleteContact: ContactPerson = {
+      ...completeContact,
+      email: '',
+    };
+
+    render(ContactSummary, {
+      contactPerson: incompleteContact,
+      finalDeadline,
+      onEdit: vi.fn(),
+    });
+
+    const warnings = page.getByText('Angabe fehlt', { exact: false });
+    await expect.element(warnings.nth(0)).toBeInTheDocument();
+  });
+
+  it('should show missing field warning for empty phone number', async () => {
+    const incompleteContact: ContactPerson = {
+      ...completeContact,
+      phone_number: '',
+    };
+
+    render(ContactSummary, {
+      contactPerson: incompleteContact,
+      finalDeadline,
+      onEdit: vi.fn(),
+    });
+
+    const warnings = page.getByText('Angabe fehlt', { exact: false });
+    await expect.element(warnings.nth(0)).toBeInTheDocument();
   });
 });

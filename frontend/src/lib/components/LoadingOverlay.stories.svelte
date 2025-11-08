@@ -9,6 +9,8 @@
   });
 </script>
 
+<Story name="Playground" args={{ isLoading: true }} />
+
 <Story name="Loading" args={{ isLoading: true }} />
 
 <Story name="Not Loading" args={{ isLoading: false }} />

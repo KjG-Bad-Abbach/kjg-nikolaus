@@ -8,6 +8,10 @@
     tags: ['autodocs'],
     argTypes: {
       onEdit: { action: 'edit' },
+      location: { control: 'object' },
+      presentLocation: { control: 'text' },
+      routePlanningDeadline: { control: 'date' },
+      finalDeadline: { control: 'date' },
     },
   });
 
@@ -37,7 +41,7 @@
 </script>
 
 <Story
-  name="Complete"
+  name="Playground"
   args={{
     location: completeLocation,
     presentLocation: 'Unter dem Weihnachtsbaum',
@@ -47,7 +51,17 @@
 />
 
 <Story
-  name="Incomplete"
+  name="All Fields Complete"
+  args={{
+    location: completeLocation,
+    presentLocation: 'Unter dem Weihnachtsbaum',
+    routePlanningDeadline,
+    finalDeadline,
+  }}
+/>
+
+<Story
+  name="Address Incomplete"
   args={{
     location: incompleteLocation,
     presentLocation: 'Unter dem Weihnachtsbaum',
@@ -57,7 +71,7 @@
 />
 
 <Story
-  name="Empty"
+  name="All Fields Empty"
   args={{
     location: emptyLocation,
     presentLocation: '',
@@ -67,10 +81,21 @@
 />
 
 <Story
-  name="Missing Present Location"
+  name="Address Complete, Present Location Missing"
   args={{
     location: completeLocation,
     presentLocation: '',
+    routePlanningDeadline,
+    finalDeadline,
+  }}
+/>
+
+<Story
+  name="With Long Present Location Text"
+  args={{
+    location: completeLocation,
+    presentLocation:
+      'Unter dem Weihnachtsbaum im Wohnzimmer, direkt neben der großen Standuhr. Bitte klingeln Sie zweimal.',
     routePlanningDeadline,
     finalDeadline,
   }}

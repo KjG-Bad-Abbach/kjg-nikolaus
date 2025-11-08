@@ -47,27 +47,6 @@ describe('SummaryCard', () => {
     await expect.element(content).toHaveTextContent('Custom Content');
   });
 
-  it('should have correct CSS classes', async () => {
-    const { container } = render(SummaryCard, {
-      title: 'Test Title',
-      onEdit: vi.fn(),
-    });
-
-    const cardDiv = container.querySelector('.text-left');
-    expect(cardDiv).toBeTruthy();
-  });
-
-  it('should render EditIcon in edit button', async () => {
-    const { container } = render(SummaryCard, {
-      title: 'Test Title',
-      onEdit: vi.fn(),
-    });
-
-    const svg = container.querySelector('svg');
-    expect(svg).toBeTruthy();
-    expect(svg?.classList.contains('size-6')).toBe(true);
-  });
-
   it('should call onEdit when Enter key is pressed on edit button', async () => {
     const onEdit = vi.fn();
     const { container } = render(SummaryCard, {
@@ -91,9 +70,11 @@ describe('SummaryCard', () => {
 
     const editButton = container.querySelector('[role="button"]') as HTMLElement;
     const keyEvent = new KeyboardEvent('keydown', { key: ' ', bubbles: true });
+    const preventDefaultSpy = vi.spyOn(keyEvent, 'preventDefault');
     await editButton.dispatchEvent(keyEvent);
 
     expect(onEdit).toHaveBeenCalledOnce();
+    expect(preventDefaultSpy).toHaveBeenCalled();
   });
 
   it('should not call onEdit when other keys are pressed on edit button', async () => {

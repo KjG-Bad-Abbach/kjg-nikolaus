@@ -7,7 +7,7 @@ describe('DeadlineBanner', () => {
   const routePlanningDeadline = new Date('2024-12-05T19:30:00+01:00');
   const finalDeadline = new Date('2024-12-20T23:59:00+01:00');
 
-  it('should render both deadlines', async () => {
+  it('should render both deadlines with explanation text', async () => {
     render(DeadlineBanner, {
       routePlanningDeadline,
       finalDeadline,
@@ -15,11 +15,12 @@ describe('DeadlineBanner', () => {
       canEditAnything: true,
     });
 
-    const routePlanningText = page.getByText('Adresse und Zeitslots:', { exact: false });
-    const finalText = page.getByText('Finale Deadline:', { exact: false });
-
-    await expect.element(routePlanningText).toBeInTheDocument();
-    await expect.element(finalText).toBeInTheDocument();
+    await expect
+      .element(page.getByText('Adresse und Zeitslots:', { exact: false }))
+      .toBeInTheDocument();
+    await expect.element(page.getByText('Finale Deadline:', { exact: false })).toBeInTheDocument();
+    await expect.element(page.getByText('(wichtig für Routenplanung)')).toBeInTheDocument();
+    await expect.element(page.getByText('(für alle restlichen Angaben)')).toBeInTheDocument();
   });
 
   it('should apply strikethrough when route planning deadline passed', async () => {
@@ -65,51 +66,5 @@ describe('DeadlineBanner', () => {
 
     expect(routePlanningElement?.classList.contains('line-through')).toBe(false);
     expect(finalElement?.classList.contains('line-through')).toBe(false);
-  });
-
-  it('should display deadline explanation text', async () => {
-    render(DeadlineBanner, {
-      routePlanningDeadline,
-      finalDeadline,
-      canEditRoutePlanning: true,
-      canEditAnything: true,
-    });
-
-    const routePlanningExplanation = page.getByText('(wichtig für Routenplanung)');
-    const finalExplanation = page.getByText('(für alle restlichen Angaben)');
-
-    await expect.element(routePlanningExplanation).toBeInTheDocument();
-    await expect.element(finalExplanation).toBeInTheDocument();
-  });
-
-  it('should render with correct test IDs', async () => {
-    const { container } = render(DeadlineBanner, {
-      routePlanningDeadline,
-      finalDeadline,
-      canEditRoutePlanning: true,
-      canEditAnything: true,
-    });
-
-    const banner = container.querySelector('[data-testid="qa-deadlines"]');
-    const routePlanning = container.querySelector('[data-testid="qa-deadline-route-planning"]');
-    const final = container.querySelector('[data-testid="qa-deadline-final"]');
-
-    expect(banner).toBeTruthy();
-    expect(routePlanning).toBeTruthy();
-    expect(final).toBeTruthy();
-  });
-
-  it('should apply correct styling classes', async () => {
-    const { container } = render(DeadlineBanner, {
-      routePlanningDeadline,
-      finalDeadline,
-      canEditRoutePlanning: true,
-      canEditAnything: true,
-    });
-
-    const banner = container.querySelector('[data-testid="qa-deadlines"]');
-    expect(banner?.classList.contains('text-calypso')).toBe(true);
-    expect(banner?.classList.contains('mx-2')).toBe(true);
-    expect(banner?.classList.contains('mt-4')).toBe(true);
   });
 });

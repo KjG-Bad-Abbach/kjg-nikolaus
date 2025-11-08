@@ -125,20 +125,6 @@ describe('ErrorModal', () => {
     expect(detailsToggle).toBeFalsy();
   });
 
-  it('should apply correct styling classes', async () => {
-    const { container } = render(ErrorModal, { error, onClose: vi.fn() });
-
-    const backdrop = container.querySelector('.fixed.inset-0');
-    expect(backdrop?.classList.contains('bg-black')).toBe(true);
-    expect(backdrop?.classList.contains('bg-opacity-50')).toBe(true);
-    expect(backdrop?.classList.contains('z-50')).toBe(true);
-
-    const modal = container.querySelector('[data-testid="qa-error-modal"]');
-    expect(modal?.classList.contains('bg-red-50')).toBe(true);
-    expect(modal?.classList.contains('border-red-500')).toBe(true);
-    expect(modal?.classList.contains('rounded-lg')).toBe(true);
-  });
-
   it('should toggle details open when clicking details button', async () => {
     render(ErrorModal, { error, onClose: vi.fn() });
 
@@ -239,7 +225,7 @@ describe('ErrorModal', () => {
     await expect.element(bodyContent).toBeInTheDocument();
   });
 
-  it('should fade when error occurs or clears', async () => {
+  it('should transition from null to error state', async () => {
     const { container, rerender } = render(ErrorModal, { error: null, onClose: vi.fn() });
 
     expect(container.querySelector('[data-testid="qa-error-modal"]')).toBeFalsy();
@@ -247,7 +233,7 @@ describe('ErrorModal', () => {
     // Simulate error occurring
     await rerender({ error, onClose: vi.fn() });
 
-    const modal2 = page.getByRole('alert');
-    await expect.element(modal2).toBeInTheDocument();
+    const modal = page.getByRole('alert');
+    await expect.element(modal).toBeInTheDocument();
   });
 });

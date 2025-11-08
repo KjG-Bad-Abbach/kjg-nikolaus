@@ -127,6 +127,21 @@ The system supports intentional overbooking to optimize route planning:
 - Time slot conflict handling
 - Multi-slot reservation logic
 
+**`*.spec.ts`**
+```js
+// wrong:
+render(SomeComponent, {
+  props: {
+    somePropName: true,
+  },
+});
+
+// correct:
+render(SomeComponent, {
+  somePropName: true,
+});
+```
+
 ## Environment Configuration
 
 Copy `.env.example` to `.env` and configure:

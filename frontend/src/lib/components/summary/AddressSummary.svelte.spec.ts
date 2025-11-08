@@ -85,9 +85,13 @@ describe('AddressSummary', () => {
       onEdit: vi.fn(),
     });
 
-    // Should show warning for present location
+    // Should show warning with final deadline for present location
     const warning = page.getByText('Ort für Geschenke:', { exact: false });
     await expect.element(warning).toBeInTheDocument();
+
+    // Verify it shows final deadline (different from route planning deadline)
+    const deadlinePattern = page.getByText(/\d+\.\d+\..*\d+:\d+ Uhr/, { exact: false });
+    await expect.element(deadlinePattern.nth(0)).toBeInTheDocument();
   });
 
   it('should call onEdit when edit button is clicked', async () => {
@@ -124,7 +128,7 @@ describe('AddressSummary', () => {
       .toBeInTheDocument();
   });
 
-  it('should handle null/undefined location fields gracefully', async () => {
+  it('should show missing field warnings for all empty fields', async () => {
     const nullLocation = {
       street: '',
       house_number: '',
@@ -140,7 +144,66 @@ describe('AddressSummary', () => {
       onEdit: vi.fn(),
     });
 
-    const heading = page.getByRole('heading', { level: 3 });
-    await expect.element(heading).toBeInTheDocument();
+    // Should show 5 warnings (4 for address fields + 1 for present location)
+    const warnings = page.getByText('Angabe fehlt', { exact: false });
+    await expect.element(warnings.nth(0)).toBeInTheDocument();
+    await expect.element(warnings.nth(1)).toBeInTheDocument();
+    await expect.element(warnings.nth(2)).toBeInTheDocument();
+    await expect.element(warnings.nth(3)).toBeInTheDocument();
+    await expect.element(warnings.nth(4)).toBeInTheDocument();
+  });
+
+  it('should show missing field warning for empty house number', async () => {
+    const incompleteLocation: Location = {
+      ...completeLocation,
+      house_number: '',
+    };
+
+    render(AddressSummary, {
+      location: incompleteLocation,
+      presentLocation: 'Present',
+      routePlanningDeadline,
+      finalDeadline,
+      onEdit: vi.fn(),
+    });
+
+    const warnings = page.getByText('Angabe fehlt', { exact: false });
+    await expect.element(warnings.nth(0)).toBeInTheDocument();
+  });
+
+  it('should show missing field warning for empty zip code', async () => {
+    const incompleteLocation: Location = {
+      ...completeLocation,
+      zip_code: '',
+    };
+
+    render(AddressSummary, {
+      location: incompleteLocation,
+      presentLocation: 'Present',
+      routePlanningDeadline,
+      finalDeadline,
+      onEdit: vi.fn(),
+    });
+
+    const warnings = page.getByText('Angabe fehlt', { exact: false });
+    await expect.element(warnings.nth(0)).toBeInTheDocument();
+  });
+
+  it('should show missing field warning for empty place', async () => {
+    const incompleteLocation: Location = {
+      ...completeLocation,
+      place: '',
+    };
+
+    render(AddressSummary, {
+      location: incompleteLocation,
+      presentLocation: 'Present',
+      routePlanningDeadline,
+      finalDeadline,
+      onEdit: vi.fn(),
+    });
+
+    const warnings = page.getByText('Angabe fehlt', { exact: false });
+    await expect.element(warnings.nth(0)).toBeInTheDocument();
   });
 });

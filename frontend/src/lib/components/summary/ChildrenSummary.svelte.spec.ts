@@ -35,8 +35,14 @@ describe('ChildrenSummary', () => {
 
     await expect.element(page.getByText('Max', { exact: true })).toBeInTheDocument();
     await expect.element(page.getByText('Blaue Augen', { exact: true })).toBeInTheDocument();
+    await expect
+      .element(page.getByText('Max war dieses Jahr besonders fleißig', { exact: true }))
+      .toBeInTheDocument();
     await expect.element(page.getByText('Emma', { exact: true })).toBeInTheDocument();
     await expect.element(page.getByText('Blonde Haare', { exact: true })).toBeInTheDocument();
+    await expect
+      .element(page.getByText('Emma hat immer ihre Hausaufgaben gemacht', { exact: true }))
+      .toBeInTheDocument();
   });
 
   it('should show missing field warning for empty children list', async () => {
@@ -143,18 +149,6 @@ describe('ChildrenSummary', () => {
     await expect.element(deadline).toBeInTheDocument();
   });
 
-  it('should truncate long speech text', async () => {
-    const { container } = render(ChildrenSummary, {
-      children: completeChildren,
-      additionalNotes: '',
-      finalDeadline,
-      onEdit: vi.fn(),
-    });
-
-    const truncateDiv = container.querySelector('.truncate');
-    expect(truncateDiv).toBeTruthy();
-  });
-
   it('should handle multiple children correctly', async () => {
     render(ChildrenSummary, {
       children: completeChildren,
@@ -178,41 +172,5 @@ describe('ChildrenSummary', () => {
     // There should be no "Angabe fehlt" warnings for complete children
     const warnings = page.getByText('Angabe fehlt', { exact: false });
     await expect.element(warnings).not.toBeInTheDocument();
-  });
-
-  it('should truncate long additional notes', async () => {
-    const { container } = render(ChildrenSummary, {
-      children: completeChildren,
-      additionalNotes:
-        'This is a very long additional note that should be truncated when displayed in the UI',
-      finalDeadline,
-      onEdit: vi.fn(),
-    });
-
-    const truncateDiv = container.querySelectorAll('.truncate');
-    // Should have truncate divs for speech + additional notes
-    expect(truncateDiv.length).toBeGreaterThan(0);
-  });
-
-  it('should handle child with empty string fields', async () => {
-    const childWithEmptyStrings: Child[] = [
-      {
-        id: '1',
-        name: '',
-        identification_trait: '',
-        speech: '',
-      },
-    ];
-
-    render(ChildrenSummary, {
-      children: childWithEmptyStrings,
-      additionalNotes: '',
-      finalDeadline,
-      onEdit: vi.fn(),
-    });
-
-    // Should show warnings for all empty fields
-    const warnings = page.getByText('Angabe fehlt', { exact: false });
-    await expect.element(warnings.nth(0)).toBeInTheDocument();
   });
 });

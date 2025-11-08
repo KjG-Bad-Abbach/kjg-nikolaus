@@ -35,6 +35,11 @@ describe('string utilities', () => {
     it('should remove multiple soft hyphens', () => {
       expect(trim('\u00AD\u00ADhello\u00AD\u00AD')).toBe('hello');
     });
+
+    it('should remove soft hyphens from middle of text', () => {
+      expect(trim('hello\u00ADworld')).toBe('helloworld');
+      expect(trim('hel\u00ADlo\u00ADworld')).toBe('helloworld');
+    });
   });
 
   describe('isFilled', () => {

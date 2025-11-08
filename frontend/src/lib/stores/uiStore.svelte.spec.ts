@@ -134,6 +134,17 @@ describe('uiStore', () => {
     expect(uiStore.step).toBe(0);
   });
 
+  it('should not change step when setting invalid value from non-zero step', () => {
+    uiStore.setStep(2);
+    expect(uiStore.step).toBe(2);
+
+    uiStore.setStep(-1);
+    expect(uiStore.step).toBe(2);
+
+    uiStore.setStep(10);
+    expect(uiStore.step).toBe(2);
+  });
+
   it('should set canJumpToAnyStep', () => {
     uiStore.setCanJumpToAnyStep(true);
     expect(uiStore.canJumpToAnyStep).toBe(true);

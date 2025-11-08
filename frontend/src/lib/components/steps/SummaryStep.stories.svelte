@@ -7,11 +7,27 @@
     title: 'Components/Steps/SummaryStep',
     tags: ['autodocs'],
     argTypes: {
-      isRoutePlanningFilled: { control: 'boolean' },
-      isEverythingFilled: { control: 'boolean' },
+      isRoutePlanningFilled: {
+        control: 'boolean',
+        description: 'Whether route planning information is complete',
+      },
+      isEverythingFilled: {
+        control: 'boolean',
+        description: 'Whether all information is complete',
+      },
     },
   });
 </script>
+
+<Story
+  name="Playground"
+  args={{
+    isRoutePlanningFilled: true,
+    isEverythingFilled: false,
+    routePlanningDeadline: new Date('2024-12-01T19:30:00+01:00'),
+    finalDeadline: new Date('2024-12-05T19:30:00+01:00'),
+  }}
+/>
 
 <Story
   name="Nothing Complete"

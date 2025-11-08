@@ -7,6 +7,11 @@
     component: StepNav,
     title: 'Components/Stepper/StepNav',
     tags: ['autodocs'],
+    argTypes: {
+      currentStep: { control: 'number' },
+      totalSteps: { control: 'number' },
+      canJumpToAnyStep: { control: 'boolean' },
+    },
   });
 
   const mockSteps = [
@@ -17,6 +22,20 @@
     { name: 'Summary', testId: 'summary', anyFilled: false, allFilled: false },
   ];
 </script>
+
+{#snippet stepListContent()}
+  <StepList steps={mockSteps} currentStep={2} canJumpToAnyStep={true} />
+{/snippet}
+
+<Story
+  name="Playground"
+  args={{
+    currentStep: 2,
+    totalSteps: 5,
+    canJumpToAnyStep: true,
+    children: stepListContent,
+  }}
+/>
 
 <!-- Demo showing complete stepper with navigation -->
 <Story name="First Step">
@@ -43,8 +62,35 @@
   </StepNav>
 </Story>
 
+<Story name="Single Step (Both Buttons Disabled)">
+  <StepNav currentStep={0} totalSteps={1} canJumpToAnyStep={true}>
+    <StepList
+      steps={[{ name: 'Only Step', testId: 'only', anyFilled: true, allFilled: true }]}
+      currentStep={0}
+      canJumpToAnyStep={true}
+    />
+  </StepNav>
+</Story>
+
+<Story name="Two Steps (Minimum Multi-step)">
+  <StepNav currentStep={0} totalSteps={2} canJumpToAnyStep={true}>
+    <StepList
+      steps={[
+        { name: 'First', testId: 'first', anyFilled: true, allFilled: true },
+        { name: 'Second', testId: 'second', anyFilled: false, allFilled: false },
+      ]}
+      currentStep={0}
+      canJumpToAnyStep={true}
+    />
+  </StepNav>
+</Story>
+
+<Story name="Without Children Slot (Standalone Buttons)">
+  <StepNav currentStep={2} totalSteps={5} canJumpToAnyStep={true} />
+</Story>
+
 <!-- Demo showing all states -->
-<Story name="All States">
+<Story name="All States Comparison">
   <div class="space-y-8 p-4">
     <div>
       <h3 class="mb-2 text-sm font-bold">First Step (Previous Disabled)</h3>
@@ -68,6 +114,16 @@
       <h3 class="mb-2 text-sm font-bold">Cannot Jump (Buttons Hidden)</h3>
       <StepNav currentStep={2} totalSteps={5} canJumpToAnyStep={false}>
         <StepList steps={mockSteps} currentStep={2} canJumpToAnyStep={false} />
+      </StepNav>
+    </div>
+    <div>
+      <h3 class="mb-2 text-sm font-bold">Single Step (Both Disabled)</h3>
+      <StepNav currentStep={0} totalSteps={1} canJumpToAnyStep={true}>
+        <StepList
+          steps={[{ name: 'Only Step', testId: 'only', anyFilled: true, allFilled: true }]}
+          currentStep={0}
+          canJumpToAnyStep={true}
+        />
       </StepNav>
     </div>
   </div>

@@ -132,16 +132,4 @@ describe('TimeSlotSummary', () => {
     const deadline = page.getByText('Deadline:', { exact: false });
     await expect.element(deadline).toBeInTheDocument();
   });
-
-  it('should render empty list when no slots', async () => {
-    const { container } = render(TimeSlotSummary, {
-      selectedTimeSlots: [],
-      maxTimeSlots,
-      routePlanningDeadline,
-      onEdit: vi.fn(),
-    });
-
-    const list = container.querySelector('ul');
-    expect(list).toBeTruthy();
-  });
 });

@@ -13,6 +13,16 @@
 </script>
 
 <Story
+  name="Playground"
+  args={{
+    routePlanningDeadline,
+    finalDeadline,
+    canEditRoutePlanning: true,
+    canEditAnything: true,
+  }}
+/>
+
+<Story
   name="Both Active"
   args={{
     routePlanningDeadline,
