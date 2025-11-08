@@ -1,23 +1,10 @@
-<script module>
+<script lang="ts" module>
   import { defineMeta } from '@storybook/addon-svelte-csf';
+  import { fn } from 'storybook/test';
   import TimeSlotSummary from './TimeSlotSummary.svelte';
+  import type { Props } from './TimeSlotSummary.svelte';
 
-  const { Story } = defineMeta({
-    component: TimeSlotSummary,
-    title: 'Components/Summary/TimeSlotSummary',
-    tags: ['autodocs'],
-    argTypes: {
-      onEdit: { action: 'edit' },
-      selectedTimeSlots: { control: 'object' },
-      maxTimeSlots: { control: 'number' },
-      routePlanningDeadline: { control: 'date' },
-    },
-  });
-
-  const routePlanningDeadline = new Date('2024-12-05T19:30:00+01:00');
-  const maxTimeSlots = 3;
-
-  const timeSlots = [
+  const timeSlots: Props['selectedTimeSlots'] = [
     {
       id: '1',
       documentId: 'doc1',
@@ -41,7 +28,7 @@
     },
   ];
 
-  const manyTimeSlots = [
+  const manyTimeSlots: Props['selectedTimeSlots'] = [
     ...timeSlots,
     {
       id: '4',
@@ -58,32 +45,34 @@
       label: 'Sa 6.12. 18:00 - 19:00 Uhr',
     },
   ];
+
+  const { Story } = defineMeta({
+    component: TimeSlotSummary,
+    title: 'Components/Summary/TimeSlotSummary',
+    tags: ['autodocs'],
+    argTypes: {
+      onEdit: { action: 'edit' },
+      selectedTimeSlots: { control: 'object' },
+      maxTimeSlots: { control: 'number' },
+      routePlanningDeadline: { control: 'date' },
+    },
+    args: {
+      selectedTimeSlots: timeSlots,
+      maxTimeSlots: 3,
+      routePlanningDeadline: new Date('2024-12-05T19:30:00+01:00'),
+      onEdit: fn(),
+    },
+  });
 </script>
 
-<Story
-  name="Playground"
-  args={{
-    selectedTimeSlots: timeSlots,
-    maxTimeSlots,
-    routePlanningDeadline,
-  }}
-/>
+<Story name="Playground" />
 
-<Story
-  name="All Slots Selected (3 of 3)"
-  args={{
-    selectedTimeSlots: timeSlots,
-    maxTimeSlots,
-    routePlanningDeadline,
-  }}
-/>
+<Story name="All Slots Selected (3 of 3)" />
 
 <Story
   name="One Slot Selected (1 of 3)"
   args={{
     selectedTimeSlots: [timeSlots[0]],
-    maxTimeSlots,
-    routePlanningDeadline,
   }}
 />
 
@@ -91,8 +80,6 @@
   name="No Slots Selected (0 of 3)"
   args={{
     selectedTimeSlots: [],
-    maxTimeSlots,
-    routePlanningDeadline,
   }}
 />
 
@@ -100,8 +87,6 @@
   name="Two Slots Selected (2 of 3)"
   args={{
     selectedTimeSlots: [timeSlots[0], timeSlots[1]],
-    maxTimeSlots,
-    routePlanningDeadline,
   }}
 />
 
@@ -110,16 +95,13 @@
   args={{
     selectedTimeSlots: manyTimeSlots,
     maxTimeSlots: 5,
-    routePlanningDeadline,
   }}
 />
 
 <Story
   name="Many Slots - Incomplete (3 of 5)"
   args={{
-    selectedTimeSlots: timeSlots,
     maxTimeSlots: 5,
-    routePlanningDeadline,
   }}
 />
 
@@ -128,7 +110,6 @@
   args={{
     selectedTimeSlots: [timeSlots[0]],
     maxTimeSlots: 1,
-    routePlanningDeadline,
   }}
 />
 
@@ -137,6 +118,5 @@
   args={{
     selectedTimeSlots: [],
     maxTimeSlots: 1,
-    routePlanningDeadline,
   }}
 />

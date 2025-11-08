@@ -1,5 +1,6 @@
-<script module>
+<script lang="ts" module>
   import { defineMeta } from '@storybook/addon-svelte-csf';
+  import { fn } from 'storybook/test';
   import ChildrenStep from './ChildrenStep.svelte';
 
   const { Story } = defineMeta({
@@ -16,57 +17,38 @@
         description: 'Whether any editing is allowed',
       },
     },
+    args: {
+      children: [
+        {
+          name: 'Max',
+          identification_trait: '8 Jahre, dunkle Haare',
+          speech: 'kann toll zeichnen\närgert seine Schwester oft',
+        },
+      ],
+      additionalNotes: 'Hund bellt, bitte Klingel benutzen',
+      finalDeadline: new Date('2024-12-05T19:30:00+01:00'),
+      canEditAnything: true,
+      validationMessages: {},
+      onChange: fn(),
+      onSubmit: fn(),
+    },
   });
 </script>
 
-<Story
-  name="Playground"
-  args={{
-    children: [
-      {
-        name: 'Max',
-        identification_trait: '8 Jahre, dunkle Haare',
-        speech: 'kann toll zeichnen\närgert seine Schwester oft',
-      },
-    ],
-    additionalNotes: 'Hund bellt, bitte Klingel benutzen',
-    finalDeadline: new Date('2024-12-05T19:30:00+01:00'),
-    canEditAnything: true,
-    validationMessages: {},
-    onChange: () => {},
-    onSubmit: () => {},
-  }}
-/>
+<Story name="Playground" />
 
 <Story
   name="Empty (No Children)"
   args={{
     children: [],
     additionalNotes: '',
-    finalDeadline: new Date('2024-12-05T19:30:00+01:00'),
-    canEditAnything: true,
-    validationMessages: {},
-    onChange: () => {},
-    onSubmit: () => {},
   }}
 />
 
 <Story
   name="With One Child"
   args={{
-    children: [
-      {
-        name: 'Max',
-        identification_trait: '8 Jahre, dunkle Haare',
-        speech: 'kann toll zeichnen\närgert seine Schwester oft',
-      },
-    ],
     additionalNotes: '',
-    finalDeadline: new Date('2024-12-05T19:30:00+01:00'),
-    canEditAnything: true,
-    validationMessages: {},
-    onChange: () => {},
-    onSubmit: () => {},
   }}
 />
 
@@ -85,12 +67,6 @@
         speech: 'sehr aufgewecktes Kind, freut sich auf Schule\nschreit sehr laut beim Streiten',
       },
     ],
-    additionalNotes: 'Hund bellt, bitte Klingel benutzen',
-    finalDeadline: new Date('2024-12-05T19:30:00+01:00'),
-    canEditAnything: true,
-    validationMessages: {},
-    onChange: () => {},
-    onSubmit: () => {},
   }}
 />
 
@@ -105,11 +81,7 @@
       },
     ],
     additionalNotes: 'Hund im Garten',
-    finalDeadline: new Date('2024-12-05T19:30:00+01:00'),
     canEditAnything: false,
-    validationMessages: {},
-    onChange: () => {},
-    onSubmit: () => {},
   }}
 />
 
@@ -124,13 +96,9 @@
       },
     ],
     additionalNotes: '',
-    finalDeadline: new Date('2024-12-05T19:30:00+01:00'),
-    canEditAnything: true,
     validationMessages: {
       'booking.children[0].name': ['Name ist erforderlich'],
     },
-    onChange: () => {},
-    onSubmit: () => {},
   }}
 />
 
@@ -166,11 +134,6 @@
     ],
     additionalNotes:
       'Familie hat einen Hund, der bei Fremden bellt. Bitte Klingel nutzen und kurz warten.',
-    finalDeadline: new Date('2024-12-05T19:30:00+01:00'),
-    canEditAnything: true,
-    validationMessages: {},
-    onChange: () => {},
-    onSubmit: () => {},
   }}
 />
 
@@ -187,10 +150,5 @@
       },
     ],
     additionalNotes: '',
-    finalDeadline: new Date('2024-12-05T19:30:00+01:00'),
-    canEditAnything: true,
-    validationMessages: {},
-    onChange: () => {},
-    onSubmit: () => {},
   }}
 />

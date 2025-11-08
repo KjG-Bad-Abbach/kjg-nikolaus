@@ -17,23 +17,20 @@
     body?: unknown;
   }
 
-  let {
-    error,
-    onClose,
-    onRetry,
-    askToReload = false,
-  }: {
+  export type Props = {
     error: ErrorObject | null;
-    onClose: () => void;
+    onClose?: () => void;
     onRetry?: () => void;
     askToReload?: boolean;
-  } = $props();
+  };
+
+  const { error, onClose, onRetry, askToReload = false }: Props = $props();
 
   let detailsOpen = $state(false);
 
   function handleBackdropClick(event: MouseEvent | KeyboardEvent) {
     if (event.target === event.currentTarget) {
-      onClose();
+      onClose?.();
     }
   }
 

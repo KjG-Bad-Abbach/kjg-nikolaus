@@ -6,17 +6,7 @@
    * Address and present location step form
    * Collects street, house number, zip code, place, and present location
    */
-  let {
-    location,
-    presentLocation,
-    routePlanningDeadline,
-    finalDeadline,
-    canEditRoutePlanning,
-    canEditAnything,
-    validationMessages,
-    onChange,
-    onSubmit,
-  }: {
+  export type Props = {
     /** Location information */
     location: Location;
     /** Present location description */
@@ -32,10 +22,22 @@
     /** Validation error messages keyed by field path */
     validationMessages: Record<string, string[]>;
     /** Callback when field values change */
-    onChange: (data: { location: Location; presentLocation: string }) => void;
+    onChange?: (data: { location: Location; presentLocation: string }) => void;
     /** Callback when form is submitted */
-    onSubmit: (event: Event) => void;
-  } = $props();
+    onSubmit?: (event: Event) => void;
+  };
+
+  const {
+    location,
+    presentLocation,
+    routePlanningDeadline,
+    finalDeadline,
+    canEditRoutePlanning,
+    canEditAnything,
+    validationMessages,
+    onChange,
+    onSubmit,
+  }: Props = $props();
 
   const routePlanningDeadlineText = $derived(formatDateTime(routePlanningDeadline));
   const finalDeadlineText = $derived(formatDateTime(finalDeadline));
@@ -50,7 +52,7 @@
 
   // Sync local state back to parent on change
   function handleChange() {
-    onChange({
+    onChange?.({
       location: {
         street,
         house_number,
@@ -64,9 +66,17 @@
   // Sync props to local state when they change
   $effect(() => {
     street = location.street;
+  });
+  $effect(() => {
     house_number = location.house_number;
+  });
+  $effect(() => {
     zip_code = location.zip_code;
+  });
+  $effect(() => {
     place = location.place;
+  });
+  $effect(() => {
     present_location = presentLocation;
   });
 

@@ -2,18 +2,13 @@
   import StepList from './stepper/StepList.svelte';
   import StepNav from './stepper/StepNav.svelte';
   import type { Step } from '$lib/types/booking';
+  import type { Snippet } from 'svelte';
 
   /**
    * Step Container Component
    * Orchestrates the multi-step booking flow with navigation and step indicators
    */
-  let {
-    currentStep = 0,
-    /* v8 ignore next 1 - Svelte 5 runes not properly instrumented by coverage tool */
-    steps = [],
-    canJumpToAnyStep = false,
-    onStepChange,
-  }: {
+  export type Props = {
     /** Current active step index (0-based) */
     currentStep?: number;
     /** Array of step metadata */
@@ -21,27 +16,38 @@
     /** Whether users can jump to any step */
     canJumpToAnyStep?: boolean;
     /** Callback when step changes */
-    onStepChange: (step: number) => void;
-  } = $props();
+    onStepChange?: (step: number) => void;
+    /** Slot for step content */
+    children?: Snippet;
+  };
+
+  const {
+    currentStep = 0,
+    /* v8 ignore next 1 - Svelte 5 runes not properly instrumented by coverage tool */
+    steps = [],
+    canJumpToAnyStep = false,
+    onStepChange,
+    children,
+  }: Props = $props();
 
   function handlePrevious() {
     /* v8 ignore next 1 - Handler passed to child component and the guard is duplicate */
     if (currentStep > 0) {
-      onStepChange(currentStep - 1);
+      onStepChange?.(currentStep - 1);
     }
   }
 
   function handleNext() {
     /* v8 ignore next 1 - Handler passed to child component and the guard is duplicate */
     if (currentStep < steps.length - 1) {
-      onStepChange(currentStep + 1);
+      onStepChange?.(currentStep + 1);
     }
   }
 
   function handleStepClick(index: number) {
     /* v8 ignore next 1 - Handler passed to child component and the guard is duplicate */
     if (canJumpToAnyStep || index === currentStep) {
-      onStepChange(index);
+      onStepChange?.(index);
     }
   }
 </script>
@@ -65,7 +71,8 @@
 
   <!-- Slot for step content, summary cards, etc. -->
   <div class="mt-8">
-    <!-- svelte-ignore slot_element_deprecated -->
-    <slot></slot>
+    {#if children}
+      {@render children()}
+    {/if}
   </div>
 </div>

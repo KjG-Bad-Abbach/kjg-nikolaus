@@ -1,15 +1,11 @@
-<script module>
+<script lang="ts" module>
   import { defineMeta } from '@storybook/addon-svelte-csf';
+  import { fn } from 'storybook/test';
   import IntroSection from './IntroSection.svelte';
-
-  const { Story } = defineMeta({
-    component: IntroSection,
-    title: 'Components/IntroSection',
-    tags: ['autodocs'],
-  });
+  import type { Props } from './IntroSection.svelte';
 
   // Sample introduction text with various formatting
-  const sampleIntroText = [
+  const sampleIntroText: Props['introductionText'] = [
     {
       type: 'heading',
       level: 2,
@@ -61,14 +57,14 @@
     },
   ];
 
-  const shortIntroText = [
+  const shortIntroText: Props['introductionText'] = [
     {
       type: 'paragraph',
       children: [{ type: 'text', text: 'Kurze Einführung für die Buchung.' }],
     },
   ];
 
-  const richFormattingText = [
+  const richFormattingText: Props['introductionText'] = [
     {
       type: 'paragraph',
       children: [
@@ -82,29 +78,26 @@
       ],
     },
   ];
+
+  const { Story } = defineMeta({
+    component: IntroSection,
+    title: 'Components/IntroSection',
+    tags: ['autodocs'],
+    args: {
+      introductionText: sampleIntroText,
+      onStart: fn(),
+    },
+  });
 </script>
 
-<Story
-  name="Playground"
-  args={{
-    introductionText: sampleIntroText,
-    onStart: () => console.log('Start clicked'),
-  }}
-/>
+<Story name="Playground" />
 
-<Story
-  name="Default"
-  args={{
-    introductionText: sampleIntroText,
-    onStart: () => console.log('Start clicked'),
-  }}
-/>
+<Story name="Default" />
 
 <Story
   name="Short Text"
   args={{
     introductionText: shortIntroText,
-    onStart: () => console.log('Start clicked'),
   }}
 />
 
@@ -112,7 +105,6 @@
   name="Rich Formatting"
   args={{
     introductionText: richFormattingText,
-    onStart: () => console.log('Start clicked'),
   }}
 />
 
@@ -120,14 +112,13 @@
   name="Empty Text"
   args={{
     introductionText: [],
-    onStart: () => console.log('Start clicked'),
   }}
 />
 
-<!-- Demo with realistic content -->
-<Story name="Realistic Example">
-  <IntroSection
-    introductionText={[
+<Story
+  name="Realistic Example"
+  args={{
+    introductionText: [
       {
         type: 'heading',
         level: 1,
@@ -177,7 +168,6 @@
           { type: 'text', text: '.' },
         ],
       },
-    ]}
-    onStart={() => alert('Buchung gestartet!')}
-  />
-</Story>
+    ],
+  }}
+/>

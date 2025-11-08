@@ -8,12 +8,7 @@
    * Children summary card
    * Displays list of children with their details and additional notes
    */
-  let {
-    children,
-    additionalNotes,
-    finalDeadline,
-    onEdit,
-  }: {
+  export type Props = {
     /** Array of children */
     children: Child[];
     /** Additional notes for Nikolaus */
@@ -21,8 +16,10 @@
     /** Final deadline */
     finalDeadline: Date;
     /** Callback when edit button is clicked */
-    onEdit: () => void;
-  } = $props();
+    onEdit?: () => void;
+  };
+
+  const { children, additionalNotes, finalDeadline, onEdit }: Props = $props();
 
   const deadlineText = $derived(formatDateTime(finalDeadline));
 </script>

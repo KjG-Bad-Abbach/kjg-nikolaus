@@ -8,18 +8,16 @@
    * Contact information summary card
    * Displays contact person details with missing field warnings
    */
-  let {
-    contactPerson,
-    finalDeadline,
-    onEdit,
-  }: {
+  export type Props = {
     /** Contact person information */
     contactPerson: ContactPerson;
     /** Final deadline for data completion */
     finalDeadline: Date;
     /** Callback when edit button is clicked */
-    onEdit: () => void;
-  } = $props();
+    onEdit?: () => void;
+  };
+
+  const { contactPerson, finalDeadline, onEdit }: Props = $props();
 
   const deadlineText = $derived(formatDateTime(finalDeadline));
 </script>

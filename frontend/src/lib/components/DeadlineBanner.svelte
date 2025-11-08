@@ -10,17 +10,15 @@
    * - Applies strikethrough styling when deadlines have passed
    */
 
-  let {
-    routePlanningDeadline,
-    finalDeadline,
-    canEditRoutePlanning,
-    canEditAnything,
-  }: {
+  export type Props = {
     routePlanningDeadline: Date;
     finalDeadline: Date;
     canEditRoutePlanning: boolean;
     canEditAnything: boolean;
-  } = $props();
+  };
+
+  const { routePlanningDeadline, finalDeadline, canEditRoutePlanning, canEditAnything }: Props =
+    $props();
 </script>
 
 <div class="mx-2 mt-4 text-calypso" data-testid="qa-deadlines">

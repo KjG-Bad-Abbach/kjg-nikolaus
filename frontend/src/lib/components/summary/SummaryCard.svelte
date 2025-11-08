@@ -1,22 +1,21 @@
 <script lang="ts">
   import EditIcon from '$lib/components/icons/EditIcon.svelte';
+  import type { Snippet } from 'svelte';
 
   /**
    * Reusable summary card component with title and edit button
    * Provides consistent layout for summary displays across booking steps
    */
-  let {
-    title,
-    onEdit,
-    children,
-  }: {
+  export type Props = {
     /** Card title displayed in header */
     title: string;
     /** Callback when edit button is clicked */
-    onEdit: () => void;
+    onEdit?: () => void;
     /** Content to display in the card body */
-    children?: import('svelte').Snippet;
-  } = $props();
+    children?: Snippet;
+  };
+
+  const { title, onEdit, children }: Props = $props();
 </script>
 
 <div class="text-left">
@@ -31,7 +30,7 @@
       onkeydown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          onEdit();
+          onEdit?.();
         }
       }}
     >

@@ -1,6 +1,16 @@
-<script module>
+<script lang="ts" module>
   import { defineMeta } from '@storybook/addon-svelte-csf';
+  import { fn } from 'storybook/test';
   import StepList from './StepList.svelte';
+  import type { Props } from './StepList.svelte';
+
+  const mockSteps: Props['steps'] = [
+    { name: 'Contact Details', testId: 'contact', anyFilled: true, allFilled: true },
+    { name: 'Address', testId: 'address', anyFilled: true, allFilled: false },
+    { name: 'Time Slots', testId: 'time-slots', anyFilled: false, allFilled: false },
+    { name: 'Children', testId: 'children', anyFilled: false, allFilled: false },
+    { name: 'Summary', testId: 'summary', anyFilled: false, allFilled: false },
+  ];
 
   const { Story } = defineMeta({
     component: StepList,
@@ -11,21 +21,16 @@
       currentStep: { control: 'number' },
       canJumpToAnyStep: { control: 'boolean' },
     },
+    args: {
+      steps: mockSteps,
+      onStepClick: fn(),
+    },
   });
-
-  const mockSteps = [
-    { name: 'Contact Details', testId: 'contact', anyFilled: true, allFilled: true },
-    { name: 'Address', testId: 'address', anyFilled: true, allFilled: false },
-    { name: 'Time Slots', testId: 'time-slots', anyFilled: false, allFilled: false },
-    { name: 'Children', testId: 'children', anyFilled: false, allFilled: false },
-    { name: 'Summary', testId: 'summary', anyFilled: false, allFilled: false },
-  ];
 </script>
 
 <Story
   name="Playground"
   args={{
-    steps: mockSteps,
     currentStep: 2,
     canJumpToAnyStep: true,
   }}
@@ -34,7 +39,6 @@
 <Story
   name="First Step Active"
   args={{
-    steps: mockSteps,
     currentStep: 0,
     canJumpToAnyStep: false,
   }}
@@ -43,7 +47,6 @@
 <Story
   name="Second Step Active"
   args={{
-    steps: mockSteps,
     currentStep: 1,
     canJumpToAnyStep: false,
   }}
@@ -52,7 +55,6 @@
 <Story
   name="Last Step Active"
   args={{
-    steps: mockSteps,
     currentStep: 4,
     canJumpToAnyStep: false,
   }}
@@ -61,7 +63,6 @@
 <Story
   name="Can Jump To Any Step"
   args={{
-    steps: mockSteps,
     currentStep: 2,
     canJumpToAnyStep: true,
   }}

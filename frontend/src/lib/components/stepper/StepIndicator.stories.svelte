@@ -1,6 +1,8 @@
-<script module>
+<script lang="ts" module>
   import { defineMeta } from '@storybook/addon-svelte-csf';
+  import { fn } from 'storybook/test';
   import StepIndicator from './StepIndicator.svelte';
+  import type { Props } from './StepIndicator.svelte';
 
   const { Story } = defineMeta({
     component: StepIndicator,
@@ -13,6 +15,9 @@
       isCurrent: { control: 'boolean' },
       allFilled: { control: 'boolean' },
       canJumpTo: { control: 'boolean' },
+    },
+    args: {
+      onClick: fn(),
     },
   });
 </script>
@@ -91,48 +96,50 @@
 
 <!-- Demo showing all states in sequence -->
 <Story name="All States Comparison">
-  <div class="space-y-4 p-4">
-    <div class="flex items-center gap-4">
-      <StepIndicator
-        index={0}
-        name="Not Filled"
-        testId="not-filled"
-        isCurrent={false}
-        allFilled={false}
-        canJumpTo={false}
-      />
-      <StepIndicator
-        index={1}
-        name="Current"
-        testId="current"
-        isCurrent={true}
-        allFilled={false}
-        canJumpTo={true}
-      />
-      <StepIndicator
-        index={2}
-        name="Filled"
-        testId="filled"
-        isCurrent={false}
-        allFilled={true}
-        canJumpTo={true}
-      />
-      <StepIndicator
-        index={3}
-        name="Current + Filled"
-        testId="current-filled"
-        isCurrent={true}
-        allFilled={true}
-        canJumpTo={true}
-      />
-      <StepIndicator
-        index={4}
-        name="Filled (No Jump)"
-        testId="filled-no-jump"
-        isCurrent={false}
-        allFilled={true}
-        canJumpTo={false}
-      />
+  {#snippet template()}
+    <div class="space-y-4 p-4">
+      <div class="flex items-center gap-4">
+        <StepIndicator
+          index={0}
+          name="Not Filled"
+          testId="not-filled"
+          isCurrent={false}
+          allFilled={false}
+          canJumpTo={false}
+        />
+        <StepIndicator
+          index={1}
+          name="Current"
+          testId="current"
+          isCurrent={true}
+          allFilled={false}
+          canJumpTo={true}
+        />
+        <StepIndicator
+          index={2}
+          name="Filled"
+          testId="filled"
+          isCurrent={false}
+          allFilled={true}
+          canJumpTo={true}
+        />
+        <StepIndicator
+          index={3}
+          name="Current + Filled"
+          testId="current-filled"
+          isCurrent={true}
+          allFilled={true}
+          canJumpTo={true}
+        />
+        <StepIndicator
+          index={4}
+          name="Filled (No Jump)"
+          testId="filled-no-jump"
+          isCurrent={false}
+          allFilled={true}
+          canJumpTo={false}
+        />
+      </div>
     </div>
-  </div>
+  {/snippet}
 </Story>

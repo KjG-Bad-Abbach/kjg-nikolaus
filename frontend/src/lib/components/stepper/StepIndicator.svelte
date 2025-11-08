@@ -1,16 +1,7 @@
 <script lang="ts">
   import CheckIcon from '../icons/CheckIcon.svelte';
 
-  // Props matching the Alpine.js implementation
-  let {
-    index,
-    name,
-    testId = '',
-    isCurrent = false,
-    allFilled = false,
-    canJumpTo = false,
-    onClick,
-  }: {
+  export type Props = {
     index: number;
     name: string;
     testId?: string;
@@ -18,7 +9,18 @@
     allFilled?: boolean;
     canJumpTo?: boolean;
     onClick?: (index: number) => void;
-  } = $props();
+  };
+
+  // Props matching the Alpine.js implementation
+  const {
+    index,
+    name,
+    testId = '',
+    isCurrent = false,
+    allFilled = false,
+    canJumpTo = false,
+    onClick,
+  }: Props = $props();
 
   function handleClick() {
     if (onClick) {

@@ -8,11 +8,11 @@
    * Conditionally rendered based on isLoading prop
    */
 
-  let {
-    isLoading,
-  }: {
+  export type Props = {
     isLoading: boolean;
-  } = $props();
+  };
+
+  const { isLoading }: Props = $props();
 </script>
 
 {#if isLoading}

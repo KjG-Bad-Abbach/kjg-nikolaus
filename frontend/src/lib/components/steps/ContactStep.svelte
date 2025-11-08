@@ -6,14 +6,7 @@
    * Contact details step form
    * Collects first name, last name, email, and phone number
    */
-  let {
-    contactPerson,
-    finalDeadline,
-    canEdit,
-    validationMessages,
-    onChange,
-    onSubmit,
-  }: {
+  export type Props = {
     /** Contact person information */
     contactPerson: ContactPerson;
     /** Final deadline for data completion */
@@ -23,10 +16,13 @@
     /** Validation error messages keyed by field path */
     validationMessages: Record<string, string[]>;
     /** Callback when field values change */
-    onChange: (contactPerson: ContactPerson) => void;
+    onChange?: (contactPerson: ContactPerson) => void;
     /** Callback when form is submitted */
-    onSubmit: (event: Event) => void;
-  } = $props();
+    onSubmit?: (event: Event) => void;
+  };
+
+  const { contactPerson, finalDeadline, canEdit, validationMessages, onChange, onSubmit }: Props =
+    $props();
 
   const deadlineText = $derived(formatDateTime(finalDeadline));
   const hasValidationErrors = $derived(Object.keys(validationMessages).length > 0);
@@ -39,7 +35,7 @@
 
   // Sync local state back to parent on change
   function handleChange() {
-    onChange({
+    onChange?.({
       first_name,
       last_name,
       email,
@@ -50,8 +46,14 @@
   // Sync props to local state when they change
   $effect(() => {
     first_name = contactPerson.first_name;
+  });
+  $effect(() => {
     last_name = contactPerson.last_name;
+  });
+  $effect(() => {
     email = contactPerson.email;
+  });
+  $effect(() => {
     phone_number = contactPerson.phone_number;
   });
 </script>

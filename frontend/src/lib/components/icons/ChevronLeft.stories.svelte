@@ -1,6 +1,7 @@
-<script module>
+<script lang="ts" module>
   import { defineMeta } from '@storybook/addon-svelte-csf';
   import ChevronLeft from './ChevronLeft.svelte';
+  import type { Props } from './ChevronLeft.svelte';
 
   const { Story } = defineMeta({
     component: ChevronLeft,
@@ -18,7 +19,7 @@
 
 <Story name="Playground" args={{ sizeClass: 'size-8' }} />
 
-<Story name="Default" args={{}} />
+<Story name="Default" />
 
 <Story name="Extra Small" args={{ sizeClass: 'size-4' }} />
 
@@ -30,28 +31,34 @@
 
 <Story name="Extra Large" args={{ sizeClass: 'size-16' }} />
 
-<Story name="With Custom Color">
-  <div class="text-atlantis">
-    <ChevronLeft sizeClass="size-10" />
-  </div>
+<Story name="With Custom Color" args={{ sizeClass: 'size-10' }}>
+  {#snippet template(args: Props)}
+    <div class="text-atlantis">
+      <ChevronLeft {...args} />
+    </div>
+  {/snippet}
 </Story>
 
-<Story name="In Navigation Button">
-  <button
-    class="inline-flex items-center gap-2 rounded-sm bg-java px-4 py-2 text-white hover:bg-java-700"
-  >
-    <ChevronLeft sizeClass="size-5" />
-    <span>Previous</span>
-  </button>
-</Story>
-
-<Story name="In Pagination">
-  <div class="flex gap-2">
+<Story name="In Navigation Button" args={{ sizeClass: 'size-5' }}>
+  {#snippet template(args: Props)}
     <button
-      class="flex size-8 items-center justify-center rounded-sm border border-gray-300 hover:bg-gray-100"
+      class="inline-flex items-center gap-2 rounded-sm bg-java px-4 py-2 text-white hover:bg-java-700"
     >
-      <ChevronLeft sizeClass="size-5" />
+      <ChevronLeft {...args} />
+      <span>Previous</span>
     </button>
-    <div class="flex items-center px-2">Page 2 of 10</div>
-  </div>
+  {/snippet}
+</Story>
+
+<Story name="In Pagination" args={{ sizeClass: 'size-5' }}>
+  {#snippet template(args: Props)}
+    <div class="flex gap-2">
+      <button
+        class="flex size-8 items-center justify-center rounded-sm border border-gray-300 hover:bg-gray-100"
+      >
+        <ChevronLeft {...args} />
+      </button>
+      <div class="flex items-center px-2">Page 2 of 10</div>
+    </div>
+  {/snippet}
 </Story>

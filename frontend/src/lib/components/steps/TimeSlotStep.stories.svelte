@@ -1,28 +1,10 @@
-<script module>
+<script lang="ts" module>
   import { defineMeta } from '@storybook/addon-svelte-csf';
+  import { fn } from 'storybook/test';
   import TimeSlotStep from './TimeSlotStep.svelte';
+  import type { Props } from './TimeSlotStep.svelte';
 
-  const { Story } = defineMeta({
-    component: TimeSlotStep,
-    title: 'Components/Steps/TimeSlotStep',
-    tags: ['autodocs'],
-    argTypes: {
-      maxTimeSlots: {
-        control: { type: 'number', min: 1, max: 10 },
-        description: 'Maximum number of time slots that can be selected',
-      },
-      canEditRoutePlanning: {
-        control: 'boolean',
-        description: 'Whether time slots can be edited',
-      },
-      showSearch: {
-        control: 'boolean',
-        description: 'Whether to show the search input',
-      },
-    },
-  });
-
-  const availableTimeSlots = [
+  const availableTimeSlots: Props['availableTimeSlots'] = [
     {
       id: '1',
       documentId: 'doc1',
@@ -66,8 +48,7 @@
   ];
 
   // Generate many time slots for testing scrolling behavior
-  /** @type {Array<{id: string, documentId: string, start: string, end: string, label: string, max_bookings: number}>} */
-  const manyTimeSlots = [];
+  const manyTimeSlots: Props['availableTimeSlots'] = [];
   const dates = ['05', '06', '07'];
   const dayNames = ['Do', 'Fr', 'Sa'];
   let idCounter = 1;
@@ -85,112 +66,85 @@
       idCounter++;
     }
   });
+
+  const { Story } = defineMeta({
+    component: TimeSlotStep,
+    title: 'Components/Steps/TimeSlotStep',
+    tags: ['autodocs'],
+    argTypes: {
+      maxTimeSlots: {
+        control: { type: 'number', min: 1, max: 10 },
+        description: 'Maximum number of time slots that can be selected',
+      },
+      canEditRoutePlanning: {
+        control: 'boolean',
+        description: 'Whether time slots can be edited',
+      },
+      showSearch: {
+        control: 'boolean',
+        description: 'Whether to show the search input',
+      },
+    },
+    args: {
+      availableTimeSlots,
+      selectedTimeSlotIds: [],
+      maxTimeSlots: 3,
+      routePlanningDeadline: new Date('2024-12-01T19:30:00+01:00'),
+      canEditRoutePlanning: true,
+      showSearch: false,
+      validationMessages: {},
+      onChange: fn(),
+      onSubmit: fn(),
+    },
+  });
 </script>
 
 <Story
   name="Playground"
   args={{
-    availableTimeSlots,
     selectedTimeSlotIds: ['1', '4'],
-    maxTimeSlots: 3,
-    routePlanningDeadline: new Date('2024-12-01T19:30:00+01:00'),
-    canEditRoutePlanning: true,
     showSearch: true,
-    validationMessages: {},
-    onChange: () => {},
-    onSubmit: () => {},
   }}
 />
 
-<Story
-  name="Empty (No Selection)"
-  args={{
-    availableTimeSlots,
-    selectedTimeSlotIds: [],
-    maxTimeSlots: 3,
-    routePlanningDeadline: new Date('2024-12-01T19:30:00+01:00'),
-    canEditRoutePlanning: true,
-    showSearch: false,
-    validationMessages: {},
-    onChange: () => {},
-    onSubmit: () => {},
-  }}
-/>
+<Story name="Empty (No Selection)" />
 
 <Story
   name="With Some Selected"
   args={{
-    availableTimeSlots,
     selectedTimeSlotIds: ['1', '4'],
-    maxTimeSlots: 3,
-    routePlanningDeadline: new Date('2024-12-01T19:30:00+01:00'),
-    canEditRoutePlanning: true,
-    showSearch: false,
-    validationMessages: {},
-    onChange: () => {},
-    onSubmit: () => {},
   }}
 />
 
 <Story
   name="Max Slots Selected"
   args={{
-    availableTimeSlots,
     selectedTimeSlotIds: ['1', '3', '5'],
-    maxTimeSlots: 3,
-    routePlanningDeadline: new Date('2024-12-01T19:30:00+01:00'),
-    canEditRoutePlanning: true,
-    showSearch: false,
-    validationMessages: {},
-    onChange: () => {},
-    onSubmit: () => {},
   }}
 />
 
 <Story
   name="With Search Enabled"
   args={{
-    availableTimeSlots,
-    selectedTimeSlotIds: [],
-    maxTimeSlots: 3,
-    routePlanningDeadline: new Date('2024-12-01T19:30:00+01:00'),
-    canEditRoutePlanning: true,
     showSearch: true,
-    validationMessages: {},
-    onChange: () => {},
-    onSubmit: () => {},
   }}
 />
 
 <Story
   name="Read-only (After Deadline)"
   args={{
-    availableTimeSlots,
     selectedTimeSlotIds: ['1', '4', '5'],
-    maxTimeSlots: 3,
-    routePlanningDeadline: new Date('2024-12-01T19:30:00+01:00'),
     canEditRoutePlanning: false,
-    showSearch: false,
-    validationMessages: {},
-    onChange: () => {},
-    onSubmit: () => {},
   }}
 />
 
 <Story
   name="With Validation Error"
   args={{
-    availableTimeSlots,
     selectedTimeSlotIds: ['1'],
-    maxTimeSlots: 3,
-    routePlanningDeadline: new Date('2024-12-01T19:30:00+01:00'),
-    canEditRoutePlanning: true,
-    showSearch: false,
     validationMessages: {
       'booking.time_slots': ['Bitte wähle mindestens 3 Zeitslots'],
     },
-    onChange: () => {},
-    onSubmit: () => {},
   }}
 />
 
@@ -198,14 +152,6 @@
   name="No Available Slots"
   args={{
     availableTimeSlots: [],
-    selectedTimeSlotIds: [],
-    maxTimeSlots: 3,
-    routePlanningDeadline: new Date('2024-12-01T19:30:00+01:00'),
-    canEditRoutePlanning: true,
-    showSearch: false,
-    validationMessages: {},
-    onChange: () => {},
-    onSubmit: () => {},
   }}
 />
 
@@ -214,13 +160,7 @@
   args={{
     availableTimeSlots: manyTimeSlots,
     selectedTimeSlotIds: ['1', '8', '12'],
-    maxTimeSlots: 3,
-    routePlanningDeadline: new Date('2024-12-01T19:30:00+01:00'),
-    canEditRoutePlanning: true,
     showSearch: true,
-    validationMessages: {},
-    onChange: () => {},
-    onSubmit: () => {},
   }}
 />
 
@@ -228,13 +168,5 @@
   name="Only One Slot Available"
   args={{
     availableTimeSlots: [availableTimeSlots[0]],
-    selectedTimeSlotIds: [],
-    maxTimeSlots: 3,
-    routePlanningDeadline: new Date('2024-12-01T19:30:00+01:00'),
-    canEditRoutePlanning: true,
-    showSearch: false,
-    validationMessages: {},
-    onChange: () => {},
-    onSubmit: () => {},
   }}
 />

@@ -6,15 +6,7 @@
    * Children details step form
    * Allows adding/removing children with their information and additional notes
    */
-  let {
-    children,
-    additionalNotes,
-    finalDeadline,
-    canEditAnything,
-    validationMessages,
-    onChange,
-    onSubmit,
-  }: {
+  export type Props = {
     /** List of children */
     children: Child[];
     /** Additional notes for the visit */
@@ -26,10 +18,20 @@
     /** Validation error messages keyed by field path */
     validationMessages: Record<string, string[]>;
     /** Callback when data changes */
-    onChange: (data: { children: Child[]; additionalNotes: string }) => void;
+    onChange?: (data: { children: Child[]; additionalNotes: string }) => void;
     /** Callback when form is submitted */
-    onSubmit: (event: Event) => void;
-  } = $props();
+    onSubmit?: (event: Event) => void;
+  };
+
+  const {
+    children,
+    additionalNotes,
+    finalDeadline,
+    canEditAnything,
+    validationMessages,
+    onChange,
+    onSubmit,
+  }: Props = $props();
 
   const deadlineText = $derived(formatDateTime(finalDeadline));
   const hasNoChildren = $derived(children.length === 0);
@@ -41,11 +43,13 @@
   // Sync props to local state when they change
   $effect(() => {
     localChildren = children.map((c) => ({ ...c }));
+  });
+  $effect(() => {
     localAdditionalNotes = additionalNotes;
   });
 
   function handleChange() {
-    onChange({
+    onChange?.({
       children: localChildren,
       additionalNotes: localAdditionalNotes,
     });

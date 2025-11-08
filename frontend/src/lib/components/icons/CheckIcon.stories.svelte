@@ -1,6 +1,7 @@
-<script module>
+<script lang="ts" module>
   import { defineMeta } from '@storybook/addon-svelte-csf';
   import CheckIcon from './CheckIcon.svelte';
+  import type { Props } from './CheckIcon.svelte';
 
   const { Story } = defineMeta({
     component: CheckIcon,
@@ -27,7 +28,7 @@
 
 <Story name="Playground" args={{ sizeClass: 'size-4' }} />
 
-<Story name="Default" args={{}} />
+<Story name="Default" />
 
 <Story name="Extra Small" args={{ sizeClass: 'size-3' }} />
 
@@ -39,21 +40,29 @@
 
 <Story name="Extra Large" args={{ sizeClass: 'size-16' }} />
 
-<Story name="With Custom Color">
-  <div class="text-atlantis">
-    <CheckIcon sizeClass="size-8" />
-  </div>
+<Story name="With Custom Color" args={{ sizeClass: 'size-8' }}>
+  {#snippet template(args: Props)}
+    <div class="text-atlantis">
+      <CheckIcon {...args} />
+    </div>
+  {/snippet}
 </Story>
 
-<Story name="In Success Badge">
-  <div class="inline-flex items-center gap-1 rounded-full bg-atlantis px-3 py-1 text-sm text-white">
-    <CheckIcon sizeClass="size-4" />
-    <span>Verified</span>
-  </div>
+<Story name="In Success Badge" args={{ sizeClass: 'size-4' }}>
+  {#snippet template(args: Props)}
+    <div
+      class="inline-flex items-center gap-1 rounded-full bg-atlantis px-3 py-1 text-sm text-white"
+    >
+      <CheckIcon {...args} />
+      <span>Verified</span>
+    </div>
+  {/snippet}
 </Story>
 
 <Story name="In Step Indicator">
-  <div class="flex size-8 items-center justify-center rounded-full bg-calypso text-white">
-    <CheckIcon />
-  </div>
+  {#snippet template(args: Props)}
+    <div class="flex size-8 items-center justify-center rounded-full bg-calypso text-white">
+      <CheckIcon {...args} />
+    </div>
+  {/snippet}
 </Story>

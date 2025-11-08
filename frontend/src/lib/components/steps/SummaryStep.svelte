@@ -4,12 +4,7 @@
   /**
    * Summary step - confirmation page showing completion status
    */
-  let {
-    isRoutePlanningFilled,
-    isEverythingFilled,
-    routePlanningDeadline,
-    finalDeadline,
-  }: {
+  export type Props = {
     /** Whether route planning information is complete */
     isRoutePlanningFilled: boolean;
     /** Whether all information is complete */
@@ -18,7 +13,10 @@
     routePlanningDeadline: Date;
     /** Final deadline for all details */
     finalDeadline: Date;
-  } = $props();
+  };
+
+  const { isRoutePlanningFilled, isEverythingFilled, routePlanningDeadline, finalDeadline }: Props =
+    $props();
 
   const routeDeadlineText = $derived(formatDateTime(routePlanningDeadline));
   const finalDeadlineText = $derived(formatDateTime(finalDeadline));

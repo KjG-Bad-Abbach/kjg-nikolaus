@@ -1,22 +1,12 @@
-<script module>
+<script lang="ts" module>
   import { defineMeta } from '@storybook/addon-svelte-csf';
+  import { fn } from 'storybook/test';
   import ChildrenSummary from './ChildrenSummary.svelte';
-
-  const { Story } = defineMeta({
-    component: ChildrenSummary,
-    title: 'Components/Summary/ChildrenSummary',
-    tags: ['autodocs'],
-    argTypes: {
-      onEdit: { action: 'edit' },
-      children: { control: 'object' },
-      additionalNotes: { control: 'text' },
-      finalDeadline: { control: 'date' },
-    },
-  });
+  import type { Props } from './ChildrenSummary.svelte';
 
   const finalDeadline = new Date('2024-12-10T19:30:00+01:00');
 
-  const completeChildren = [
+  const completeChildren: Props['children'] = [
     {
       id: '1',
       name: 'Max',
@@ -31,7 +21,7 @@
     },
   ];
 
-  const incompleteChildren = [
+  const incompleteChildren: Props['children'] = [
     {
       id: '1',
       name: 'Max',
@@ -40,7 +30,7 @@
     },
   ];
 
-  const manyChildren = [
+  const manyChildren: Props['children'] = [
     ...completeChildren,
     {
       id: '3',
@@ -62,7 +52,7 @@
     },
   ];
 
-  const childWithLongSpeech = [
+  const childWithLongSpeech: Props['children'] = [
     {
       id: '1',
       name: 'Max',
@@ -71,42 +61,42 @@
         'Max war dieses Jahr besonders fleißig und hat seinen Eltern und Geschwistern geholfen. Er hat seine Hausaufgaben immer pünktlich erledigt und war sehr ordentlich. Außerdem hat er sich um seine kleinere Schwester gekümmert und war ein Vorbild für alle anderen Kinder.',
     },
   ];
+
+  const { Story } = defineMeta({
+    component: ChildrenSummary,
+    title: 'Components/Summary/ChildrenSummary',
+    tags: ['autodocs'],
+    argTypes: {
+      onEdit: { action: 'edit' },
+      children: { control: 'object' },
+      additionalNotes: { control: 'text' },
+      finalDeadline: { control: 'date' },
+    },
+    args: {
+      children: completeChildren,
+      additionalNotes: '',
+      finalDeadline,
+      onEdit: fn(),
+    },
+  });
 </script>
 
-<Story
-  name="Playground"
-  args={{
-    children: completeChildren,
-    additionalNotes: '',
-    finalDeadline,
-  }}
-/>
+<Story name="Playground" />
 
-<Story
-  name="Two Children Complete"
-  args={{
-    children: completeChildren,
-    additionalNotes: '',
-    finalDeadline,
-  }}
-/>
+<Story name="Two Children Complete" />
 
 <Story
   name="With Additional Notes"
   args={{
-    children: completeChildren,
     additionalNotes: 'Bitte klingeln Sie zweimal. Die Kinder warten schon gespannt!',
-    finalDeadline,
   }}
 />
 
 <Story
   name="With Long Additional Notes"
   args={{
-    children: completeChildren,
     additionalNotes:
       'Bitte klingeln Sie zweimal und warten Sie kurz. Die Kinder sind sehr aufgeregt und werden zur Tür rennen. Der Hund sollte weggesperrt sein, aber bitte vorsichtig sein. Die Geschenke sollten unter dem Weihnachtsbaum im Wohnzimmer abgelegt werden.',
-    finalDeadline,
   }}
 />
 
@@ -114,8 +104,6 @@
   name="Child with Missing Fields"
   args={{
     children: incompleteChildren,
-    additionalNotes: '',
-    finalDeadline,
   }}
 />
 
@@ -123,8 +111,6 @@
   name="No Children (Empty List)"
   args={{
     children: [],
-    additionalNotes: '',
-    finalDeadline,
   }}
 />
 
@@ -132,8 +118,6 @@
   name="Single Child"
   args={{
     children: [completeChildren[0]],
-    additionalNotes: '',
-    finalDeadline,
   }}
 />
 
@@ -141,8 +125,6 @@
   name="Many Children (5 Children)"
   args={{
     children: manyChildren,
-    additionalNotes: '',
-    finalDeadline,
   }}
 />
 
@@ -150,8 +132,6 @@
   name="Child with Long Speech (Truncation Test)"
   args={{
     children: childWithLongSpeech,
-    additionalNotes: '',
-    finalDeadline,
   }}
 />
 
@@ -160,6 +140,5 @@
   args={{
     children: manyChildren,
     additionalNotes: 'Alle Kinder sind sehr aufgeregt. Bitte um 18:00 Uhr kommen.',
-    finalDeadline,
   }}
 />

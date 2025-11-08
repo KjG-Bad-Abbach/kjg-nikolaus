@@ -10,19 +10,15 @@
    * - Validation error display
    */
 
-  let {
-    label,
-    htmlFor,
-    errors = [],
-    testId,
-    children,
-  }: {
+  export type Props = {
     label: string;
     htmlFor: string;
     errors?: string[];
     testId?: string;
     children?: Snippet;
-  } = $props();
+  };
+
+  const { label, htmlFor, errors = [], testId, children }: Props = $props();
 </script>
 
 <div data-testid={testId}>

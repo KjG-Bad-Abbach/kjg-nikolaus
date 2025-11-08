@@ -1,12 +1,10 @@
 <script lang="ts">
-  // Props with defaults matching Alpine implementation
-  let {
-    sizeClass = 'size-12',
-    colorClass = 'text-calypso',
-  }: {
+  export type Props = {
     sizeClass?: string;
     colorClass?: string;
-  } = $props();
+  };
+
+  const { sizeClass = 'size-12', colorClass = 'text-calypso' }: Props = $props();
 
   const classNames = $derived([sizeClass, colorClass, 'animate-spin'].join(' '));
 </script>

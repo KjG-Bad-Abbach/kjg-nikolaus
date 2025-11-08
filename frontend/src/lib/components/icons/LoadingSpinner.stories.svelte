@@ -1,6 +1,7 @@
-<script module>
+<script lang="ts" module>
   import { defineMeta } from '@storybook/addon-svelte-csf';
   import LoadingSpinner from './LoadingSpinner.svelte';
+  import type { Props } from './LoadingSpinner.svelte';
 
   const { Story } = defineMeta({
     component: LoadingSpinner,
@@ -32,7 +33,7 @@
 
 <Story name="Playground" args={{ sizeClass: 'size-12', colorClass: 'text-calypso' }} />
 
-<Story name="Default" args={{}} />
+<Story name="Default" />
 
 <Story name="Extra Small" args={{ sizeClass: 'size-4' }} />
 
@@ -50,43 +51,55 @@
 
 <Story name="Blue Spinner" args={{ colorClass: 'text-java' }} />
 
-<Story name="White Spinner">
-  <div class="rounded-sm bg-gray-800 p-8">
-    <LoadingSpinner colorClass="text-white" />
-  </div>
+<Story name="White Spinner" args={{ colorClass: 'text-white' }}>
+  {#snippet template(args: Props)}
+    <div class="rounded-sm bg-gray-800 p-8">
+      <LoadingSpinner {...args} />
+    </div>
+  {/snippet}
 </Story>
 
-<Story name="Small White Spinner">
-  <div class="inline-flex rounded-sm bg-gray-800 p-4">
-    <LoadingSpinner sizeClass="size-5" colorClass="text-white" />
-  </div>
+<Story name="Small White Spinner" args={{ sizeClass: 'size-5', colorClass: 'text-white' }}>
+  {#snippet template(args: Props)}
+    <div class="inline-flex rounded-sm bg-gray-800 p-4">
+      <LoadingSpinner {...args} />
+    </div>
+  {/snippet}
 </Story>
 
 <Story name="In Loading Overlay">
-  <div class="flex h-64 items-center justify-center bg-gray-100">
-    <LoadingSpinner />
-  </div>
-</Story>
-
-<Story name="In Button">
-  <button class="inline-flex items-center gap-2 rounded-sm bg-java px-4 py-2 text-white" disabled>
-    <LoadingSpinner sizeClass="size-5" colorClass="text-white" />
-    <span>Loading...</span>
-  </button>
-</Story>
-
-<Story name="Inline with Text">
-  <div class="flex items-center gap-2">
-    <LoadingSpinner sizeClass="size-5" />
-    <span>Processing your request...</span>
-  </div>
-</Story>
-
-<Story name="Card Loading State">
-  <div class="rounded-sm border border-gray-300 p-6">
-    <div class="flex flex-col items-center gap-4">
-      <LoadingSpinner sizeClass="size-10" />
-      <p class="text-gray-600">Loading your data...</p>
+  {#snippet template(args: Props)}
+    <div class="flex h-64 items-center justify-center bg-gray-100">
+      <LoadingSpinner {...args} />
     </div>
-  </div>
+  {/snippet}
+</Story>
+
+<Story name="In Button" args={{ sizeClass: 'size-5', colorClass: 'text-white' }}>
+  {#snippet template(args: Props)}
+    <button class="inline-flex items-center gap-2 rounded-sm bg-java px-4 py-2 text-white" disabled>
+      <LoadingSpinner {...args} />
+      <span>Loading...</span>
+    </button>
+  {/snippet}
+</Story>
+
+<Story name="Inline with Text" args={{ sizeClass: 'size-5' }}>
+  {#snippet template(args: Props)}
+    <div class="flex items-center gap-2">
+      <LoadingSpinner {...args} />
+      <span>Processing your request...</span>
+    </div>
+  {/snippet}
+</Story>
+
+<Story name="Card Loading State" args={{ sizeClass: 'size-10' }}>
+  {#snippet template(args: Props)}
+    <div class="rounded-sm border border-gray-300 p-6">
+      <div class="flex flex-col items-center gap-4">
+        <LoadingSpinner {...args} />
+        <p class="text-gray-600">Loading your data...</p>
+      </div>
+    </div>
+  {/snippet}
 </Story>

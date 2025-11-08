@@ -5,16 +5,18 @@
    * Introduction section component
    * Displays CMS introduction text with rich text formatting and a start button
    */
-  let {
-    /* v8 ignore next 1 - Svelte 5 runes not properly instrumented by coverage tool */
-    introductionText = [],
-    onStart,
-  }: {
+  export type Props = {
     /** Introduction text from CMS (rich text blocks) */
     introductionText?: RichTextNode[];
     /** Callback when start button is clicked */
-    onStart: () => void;
-  } = $props();
+    onStart?: () => void;
+  };
+
+  const {
+    /* v8 ignore next 1 - Svelte 5 runes not properly instrumented by coverage tool */
+    introductionText = [],
+    onStart,
+  }: Props = $props();
 
   // Compute HTML content from rich text with custom Tailwind classes
   function getHtmlContent(): string {

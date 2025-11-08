@@ -7,12 +7,7 @@
    * Time slot summary card
    * Displays selected time slots with missing field warnings
    */
-  let {
-    selectedTimeSlots,
-    maxTimeSlots,
-    routePlanningDeadline,
-    onEdit,
-  }: {
+  export type Props = {
     /** Array of selected time slots */
     selectedTimeSlots: TimeSlot[];
     /** Maximum number of time slots that can be selected */
@@ -20,8 +15,10 @@
     /** Route planning deadline */
     routePlanningDeadline: Date;
     /** Callback when edit button is clicked */
-    onEdit: () => void;
-  } = $props();
+    onEdit?: () => void;
+  };
+
+  const { selectedTimeSlots, maxTimeSlots, routePlanningDeadline, onEdit }: Props = $props();
 
   const deadlineText = $derived(formatDateTime(routePlanningDeadline));
 </script>

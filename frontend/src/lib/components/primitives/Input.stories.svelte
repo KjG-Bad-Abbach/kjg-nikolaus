@@ -1,6 +1,7 @@
-<script module>
+<script lang="ts" module>
   import { defineMeta } from '@storybook/addon-svelte-csf';
   import Input from './Input.svelte';
+  import type { Props } from './Input.svelte';
 
   const { Story } = defineMeta({
     component: Input,
@@ -39,94 +40,196 @@
   }}
 />
 
-<Story name="Text Input">
-  <Input label="First Name" id="first-name" placeholder="Enter your first name" />
-</Story>
+<Story
+  name="Text Input"
+  args={{
+    label: 'First Name',
+    id: 'first-name',
+    placeholder: 'Enter your first name',
+  }}
+/>
 
-<Story name="Email Input">
-  <Input label="Email Address" id="email" type="email" placeholder="example@example.com" />
-</Story>
+<Story
+  name="Email Input"
+  args={{
+    label: 'Email Address',
+    id: 'email',
+    type: 'email',
+    placeholder: 'example@example.com',
+  }}
+/>
 
-<Story name="Phone Input">
-  <Input label="Phone Number" id="phone" type="tel" placeholder="0123 4567890" />
-</Story>
+<Story
+  name="Phone Input"
+  args={{
+    label: 'Phone Number',
+    id: 'phone',
+    type: 'tel',
+    placeholder: '0123 4567890',
+  }}
+/>
 
-<Story name="Password Input">
-  <Input label="Password" id="password" type="password" placeholder="Enter your password" />
-</Story>
+<Story
+  name="Password Input"
+  args={{
+    label: 'Password',
+    id: 'password',
+    type: 'password',
+    placeholder: 'Enter your password',
+  }}
+/>
 
-<Story name="Number Input">
-  <Input label="Age" id="age" type="number" placeholder="Enter your age" />
-</Story>
+<Story
+  name="Number Input"
+  args={{
+    label: 'Age',
+    id: 'age',
+    type: 'number',
+    placeholder: 'Enter your age',
+  }}
+/>
 
-<Story name="URL Input">
-  <Input label="Website" id="website" type="url" placeholder="https://example.com" />
-</Story>
+<Story
+  name="URL Input"
+  args={{
+    label: 'Website',
+    id: 'website',
+    type: 'url',
+    placeholder: 'https://example.com',
+  }}
+/>
 
-<Story name="Date Input">
-  <Input label="Birth Date" id="birthdate" type="date" />
-</Story>
+<Story
+  name="Date Input"
+  args={{
+    label: 'Birth Date',
+    id: 'birthdate',
+    type: 'date',
+  }}
+/>
 
-<Story name="Search Input">
-  <Input label="Search" id="search" type="search" placeholder="Search..." />
-</Story>
+<Story
+  name="Search Input"
+  args={{
+    label: 'Search',
+    id: 'search',
+    type: 'search',
+    placeholder: 'Search...',
+  }}
+/>
 
-<Story name="Without Label">
-  <Input id="no-label" placeholder="Input without label" />
-</Story>
+<Story
+  name="Without Label"
+  args={{
+    id: 'no-label',
+    placeholder: 'Input without label',
+  }}
+/>
 
-<Story name="With Error">
-  <Input label="First Name" id="name-error" error="This field is required" />
-</Story>
+<Story
+  name="With Error"
+  args={{
+    label: 'First Name',
+    id: 'name-error',
+    error: 'This field is required',
+  }}
+/>
 
-<Story name="Readonly">
-  <Input label="First Name" id="name-readonly" value="John Doe" readonly />
-</Story>
+<Story
+  name="Readonly"
+  args={{
+    label: 'First Name',
+    id: 'name-readonly',
+    value: 'John Doe',
+    readonly: true,
+  }}
+/>
 
-<Story name="Required">
-  <Input label="First Name" id="name-required" required placeholder="Required field" />
-</Story>
+<Story
+  name="Required"
+  args={{
+    label: 'First Name',
+    id: 'name-required',
+    required: true,
+    placeholder: 'Required field',
+  }}
+/>
 
-<Story name="With Max Length">
-  <Input label="First Name" id="name-maxlength" maxlength={50} placeholder="Max 50 characters" />
-</Story>
+<Story
+  name="With Max Length"
+  args={{
+    label: 'First Name',
+    id: 'name-maxlength',
+    maxlength: 50,
+    placeholder: 'Max 50 characters',
+  }}
+/>
 
 <Story name="Long Value">
-  <div class="max-w-xs">
-    <Input
-      label="Long Text"
-      id="long-value"
-      value="This is a very long value that might overflow the input field and needs to be scrollable"
-    />
-  </div>
+  {#snippet template(args: Props)}
+    <div class="max-w-xs">
+      <Input
+        {...args}
+        label="Long Text"
+        id="long-value"
+        value="This is a very long value that might overflow the input field and needs to be scrollable"
+      />
+    </div>
+  {/snippet}
 </Story>
 
-<Story name="Disabled">
-  <Input label="Disabled Field" id="disabled-input" value="Cannot edit" disabled />
-</Story>
+<Story
+  name="Disabled"
+  args={{
+    label: 'Disabled Field',
+    id: 'disabled-input',
+    value: 'Cannot edit',
+    disabled: true,
+  }}
+/>
 
-<Story name="Custom Classes">
-  <Input
-    label="Custom Styled"
-    id="custom"
-    class="ring-2 ring-atlantis"
-    placeholder="Custom style"
-  />
-</Story>
+<Story
+  name="Custom Classes"
+  args={{
+    label: 'Custom Styled',
+    id: 'custom',
+    class: 'ring-2 ring-atlantis',
+    placeholder: 'Custom style',
+  }}
+/>
 
-<Story name="With Autofocus">
-  <Input label="Auto-focused Field" id="autofocus" autofocus placeholder="This field is focused" />
-</Story>
+<Story
+  name="With Autofocus"
+  args={{
+    label: 'Auto-focused Field',
+    id: 'autofocus',
+    autofocus: true,
+    placeholder: 'This field is focused',
+  }}
+/>
 
 <Story name="All States Comparison">
-  <div class="space-y-4">
-    <Input label="Normal" id="normal" placeholder="Normal input" />
-    <Input label="With Value" id="with-value" value="John Doe" />
-    <Input label="With Placeholder" id="with-placeholder" placeholder="Enter text here" />
-    <Input label="With Error" id="with-error" value="invalid@" error="Invalid email format" />
-    <Input label="Readonly" id="readonly-state" value="Cannot edit" readonly />
-    <Input label="Disabled" id="disabled-state" value="Cannot edit" disabled />
-    <Input label="Required *" id="required-state" required />
-    <Input label="Max Length (10)" id="maxlength-state" maxlength={10} value="12345" />
-  </div>
+  {#snippet template(args: Props)}
+    <div class="space-y-4">
+      <Input {...args} label="Normal" id="normal" placeholder="Normal input" />
+      <Input {...args} label="With Value" id="with-value" value="John Doe" />
+      <Input
+        {...args}
+        label="With Placeholder"
+        id="with-placeholder"
+        placeholder="Enter text here"
+      />
+      <Input
+        {...args}
+        label="With Error"
+        id="with-error"
+        value="invalid@"
+        error="Invalid email format"
+      />
+      <Input {...args} label="Readonly" id="readonly-state" value="Cannot edit" readonly />
+      <Input {...args} label="Disabled" id="disabled-state" value="Cannot edit" disabled />
+      <Input {...args} label="Required *" id="required-state" required />
+      <Input {...args} label="Max Length (10)" id="maxlength-state" maxlength={10} value="12345" />
+    </div>
+  {/snippet}
 </Story>

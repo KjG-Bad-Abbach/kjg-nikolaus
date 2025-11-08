@@ -582,7 +582,7 @@ Extract from `index.html` lines 82-96:
 ```svelte
 <script lang="ts">
   // Props with defaults matching Alpine implementation
-  let {
+  const {
     sizeClass = 'size-12',
     colorClass = 'text-calypso'
   }: {
@@ -701,7 +701,7 @@ describe('ComponentName', () => {
 <script lang="ts">
   import type { PropsType } from '$lib/types/componentProps';
 
-  let {
+  const {
     prop1,
     prop2 = 'default',
     onEvent
@@ -1016,7 +1016,7 @@ After creating the `RichTextBlocksRenderer` utility (Phase 0), use it in compone
 <script lang="ts">
   import { renderRichText } from '$lib/utils/richTextRenderer';
 
-  let { introductionText = [] } = $props();
+  const { introductionText = [] } = $props();
 
   $: htmlContent = renderRichText(introductionText, {
     extend: {

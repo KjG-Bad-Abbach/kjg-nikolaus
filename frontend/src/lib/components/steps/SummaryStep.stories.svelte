@@ -1,4 +1,4 @@
-<script module>
+<script lang="ts" module>
   import { defineMeta } from '@storybook/addon-svelte-csf';
   import SummaryStep from './SummaryStep.svelte';
 
@@ -16,45 +16,29 @@
         description: 'Whether all information is complete',
       },
     },
+    args: {
+      isRoutePlanningFilled: true,
+      isEverythingFilled: false,
+      routePlanningDeadline: new Date('2024-12-01T19:30:00+01:00'),
+      finalDeadline: new Date('2024-12-05T19:30:00+01:00'),
+    },
   });
 </script>
 
-<Story
-  name="Playground"
-  args={{
-    isRoutePlanningFilled: true,
-    isEverythingFilled: false,
-    routePlanningDeadline: new Date('2024-12-01T19:30:00+01:00'),
-    finalDeadline: new Date('2024-12-05T19:30:00+01:00'),
-  }}
-/>
+<Story name="Playground" />
 
 <Story
   name="Nothing Complete"
   args={{
     isRoutePlanningFilled: false,
-    isEverythingFilled: false,
-    routePlanningDeadline: new Date('2024-12-01T19:30:00+01:00'),
-    finalDeadline: new Date('2024-12-05T19:30:00+01:00'),
   }}
 />
 
-<Story
-  name="Route Planning Complete"
-  args={{
-    isRoutePlanningFilled: true,
-    isEverythingFilled: false,
-    routePlanningDeadline: new Date('2024-12-01T19:30:00+01:00'),
-    finalDeadline: new Date('2024-12-05T19:30:00+01:00'),
-  }}
-/>
+<Story name="Route Planning Complete" />
 
 <Story
   name="Everything Complete"
   args={{
-    isRoutePlanningFilled: true,
     isEverythingFilled: true,
-    routePlanningDeadline: new Date('2024-12-01T19:30:00+01:00'),
-    finalDeadline: new Date('2024-12-05T19:30:00+01:00'),
   }}
 />

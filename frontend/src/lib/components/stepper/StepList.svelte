@@ -2,18 +2,15 @@
   import type { Step } from '$lib/types/booking';
   import StepIndicator from './StepIndicator.svelte';
 
-  // Props matching the Alpine.js implementation
-  let {
-    steps,
-    currentStep,
-    canJumpToAnyStep = false,
-    onStepClick,
-  }: {
+  export type Props = {
     steps: Step[];
     currentStep: number;
     canJumpToAnyStep?: boolean;
     onStepClick?: (index: number) => void;
-  } = $props();
+  };
+
+  // Props matching the Alpine.js implementation
+  const { steps, currentStep, canJumpToAnyStep = false, onStepClick }: Props = $props();
 
   function handleStepClick(index: number) {
     if (onStepClick) {

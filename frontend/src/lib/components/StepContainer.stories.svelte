@@ -1,37 +1,8 @@
-<script module>
+<script lang="ts" module>
   import { defineMeta } from '@storybook/addon-svelte-csf';
+  import { fn } from 'storybook/test';
   import StepContainer from './StepContainer.svelte';
-
-  const { Story } = defineMeta({
-    component: StepContainer,
-    title: 'Components/StepContainer',
-    tags: ['autodocs'],
-  });
-
-  const sampleBooking = {
-    contact_person: {
-      first_name: 'Max',
-      last_name: 'Mustermann',
-      email: 'max@example.com',
-      phone_number: '+49 123 456789',
-    },
-    location: {
-      street: 'Hauptstraße',
-      house_number: '123',
-      zip_code: '12345',
-      place: 'Berlin',
-    },
-    present_location: 'Wohnzimmer',
-    children: [
-      {
-        name: 'Anna',
-        identification_trait: 'Blonde Haare',
-        speech: 'Hat fleißig gelernt',
-      },
-    ],
-    time_slots: [],
-    additional_notes: 'Bitte klingeln',
-  };
+  import type { Props } from './StepContainer.svelte';
 
   const sampleSteps = [
     { name: 'Kontakt', testId: 'contact', anyFilled: true, allFilled: true },
@@ -40,68 +11,67 @@
     { name: 'Kinder', testId: 'children', anyFilled: true, allFilled: false },
     { name: 'Übersicht', testId: 'summary', anyFilled: false, allFilled: false },
   ];
+
+  const { Story } = defineMeta({
+    component: StepContainer,
+    title: 'Components/StepContainer',
+    tags: ['autodocs'],
+    args: {
+      steps: sampleSteps,
+      canJumpToAnyStep: true,
+      onStepChange: fn(),
+    },
+  });
 </script>
 
-{#snippet stepContent()}
-  <div class="rounded-lg bg-white p-4 shadow-sm">
-    <p class="text-gray-600">This is the content for the current step.</p>
-    <p class="mt-2 text-sm text-gray-500">You can customize this content in the Playground.</p>
-  </div>
+{#snippet template(args: Props)}
+  <StepContainer {...args}>
+    <div class="rounded-lg bg-white p-4 shadow-sm">
+      <p class="text-gray-600">This is the content for the current step.</p>
+      <p class="mt-2 text-sm text-gray-500">You can customize this content in the Playground.</p>
+    </div>
+  </StepContainer>
 {/snippet}
 
 <Story
   name="Playground"
   args={{
     currentStep: 1,
-    steps: sampleSteps,
-    canJumpToAnyStep: true,
-    onStepChange: (step) => console.log('Navigate to step:', step),
-    children: stepContent,
   }}
+  {template}
 />
 
 <Story
   name="First Step"
   args={{
     currentStep: 0,
-    steps: sampleSteps,
-    booking: sampleBooking,
-    canJumpToAnyStep: true,
-    onStepChange: (step) => console.log('Navigate to step:', step),
   }}
+  {template}
 />
 
 <Story
   name="Middle Step"
   args={{
     currentStep: 2,
-    steps: sampleSteps,
-    booking: sampleBooking,
-    canJumpToAnyStep: true,
-    onStepChange: (step) => console.log('Navigate to step:', step),
   }}
+  {template}
 />
 
 <Story
   name="Last Step"
   args={{
     currentStep: 4,
-    steps: sampleSteps,
-    booking: sampleBooking,
-    canJumpToAnyStep: true,
-    onStepChange: (step) => console.log('Navigate to step:', step),
   }}
+  {template}
 />
 
 <Story
   name="No Jump Navigation"
   args={{
     currentStep: 1,
-    steps: sampleSteps,
-    booking: sampleBooking,
     canJumpToAnyStep: false,
-    onStepChange: (step) => console.log('Navigate to step:', step),
   }}
+  {template}
 />
 
 <Story
@@ -113,25 +83,7 @@
       { name: 'Adresse', testId: 'address', anyFilled: false, allFilled: false },
       { name: 'Zeitslots', testId: 'timeslots', anyFilled: false, allFilled: false },
     ],
-    booking: {
-      contact_person: {
-        first_name: '',
-        last_name: '',
-        email: '',
-        phone_number: '',
-      },
-      location: {
-        street: '',
-        house_number: '',
-        zip_code: '',
-        place: '',
-      },
-      present_location: '',
-      children: [],
-      time_slots: [],
-      additional_notes: '',
-    },
     canJumpToAnyStep: false,
-    onStepChange: (step) => console.log('Navigate to step:', step),
   }}
+  {template}
 />

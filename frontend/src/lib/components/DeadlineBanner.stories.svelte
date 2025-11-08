@@ -1,52 +1,38 @@
-<script module>
+<script lang="ts" module>
   import { defineMeta } from '@storybook/addon-svelte-csf';
   import DeadlineBanner from './DeadlineBanner.svelte';
+  import type { Props } from './DeadlineBanner.svelte';
+
+  const routePlanningDeadline = new Date('2024-12-05T19:30:00+01:00');
+  const finalDeadline = new Date('2024-12-20T23:59:00+01:00');
 
   const { Story } = defineMeta({
     component: DeadlineBanner,
     title: 'Components/DeadlineBanner',
     tags: ['autodocs'],
+    args: {
+      routePlanningDeadline,
+      finalDeadline,
+      canEditRoutePlanning: true,
+      canEditAnything: true,
+    },
   });
-
-  const routePlanningDeadline = new Date('2024-12-05T19:30:00+01:00');
-  const finalDeadline = new Date('2024-12-20T23:59:00+01:00');
 </script>
 
-<Story
-  name="Playground"
-  args={{
-    routePlanningDeadline,
-    finalDeadline,
-    canEditRoutePlanning: true,
-    canEditAnything: true,
-  }}
-/>
+<Story name="Playground" />
 
-<Story
-  name="Both Active"
-  args={{
-    routePlanningDeadline,
-    finalDeadline,
-    canEditRoutePlanning: true,
-    canEditAnything: true,
-  }}
-/>
+<Story name="Both Active" />
 
 <Story
   name="Route Planning Deadline Passed"
   args={{
-    routePlanningDeadline,
-    finalDeadline,
     canEditRoutePlanning: false,
-    canEditAnything: true,
   }}
 />
 
 <Story
   name="Both Deadlines Passed"
   args={{
-    routePlanningDeadline,
-    finalDeadline,
     canEditRoutePlanning: false,
     canEditAnything: false,
   }}
@@ -57,22 +43,17 @@
   args={{
     routePlanningDeadline: new Date('2025-12-05T19:30:00+01:00'),
     finalDeadline: new Date('2025-12-20T23:59:00+01:00'),
-    canEditRoutePlanning: true,
-    canEditAnything: true,
   }}
 />
 
 <Story name="In Context">
-  <div class="max-w-4xl rounded-lg bg-white p-6 shadow-md">
-    <h1 class="mb-4 text-3xl font-bold text-surfie-green">KjG Nikolaus Buchung</h1>
-    <DeadlineBanner
-      {routePlanningDeadline}
-      {finalDeadline}
-      canEditRoutePlanning={true}
-      canEditAnything={true}
-    />
-    <div class="mt-6">
-      <p class="text-gray-600">Content would go here...</p>
+  {#snippet template(args: Props)}
+    <div class="max-w-4xl rounded-lg bg-white p-6 shadow-md">
+      <h1 class="mb-4 text-3xl font-bold text-surfie-green">KjG Nikolaus Buchung</h1>
+      <DeadlineBanner {...args} />
+      <div class="mt-6">
+        <p class="text-gray-600">Content would go here...</p>
+      </div>
     </div>
-  </div>
+  {/snippet}
 </Story>

@@ -3,22 +3,24 @@
   import ChevronRight from '../icons/ChevronRight.svelte';
   import type { Snippet } from 'svelte';
 
-  // Props matching the Alpine.js implementation
-  let {
-    currentStep,
-    totalSteps,
-    canJumpToAnyStep = false,
-    onPrevious,
-    onNext,
-    children,
-  }: {
+  export type Props = {
     currentStep: number;
     totalSteps: number;
     canJumpToAnyStep?: boolean;
     onPrevious?: () => void;
     onNext?: () => void;
     children?: Snippet;
-  } = $props();
+  };
+
+  // Props matching the Alpine.js implementation
+  const {
+    currentStep,
+    totalSteps,
+    canJumpToAnyStep = false,
+    onPrevious,
+    onNext,
+    children,
+  }: Props = $props();
 
   // Derived states
   const isFirstStep = $derived(currentStep <= 0);

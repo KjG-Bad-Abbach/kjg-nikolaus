@@ -1,5 +1,9 @@
 <script lang="ts">
-  let { sizeClass = 'size-8' }: { sizeClass?: string } = $props();
+  export type Props = {
+    sizeClass?: string;
+  };
+
+  const { sizeClass = 'size-8' }: Props = $props();
 </script>
 
 <svg

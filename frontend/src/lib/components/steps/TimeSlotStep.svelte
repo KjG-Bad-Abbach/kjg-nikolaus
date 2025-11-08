@@ -6,17 +6,7 @@
    * Time slot selection step form
    * Allows users to select multiple time slots with search and grouping
    */
-  let {
-    availableTimeSlots,
-    selectedTimeSlotIds,
-    maxTimeSlots,
-    routePlanningDeadline,
-    canEditRoutePlanning,
-    showSearch,
-    validationMessages,
-    onChange,
-    onSubmit,
-  }: {
+  export type Props = {
     /** Available time slots */
     availableTimeSlots: TimeSlot[];
     /** Currently selected time slot IDs */
@@ -32,10 +22,22 @@
     /** Validation error messages keyed by field path */
     validationMessages: Record<string, string[]>;
     /** Callback when selection changes */
-    onChange: (selectedIds: string[]) => void;
+    onChange?: (selectedIds: string[]) => void;
     /** Callback when form is submitted */
-    onSubmit: (event: Event) => void;
-  } = $props();
+    onSubmit?: (event: Event) => void;
+  };
+
+  const {
+    availableTimeSlots,
+    selectedTimeSlotIds,
+    maxTimeSlots,
+    routePlanningDeadline,
+    canEditRoutePlanning,
+    showSearch,
+    validationMessages,
+    onChange,
+    onSubmit,
+  }: Props = $props();
 
   const deadlineText = $derived(formatDateTime(routePlanningDeadline));
   const hasValidationErrors = $derived(Object.keys(validationMessages).length > 0);
@@ -86,17 +88,17 @@
 
     if (isSelected) {
       // Remove from selection
-      onChange(selectedTimeSlotIds.filter((id) => id !== slotId));
+      onChange?.(selectedTimeSlotIds.filter((id) => id !== slotId));
     } else {
       // Add to selection if not at max
       if (selectedTimeSlotIds.length < maxTimeSlots) {
-        onChange([...selectedTimeSlotIds, slotId]);
+        onChange?.([...selectedTimeSlotIds, slotId]);
       }
     }
   }
 
   function removeTimeSlot(slotId: string) {
-    onChange(selectedTimeSlotIds.filter((id) => id !== slotId));
+    onChange?.(selectedTimeSlotIds.filter((id) => id !== slotId));
   }
 
   function isSlotSelected(slotId: string): boolean {

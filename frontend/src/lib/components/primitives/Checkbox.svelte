@@ -1,22 +1,22 @@
 <script lang="ts">
   import type { HTMLInputAttributes } from 'svelte/elements';
 
-  interface CheckboxProps extends HTMLInputAttributes {
+  export interface Props extends HTMLInputAttributes {
     label?: string;
     id: string;
   }
 
-  let {
+  const {
     label,
     id,
     checked = false,
     disabled = false,
     class: className = '',
     ...restProps
-  }: CheckboxProps = $props();
+  }: Props = $props();
 
   const baseClasses = 'form-checkbox peer text-calypso h-5 w-5';
-  const combinedClasses = `${baseClasses} ${className}`.trim();
+  const combinedClasses = $derived(`${baseClasses} ${className}`.trim());
 </script>
 
 <div class="flex items-center">

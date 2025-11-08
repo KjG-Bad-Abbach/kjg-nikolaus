@@ -8,13 +8,7 @@
    * Address summary card
    * Displays location and present location with missing field warnings
    */
-  let {
-    location,
-    presentLocation,
-    routePlanningDeadline,
-    finalDeadline,
-    onEdit,
-  }: {
+  export type Props = {
     /** Address location information */
     location: Location;
     /** Present location description */
@@ -24,8 +18,11 @@
     /** Final deadline (for present location) */
     finalDeadline: Date;
     /** Callback when edit button is clicked */
-    onEdit: () => void;
-  } = $props();
+    onEdit?: () => void;
+  };
+
+  const { location, presentLocation, routePlanningDeadline, finalDeadline, onEdit }: Props =
+    $props();
 
   const routeDeadlineText = $derived(formatDateTime(routePlanningDeadline));
   const finalDeadlineText = $derived(formatDateTime(finalDeadline));
