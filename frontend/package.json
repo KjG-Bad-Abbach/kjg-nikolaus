@@ -15,7 +15,7 @@
     "test:unit": "vitest --browser.headless",
     "test": "pnpm test:unit --run && pnpm test:e2e",
     "test:e2e": "playwright test",
-    "storybook": "storybook dev -p 6006",
+    "storybook": "storybook dev -p 6006 --no-open",
     "build-storybook": "storybook build"
   },
   "devDependencies": {
