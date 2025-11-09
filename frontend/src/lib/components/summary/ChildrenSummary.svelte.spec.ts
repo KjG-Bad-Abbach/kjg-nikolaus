@@ -173,4 +173,27 @@ describe('ChildrenSummary', () => {
     const warnings = page.getByText('Angabe fehlt', { exact: false });
     await expect.element(warnings).not.toBeInTheDocument();
   });
+
+  it('should apply correct spacing when single child with additional notes', async () => {
+    const singleChild: Child[] = [
+      {
+        id: '1',
+        name: 'Max',
+        identification_trait: 'Blaue Augen',
+        speech: 'Max war dieses Jahr besonders fleißig',
+      },
+    ];
+
+    const { container } = render(ChildrenSummary, {
+      children: singleChild,
+      additionalNotes: 'Bitte klingeln Sie zweimal',
+      finalDeadline,
+      onEdit: vi.fn(),
+    });
+
+    // With single child (length < 2), the mt-2 class should not be applied
+    const notesSection = container.querySelector('.truncate')?.parentElement?.parentElement;
+    // The element should exist but should not have mt-2 class since children.length < 2
+    expect(notesSection?.classList.contains('mt-2')).toBe(false);
+  });
 });
