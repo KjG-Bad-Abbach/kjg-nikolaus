@@ -27,7 +27,7 @@ describe('date formatting utilities', () => {
       const differentYear = currentYear + 1;
       const date = new Date(`${differentYear}-12-05T10:00:00`);
       const result = formatDate(date);
-      expect(result).toMatch(new RegExp(`^[A-Za-z]{2,3} \\d{1,2}\\.\\d{1,2}\\. ${differentYear}$`));
+      expect(result).toMatch(new RegExp(`^[A-Za-z]{2,3} \\d{1,2}\\.\\d{1,2}\\.${differentYear}$`));
     });
 
     it('should use German locale for weekday', () => {
@@ -74,7 +74,7 @@ describe('date formatting utilities', () => {
       const date = new Date(`${differentYear}-12-05T19:30:00`);
       const result = formatDateTime(date);
       expect(result).toMatch(
-        new RegExp(`^[A-Za-z]{2,3} \\d{1,2}\\.\\d{1,2}\\. ${differentYear} 19:30 Uhr$`),
+        new RegExp(`^[A-Za-z]{2,3} \\d{1,2}\\.\\d{1,2}\\.${differentYear} 19:30 Uhr$`),
       );
     });
 
@@ -94,7 +94,7 @@ describe('date formatting utilities', () => {
       const end = new Date(`${differentYear}-12-05T20:30:00`);
       const result = formatDateTimeRange(start, end);
       expect(result).toMatch(
-        new RegExp(`^[A-Za-z]{2,3} \\d{1,2}\\.\\d{1,2}\\. ${differentYear} 19:30 - 20:30 Uhr$`),
+        new RegExp(`^[A-Za-z]{2,3} \\d{1,2}\\.\\d{1,2}\\.${differentYear} 19:30 - 20:30 Uhr$`),
       );
     });
 
