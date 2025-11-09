@@ -43,8 +43,6 @@
   });
 </script>
 
-<Story name="Playground" />
-
 <Story name="Default" />
 
 <Story name="Extra Small" args={{ sizeClass: 'size-3' }} />

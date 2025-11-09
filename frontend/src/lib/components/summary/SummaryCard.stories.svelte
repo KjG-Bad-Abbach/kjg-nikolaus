@@ -23,7 +23,7 @@
   </SummaryCard>
 {/snippet}
 
-<Story name="Playground" args={{ title: 'Contact Information' }} {template} />
+<Story name="Simple" args={{ title: 'Contact Information' }} {template} />
 
 <Story name="No Content (children undefined)" args={{ title: 'Empty Card' }}>
   {#snippet template(args: Props)}

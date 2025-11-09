@@ -90,15 +90,20 @@
   });
 </script>
 
-<Story name="Playground" />
+{#snippet template(args: Props)}
+  <div class="bg-java p-4">
+    <IntroSection {...args} />
+  </div>
+{/snippet}
 
-<Story name="Default" />
+<Story name="Default" {template} />
 
 <Story
   name="Short Text"
   args={{
     introductionText: shortIntroText,
   }}
+  {template}
 />
 
 <Story
@@ -106,6 +111,7 @@
   args={{
     introductionText: richFormattingText,
   }}
+  {template}
 />
 
 <Story
@@ -113,6 +119,7 @@
   args={{
     introductionText: [],
   }}
+  {template}
 />
 
 <Story
@@ -170,4 +177,5 @@
       },
     ],
   }}
+  {template}
 />

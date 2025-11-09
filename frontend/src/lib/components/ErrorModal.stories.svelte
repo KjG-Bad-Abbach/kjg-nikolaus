@@ -70,8 +70,6 @@
   <ErrorModal {...args} />
 {/snippet}
 
-<Story name="Playground" {template} />
-
 <Story name="Simple Error" args={{ error: simpleError }} {template} />
 
 <Story name="Detailed Error" {template} />

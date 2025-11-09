@@ -18,19 +18,6 @@
   });
 </script>
 
-<Story name="Playground" args={{ label: 'First Name *', htmlFor: 'playground-input', errors: [] }}>
-  {#snippet template(args: Props)}
-    <FormField {...args}>
-      <Input
-        id="playground-input"
-        type="text"
-        placeholder="Enter your input"
-        data-testid="qa-playground"
-      />
-    </FormField>
-  {/snippet}
-</Story>
-
 <Story name="Default" args={{ label: 'First Name *', htmlFor: 'first-name' }}>
   {#snippet template(args: Props)}
     <FormField {...args}>

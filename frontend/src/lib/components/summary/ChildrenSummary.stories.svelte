@@ -81,8 +81,6 @@
   });
 </script>
 
-<Story name="Playground" />
-
 <Story name="Two Children Complete" />
 
 <Story
@@ -115,9 +113,25 @@
 />
 
 <Story
+  name="No Children with Notes"
+  args={{
+    children: [],
+    additionalNotes: 'Bitte klingeln Sie zweimal. Die Kinder warten schon gespannt!',
+  }}
+/>
+
+<Story
   name="Single Child"
   args={{
     children: [completeChildren[0]],
+  }}
+/>
+
+<Story
+  name="Single Child with Notes"
+  args={{
+    children: [completeChildren[0]],
+    additionalNotes: 'Bitte klingeln Sie zweimal. Das Kind wartet schon gespannt!',
   }}
 />
 

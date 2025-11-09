@@ -65,8 +65,6 @@
   });
 </script>
 
-<Story name="Playground" />
-
 <Story name="All Slots Selected (3 of 3)" />
 
 <Story

@@ -24,7 +24,7 @@
       canJumpToAnyStep: { control: 'boolean' },
     },
     args: {
-      currentStep: 2,
+      currentStep: 0,
       totalSteps: 5,
       canJumpToAnyStep: true,
       onPrevious: fn(),
@@ -38,45 +38,58 @@
 {/snippet}
 
 {#snippet templateWithSteps(args: Props, steps: StepListProps['steps'] = mockSteps)}
-  <StepNav {...args}>
-    <StepList {steps} currentStep={args.currentStep} canJumpToAnyStep={args.canJumpToAnyStep} />
-  </StepNav>
+  <div class="bg-java p-4">
+    <StepNav {...args}>
+      <StepList {steps} currentStep={args.currentStep} canJumpToAnyStep={args.canJumpToAnyStep} />
+    </StepNav>
+  </div>
 {/snippet}
 
-<Story name="Playground" {template} />
+<Story name="First Step" {template} />
 
-<!-- Demo showing complete stepper with navigation -->
-<Story name="First Step" args={{ currentStep: 0 }} {template} />
-
-<Story name="Middle Step" {template} />
+<Story name="Middle Step" args={{ currentStep: 2 }} {template} />
 
 <Story name="Last Step" args={{ currentStep: 4 }} {template} />
 
-<Story name="Cannot Jump (Buttons Hidden)" args={{ canJumpToAnyStep: false }} {template} />
+<Story
+  name="Cannot Jump (Buttons Hidden)"
+  args={{ currentStep: 2, canJumpToAnyStep: false }}
+  {template}
+/>
+
+{#snippet templateOneStep(args: Props)}
+  {@render templateWithSteps(args, [
+    { name: 'Only Step', testId: 'only', anyFilled: true, allFilled: true },
+  ])}
+{/snippet}
 
 <Story
   name="Single Step (Both Buttons Disabled)"
-  args={{ currentStep: 0, totalSteps: 1 }}
-  template={(_) =>
-    templateWithSteps(_, [{ name: 'Only Step', testId: 'only', anyFilled: true, allFilled: true }])}
+  args={{ totalSteps: 1 }}
+  template={templateOneStep}
 />
 
-<Story
-  name="Two Steps (Minimum Multi-step)"
-  args={{ currentStep: 0, totalSteps: 2 }}
-  template={(_) =>
-    templateWithSteps(_, [
-      { name: 'First', testId: 'first', anyFilled: true, allFilled: true },
-      { name: 'Second', testId: 'second', anyFilled: false, allFilled: false },
-    ])}
-/>
+{#snippet templateTwoSteps(args: Props)}
+  {@render templateWithSteps(args, [
+    { name: 'First', testId: 'first', anyFilled: true, allFilled: true },
+    { name: 'Second', testId: 'second', anyFilled: false, allFilled: false },
+  ])}
+{/snippet}
 
-<Story name="Without Children Slot (Standalone Buttons)" />
+<Story name="Two Steps (Minimum Multi-step)" args={{ totalSteps: 2 }} template={templateTwoSteps} />
+
+{#snippet templateWithoutSteps(args: Props)}
+  <div class="bg-java p-4">
+    <StepNav {...args} />
+  </div>
+{/snippet}
+
+<Story name="Without Children Slot (Standalone Buttons)" template={templateWithoutSteps} />
 
 <!-- Demo showing all states -->
 <Story name="All States Comparison">
   {#snippet template(args: Props)}
-    <div class="space-y-8 p-4">
+    <div class="space-y-8 bg-java p-4">
       <div>
         <h3 class="mb-2 text-sm font-bold">First Step (Previous Disabled)</h3>
         <StepNav {...args} currentStep={0} totalSteps={5}>

@@ -2,6 +2,7 @@
   import { defineMeta } from '@storybook/addon-svelte-csf';
   import { fn } from 'storybook/test';
   import ChildrenStep from './ChildrenStep.svelte';
+  import type { Props } from './ChildrenStep.svelte';
 
   const { Story } = defineMeta({
     component: ChildrenStep,
@@ -35,7 +36,13 @@
   });
 </script>
 
-<Story name="Playground" />
+{#snippet template(args: Props)}
+  <div class="bg-java p-4">
+    <ChildrenStep {...args} />
+  </div>
+{/snippet}
+
+<Story name="With One Child" {template} />
 
 <Story
   name="Empty (No Children)"
@@ -43,13 +50,7 @@
     children: [],
     additionalNotes: '',
   }}
-/>
-
-<Story
-  name="With One Child"
-  args={{
-    additionalNotes: '',
-  }}
+  {template}
 />
 
 <Story
@@ -68,6 +69,7 @@
       },
     ],
   }}
+  {template}
 />
 
 <Story
@@ -83,6 +85,7 @@
     additionalNotes: 'Hund im Garten',
     canEditAnything: false,
   }}
+  {template}
 />
 
 <Story
@@ -100,6 +103,7 @@
       'booking.children[0].name': ['Name ist erforderlich'],
     },
   }}
+  {template}
 />
 
 <Story
@@ -135,6 +139,7 @@
     additionalNotes:
       'Familie hat einen Hund, der bei Fremden bellt. Bitte Klingel nutzen und kurz warten.',
   }}
+  {template}
 />
 
 <Story
@@ -151,4 +156,5 @@
     ],
     additionalNotes: '',
   }}
+  {template}
 />

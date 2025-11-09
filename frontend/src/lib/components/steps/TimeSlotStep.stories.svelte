@@ -99,28 +99,29 @@
   });
 </script>
 
+{#snippet template(args: Props)}
+  <div class="bg-java p-4">
+    <TimeSlotStep {...args} />
+  </div>
+{/snippet}
+
 <Story
-  name="Playground"
+  name="Some Selected"
   args={{
     selectedTimeSlotIds: ['1', '4'],
     showSearch: true,
   }}
+  {template}
 />
 
 <Story name="Empty (No Selection)" />
-
-<Story
-  name="With Some Selected"
-  args={{
-    selectedTimeSlotIds: ['1', '4'],
-  }}
-/>
 
 <Story
   name="Max Slots Selected"
   args={{
     selectedTimeSlotIds: ['1', '3', '5'],
   }}
+  {template}
 />
 
 <Story
@@ -128,6 +129,7 @@
   args={{
     showSearch: true,
   }}
+  {template}
 />
 
 <Story
@@ -136,6 +138,7 @@
     selectedTimeSlotIds: ['1', '4', '5'],
     canEditRoutePlanning: false,
   }}
+  {template}
 />
 
 <Story
@@ -146,6 +149,7 @@
       'booking.time_slots': ['Bitte wähle mindestens 3 Zeitslots'],
     },
   }}
+  {template}
 />
 
 <Story
@@ -153,6 +157,7 @@
   args={{
     availableTimeSlots: [],
   }}
+  {template}
 />
 
 <Story
@@ -162,6 +167,7 @@
     selectedTimeSlotIds: ['1', '8', '12'],
     showSearch: true,
   }}
+  {template}
 />
 
 <Story
@@ -169,4 +175,5 @@
   args={{
     availableTimeSlots: [availableTimeSlots[0]],
   }}
+  {template}
 />

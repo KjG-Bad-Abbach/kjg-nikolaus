@@ -2,6 +2,7 @@
   import { defineMeta } from '@storybook/addon-svelte-csf';
   import { fn } from 'storybook/test';
   import ContactStep from './ContactStep.svelte';
+  import type { Props } from './ContactStep.svelte';
 
   const { Story } = defineMeta({
     component: ContactStep,
@@ -33,7 +34,13 @@
   });
 </script>
 
-<Story name="Playground" />
+{#snippet template(args: Props)}
+  <div class="bg-java p-4">
+    <ContactStep {...args} />
+  </div>
+{/snippet}
+
+<Story name="Filled" {template} />
 
 <Story
   name="Empty Form"
@@ -45,6 +52,7 @@
       phone_number: '',
     },
   }}
+  {template}
 />
 
 <Story
@@ -60,6 +68,7 @@
       'booking.contact_person.first_name': ['Vorname ist erforderlich'],
     },
   }}
+  {template}
 />
 
 <Story
@@ -81,6 +90,7 @@
       'booking.contact_person.phone_number': ['Telefonnummer ist erforderlich'],
     },
   }}
+  {template}
 />
 
 <Story
@@ -88,6 +98,7 @@
   args={{
     canEdit: false,
   }}
+  {template}
 />
 
 <Story
@@ -100,4 +111,5 @@
       phone_number: '+49 (0) 123 / 456789-0',
     },
   }}
+  {template}
 />

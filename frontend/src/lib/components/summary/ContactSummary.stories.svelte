@@ -51,8 +51,6 @@
   });
 </script>
 
-<Story name="Playground" />
-
 <Story name="All Fields Complete" />
 
 <Story

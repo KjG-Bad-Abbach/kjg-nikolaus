@@ -2,6 +2,7 @@
   import { defineMeta } from '@storybook/addon-svelte-csf';
   import { fn } from 'storybook/test';
   import AddressStep from './AddressStep.svelte';
+  import type { Props } from './AddressStep.svelte';
 
   const { Story } = defineMeta({
     component: AddressStep,
@@ -44,7 +45,13 @@
   });
 </script>
 
-<Story name="Playground" />
+{#snippet template(args: Props)}
+  <div class="bg-java p-4">
+    <AddressStep {...args} />
+  </div>
+{/snippet}
+
+<Story name="Filled" {template} />
 
 <Story
   name="Empty Form"
@@ -57,9 +64,8 @@
     },
     presentLocation: '',
   }}
+  {template}
 />
-
-<Story name="Filled" />
 
 <Story
   name="With Validation Errors"
@@ -78,6 +84,7 @@
       'booking.location.place': ['Ort ist erforderlich'],
     },
   }}
+  {template}
 />
 
 <Story
@@ -86,6 +93,7 @@
     presentLocation: 'In der Garage',
     canEditRoutePlanning: false,
   }}
+  {template}
 />
 
 <Story
@@ -94,6 +102,7 @@
     canEditRoutePlanning: false,
     canEditAnything: false,
   }}
+  {template}
 />
 
 <Story
@@ -107,6 +116,7 @@
     },
     presentLocation: '',
   }}
+  {template}
 />
 
 <Story
@@ -121,4 +131,5 @@
     presentLocation:
       'Im Gartenhäuschen hinter dem Haus auf der rechten Seite, der Schlüssel liegt unter dem großen grauen Blumentopf neben der blauen Tür mit dem Weihnachtskranz',
   }}
+  {template}
 />

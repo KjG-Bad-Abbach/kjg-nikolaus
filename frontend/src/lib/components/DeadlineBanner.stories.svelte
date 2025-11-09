@@ -3,8 +3,10 @@
   import DeadlineBanner from './DeadlineBanner.svelte';
   import type { Props } from './DeadlineBanner.svelte';
 
-  const routePlanningDeadline = new Date('2024-12-05T19:30:00+01:00');
-  const finalDeadline = new Date('2024-12-20T23:59:00+01:00');
+  const currentYear = new Date().getFullYear();
+
+  const routePlanningDeadline = new Date(`${currentYear}-12-05T19:30:00+01:00`);
+  const finalDeadline = new Date(`${currentYear}-12-20T23:59:00+01:00`);
 
   const { Story } = defineMeta({
     component: DeadlineBanner,
@@ -18,8 +20,6 @@
     },
   });
 </script>
-
-<Story name="Playground" />
 
 <Story name="Both Active" />
 
@@ -41,8 +41,8 @@
 <Story
   name="Future Deadlines"
   args={{
-    routePlanningDeadline: new Date('2025-12-05T19:30:00+01:00'),
-    finalDeadline: new Date('2025-12-20T23:59:00+01:00'),
+    routePlanningDeadline: new Date(`${currentYear + 1}-12-05T19:30:00+01:00`),
+    finalDeadline: new Date(`${currentYear + 1}-12-20T23:59:00+01:00`),
   }}
 />
 

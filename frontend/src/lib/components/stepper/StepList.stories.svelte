@@ -28,12 +28,19 @@
   });
 </script>
 
+{#snippet template(args: Props)}
+  <div class="bg-java p-4">
+    <StepList {...args} />
+  </div>
+{/snippet}
+
 <Story
-  name="Playground"
+  name="Can Jump To Any Step"
   args={{
     currentStep: 2,
     canJumpToAnyStep: true,
   }}
+  {template}
 />
 
 <Story
@@ -42,6 +49,7 @@
     currentStep: 0,
     canJumpToAnyStep: false,
   }}
+  {template}
 />
 
 <Story
@@ -50,6 +58,7 @@
     currentStep: 1,
     canJumpToAnyStep: false,
   }}
+  {template}
 />
 
 <Story
@@ -58,14 +67,7 @@
     currentStep: 4,
     canJumpToAnyStep: false,
   }}
-/>
-
-<Story
-  name="Can Jump To Any Step"
-  args={{
-    currentStep: 2,
-    canJumpToAnyStep: true,
-  }}
+  {template}
 />
 
 <Story
@@ -81,6 +83,7 @@
     currentStep: 4,
     canJumpToAnyStep: true,
   }}
+  {template}
 />
 
 <Story
@@ -90,6 +93,7 @@
     currentStep: 0,
     canJumpToAnyStep: false,
   }}
+  {template}
 />
 
 <Story
@@ -99,6 +103,7 @@
     currentStep: 0,
     canJumpToAnyStep: false,
   }}
+  {template}
 />
 
 <Story
@@ -111,6 +116,7 @@
     currentStep: 1,
     canJumpToAnyStep: true,
   }}
+  {template}
 />
 
 <Story
@@ -128,6 +134,7 @@
     currentStep: 2,
     canJumpToAnyStep: false,
   }}
+  {template}
 />
 
 <Story
@@ -156,4 +163,5 @@
     currentStep: 1,
     canJumpToAnyStep: true,
   }}
+  {template}
 />

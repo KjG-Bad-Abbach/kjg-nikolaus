@@ -22,17 +22,11 @@
   });
 </script>
 
-<Story
-  name="Playground"
-  args={{
-    index: 0,
-    name: 'Contact Details',
-    testId: 'contact',
-    isCurrent: false,
-    allFilled: false,
-    canJumpTo: false,
-  }}
-/>
+{#snippet template(args: Props)}
+  <ol class="flex items-center gap-4 bg-java p-4">
+    <StepIndicator {...args} />
+  </ol>
+{/snippet}
 
 <Story
   name="Default (Not Filled)"
@@ -44,6 +38,7 @@
     allFilled: false,
     canJumpTo: false,
   }}
+  {template}
 />
 
 <Story
@@ -56,6 +51,7 @@
     allFilled: false,
     canJumpTo: true,
   }}
+  {template}
 />
 
 <Story
@@ -68,6 +64,7 @@
     allFilled: true,
     canJumpTo: true,
   }}
+  {template}
 />
 
 <Story
@@ -80,6 +77,7 @@
     allFilled: true,
     canJumpTo: true,
   }}
+  {template}
 />
 
 <Story
@@ -92,13 +90,14 @@
     allFilled: true,
     canJumpTo: false,
   }}
+  {template}
 />
 
 <!-- Demo showing all states in sequence -->
 <Story name="All States Comparison">
   {#snippet template()}
-    <div class="space-y-4 p-4">
-      <div class="flex items-center gap-4">
+    <div class="space-y-4 bg-java p-4">
+      <ol class="flex items-center gap-4">
         <StepIndicator
           index={0}
           name="Not Filled"
@@ -139,7 +138,7 @@
           allFilled={true}
           canJumpTo={false}
         />
-      </div>
+      </ol>
     </div>
   {/snippet}
 </Story>
