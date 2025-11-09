@@ -28,10 +28,10 @@
   const hasValidationErrors = $derived(Object.keys(validationMessages).length > 0);
 
   // Local reactive state for form fields
-  let first_name = $state(contactPerson.first_name);
-  let last_name = $state(contactPerson.last_name);
-  let email = $state(contactPerson.email);
-  let phone_number = $state(contactPerson.phone_number);
+  let first_name = $derived(contactPerson.first_name);
+  let last_name = $derived(contactPerson.last_name);
+  let email = $derived(contactPerson.email);
+  let phone_number = $derived(contactPerson.phone_number);
 
   // Sync local state back to parent on change
   function handleChange() {
@@ -42,20 +42,6 @@
       phone_number,
     });
   }
-
-  // Sync props to local state when they change
-  $effect(() => {
-    first_name = contactPerson.first_name;
-  });
-  $effect(() => {
-    last_name = contactPerson.last_name;
-  });
-  $effect(() => {
-    email = contactPerson.email;
-  });
-  $effect(() => {
-    phone_number = contactPerson.phone_number;
-  });
 
   function handleSubmit(event: Event) {
     event.preventDefault();

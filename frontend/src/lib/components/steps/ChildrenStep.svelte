@@ -37,16 +37,8 @@
   const hasNoChildren = $derived(children.length === 0);
 
   // Local reactive state
-  let localChildren = $state<Child[]>(children.map((c) => ({ ...c })));
-  let localAdditionalNotes = $state(additionalNotes);
-
-  // Sync props to local state when they change
-  $effect(() => {
-    localChildren = children.map((c) => ({ ...c }));
-  });
-  $effect(() => {
-    localAdditionalNotes = additionalNotes;
-  });
+  let localChildren = $derived<Child[]>(children.map((c) => ({ ...c })));
+  let localAdditionalNotes = $derived(additionalNotes);
 
   function handleChange() {
     onChange?.({

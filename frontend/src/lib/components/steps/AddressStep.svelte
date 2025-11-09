@@ -44,11 +44,11 @@
   const hasValidationErrors = $derived(Object.keys(validationMessages).length > 0);
 
   // Local reactive state for form fields
-  let street = $state(location.street);
-  let house_number = $state(location.house_number);
-  let zip_code = $state(location.zip_code);
-  let place = $state(location.place);
-  let present_location = $state(presentLocation);
+  let street = $derived(location.street);
+  let house_number = $derived(location.house_number);
+  let zip_code = $derived(location.zip_code);
+  let place = $derived(location.place);
+  let present_location = $derived(presentLocation);
 
   // Sync local state back to parent on change
   function handleChange() {
@@ -62,23 +62,6 @@
       presentLocation: present_location,
     });
   }
-
-  // Sync props to local state when they change
-  $effect(() => {
-    street = location.street;
-  });
-  $effect(() => {
-    house_number = location.house_number;
-  });
-  $effect(() => {
-    zip_code = location.zip_code;
-  });
-  $effect(() => {
-    place = location.place;
-  });
-  $effect(() => {
-    present_location = presentLocation;
-  });
 
   // Limit zip code to 5 digits
   function handleZipInput(event: Event) {
