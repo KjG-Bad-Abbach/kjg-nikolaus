@@ -315,7 +315,7 @@ describe('TimeSlotStep', () => {
   });
 
   it('should call onSubmit when form is submitted', async () => {
-    const onSubmit = vi.fn((e) => e.preventDefault());
+    const onSubmit = vi.fn();
     render(TimeSlotStep, {
       availableTimeSlots,
       selectedTimeSlotIds: ['1', '2', '3'],

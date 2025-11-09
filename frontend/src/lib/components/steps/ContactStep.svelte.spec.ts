@@ -266,7 +266,7 @@ describe('ContactStep', () => {
   });
 
   it('should call onSubmit when form is submitted', async () => {
-    const onSubmit = vi.fn((e) => e.preventDefault());
+    const onSubmit = vi.fn();
     render(ContactStep, {
       contactPerson: filledContact,
       finalDeadline,

@@ -24,7 +24,7 @@
     /** Callback when selection changes */
     onChange?: (selectedIds: string[]) => void;
     /** Callback when form is submitted */
-    onSubmit?: (event: Event) => void;
+    onSubmit?: (selectedIds: string[]) => void;
   };
 
   const {
@@ -113,6 +113,11 @@
   function getSlotLabel(slotId: string): string {
     const slot = availableTimeSlots.find((s) => s.id === slotId);
     return slot?.label || '';
+  }
+
+  function handleSubmit(event: Event) {
+    event.preventDefault();
+    onSubmit?.(selectedTimeSlotIds);
   }
 </script>
 
@@ -228,7 +233,7 @@
     </div>
   {/if}
 
-  <form data-testid="qa-time-slot-form" class="mt-6 space-y-6" onsubmit={onSubmit}>
+  <form data-testid="qa-time-slot-form" class="mt-6 space-y-6" onsubmit={handleSubmit}>
     {#if canEditRoutePlanning && isUnderMin}
       <p class="mt-4 text-rust">
         Bitte wähle mindestens <span>{maxTimeSlots}</span> Zeitslots. Damit wir eine bestmögliche Fahrroute

@@ -22,14 +22,9 @@ vi.mock('$lib/utils/formSubmission', async () => {
 
 describe('submitHandlers', () => {
   let mockContext: SubmitContext;
-  let mockEvent: Event;
 
   beforeEach(() => {
     vi.clearAllMocks();
-
-    mockEvent = {
-      preventDefault: vi.fn(),
-    } as unknown as Event;
 
     mockContext = {
       uiStore: {
@@ -76,9 +71,8 @@ describe('submitHandlers', () => {
         isNewBooking: true,
       });
 
-      await submitContactDetails(mockEvent, mockContext);
+      await submitContactDetails(mockContext);
 
-      expect(mockEvent.preventDefault).toHaveBeenCalled();
       expect(formSubmission.submitContact).toHaveBeenCalledWith({
         contact: mockContext.bookingStore.booking.contact_person,
         bookingId: mockContext.uiStore.bookingId,
@@ -94,7 +88,7 @@ describe('submitHandlers', () => {
         isNewBooking: true,
       });
 
-      await submitContactDetails(mockEvent, mockContext);
+      await submitContactDetails(mockContext);
 
       expect(mockContext.uiStore.setBookingId).toHaveBeenCalledWith('new-booking-456');
       expect(mockContext.uiStore.setView).toHaveBeenCalledWith('steps');
@@ -108,7 +102,7 @@ describe('submitHandlers', () => {
         isNewBooking: false,
       });
 
-      await submitContactDetails(mockEvent, mockContext);
+      await submitContactDetails(mockContext);
 
       expect(mockContext.uiStore.setBookingId).toHaveBeenCalledWith('existing-booking-789');
       expect(mockContext.uiStore.setView).toHaveBeenCalledWith('steps');
@@ -122,7 +116,7 @@ describe('submitHandlers', () => {
         isNewBooking: false,
       });
 
-      await submitContactDetails(mockEvent, mockContext);
+      await submitContactDetails(mockContext);
 
       expect(mockContext.uiStore.setBookingId).not.toHaveBeenCalled();
       expect(mockContext.uiStore.setStep).not.toHaveBeenCalled();
@@ -133,9 +127,8 @@ describe('submitHandlers', () => {
     it('should prevent default event and submit address', async () => {
       vi.mocked(formSubmission.submitAddress).mockResolvedValue(true);
 
-      await submitAddressStep(mockEvent, mockContext);
+      await submitAddressStep(mockContext);
 
-      expect(mockEvent.preventDefault).toHaveBeenCalled();
       expect(formSubmission.submitAddress).toHaveBeenCalledWith({
         location: mockContext.bookingStore.booking.location,
         presentLocation: mockContext.bookingStore.booking.present_location,
@@ -149,7 +142,7 @@ describe('submitHandlers', () => {
     it('should reload booking and move to next step on success', async () => {
       vi.mocked(formSubmission.submitAddress).mockResolvedValue(true);
 
-      await submitAddressStep(mockEvent, mockContext);
+      await submitAddressStep(mockContext);
 
       expect(mockContext.reloadBooking).toHaveBeenCalled();
       expect(mockContext.uiStore.setStep).toHaveBeenCalledWith(2);
@@ -158,7 +151,7 @@ describe('submitHandlers', () => {
     it('should not proceed on failure', async () => {
       vi.mocked(formSubmission.submitAddress).mockResolvedValue(false);
 
-      await submitAddressStep(mockEvent, mockContext);
+      await submitAddressStep(mockContext);
 
       expect(mockContext.reloadBooking).not.toHaveBeenCalled();
       expect(mockContext.uiStore.setStep).not.toHaveBeenCalled();
@@ -169,9 +162,8 @@ describe('submitHandlers', () => {
     it('should prevent default event and submit time slots', async () => {
       vi.mocked(formSubmission.submitTimeSlots).mockResolvedValue(true);
 
-      await submitTimeSlotsStep(mockEvent, mockContext);
+      await submitTimeSlotsStep(mockContext);
 
-      expect(mockEvent.preventDefault).toHaveBeenCalled();
       expect(formSubmission.submitTimeSlots).toHaveBeenCalledWith({
         selectedTimeSlotIds: mockContext.bookingStore.selectedTimeSlotIds,
         bookingId: mockContext.uiStore.bookingId,
@@ -184,7 +176,7 @@ describe('submitHandlers', () => {
     it('should reload booking and move to next step on success', async () => {
       vi.mocked(formSubmission.submitTimeSlots).mockResolvedValue(true);
 
-      await submitTimeSlotsStep(mockEvent, mockContext);
+      await submitTimeSlotsStep(mockContext);
 
       expect(mockContext.reloadBooking).toHaveBeenCalled();
       expect(mockContext.uiStore.setStep).toHaveBeenCalledWith(3);
@@ -193,7 +185,7 @@ describe('submitHandlers', () => {
     it('should not proceed on failure', async () => {
       vi.mocked(formSubmission.submitTimeSlots).mockResolvedValue(false);
 
-      await submitTimeSlotsStep(mockEvent, mockContext);
+      await submitTimeSlotsStep(mockContext);
 
       expect(mockContext.reloadBooking).not.toHaveBeenCalled();
       expect(mockContext.uiStore.setStep).not.toHaveBeenCalled();
@@ -204,9 +196,8 @@ describe('submitHandlers', () => {
     it('should prevent default event and submit children', async () => {
       vi.mocked(formSubmission.submitChildren).mockResolvedValue(true);
 
-      await submitChildrenStep(mockEvent, mockContext);
+      await submitChildrenStep(mockContext);
 
-      expect(mockEvent.preventDefault).toHaveBeenCalled();
       expect(formSubmission.submitChildren).toHaveBeenCalledWith({
         children: mockContext.bookingStore.booking.children,
         additionalNotes: mockContext.bookingStore.booking.additional_notes,
@@ -219,7 +210,7 @@ describe('submitHandlers', () => {
     it('should reload booking and move to summary step on success', async () => {
       vi.mocked(formSubmission.submitChildren).mockResolvedValue(true);
 
-      await submitChildrenStep(mockEvent, mockContext);
+      await submitChildrenStep(mockContext);
 
       expect(mockContext.reloadBooking).toHaveBeenCalled();
       expect(mockContext.uiStore.setStep).toHaveBeenCalledWith(4);
@@ -228,7 +219,7 @@ describe('submitHandlers', () => {
     it('should not proceed on failure', async () => {
       vi.mocked(formSubmission.submitChildren).mockResolvedValue(false);
 
-      await submitChildrenStep(mockEvent, mockContext);
+      await submitChildrenStep(mockContext);
 
       expect(mockContext.reloadBooking).not.toHaveBeenCalled();
       expect(mockContext.uiStore.setStep).not.toHaveBeenCalled();

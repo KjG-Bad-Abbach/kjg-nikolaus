@@ -20,7 +20,7 @@
     /** Callback when data changes */
     onChange?: (data: { children: Child[]; additionalNotes: string }) => void;
     /** Callback when form is submitted */
-    onSubmit?: (event: Event) => void;
+    onSubmit?: (data: { children: Child[]; additionalNotes: string }) => void;
   };
 
   const {
@@ -63,6 +63,14 @@
   function removeChild(index: number) {
     localChildren = localChildren.filter((_, i) => i !== index);
     handleChange();
+  }
+
+  function handleSubmit(event: Event) {
+    event.preventDefault();
+    onSubmit?.({
+      children: localChildren,
+      additionalNotes: localAdditionalNotes,
+    });
   }
 </script>
 
@@ -121,7 +129,7 @@
     <p class="mt-6 text-rust">Bitte füge mindestens ein Kind hinzu.</p>
   {/if}
 
-  <form data-testid="qa-children-form" class="mt-6 space-y-6" onsubmit={onSubmit}>
+  <form data-testid="qa-children-form" class="mt-6 space-y-6" onsubmit={handleSubmit}>
     <!-- List of children -->
     {#each localChildren as child, index (index)}
       <div class="space-y-4 rounded-lg border border-gray-300 bg-gray-100 p-4">

@@ -87,10 +87,10 @@
   };
 
   // Bind submit handlers with context
-  const wrappedSubmitContactDetails = (event: Event) => submitContactDetails(event, submitContext);
-  const wrappedSubmitAddressStep = (event: Event) => submitAddressStep(event, submitContext);
-  const wrappedSubmitTimeSlotsStep = (event: Event) => submitTimeSlotsStep(event, submitContext);
-  const wrappedSubmitChildrenStep = (event: Event) => submitChildrenStep(event, submitContext);
+  const wrappedSubmitContactDetails = () => submitContactDetails(submitContext);
+  const wrappedSubmitAddressStep = () => submitAddressStep(submitContext);
+  const wrappedSubmitTimeSlotsStep = () => submitTimeSlotsStep(submitContext);
+  const wrappedSubmitChildrenStep = () => submitChildrenStep(submitContext);
 
   // Bind change handlers with context
   const wrappedHandleContactChange = (contact: ContactPerson) =>

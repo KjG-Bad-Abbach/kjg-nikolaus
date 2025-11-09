@@ -28,9 +28,7 @@ export interface SubmitContext {
  * Submits contact details (Step 0)
  * Handles both new bookings and existing booking updates
  */
-export async function submitContactDetails(event: Event, context: SubmitContext): Promise<void> {
-  event.preventDefault();
-
+export async function submitContactDetails(context: SubmitContext): Promise<void> {
   const result = await submitContact({
     contact: context.bookingStore.booking.contact_person,
     bookingId: context.uiStore.bookingId,
@@ -58,9 +56,7 @@ export async function submitContactDetails(event: Event, context: SubmitContext)
 /**
  * Submits address details (Step 1)
  */
-export async function submitAddressStep(event: Event, context: SubmitContext): Promise<void> {
-  event.preventDefault();
-
+export async function submitAddressStep(context: SubmitContext): Promise<void> {
   const success = await submitAddress({
     location: context.bookingStore.booking.location,
     presentLocation: context.bookingStore.booking.present_location,
@@ -79,9 +75,7 @@ export async function submitAddressStep(event: Event, context: SubmitContext): P
 /**
  * Submits time slot selections (Step 2)
  */
-export async function submitTimeSlotsStep(event: Event, context: SubmitContext): Promise<void> {
-  event.preventDefault();
-
+export async function submitTimeSlotsStep(context: SubmitContext): Promise<void> {
   const success = await submitTimeSlots({
     selectedTimeSlotIds: context.bookingStore.selectedTimeSlotIds,
     bookingId: context.uiStore.bookingId,
@@ -99,9 +93,7 @@ export async function submitTimeSlotsStep(event: Event, context: SubmitContext):
 /**
  * Submits children details and additional notes (Step 3)
  */
-export async function submitChildrenStep(event: Event, context: SubmitContext): Promise<void> {
-  event.preventDefault();
-
+export async function submitChildrenStep(context: SubmitContext): Promise<void> {
   const success = await submitChildren({
     children: context.bookingStore.booking.children,
     additionalNotes: context.bookingStore.booking.additional_notes,

@@ -18,7 +18,7 @@
     /** Callback when field values change */
     onChange?: (contactPerson: ContactPerson) => void;
     /** Callback when form is submitted */
-    onSubmit?: (event: Event) => void;
+    onSubmit?: (contactPerson: ContactPerson) => void;
   };
 
   const { contactPerson, finalDeadline, canEdit, validationMessages, onChange, onSubmit }: Props =
@@ -56,6 +56,16 @@
   $effect(() => {
     phone_number = contactPerson.phone_number;
   });
+
+  function handleSubmit(event: Event) {
+    event.preventDefault();
+    onSubmit?.({
+      first_name,
+      last_name,
+      email,
+      phone_number,
+    });
+  }
 </script>
 
 <div class="mx-auto w-full max-w-3xl rounded-lg bg-white p-6 shadow-md">
@@ -71,7 +81,7 @@
     </p>
   {/if}
 
-  <form data-testid="qa-contact-form" class="space-y-6" onsubmit={onSubmit}>
+  <form data-testid="qa-contact-form" class="space-y-6" onsubmit={handleSubmit}>
     <div>
       <label for="first_name" class="block text-left font-medium text-surfie-green">Vorname *</label
       >

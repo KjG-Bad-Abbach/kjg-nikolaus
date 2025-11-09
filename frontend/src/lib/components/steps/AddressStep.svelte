@@ -24,7 +24,7 @@
     /** Callback when field values change */
     onChange?: (data: { location: Location; presentLocation: string }) => void;
     /** Callback when form is submitted */
-    onSubmit?: (event: Event) => void;
+    onSubmit?: (data: { location: Location; presentLocation: string }) => void;
   };
 
   const {
@@ -89,6 +89,19 @@
     }
     handleChange();
   }
+
+  function handleSubmit(event: Event) {
+    event.preventDefault();
+    onSubmit?.({
+      location: {
+        street,
+        house_number,
+        zip_code,
+        place,
+      },
+      presentLocation: present_location,
+    });
+  }
 </script>
 
 <div class="mx-auto w-full max-w-3xl rounded-lg bg-white p-6 shadow-md">
@@ -104,7 +117,7 @@
     </p>
   {/if}
 
-  <form data-testid="qa-address-form" class="space-y-6" onsubmit={onSubmit}>
+  <form data-testid="qa-address-form" class="space-y-6" onsubmit={handleSubmit}>
     <div>
       <label for="street" class="block text-left font-medium text-surfie-green">Straße *</label>
       <input
