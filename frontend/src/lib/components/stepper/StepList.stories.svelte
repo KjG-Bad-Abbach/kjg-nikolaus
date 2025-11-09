@@ -12,6 +12,13 @@
     { name: 'Summary', testId: 'summary', anyFilled: false, allFilled: false },
   ];
 
+  const hugeSteps: Props['steps'] = Array.from({ length: 30 }, (_, i) => ({
+    name: `Step ${i + 1}`,
+    testId: `step-${i + 1}`,
+    anyFilled: i % 3 >= 1,
+    allFilled: i % 3 >= 2,
+  }));
+
   const { Story } = defineMeta({
     component: StepList,
     title: 'Components/Stepper/StepList',
@@ -131,6 +138,16 @@
       { name: 'Step 6', testId: 'step-6', anyFilled: false, allFilled: false },
       { name: 'Step 7', testId: 'step-7', anyFilled: false, allFilled: false },
     ],
+    currentStep: 2,
+    canJumpToAnyStep: false,
+  }}
+  {template}
+/>
+
+<Story
+  name="Huge Steps (30)"
+  args={{
+    steps: hugeSteps,
     currentStep: 2,
     canJumpToAnyStep: false,
   }}

@@ -39,7 +39,7 @@ describe('StepIndicator', () => {
       canJumpTo: true,
     });
 
-    const circle = container.querySelector('span.rounded-full');
+    const circle = container.querySelector('div.rounded-full');
     expect(circle?.classList.contains('border-calypso-950')).toBe(true);
     expect(circle?.classList.contains('bg-calypso')).toBe(true);
   });
@@ -53,7 +53,7 @@ describe('StepIndicator', () => {
       canJumpTo: false,
     });
 
-    const circle = container.querySelector('span.rounded-full');
+    const circle = container.querySelector('div.rounded-full');
     expect(circle?.classList.contains('bg-calypso')).toBe(true);
   });
 
@@ -180,7 +180,7 @@ describe('StepIndicator', () => {
       canJumpTo: true,
     });
 
-    const circle = container.querySelector('span.rounded-full');
+    const circle = container.querySelector('div.rounded-full');
     expect(circle?.classList.contains('bg-calypso')).toBe(true);
     expect(circle?.classList.contains('border-calypso-950')).toBe(true);
     expect(circle?.classList.contains('text-calypso-500')).toBe(true);
@@ -199,7 +199,7 @@ describe('StepIndicator', () => {
       canJumpTo: false,
     });
 
-    const circle = container.querySelector('span.rounded-full');
+    const circle = container.querySelector('div.rounded-full');
     expect(circle?.classList.contains('bg-calypso')).toBe(false);
     expect(circle?.classList.contains('bg-java-500')).toBe(true);
     expect(circle?.classList.contains('border-java')).toBe(true);

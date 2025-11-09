@@ -45,7 +45,7 @@
     aria-label={name}
     title={name}
   >
-    <span
+    <div
       class="size-8 rounded-full border-4 text-center text-[10px]/6 font-bold"
       class:bg-calypso={allFilled || isCurrent}
       class:group-hover:bg-calypso-950={(allFilled || isCurrent) && (canJumpTo || isCurrent)}
@@ -55,13 +55,13 @@
       class:border-java={!isCurrent}
     >
       {#if !allFilled}
-        <span>{index + 1}</span>
+        <div>{index + 1}</div>
       {:else}
-        <span>
+        <div>
           <CheckIcon sizeClass="size-4" class="m-1" />
-        </span>
+        </div>
       {/if}
-    </span>
-    <span class="hidden sm:block">{name}</span>
+    </div>
+    <div class="hidden max-w-64 truncate sm:block">{name}</div>
   </button>
 </li>
