@@ -141,7 +141,7 @@ export default factories.createCoreService(
           return `
             <div class="mt-6">
               <a
-                class="w-full rounded-sm bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:outline-hidden focus:ring-2 focus:ring-java focus:ring-opacity-50"
+                class="w-full rounded-sm bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:outline-hidden focus:ring-2 focus:ring-java/50"
                 href="${bookingUrl}"
               >
                 ${param || "Buchung vervollständigen/bearbeiten"}

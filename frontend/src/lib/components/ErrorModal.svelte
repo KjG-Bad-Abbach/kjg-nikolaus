@@ -41,7 +41,7 @@
 
 {#if error}
   <div
-    class="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
     role="button"
     tabindex="-1"
     onclick={handleBackdropClick}
@@ -110,7 +110,7 @@
             type="button"
             onclick={onRetry}
             data-testid="qa-error-retry"
-            class="focus:ring-opacity-50 rounded-sm border-2 border-gray-400 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 focus:ring-2 focus:ring-java-500 focus:outline-hidden"
+            class="rounded-sm border-2 border-gray-400 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 focus:ring-2 focus:ring-java-500/50 focus:outline-hidden"
           >
             Erneut versuchen
           </button>
@@ -119,7 +119,7 @@
             type="button"
             onclick={onClose}
             data-testid="qa-error-dismiss"
-            class="focus:ring-opacity-50 rounded-sm border-2 border-gray-400 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 focus:ring-2 focus:ring-java-500 focus:outline-hidden"
+            class="rounded-sm border-2 border-gray-400 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 focus:ring-2 focus:ring-java-500/50 focus:outline-hidden"
           >
             OK
           </button>

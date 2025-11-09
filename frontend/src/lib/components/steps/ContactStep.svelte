@@ -158,7 +158,7 @@
         <button
           type="submit"
           data-testid="qa-contact-submit"
-          class="focus:ring-opacity-50 w-full rounded-sm bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:ring-2 focus:ring-java focus:outline-hidden"
+          class="w-full rounded-sm bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:ring-2 focus:ring-java/50 focus:outline-hidden"
         >
           Speichern & Weiter
         </button>

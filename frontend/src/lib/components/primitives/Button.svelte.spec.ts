@@ -36,8 +36,7 @@ describe('Button', () => {
     expect(button?.classList.contains('font-bold')).toBe(true);
     expect(button?.classList.contains('focus:ring-2')).toBe(true);
     expect(button?.classList.contains('focus:outline-hidden')).toBe(true);
-    expect(button?.classList.contains('focus:ring-java')).toBe(true);
-    expect(button?.classList.contains('focus:ring-opacity-50')).toBe(true);
+    expect(button?.classList.contains('focus:ring-java/50')).toBe(true);
   });
 
   it('should apply primary variant styles by default', async () => {

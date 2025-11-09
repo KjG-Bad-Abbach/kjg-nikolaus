@@ -38,7 +38,7 @@
           <button
             @click="view = 'steps'"
             data-testid="qa-intro-start"
-            class="bg-atlantis hover:bg-surfie-green focus:ring-java focus:ring-opacity-50 rounded-sm px-6 py-2 font-bold text-white focus:ring-2 focus:outline-hidden"
+            class="bg-atlantis hover:bg-surfie-green focus:ring-java/50 rounded-sm px-6 py-2 font-bold text-white focus:ring-2 focus:outline-hidden"
           >
             Jetzt anmelden
           </button>
@@ -107,7 +107,7 @@
             <button
               x-show="canJumpToAnyStep"
               @click="step > 0 ? setStep(step - 1) : null"
-              class="text-calypso focus:ring-java-500 focus:ring-opacity-50 flex-none cursor-pointer py-2 font-bold select-none focus:ring-2 focus:outline-hidden"
+              class="text-calypso focus:ring-java-500/50 flex-none cursor-pointer py-2 font-bold select-none focus:ring-2 focus:outline-hidden"
               :class="step <= 0 ? 'opacity-50 cursor-not-allowed' : 'hover:text-calypso-950'"
               :disabled="step <= 0"
               aria-hidden="true"
@@ -198,7 +198,7 @@
             <button
               x-show="canJumpToAnyStep"
               @click="step < steps.length - 1 ? setStep(step + 1) : null"
-              class="text-calypso focus:ring-java-500 focus:ring-opacity-50 flex-none cursor-pointer py-2 font-bold select-none focus:ring-2 focus:outline-hidden"
+              class="text-calypso focus:ring-java-500/50 flex-none cursor-pointer py-2 font-bold select-none focus:ring-2 focus:outline-hidden"
               :class="step >= steps.length - 1 ? 'opacity-50 cursor-not-allowed' : 'hover:text-calypso-950'"
               :disabled="step >= steps.length - 1"
               aria-hidden="true"
@@ -721,7 +721,7 @@
                 <button
                   type="submit"
                   data-testid="qa-contact-submit"
-                  class="bg-atlantis hover:bg-surfie-green focus:ring-java focus:ring-opacity-50 w-full rounded-sm px-4 py-2 font-bold text-white focus:ring-2 focus:outline-hidden"
+                  class="bg-atlantis hover:bg-surfie-green focus:ring-java/50 w-full rounded-sm px-4 py-2 font-bold text-white focus:ring-2 focus:outline-hidden"
                 >
                   Speichern & Weiter
                 </button>
@@ -940,7 +940,7 @@
                 <button
                   type="submit"
                   data-testid="qa-address-submit"
-                  class="bg-atlantis hover:bg-surfie-green focus:ring-java focus:ring-opacity-50 w-full rounded-sm px-4 py-2 font-bold text-white focus:ring-2 focus:outline-hidden"
+                  class="bg-atlantis hover:bg-surfie-green focus:ring-java/50 w-full rounded-sm px-4 py-2 font-bold text-white focus:ring-2 focus:outline-hidden"
                 >
                   Speichern & Weiter
                 </button>
@@ -1092,7 +1092,7 @@
                       :disabled="!canEditRoutePlanning"
                       @click="updateTimeSlot(slotId, false)"
                       :data-testid="'qa-remove-selected-slot-' + slotId"
-                      class="focus:ring-java-500 focus:ring-opacity-50 text-gray-500 hover:text-gray-700 focus:ring-2 focus:outline-hidden"
+                      class="focus:ring-java-500/50 text-gray-500 hover:text-gray-700 focus:ring-2 focus:outline-hidden"
                       x-cloak
                     >
                       <svg
@@ -1135,7 +1135,7 @@
                 <button
                   type="submit"
                   data-testid="qa-time-slot-submit"
-                  class="bg-atlantis hover:bg-surfie-green focus:ring-java focus:ring-opacity-50 w-full rounded-sm px-4 py-2 font-bold text-white focus:ring-2 focus:outline-hidden"
+                  class="bg-atlantis hover:bg-surfie-green focus:ring-java/50 w-full rounded-sm px-4 py-2 font-bold text-white focus:ring-2 focus:outline-hidden"
                 >
                   Speichern & Weiter
                 </button>
@@ -1331,7 +1331,7 @@
                     type="button"
                     @click="removeChild(index)"
                     :data-testid="'qa-remove-child-' + index"
-                    class="focus:ring-rust focus:ring-opacity-50 mt-2 rounded-sm bg-red-500 px-3 py-1 text-sm font-bold text-white hover:bg-red-600 focus:ring-2 focus:outline-hidden"
+                    class="focus:ring-rust/50 mt-2 rounded-sm bg-red-500 px-3 py-1 text-sm font-bold text-white hover:bg-red-600 focus:ring-2 focus:outline-hidden"
                     x-cloak
                   >
                     Kind entfernen
@@ -1346,7 +1346,7 @@
                   @click="addChild"
                   :disabled="!canEditAnything"
                   data-testid="qa-add-child"
-                  class="bg-atlantis hover:bg-surfie-green focus:ring-java focus:ring-opacity-50 rounded-sm px-4 py-2 font-bold text-white focus:ring-2 focus:outline-hidden"
+                  class="bg-atlantis hover:bg-surfie-green focus:ring-java/50 rounded-sm px-4 py-2 font-bold text-white focus:ring-2 focus:outline-hidden"
                 >
                   Kind hinzufügen
                 </button>
@@ -1394,7 +1394,7 @@
                 <button
                   type="submit"
                   data-testid="qa-children-submit"
-                  class="bg-atlantis hover:bg-surfie-green focus:ring-java focus:ring-opacity-50 w-full rounded-sm px-4 py-2 font-bold text-white focus:ring-2 focus:outline-hidden"
+                  class="bg-atlantis hover:bg-surfie-green focus:ring-java/50 w-full rounded-sm px-4 py-2 font-bold text-white focus:ring-2 focus:outline-hidden"
                 >
                   Speichern & Weiter
                 </button>
@@ -1413,7 +1413,7 @@
                 type="button"
                 @click="setStep(4)"
                 data-testid="qa-children-skip"
-                class="border-atlantis text-atlantis hover:border-surfie-green hover:text-surfie-green focus:ring-java focus:ring-opacity-50 w-full rounded-sm border-2 px-4 py-2 font-bold focus:ring-2 focus:outline-hidden"
+                class="border-atlantis text-atlantis hover:border-surfie-green hover:text-surfie-green focus:ring-java/50 w-full rounded-sm border-2 px-4 py-2 font-bold focus:ring-2 focus:outline-hidden"
               >
                 Aktuell überspringen (nicht speichern)
               </button>
@@ -1638,7 +1638,7 @@
               type="button"
               x-on:click="sendEmailVerification"
               data-testid="qa-email-resend"
-              class="bg-atlantis hover:bg-surfie-green focus:ring-java focus:ring-opacity-50 w-full rounded-sm px-4 py-2 font-bold text-white focus:ring-2 focus:outline-hidden"
+              class="bg-atlantis hover:bg-surfie-green focus:ring-java/50 w-full rounded-sm px-4 py-2 font-bold text-white focus:ring-2 focus:outline-hidden"
             >
               E-Mail erneut senden
             </button>
@@ -1685,7 +1685,7 @@
         x-transition:leave="transition ease-in duration-200"
         x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0"
-        class="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
         @click.self="closeError()"
         x-cloak
       >
@@ -1750,7 +1750,7 @@
               @click="reload()"
               type="button"
               data-testid="qa-error-retry"
-              class="focus:ring-java-500 focus:ring-opacity-50 rounded-sm border-2 border-gray-400 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 focus:ring-2 focus:outline-hidden"
+              class="focus:ring-java-500/50 rounded-sm border-2 border-gray-400 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 focus:ring-2 focus:outline-hidden"
               x-cloak
             >
               Erneut versuchen
@@ -1760,7 +1760,7 @@
               @click="closeError()"
               type="button"
               data-testid="qa-error-dismiss"
-              class="focus:ring-java-500 focus:ring-opacity-50 rounded-sm border-2 border-gray-400 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 focus:ring-2 focus:outline-hidden"
+              class="focus:ring-java-500/50 rounded-sm border-2 border-gray-400 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 focus:ring-2 focus:outline-hidden"
               x-cloak
             >
               OK

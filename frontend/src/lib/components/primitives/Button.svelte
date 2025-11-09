@@ -19,7 +19,7 @@
   }: Props = $props();
 
   const baseClasses =
-    'rounded-sm px-4 py-2 font-bold focus:ring-2 focus:outline-hidden focus:ring-java focus:ring-opacity-50';
+    'rounded-sm px-4 py-2 font-bold focus:ring-2 focus:outline-hidden focus:ring-java/50';
 
   const variantClasses = $derived({
     primary: disabled

@@ -198,7 +198,7 @@
             type="button"
             onclick={() => removeChild(index)}
             data-testid={`qa-remove-child-${index}`}
-            class="focus:ring-opacity-50 mt-2 rounded-sm bg-red-500 px-3 py-1 text-sm font-bold text-white hover:bg-red-600 focus:ring-2 focus:ring-rust focus:outline-hidden"
+            class="mt-2 rounded-sm bg-red-500 px-3 py-1 text-sm font-bold text-white hover:bg-red-600 focus:ring-2 focus:ring-rust/50 focus:outline-hidden"
           >
             Kind entfernen
           </button>
@@ -213,7 +213,7 @@
           type="button"
           onclick={addChild}
           data-testid="qa-add-child"
-          class="focus:ring-opacity-50 rounded-sm bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:ring-2 focus:ring-java focus:outline-hidden"
+          class="rounded-sm bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:ring-2 focus:ring-java/50 focus:outline-hidden"
         >
           Kind hinzufügen
         </button>
@@ -255,7 +255,7 @@
         <button
           type="submit"
           data-testid="qa-children-submit"
-          class="focus:ring-opacity-50 w-full rounded-sm bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:ring-2 focus:ring-java focus:outline-hidden"
+          class="w-full rounded-sm bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:ring-2 focus:ring-java/50 focus:outline-hidden"
         >
           Speichern & Weiter
         </button>

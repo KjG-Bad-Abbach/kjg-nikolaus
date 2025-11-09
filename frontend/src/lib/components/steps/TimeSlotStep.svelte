@@ -206,7 +206,7 @@
                 onclick={() => removeTimeSlot(slotId)}
                 data-testid={`qa-remove-selected-slot-${slotId}`}
                 aria-label="Zeitslot entfernen"
-                class="focus:ring-opacity-50 text-gray-500 hover:text-gray-700 focus:ring-2 focus:ring-java-500 focus:outline-hidden"
+                class="text-gray-500 hover:text-gray-700 focus:ring-2 focus:ring-java-500/50 focus:outline-hidden"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -242,7 +242,7 @@
         <button
           type="submit"
           data-testid="qa-time-slot-submit"
-          class="focus:ring-opacity-50 w-full rounded-sm bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:ring-2 focus:ring-java focus:outline-hidden"
+          class="w-full rounded-sm bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:ring-2 focus:ring-java/50 focus:outline-hidden"
         >
           Speichern & Weiter
         </button>
