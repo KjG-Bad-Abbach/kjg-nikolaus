@@ -8,6 +8,9 @@
     component: AddressStep,
     title: 'Components/Steps/AddressStep',
     tags: ['autodocs'],
+    parameters: {
+      layout: 'fullscreen',
+    },
     argTypes: {
       location: {
         control: 'object',

@@ -23,6 +23,9 @@
     component: StepList,
     title: 'Components/Stepper/StepList',
     tags: ['autodocs'],
+    parameters: {
+      layout: 'fullscreen',
+    },
     argTypes: {
       steps: { control: 'object' },
       currentStep: { control: 'number' },

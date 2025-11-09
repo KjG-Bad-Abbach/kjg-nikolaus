@@ -8,6 +8,9 @@
     component: ContactStep,
     title: 'Components/Steps/ContactStep',
     tags: ['autodocs'],
+    parameters: {
+      layout: 'fullscreen',
+    },
     argTypes: {
       contactPerson: {
         control: 'object',

@@ -18,6 +18,9 @@
     component: StepNav,
     title: 'Components/Stepper/StepNav',
     tags: ['autodocs'],
+    parameters: {
+      layout: 'fullscreen',
+    },
     argTypes: {
       currentStep: { control: 'number' },
       totalSteps: { control: 'number' },

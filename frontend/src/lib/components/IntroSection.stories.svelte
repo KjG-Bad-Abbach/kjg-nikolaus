@@ -83,6 +83,9 @@
     component: IntroSection,
     title: 'Components/IntroSection',
     tags: ['autodocs'],
+    parameters: {
+      layout: 'fullscreen',
+    },
     args: {
       introductionText: sampleIntroText,
       onStart: fn(),

@@ -71,6 +71,9 @@
     component: TimeSlotStep,
     title: 'Components/Steps/TimeSlotStep',
     tags: ['autodocs'],
+    parameters: {
+      layout: 'fullscreen',
+    },
     argTypes: {
       maxTimeSlots: {
         control: { type: 'number', min: 1, max: 10 },

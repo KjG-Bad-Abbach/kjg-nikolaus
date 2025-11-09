@@ -16,6 +16,9 @@
     component: StepContainer,
     title: 'Components/StepContainer',
     tags: ['autodocs'],
+    parameters: {
+      layout: 'fullscreen',
+    },
     args: {
       steps: sampleSteps,
       canJumpToAnyStep: true,

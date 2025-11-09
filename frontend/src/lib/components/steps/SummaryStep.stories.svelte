@@ -7,6 +7,9 @@
     component: SummaryStep,
     title: 'Components/Steps/SummaryStep',
     tags: ['autodocs'],
+    parameters: {
+      layout: 'fullscreen',
+    },
     argTypes: {
       isRoutePlanningFilled: {
         control: 'boolean',

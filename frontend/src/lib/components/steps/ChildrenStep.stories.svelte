@@ -8,6 +8,9 @@
     component: ChildrenStep,
     title: 'Components/Steps/ChildrenStep',
     tags: ['autodocs'],
+    parameters: {
+      layout: 'fullscreen',
+    },
     argTypes: {
       additionalNotes: {
         control: 'text',

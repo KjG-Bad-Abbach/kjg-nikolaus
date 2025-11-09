@@ -35,6 +35,9 @@
     component: ErrorModal,
     title: 'Components/ErrorModal',
     tags: ['autodocs'],
+    parameters: {
+      layout: 'fullscreen',
+    },
     args: {
       error: detailedError,
       onClose: fn(),
