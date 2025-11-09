@@ -1,13 +1,19 @@
 <script lang="ts">
   export type Props = {
-    sizeClass?: string;
+    sizeClass?: `size-${number}`;
+    colorClass?: `text-${string}`;
+    class?: string;
   };
 
-  const { sizeClass = 'size-8' }: Props = $props();
+  const { sizeClass = 'size-6', colorClass, class: additionalClasses }: Props = $props();
+
+  const combinedClasses = $derived(
+    [sizeClass, colorClass, additionalClasses].filter(Boolean).join(' '),
+  );
 </script>
 
 <svg
-  class={sizeClass}
+  class={combinedClasses}
   fill="currentColor"
   viewBox="0 0 16 16"
   xmlns="http://www.w3.org/2000/svg"

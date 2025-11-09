@@ -1,22 +1,24 @@
 <script lang="ts">
   export type Props = {
-    sizeClass?: string;
-    colorClass?: string;
+    sizeClass?: `size-${number}`;
+    colorClass?: `text-${string}`;
+    class?: string;
   };
 
-  const { sizeClass = 'size-12', colorClass = 'text-calypso' }: Props = $props();
+  const { sizeClass = 'size-6', colorClass, class: additionalClasses }: Props = $props();
 
-  const classNames = $derived([sizeClass, colorClass, 'animate-spin'].join(' '));
+  const combinedClasses = $derived(
+    [sizeClass, colorClass, additionalClasses, 'animate-spin'].filter(Boolean).join(' '),
+  );
 </script>
 
 <svg
-  class={classNames}
+  class={combinedClasses}
   fill="currentColor"
   viewBox="0 0 24 24"
   xmlns="http://www.w3.org/2000/svg"
   aria-hidden="true"
   data-slot="icon"
-  role="img"
 >
   <path
     clip-rule="evenodd"

@@ -58,7 +58,7 @@
         <span>{index + 1}</span>
       {:else}
         <span>
-          <CheckIcon sizeClass="m-1 size-4" />
+          <CheckIcon sizeClass="size-4" class="m-1" />
         </span>
       {/if}
     </span>

@@ -22,11 +22,28 @@
         ],
         description: 'Tailwind size class for the icon',
       },
+      colorClass: {
+        control: 'select',
+        options: [
+          'text-java',
+          'text-calypso',
+          'text-flush-orange',
+          'text-camelot',
+          'text-brink-pink',
+          'text-bossanova',
+          'text-atlantis',
+          'text-surfie-green',
+          'text-sun',
+          'text-rust',
+        ],
+        description: 'Tailwind color class for the icon',
+      },
+      class: { control: 'text', description: 'Additional classes for the icon' },
     },
   });
 </script>
 
-<Story name="Playground" args={{ sizeClass: 'size-4' }} />
+<Story name="Playground" />
 
 <Story name="Default" />
 
@@ -34,21 +51,15 @@
 
 <Story name="Small" args={{ sizeClass: 'size-4' }} />
 
-<Story name="Medium" args={{ sizeClass: 'size-6' }} />
+<Story name="Medium" />
 
 <Story name="Large" args={{ sizeClass: 'size-12' }} />
 
 <Story name="Extra Large" args={{ sizeClass: 'size-16' }} />
 
-<Story name="With Custom Color" args={{ sizeClass: 'size-8' }}>
-  {#snippet template(args: Props)}
-    <div class="text-atlantis">
-      <CheckIcon {...args} />
-    </div>
-  {/snippet}
-</Story>
+<Story name="With Color" args={{ colorClass: 'text-atlantis' }} />
 
-<Story name="In Success Badge" args={{ sizeClass: 'size-4' }}>
+<Story name="In Success Badge">
   {#snippet template(args: Props)}
     <div
       class="inline-flex items-center gap-1 rounded-full bg-atlantis px-3 py-1 text-sm text-white"

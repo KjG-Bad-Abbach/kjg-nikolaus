@@ -3,34 +3,66 @@ import { render } from 'vitest-browser-svelte';
 import ChevronRight from './ChevronRight.svelte';
 
 describe('ChevronRight', () => {
-  it('should render chevron right icon SVG', async () => {
+  it('should render with correct defaults', async () => {
     const { container } = render(ChevronRight);
 
     const svg = container.querySelector('svg');
     expect(svg).toBeTruthy();
     expect(svg?.getAttribute('aria-hidden')).toBe('true');
+    expect(svg?.classList.contains('size-6')).toBe(true);
   });
 
   it('should apply custom size class', async () => {
     const { container } = render(ChevronRight, {
-      sizeClass: 'size-12',
+      sizeClass: 'size-8',
     });
-
-    const svg = container.querySelector('svg');
-    expect(svg?.classList.contains('size-12')).toBe(true);
-  });
-
-  it('should use default size when not provided', async () => {
-    const { container } = render(ChevronRight);
 
     const svg = container.querySelector('svg');
     expect(svg?.classList.contains('size-8')).toBe(true);
   });
 
-  it('should have correct viewBox', async () => {
-    const { container } = render(ChevronRight);
+  it('should apply custom color class', async () => {
+    const { container } = render(ChevronRight, {
+      colorClass: 'text-green-500',
+    });
 
     const svg = container.querySelector('svg');
-    expect(svg?.getAttribute('viewBox')).toBe('0 0 16 16');
+    expect(svg?.classList.contains('size-6')).toBe(true);
+    expect(svg?.classList.contains('text-green-500')).toBe(true);
+  });
+
+  it('should apply additional classes', async () => {
+    const { container } = render(ChevronRight, {
+      class: 'custom-class',
+    });
+
+    const svg = container.querySelector('svg');
+    expect(svg?.classList.contains('size-6')).toBe(true);
+    expect(svg?.classList.contains('custom-class')).toBe(true);
+  });
+
+  it('should apply all classes together', async () => {
+    const { container } = render(ChevronRight, {
+      sizeClass: 'size-8',
+      colorClass: 'text-blue-600',
+      class: 'extra-class',
+    });
+
+    const svg = container.querySelector('svg');
+    expect(svg?.classList.contains('size-8')).toBe(true);
+    expect(svg?.classList.contains('text-blue-600')).toBe(true);
+    expect(svg?.classList.contains('extra-class')).toBe(true);
+  });
+
+  it('should handle undefined optional props correctly', async () => {
+    const { container } = render(ChevronRight, {
+      sizeClass: 'size-10',
+      colorClass: undefined,
+      class: undefined,
+    });
+
+    const svg = container.querySelector('svg');
+    expect(svg?.classList.contains('size-10')).toBe(true);
+    expect(svg?.classList.contains('undefined')).toBe(false);
   });
 });

@@ -499,11 +499,14 @@ import { render } from 'vitest-browser-svelte';
 import LoadingSpinner from './LoadingSpinner.svelte';
 
 describe('LoadingSpinner', () => {
-  it('should render spinner SVG', async () => {
+  it('should render with correct defaults', async () => {
     render(LoadingSpinner);
 
-    const svg = page.getByRole('img', { hidden: true });
-    await expect.element(svg).toBeInTheDocument();
+    const svg = container.querySelector('svg');
+    expect(svg).toBeTruthy();
+    expect(svg?.getAttribute('aria-hidden')).toBe('true');
+    expect(svg?.classList.contains('size-6')).toBe(true);
+    expect(svg?.classList.contains('animate-spin')).toBe(true);
   });
 
   it('should apply custom size class', async () => {
@@ -583,16 +586,18 @@ Extract from `index.html` lines 82-96:
 <script lang="ts">
   // Props with defaults matching Alpine implementation
   const {
-    sizeClass = 'size-12',
-    colorClass = 'text-calypso'
+    sizeClass = 'size-6',
+    colorClass,
+    class: additionalClasses,
   }: {
-    sizeClass?: string;
-    colorClass?: string;
+    sizeClass?: `size-${number}`;
+    colorClass?: `text-${string}`;
+    class?: string;
   } = $props();
 </script>
 
 <svg
-  class="{sizeClass} {colorClass} animate-spin"
+  class="{sizeClass} {colorClass} {additionalClasses} animate-spin"
   fill="currentColor"
   viewBox="0 0 24 24"
   xmlns="http://www.w3.org/2000/svg"
