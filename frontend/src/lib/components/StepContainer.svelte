@@ -56,17 +56,15 @@
   <h2 class="sr-only">Schritte</h2>
 
   <div class="flex items-center space-x-2 px-2">
-    <!-- Navigation -->
     <StepNav
       {currentStep}
       totalSteps={steps.length}
       {canJumpToAnyStep}
       onPrevious={handlePrevious}
       onNext={handleNext}
-    />
-
-    <!-- Step Indicators -->
-    <StepList {steps} {currentStep} {canJumpToAnyStep} onStepClick={handleStepClick} />
+    >
+      <StepList {steps} {currentStep} {canJumpToAnyStep} onStepClick={handleStepClick} />
+    </StepNav>
   </div>
 
   <!-- Slot for step content, summary cards, etc. -->
