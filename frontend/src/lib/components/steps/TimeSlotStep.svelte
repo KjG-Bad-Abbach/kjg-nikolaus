@@ -142,6 +142,28 @@
     </p>
   {/if}
 
+  <div
+    class="mt-2 mb-4 rounded-md border border-gray-300 bg-gray-50 p-3 text-left text-sm text-gray-700"
+  >
+    <p>
+      Damit wir eine bestmögliche Route für unsere Nikoläuse planen können, müssen alle Buchungen
+      genau <span>{maxTimeSlots}</span> Zeitslots auswählen. Keine Angst, die Zeitslots können
+      <span>{maxTimeSlots}</span>-fach überbucht werden. Jede Buchung wird für die Gesamtwertung nur
+      einmal gezählt, sodass wir unsere Kapazitäten genau ausreizen können. Hinter jedem Zeitslot
+      ist außerdem hinterlegt, wie viele zeitgleiche Besuche wir durchführen können. Die Zeitslots
+      können also
+      <span
+        class="inline-flex items-center rounded-md bg-gray-600/10 px-2 py-1 text-xs font-medium text-gray-600 inset-ring inset-ring-gray-600/20"
+        >{maxTimeSlots}</span
+      >
+      &times;
+      <span
+        class="inline-flex items-center rounded-md bg-gray-600/10 px-2 py-1 text-xs font-medium text-gray-600 inset-ring inset-ring-gray-600/20"
+        >Anzahl zeitgleicher Besuche</span
+      > ausgewählt werden.
+    </p>
+  </div>
+
   {#if canEditRoutePlanning && isMaxReached}
     <p class="mt-2 text-rust">
       Du kannst maximal <span>{maxTimeSlots}</span> Zeitslots auswählen.
@@ -235,10 +257,17 @@
 
   <form data-testid="qa-time-slot-form" class="mt-6 space-y-6" onsubmit={handleSubmit}>
     {#if canEditRoutePlanning && isUnderMin}
-      <p class="mt-4 text-rust">
-        Bitte wähle mindestens <span>{maxTimeSlots}</span> Zeitslots. Damit wir eine bestmögliche Fahrroute
-        für unsere Nikoläuse erstellen können.
-      </p>
+      <div class="mt-4 space-y-2">
+        <p class="text-rust">
+          Bitte wähle mindestens <span>{maxTimeSlots}</span> Zeitslots. Damit wir eine bestmögliche Fahrroute
+          für unsere Nikoläuse erstellen können.
+        </p>
+        <p class="text-left text-sm text-gray-600 italic">
+          (Keine Angst, die Zeitslots können <span>{maxTimeSlots}</span>-fach überbucht werden. Jede
+          Buchung wird für die Gesamtwertung nur einmal gezählt, sodass wir unsere Kapazitäten genau
+          ausreizen können.)
+        </p>
+      </div>
     {/if}
 
     <!-- Submit Button -->

@@ -28,11 +28,17 @@ else
   echo "Launching container ${CONTAINER_NAME} (terminal-only)..."
 
   echo "Creating new container ${CONTAINER_NAME}..."
+  mkdir -p "${HOME}/.codex"
+  mkdir -p "${HOME}/.claude"
+  mkdir -p "${HOME}/.config/ccstatusline"
+  touch "${HOME}/.claude.json"
+  touch "${HOME}/.claude.json.backup"
   exec docker run -it \
     --name "${CONTAINER_NAME}" \
     -v "${PROJECT_ROOT}:/workspace" \
     -v "${HOME}/.codex:/home/ubuntu/.codex" \
     -v "${HOME}/.claude:/home/ubuntu/.claude" \
+    -v "${HOME}/.config/ccstatusline:/home/ubuntu/.config/ccstatusline" \
     -v "${HOME}/.claude.json:/home/ubuntu/.claude.json" \
     -v "${HOME}/.claude.json.backup:/home/ubuntu/.claude.json.backup" \
     -p 6006:6006 \

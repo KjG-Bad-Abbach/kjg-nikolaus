@@ -185,6 +185,8 @@ Deine KjG Bad Abbach.
 
 ![Step 3](imgs/Step3.png)
 
+![Step 3.1](imgs/Step3.1.png)
+
 ![Step 4.1](imgs/Step4.1.png)
 
 ![Step 4.2](imgs/Step4.2.png)
