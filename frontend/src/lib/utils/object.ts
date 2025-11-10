@@ -21,9 +21,15 @@ export function clone<T>(value: T): T {
 export function updateExistingObjectKeys(
   obj: Record<string, unknown>,
   newObj: Record<string, unknown>,
+  updateWhenNullOrEmpty = false,
 ): void {
   Object.keys(obj).forEach((key) => {
-    if (newObj[key]) {
+    if (
+      newObj[key] ||
+      newObj[key] === 0 ||
+      newObj[key] === false ||
+      (updateWhenNullOrEmpty && (newObj[key] === '' || newObj[key] === null))
+    ) {
       if (Array.isArray(obj[key]) && Array.isArray(newObj[key])) {
         obj[key] = clone(newObj[key]);
       } else if (obj[key] instanceof Date) {

@@ -83,6 +83,15 @@ describe('richTextRenderer', () => {
       expect(renderer.render()).toContain('bg-gray-100');
     });
 
+    it('should omit class attribute if not required', () => {
+      const content: RichTextNode[] = [{ text: 'code', code: true }];
+      const renderer = new RichTextBlocksRenderer(content, {
+        code: '', // Remove default class
+      });
+      expect(renderer.render()).toContain('<code');
+      expect(renderer.render()).not.toContain('class=');
+    });
+
     it('should combine multiple formatting', () => {
       const content: RichTextNode[] = [{ text: 'text', bold: true, italic: true }];
       const renderer = new RichTextBlocksRenderer(content);
@@ -224,15 +233,12 @@ describe('richTextRenderer', () => {
       expect(result).toContain('<em');
     });
 
-    it('should render formatting with default class when custom class is empty', () => {
-      // Empty class values are falsy, so updateExistingObjectKeys won't update
-      // The default class will be used instead
+    it('should render formatting with default class when custom class is undefined', () => {
       const content: RichTextNode[] = [{ text: 'code text', code: true }];
       const renderer = new RichTextBlocksRenderer(content, {
-        code: '', // Empty string is falsy, so default class remains
+        code: undefined,
       });
       const result = renderer.render();
-      // Should use the default class since empty string is falsy
       expect(result).toContain('<code class=');
       expect(result).toContain('bg-gray-100');
     });

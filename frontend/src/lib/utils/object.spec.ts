@@ -86,11 +86,22 @@ describe('object utilities', () => {
       expect(obj.text).toBe('hello');
     });
 
-    it('should skip zero (falsy) values', () => {
+    it('should update empty string (falsy) values when updateWhenEmpty is true', () => {
+      const obj = { text: 'hello' };
+      updateExistingObjectKeys(obj, { text: '' }, true);
+      expect(obj.text).toBe('');
+    });
+
+    it('should update zero (falsy) values', () => {
       const obj = { count: 5 };
       updateExistingObjectKeys(obj, { count: 0 });
-      // 0 is falsy, so it won't update
-      expect(obj.count).toBe(5);
+      expect(obj.count).toBe(0);
+    });
+
+    it('should update false values', () => {
+      const obj = { flag: true };
+      updateExistingObjectKeys(obj, { flag: false });
+      expect(obj.flag).toBe(false);
     });
 
     it('should handle non-empty string conversion', () => {
@@ -111,6 +122,12 @@ describe('object utilities', () => {
       updateExistingObjectKeys(obj, { text: null });
       // null is falsy, so it won't update
       expect(obj.text).toBe('hello');
+    });
+
+    it('should update null (falsy) values when updateWhenEmpty is true', () => {
+      const obj = { text: 'hello' };
+      updateExistingObjectKeys(obj, { text: null }, true);
+      expect(obj.text).toBe('');
     });
   });
 

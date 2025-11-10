@@ -56,6 +56,7 @@ export class RichTextBlocksRenderer {
     updateExistingObjectKeys(
       this.defaultClasses as unknown as Record<string, unknown>,
       customClasses as unknown as Record<string, unknown>,
+      true,
     );
     // Extend defaultClasses with provided classes (adds new ones)
     extendExistingObjectKeys(

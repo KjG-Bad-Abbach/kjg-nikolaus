@@ -109,6 +109,9 @@ describe('bookingStore', () => {
 
     bookingStore.booking.contact_person.first_name = 'Anna';
     expect(bookingStore.hasChanges()).toBe(true);
+
+    bookingStore.booking.contact_person.first_name = 'Max';
+    expect(bookingStore.hasChanges()).toBe(false);
   });
 
   it('should detect changes in location', () => {
@@ -170,9 +173,9 @@ describe('bookingStore', () => {
     expect(bookingStore.hasChanges()).toBe(false);
   });
 
-  it('should treat empty string and null as same', () => {
+  it('should treat empty string and undefined as same', () => {
     bookingStore.updateFromDatabase({
-      present_location: '',
+      present_location: undefined,
     });
 
     bookingStore.booking.present_location = '';
@@ -257,6 +260,17 @@ describe('bookingStore', () => {
     expect(bookingStore.timeSlotSearchQuery).toBe('19:00');
   });
 
+  it('should handle undefined time slots from database', () => {
+    bookingStore.updateFromDatabase({
+      time_slots: undefined,
+    });
+
+    expect(bookingStore.hasChanges()).toBe(false);
+
+    bookingStore.setSelectedTimeSlotIds(['slot-1']);
+    expect(bookingStore.hasChanges()).toBe(true);
+  });
+
   it('should detect changes in time slot IDs', () => {
     const timeSlots: TimeSlot[] = [
       {
@@ -333,28 +347,23 @@ describe('bookingStore', () => {
     expect(bookingStore.hasChanges()).toBe(false);
   });
 
+  it('should detect changes when undefined', () => {
+    bookingStore.booking = { ...bookingStore.booking };
+    bookingStore.bookingLoadedFromDatabase = undefined as unknown as Booking;
+
+    expect(bookingStore.hasChanges()).toBe(true);
+  });
+
   it('should detect changes with numeric values', () => {
-    // Test with a numeric property that differs
-    const booking1 = { ...bookingStore.booking };
-    const booking2 = { ...bookingStore.booking };
+    // Adding a new property to simulate change
+    bookingStore.updateField('test' as keyof Booking, 123);
 
-    bookingStore.booking = booking1;
-    bookingStore.bookingLoadedFromDatabase = booking2;
-
-    // They should be equal
-    expect(bookingStore.hasChanges()).toBe(false);
+    expect(bookingStore.hasChanges()).toBe(true);
   });
 
   it('should handle boolean values in change detection', () => {
-    // Simulate a scenario where we have a boolean value change
-    bookingStore.booking.children = [
-      {
-        name: 'Test',
-        identification_trait: 'trait',
-        speech: 'speech',
-      },
-    ];
-    bookingStore.bookingLoadedFromDatabase.children = [];
+    // Adding a new property to simulate change
+    bookingStore.updateField('test' as keyof Booking, true);
 
     expect(bookingStore.hasChanges()).toBe(true);
   });

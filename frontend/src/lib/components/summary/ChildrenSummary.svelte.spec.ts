@@ -60,7 +60,7 @@ describe('ChildrenSummary', () => {
   });
 
   it('should show missing field warnings for incomplete child data', async () => {
-    const incompleteChildren: Child[] = [
+    const incompleteChildren1: Child[] = [
       {
         id: '1',
         name: '',
@@ -69,15 +69,34 @@ describe('ChildrenSummary', () => {
       },
     ];
 
-    render(ChildrenSummary, {
-      children: incompleteChildren,
+    const { rerender } = render(ChildrenSummary, {
+      children: incompleteChildren1,
       additionalNotes: '',
       finalDeadline,
       onEdit: vi.fn(),
     });
 
-    const warnings = page.getByText('Angabe fehlt', { exact: false });
-    await expect.element(warnings.nth(0)).toBeInTheDocument();
+    const warnings1 = page.getByText('Angabe fehlt', { exact: false });
+    await expect.element(warnings1.nth(0)).toBeInTheDocument();
+
+    const incompleteChildren2: Child[] = [
+      {
+        id: '1',
+        name: 'Max',
+        identification_trait: '',
+        speech: 'Max war dieses Jahr besonders fleißig',
+      },
+    ];
+
+    rerender({
+      children: incompleteChildren2,
+      additionalNotes: '',
+      finalDeadline,
+      onEdit: vi.fn(),
+    });
+
+    const warnings2 = page.getByText('Angabe fehlt', { exact: false });
+    await expect.element(warnings2.nth(0)).toBeInTheDocument();
   });
 
   it('should display additional notes when provided', async () => {
