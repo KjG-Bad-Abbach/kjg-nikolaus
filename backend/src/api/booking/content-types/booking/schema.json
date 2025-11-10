@@ -13,26 +13,24 @@
   "pluginOptions": {},
   "attributes": {
     "contact_person": {
-      "displayName": "Contact Person",
       "type": "component",
-      "repeatable": false,
       "component": "shared.contact-person",
+      "repeatable": false,
       "required": true
     },
     "children": {
       "type": "component",
-      "repeatable": true,
-      "component": "booking.child"
+      "component": "booking.child",
+      "repeatable": true
     },
     "present_location": {
       "type": "string",
       "maxLength": 200
     },
     "location": {
-      "displayName": "Address",
       "type": "component",
-      "repeatable": false,
       "component": "shared.address",
+      "repeatable": false,
       "required": false
     },
     "time_slots": {
@@ -43,6 +41,16 @@
     },
     "additional_notes": {
       "type": "text"
+    },
+    "confirmation": {
+      "type": "component",
+      "component": "booking.confirmation",
+      "repeatable": false
+    },
+    "confirmation_sent": {
+      "type": "boolean",
+      "required": true,
+      "default": false
     }
   }
 }

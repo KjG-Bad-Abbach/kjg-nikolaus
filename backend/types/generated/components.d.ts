@@ -18,6 +18,22 @@ export interface BookingChild extends Struct.ComponentSchema {
   };
 }
 
+export interface BookingConfirmation extends Struct.ComponentSchema {
+  collectionName: 'components_booking_confirmations';
+  info: {
+    displayName: 'Confirmation';
+    icon: 'check';
+  };
+  attributes: {
+    additional_hint: Schema.Attribute.Blocks;
+    assigned_time_slot: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::time-slot.time-slot'
+    >;
+    assigned_time_slot_overwrite: Schema.Attribute.String;
+  };
+}
+
 export interface SharedAddress extends Struct.ComponentSchema {
   collectionName: 'components_shared_addresses';
   info: {
@@ -84,6 +100,7 @@ declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
       'booking.child': BookingChild;
+      'booking.confirmation': BookingConfirmation;
       'shared.address': SharedAddress;
       'shared.contact-person': SharedContactPerson;
     }

@@ -476,6 +476,10 @@ export interface ApiBookingBooking extends Struct.CollectionTypeSchema {
   attributes: {
     additional_notes: Schema.Attribute.Text;
     children: Schema.Attribute.Component<'booking.child', true>;
+    confirmation: Schema.Attribute.Component<'booking.confirmation', false>;
+    confirmation_sent: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<false>;
     contact_person: Schema.Attribute.Component<'shared.contact-person', false> &
       Schema.Attribute.Required;
     createdAt: Schema.Attribute.DateTime;
