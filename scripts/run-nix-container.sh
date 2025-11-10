@@ -28,6 +28,10 @@ else
   echo "Launching container ${CONTAINER_NAME} (terminal-only)..."
 
   echo "Creating new container ${CONTAINER_NAME}..."
+  mkdir -p "${HOME}/.codex"
+  mkdir -p "${HOME}/.claude"
+  touch "${HOME}/.claude.json"
+  touch "${HOME}/.claude.json.backup"
   exec docker run -it \
     --name "${CONTAINER_NAME}" \
     -v "${PROJECT_ROOT}:/workspace" \
