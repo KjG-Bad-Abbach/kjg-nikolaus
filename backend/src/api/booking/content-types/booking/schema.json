@@ -43,14 +43,10 @@
       "type": "text"
     },
     "confirmation": {
-      "type": "component",
-      "component": "booking.confirmation",
-      "repeatable": false
-    },
-    "confirmation_sent": {
-      "type": "boolean",
-      "required": true,
-      "default": false
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::booking-confirmation.booking-confirmation",
+      "mappedBy": "booking"
     }
   }
 }

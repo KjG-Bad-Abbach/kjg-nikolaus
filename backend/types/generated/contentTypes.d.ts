@@ -430,6 +430,48 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiBookingConfirmationBookingConfirmation
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'booking_confirmations';
+  info: {
+    displayName: 'BookingConfirmation';
+    pluralName: 'booking-confirmations';
+    singularName: 'booking-confirmation';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    additional_hint_rich: Schema.Attribute.Blocks;
+    additional_hint_text: Schema.Attribute.Text;
+    additional_hint_type: Schema.Attribute.Enumeration<['text', 'rich']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'text'>;
+    assigned_time_slot: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::time-slot.time-slot'
+    >;
+    assigned_time_slot_overwrite: Schema.Attribute.String;
+    booking: Schema.Attribute.Relation<'oneToOne', 'api::booking.booking'>;
+    confirmation_sent: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<false>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::booking-confirmation.booking-confirmation'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiBookingHistoryBookingHistory
   extends Struct.CollectionTypeSchema {
   collectionName: 'booking_histories';
@@ -476,10 +518,10 @@ export interface ApiBookingBooking extends Struct.CollectionTypeSchema {
   attributes: {
     additional_notes: Schema.Attribute.Text;
     children: Schema.Attribute.Component<'booking.child', true>;
-    confirmation: Schema.Attribute.Component<'booking.confirmation', false>;
-    confirmation_sent: Schema.Attribute.Boolean &
-      Schema.Attribute.Required &
-      Schema.Attribute.DefaultTo<false>;
+    confirmation: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::booking-confirmation.booking-confirmation'
+    >;
     contact_person: Schema.Attribute.Component<'shared.contact-person', false> &
       Schema.Attribute.Required;
     createdAt: Schema.Attribute.DateTime;
@@ -522,6 +564,9 @@ export interface ApiConfigConfig extends Struct.SingleTypeSchema {
     api_base_url: Schema.Attribute.String & Schema.Attribute.Required;
     api_token: Schema.Attribute.Text & Schema.Attribute.Required;
     base_url: Schema.Attribute.String & Schema.Attribute.Required;
+    confirmation_email_body_template: Schema.Attribute.Blocks;
+    confirmation_email_subject_template: Schema.Attribute.String &
+      Schema.Attribute.Required;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1110,6 +1155,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::booking-confirmation.booking-confirmation': ApiBookingConfirmationBookingConfirmation;
       'api::booking-history.booking-history': ApiBookingHistoryBookingHistory;
       'api::booking.booking': ApiBookingBooking;
       'api::config.config': ApiConfigConfig;
