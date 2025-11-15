@@ -11,6 +11,7 @@
       "version": "22"
     }
   },
+  "remoteUser": "ubuntu",
   "customizations": {
     "vscode": {
       "extensions": [
