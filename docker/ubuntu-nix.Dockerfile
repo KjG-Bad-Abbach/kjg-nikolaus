@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.20
+# syntax=docker/dockerfile:1.21
 FROM mcr.microsoft.com/playwright:v1.57.0
 
 LABEL org.opencontainers.image.description="Playwright base image with Nix package manager preinstalled"
