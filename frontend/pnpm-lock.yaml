@@ -19,7 +19,7 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1
       '@types/node':
-        specifier: ^22.19.12
+        specifier: ^22.19.13
         version: 22.19.13
       '@vitest/coverage-v8':
         specifier: ^4.0.18
