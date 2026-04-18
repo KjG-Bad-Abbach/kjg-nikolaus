@@ -31,7 +31,7 @@
     "laravel-mix": "^6.0.49",
     "mix-tailwindcss": "^1.3.0",
     "postcss": "^8.5.9",
-    "prettier": "^3.8.2",
+    "prettier": "^3.8.3",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "serve": "^14.2.6",
     "tailwindcss": "^4.2.2",
