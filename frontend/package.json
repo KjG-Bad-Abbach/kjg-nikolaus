@@ -32,7 +32,7 @@
     "mix-tailwindcss": "^1.3.0",
     "postcss": "^8.5.12",
     "prettier": "^3.8.3",
-    "prettier-plugin-tailwindcss": "^0.7.3",
+    "prettier-plugin-tailwindcss": "^0.8.0",
     "serve": "^14.2.6",
     "tailwindcss": "^4.2.4",
     "vitest": "^4.1.5",
