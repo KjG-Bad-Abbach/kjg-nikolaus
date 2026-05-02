@@ -13,11 +13,11 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@strapi/plugin-cloud": "5.43.0",
-    "@strapi/plugin-graphql": "^5.43.0",
-    "@strapi/plugin-users-permissions": "5.43.0",
-    "@strapi/provider-email-nodemailer": "^5.43.0",
-    "@strapi/strapi": "5.43.0",
+    "@strapi/plugin-cloud": "5.44.0",
+    "@strapi/plugin-graphql": "^5.44.0",
+    "@strapi/plugin-users-permissions": "5.44.0",
+    "@strapi/provider-email-nodemailer": "^5.44.0",
+    "@strapi/strapi": "5.44.0",
     "pg": "8.20.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
