@@ -30,4 +30,5 @@ storybook-static
 /coverage
 /.nyc_output
 *.lcov
+/.vitest-attachments/
 playwright-report/

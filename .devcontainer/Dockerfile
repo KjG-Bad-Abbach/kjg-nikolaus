@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/playwright:v1.57.0-noble
+FROM mcr.microsoft.com/playwright:v1.59.1-noble
 
 # Install sudo and give ubuntu passwordless sudo
 RUN apt update \

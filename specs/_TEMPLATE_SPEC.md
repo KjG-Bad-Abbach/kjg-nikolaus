@@ -1,17 +1,5 @@
 # SPEC-{short-title}
 
-## Status
-
-- Proposed | Accepted | In-Progress | Released | Deprecated
-
-## Owners
-
-- Name(s) and role(s)
-
-## Date
-
-- YYYY-MM-DD
-
 ## Summary
 
 - One-paragraph statement of the problem and solution approach
@@ -79,10 +67,6 @@
 ## References
 
 - Links to ADRs/specs/research/issues
-
-## History
-
-- YYYY-MM-DD: status change or notable decision
 
 ## Notes
 

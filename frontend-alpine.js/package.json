@@ -22,24 +22,24 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@playwright/test": "1.57.0",
-    "@tailwindcss/postcss": "^4.1.17",
-    "@types/node": "^22.19.0",
-    "@vitest/coverage-v8": "^4.0.7",
+    "@playwright/test": "1.59.1",
+    "@tailwindcss/postcss": "^4.3.5",
+    "@types/node": "^22.20.5",
+    "@vitest/coverage-v8": "^4.1.12",
     "browser-sync": "^3.0.4",
     "browser-sync-webpack-plugin": "^2.4.0",
     "laravel-mix": "^6.0.49",
     "mix-tailwindcss": "^1.3.0",
-    "postcss": "^8.5.6",
-    "prettier": "^3.6.2",
-    "prettier-plugin-tailwindcss": "^0.7.1",
-    "serve": "^14.2.5",
-    "tailwindcss": "^4.1.17",
-    "vitest": "^4.0.7",
-    "webpack": "^5.102.1",
+    "postcss": "^8.5.32",
+    "prettier": "^3.9.10",
+    "prettier-plugin-tailwindcss": "^0.7.4",
+    "serve": "^14.2.7",
+    "tailwindcss": "^4.3.5",
+    "vitest": "^4.1.12",
+    "webpack": "^5.112.2",
     "webpack-cli": "^6.0.1"
   },
   "dependencies": {
-    "alpinejs": "^3.15.1"
+    "alpinejs": "^3.17.5"
   }
 }
