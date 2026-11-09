@@ -1,7 +1,24 @@
-.env
 .data
 .DS_Store
 .pnpm-store
 
 # direnv
 .direnv/
+.env
+.env*
+!.envrc
+!.env.example
+!.env*.example
+
+###################
+#      Ralph      #
+###################
+# source: https://github.com/snarktank/ralph
+
+# Ralph working files (generated during runs)
+prd.json
+progress.txt
+.last-branch
+.ralph-stop
+# Archive is optional to commit
+# archive/

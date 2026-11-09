@@ -8,6 +8,8 @@ mkShell {
   ];
 
   shellHook = ''
+    set -euo pipefail
+
     echo "----------------------------------------"
     echo "backend: Installing pnpm dependencies..."
     cd backend
