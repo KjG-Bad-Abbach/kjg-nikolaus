@@ -11,7 +11,7 @@ import {
   getFirstIncompleteStep,
   calculateStepCompletionStatus,
 } from './stepNavigation';
-import type { Booking, DerivedStores } from '$lib/types/booking';
+import type { Booking } from '$lib/types/booking';
 
 describe('stepNavigation', () => {
   describe('isContactComplete', () => {
@@ -393,15 +393,11 @@ describe('stepNavigation', () => {
       additional_notes: '',
     };
 
-    const mockDerivedStores: DerivedStores = {
-      canEditRoutePlanning: true,
-      canEditAnything: true,
-      isRoutePlanningFilled: true,
-      isEverythingFilled: true,
-    };
-
     it('should calculate status for complete booking', () => {
-      const status = calculateStepCompletionStatus(completeBooking, 3, mockDerivedStores);
+      // Arrange
+      // Act
+      const status = calculateStepCompletionStatus(completeBooking, 3);
+      // Assert
       expect(status).toHaveLength(5);
       expect(status[0]).toEqual({ allFilled: true, anyFilled: true }); // Contact
       expect(status[1]).toEqual({ allFilled: true, anyFilled: true }); // Address
@@ -411,6 +407,7 @@ describe('stepNavigation', () => {
     });
 
     it('should calculate status for incomplete contact', () => {
+      // Arrange
       const booking = {
         ...completeBooking,
         contact_person: {
@@ -420,11 +417,15 @@ describe('stepNavigation', () => {
           phone_number: '',
         },
       };
-      const status = calculateStepCompletionStatus(booking, 3, mockDerivedStores);
+      // Act
+      const status = calculateStepCompletionStatus(booking, 3);
+      // Assert
       expect(status[0]).toEqual({ allFilled: false, anyFilled: true });
+      expect(status[4]).toEqual({ allFilled: false, anyFilled: false });
     });
 
     it('should calculate status for empty booking', () => {
+      // Arrange
       const emptyBooking: Booking = {
         contact_person: {
           first_name: '',
@@ -443,13 +444,9 @@ describe('stepNavigation', () => {
         children: [],
         additional_notes: '',
       };
-      const emptyDerivedStores: DerivedStores = {
-        canEditRoutePlanning: true,
-        canEditAnything: true,
-        isRoutePlanningFilled: false,
-        isEverythingFilled: false,
-      };
-      const status = calculateStepCompletionStatus(emptyBooking, 3, emptyDerivedStores);
+      // Act
+      const status = calculateStepCompletionStatus(emptyBooking, 3);
+      // Assert
       expect(status[0]).toEqual({ allFilled: false, anyFilled: false });
       expect(status[1]).toEqual({ allFilled: false, anyFilled: false });
       expect(status[2]).toEqual({ allFilled: false, anyFilled: false });
@@ -458,12 +455,15 @@ describe('stepNavigation', () => {
     });
 
     it('should mark children as anyFilled when additional_notes present', () => {
+      // Arrange
       const booking = {
         ...completeBooking,
         children: [],
         additional_notes: 'Some notes',
       };
-      const status = calculateStepCompletionStatus(booking, 3, mockDerivedStores);
+      // Act
+      const status = calculateStepCompletionStatus(booking, 3);
+      // Assert
       expect(status[3]).toEqual({ allFilled: false, anyFilled: true });
     });
   });

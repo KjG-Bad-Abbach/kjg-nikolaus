@@ -5,7 +5,7 @@ import type { Step, ApiError } from '$lib/types/booking';
  * Manages application UI state including view, loading, errors, and step navigation
  */
 
-export type View = 'intro' | 'steps';
+export type View = 'intro' | 'steps' | 'email-verification-needed';
 
 class UIStore {
   // Loading state

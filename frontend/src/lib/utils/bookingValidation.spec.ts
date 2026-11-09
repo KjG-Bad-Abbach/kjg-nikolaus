@@ -3,7 +3,6 @@ import {
   getValidationMessagesForSteps,
   validateContactPerson,
   validateAddress,
-  validateTimeSlots,
   validateChildren,
   extractApiValidationErrors,
   trimContactPerson,
@@ -132,81 +131,43 @@ describe('bookingValidation', () => {
       place: 'München',
     };
 
-    it('should return no errors for valid address when route planning allowed', () => {
-      const errors = validateAddress(validLocation, 'Wohnzimmer', true);
+    it('validateAddress_ValidLocation_Expect_NoErrors', () => {
+      // Arrange
+      // Act
+      const errors = validateAddress(validLocation);
+      // Assert
       expect(errors).toEqual({});
     });
 
-    it('should return no errors for valid present_location when route planning not allowed', () => {
-      const errors = validateAddress(validLocation, 'Wohnzimmer', false);
-      expect(errors).toEqual({});
-    });
+    it.each(['street', 'house_number', 'zip_code', 'place'] as const)(
+      'validateAddress_MissingField%s_Expect_RequiredFieldError',
+      (field) => {
+        // Arrange
+        const location = { ...validLocation, [field]: '' };
+        // Act
+        const errors = validateAddress(location);
+        // Assert
+        expect(errors[`booking.location.${field}`]).toBe('Eingabe ist erforderlich.');
+      },
+    );
 
-    it('should return error for missing present_location when route planning not allowed', () => {
-      const errors = validateAddress(validLocation, '', false);
-      expect(errors['booking.present_location']).toBe('Eingabe ist erforderlich.');
-    });
-
-    it('should return error for missing street when route planning allowed', () => {
-      const location = { ...validLocation, street: '' };
-      const errors = validateAddress(location, 'Wohnzimmer', true);
-      expect(errors['booking.location.street']).toBe('Eingabe ist erforderlich.');
-    });
-
-    it('should return error for missing house_number when route planning allowed', () => {
-      const location = { ...validLocation, house_number: '' };
-      const errors = validateAddress(location, 'Wohnzimmer', true);
-      expect(errors['booking.location.house_number']).toBe('Eingabe ist erforderlich.');
-    });
-
-    it('should return error for missing zip_code when route planning allowed', () => {
-      const location = { ...validLocation, zip_code: '' };
-      const errors = validateAddress(location, 'Wohnzimmer', true);
-      expect(errors['booking.location.zip_code']).toBe('Eingabe ist erforderlich.');
-    });
-
-    it('should return error for missing place when route planning allowed', () => {
-      const location = { ...validLocation, place: '' };
-      const errors = validateAddress(location, 'Wohnzimmer', true);
-      expect(errors['booking.location.place']).toBe('Eingabe ist erforderlich.');
-    });
-
-    it('should return error for missing present_location when route planning allowed', () => {
-      const errors = validateAddress(validLocation, '', true);
-      expect(errors['booking.present_location']).toBe('Eingabe ist erforderlich.');
-    });
-
-    it('should not validate location fields when route planning not allowed', () => {
+    it('validateAddress_EmptyLocation_Expect_AllRequiredFieldErrors', () => {
+      // Arrange
       const emptyLocation: Location = {
         street: '',
         house_number: '',
         zip_code: '',
         place: '',
       };
-      const errors = validateAddress(emptyLocation, 'Wohnzimmer', false);
-      expect(errors).toEqual({});
-    });
-  });
-
-  describe('validateTimeSlots', () => {
-    it('should return no errors when enough slots selected', () => {
-      const errors = validateTimeSlots(['id1', 'id2', 'id3'], 3);
-      expect(errors).toEqual({});
-    });
-
-    it('should return error when not enough slots selected', () => {
-      const errors = validateTimeSlots(['id1', 'id2'], 3);
-      expect(errors['booking.time_slots']).toBe('Bitte wähle 3 Zeitslots aus.');
-    });
-
-    it('should return error when no slots selected', () => {
-      const errors = validateTimeSlots([], 3);
-      expect(errors['booking.time_slots']).toBe('Bitte wähle 3 Zeitslots aus.');
-    });
-
-    it('should use custom maxTimeSlots value', () => {
-      const errors = validateTimeSlots(['id1'], 2);
-      expect(errors['booking.time_slots']).toBe('Bitte wähle 2 Zeitslots aus.');
+      // Act
+      const errors = validateAddress(emptyLocation);
+      // Assert
+      expect(errors).toEqual({
+        'booking.location.street': 'Eingabe ist erforderlich.',
+        'booking.location.house_number': 'Eingabe ist erforderlich.',
+        'booking.location.zip_code': 'Eingabe ist erforderlich.',
+        'booking.location.place': 'Eingabe ist erforderlich.',
+      });
     });
   });
 
@@ -222,42 +183,67 @@ describe('bookingValidation', () => {
       expect(errors).toEqual({});
     });
 
-    it('should return error when no children provided', () => {
+    it('validateChildren_EmptyChildren_Expect_SaveAllowed', () => {
+      // Arrange
+      // Act
       const errors = validateChildren([]);
-      expect(errors['booking.children']).toBe('Bitte füge mindestens ein Kind hinzu.');
+      // Assert
+      expect(errors).toEqual({});
     });
 
     it('should return error for missing child name', () => {
+      // Arrange
       const child = { ...validChild, name: '' };
+      // Act
       const errors = validateChildren([child]);
-      expect(errors['booking.children.0.name']).toBe('Eingabe ist erforderlich.');
+      // Assert
+      expect(errors['booking.children[0].name']).toBe('Eingabe ist erforderlich.');
     });
 
-    it('should return error for missing identification_trait', () => {
+    it('validateChildren_MissingIdentification_Expect_SaveAllowed', () => {
+      // Arrange
       const child = { ...validChild, identification_trait: '' };
+      // Act
       const errors = validateChildren([child]);
-      expect(errors['booking.children.0.identification_trait']).toBe('Eingabe ist erforderlich.');
+      // Assert
+      expect(errors).toEqual({});
     });
 
-    it('should return error for missing speech', () => {
+    it('validateChildren_MissingSpeech_Expect_SaveAllowed', () => {
+      // Arrange
       const child = { ...validChild, speech: '' };
+      // Act
       const errors = validateChildren([child]);
-      expect(errors['booking.children.0.speech']).toBe('Eingabe ist erforderlich.');
+      // Assert
+      expect(errors).toEqual({});
     });
 
     it('should return errors for multiple children with correct indices', () => {
+      // Arrange
       const children = [
         { name: 'Anna', identification_trait: '', speech: 'Gedicht' },
         { name: '', identification_trait: 'Blondes Haar', speech: '' },
       ];
+      // Act
       const errors = validateChildren(children);
-      expect(errors['booking.children.0.identification_trait']).toBe('Eingabe ist erforderlich.');
-      expect(errors['booking.children.1.name']).toBe('Eingabe ist erforderlich.');
-      expect(errors['booking.children.1.speech']).toBe('Eingabe ist erforderlich.');
+      // Assert
+      expect(errors).toEqual({ 'booking.children[1].name': 'Eingabe ist erforderlich.' });
     });
   });
 
   describe('extractApiValidationErrors', () => {
+    it.each(['0', '[0]'])('extractApiValidationErrors_ChildIndex%s_Expect_FieldPath', (index) => {
+      // Arrange
+      const path = index === '0' ? ['children', index, 'speech'] : [`children${index}`, 'speech'];
+      const apiError: ApiError = {
+        message: 'Validation failed',
+        body: { error: { details: { errors: [{ path, message: `${path.join('.')} too long` }] } } },
+      };
+      // Act
+      const errors = extractApiValidationErrors(apiError);
+      // Assert
+      expect(errors).toEqual({ 'booking.children[0].speech': 'too long' });
+    });
     it('should extract validation errors from API response', () => {
       const apiError: ApiError = {
         message: 'Validation failed',

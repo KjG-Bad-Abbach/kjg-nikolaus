@@ -1,11 +1,13 @@
 import { page } from 'vitest/browser';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import ChildrenStep from './ChildrenStep.svelte';
 import type { Child } from '$lib/types/booking';
 
 describe('ChildrenStep', () => {
   const finalDeadline = new Date('2024-12-05T19:30:00+01:00');
+
+  afterEach(() => vi.restoreAllMocks());
 
   it('should render heading and instructions', async () => {
     render(ChildrenStep, {
@@ -81,6 +83,7 @@ describe('ChildrenStep', () => {
   });
 
   it('should call onChange when adding a child', async () => {
+    // Arrange
     const onChange = vi.fn();
 
     render(ChildrenStep, {
@@ -94,14 +97,21 @@ describe('ChildrenStep', () => {
     });
 
     const addButton = page.getByTestId('qa-add-child');
+    // Act
     await addButton.click();
 
+    // Assert
     expect(onChange).toHaveBeenCalled();
     const call = onChange.mock.calls[0][0];
     expect(call.children).toHaveLength(1);
+    await expect
+      .element(page.getByText('Bitte füge mindestens ein Kind hinzu.'))
+      .not.toBeInTheDocument();
   });
 
   it('should call onChange when removing a child', async () => {
+    // Arrange
+    const confirm = vi.spyOn(window, 'confirm').mockReturnValue(true);
     const onChange = vi.fn();
     const children: Child[] = [
       { name: 'Max', identification_trait: '', speech: '' },
@@ -119,12 +129,94 @@ describe('ChildrenStep', () => {
     });
 
     const removeButton = page.getByTestId('qa-remove-child-0');
+    // Act
     await removeButton.click();
 
+    // Assert
+    expect(confirm).toHaveBeenCalledWith('Möchten Sie dieses Kind wirklich entfernen?');
     expect(onChange).toHaveBeenCalled();
     const call = onChange.mock.calls[0][0];
     expect(call.children).toHaveLength(1);
     expect(call.children[0].name).toBe('Anna');
+  });
+
+  it('removeChild_ConfirmationDeclined_Expect_NoChanges', async () => {
+    // Arrange
+    vi.spyOn(window, 'confirm').mockReturnValue(false);
+    const onChange = vi.fn();
+    render(ChildrenStep, {
+      children: [{ name: 'Anna', identification_trait: '', speech: '' }],
+      additionalNotes: '',
+      finalDeadline,
+      canEditAnything: true,
+      validationMessages: {},
+      onChange,
+    });
+    // Act
+    await page.getByTestId('qa-remove-child-0').click();
+    // Assert
+    expect(onChange).not.toHaveBeenCalled();
+    await expect.element(page.getByTestId('qa-child-name-0')).toHaveValue('Anna');
+  });
+
+  it.each([
+    { children: [] },
+    { children: [{ name: 'Anna', identification_trait: '', speech: '' }] },
+  ])('handleSubmit_DeferredDetails$children_Expect_StructuredPayload', async ({ children }) => {
+    // Arrange
+    const onSubmit = vi.fn();
+    render(ChildrenStep, {
+      children,
+      additionalNotes: 'Visit notes',
+      finalDeadline,
+      canEditAnything: true,
+      validationMessages: {},
+      onSubmit,
+    });
+    // Act
+    await page.getByTestId('qa-children-submit').click();
+    // Assert
+    expect(onSubmit).toHaveBeenCalledExactlyOnceWith({ children, additionalNotes: 'Visit notes' });
+  });
+
+  it('skip_UnsavedInvalidChild_Expect_NavigationWithoutSubmission', async () => {
+    // Arrange
+    const onSkip = vi.fn();
+    const onSubmit = vi.fn();
+    render(ChildrenStep, {
+      children: [{ name: '', identification_trait: '', speech: '' }],
+      additionalNotes: '',
+      finalDeadline,
+      canEditAnything: true,
+      validationMessages: {},
+      onSkip,
+      onSubmit,
+    });
+    // Act
+    await page.getByTestId('qa-children-skip').click();
+    // Assert
+    expect(onSkip).toHaveBeenCalledExactlyOnceWith();
+    expect(onSubmit).not.toHaveBeenCalled();
+  });
+
+  it('handleSubmit_BlankChildName_Expect_NativeValidation', async () => {
+    // Arrange
+    const onSubmit = vi.fn();
+    render(ChildrenStep, {
+      children: [{ name: '', identification_trait: '', speech: '' }],
+      additionalNotes: '',
+      finalDeadline,
+      canEditAnything: true,
+      validationMessages: {},
+      onSubmit,
+    });
+    // Act
+    await page.getByTestId('qa-children-submit').click();
+    // Assert
+    expect(onSubmit).not.toHaveBeenCalled();
+    expect(
+      (page.getByTestId('qa-child-name-0').element() as HTMLInputElement).validity.valueMissing,
+    ).toBe(true);
   });
 
   it('should render additional notes field', async () => {
@@ -156,8 +248,10 @@ describe('ChildrenStep', () => {
   });
 
   it('should hide buttons when not editable', async () => {
+    // Arrange
     const children: Child[] = [{ name: 'Max', identification_trait: '', speech: '' }];
 
+    // Act
     render(ChildrenStep, {
       children,
       additionalNotes: '',
@@ -168,14 +262,19 @@ describe('ChildrenStep', () => {
       onSubmit: vi.fn(),
     });
 
+    // Assert
     await expect.element(page.getByTestId('qa-add-child')).not.toBeInTheDocument();
-    await expect.element(page.getByTestId('qa-remove-child-0')).not.toBeInTheDocument();
+    // Alpine keeps this hidden control as a spacing sibling inside each child card.
+    await expect.element(page.getByTestId('qa-remove-child-0')).not.toBeVisible();
     await expect.element(page.getByTestId('qa-children-submit')).not.toBeInTheDocument();
+    await expect.element(page.getByTestId('qa-children-skip')).not.toBeInTheDocument();
   });
 
-  it('should make fields readonly when not editable', async () => {
+  it('ChildrenForm_ReadOnly_Expect_LockedFieldsAndOriginalSpacing', async () => {
+    // Arrange
     const children: Child[] = [{ name: 'Max', identification_trait: '', speech: '' }];
 
+    // Act
     render(ChildrenStep, {
       children,
       additionalNotes: '',
@@ -186,11 +285,20 @@ describe('ChildrenStep', () => {
       onSubmit: vi.fn(),
     });
 
+    // Assert
     await expect.element(page.getByTestId('qa-child-name-0')).toHaveAttribute('readonly');
     await expect.element(page.getByTestId('qa-additional-notes')).toHaveAttribute('readonly');
+    for (const [testId, marginBottom] of [
+      ['qa-child-speech-0', '16px'],
+      ['qa-additional-notes', '24px'],
+    ]) {
+      const field = page.getByTestId(testId).element().parentElement!;
+      expect(getComputedStyle(field).marginBottom).toBe(marginBottom);
+    }
   });
 
   it('should display validation messages for child fields', async () => {
+    // Arrange
     const children: Child[] = [{ name: '', identification_trait: '', speech: '' }];
     const validationMessages = {
       'booking.children[0].name': ['Name ist erforderlich'],
@@ -198,6 +306,7 @@ describe('ChildrenStep', () => {
       'booking.children[0].speech': ['Rede ist erforderlich'],
     };
 
+    // Act
     render(ChildrenStep, {
       children,
       additionalNotes: '',
@@ -208,9 +317,11 @@ describe('ChildrenStep', () => {
       onSubmit: vi.fn(),
     });
 
+    // Assert
     await expect.element(page.getByText('Name ist erforderlich')).toBeInTheDocument();
     await expect.element(page.getByText('Bitte Merkmal angeben')).toBeInTheDocument();
     await expect.element(page.getByText('Rede ist erforderlich')).toBeInTheDocument();
+    await expect.element(page.getByText('Bitte überprüfe deine Eingaben.')).toBeInTheDocument();
   });
 
   it('should display validation message for additional notes', async () => {

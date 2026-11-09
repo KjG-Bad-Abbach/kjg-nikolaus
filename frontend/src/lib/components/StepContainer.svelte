@@ -55,22 +55,18 @@
 <div data-testid="qa-step-container" class="mx-2 mt-8 mb-4">
   <h2 class="sr-only">Schritte</h2>
 
-  <div class="flex items-center space-x-2 px-2">
-    <StepNav
-      {currentStep}
-      totalSteps={steps.length}
-      {canJumpToAnyStep}
-      onPrevious={handlePrevious}
-      onNext={handleNext}
-    >
-      <StepList {steps} {currentStep} {canJumpToAnyStep} onStepClick={handleStepClick} />
-    </StepNav>
-  </div>
-
-  <!-- Slot for step content, summary cards, etc. -->
-  <div class="mt-8">
-    {#if children}
-      {@render children()}
-    {/if}
-  </div>
+  <StepNav
+    {currentStep}
+    totalSteps={steps.length}
+    {canJumpToAnyStep}
+    onPrevious={handlePrevious}
+    onNext={handleNext}
+  >
+    <StepList {steps} {currentStep} {canJumpToAnyStep} onStepClick={handleStepClick} />
+  </StepNav>
 </div>
+
+<!-- Slot for step content, summary cards, etc. -->
+{#if children}
+  {@render children()}
+{/if}

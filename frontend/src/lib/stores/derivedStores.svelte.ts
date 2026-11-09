@@ -1,7 +1,6 @@
 import { optionsStore } from './optionsStore.svelte';
 import { bookingStore } from './bookingStore.svelte';
 import { isFilled } from '$lib/utils/string';
-import { SvelteDate } from 'svelte/reactivity';
 
 /**
  * Derived stores and computed values
@@ -9,18 +8,24 @@ import { SvelteDate } from 'svelte/reactivity';
  */
 
 class DerivedStores {
+  private currentTime_ms = $state(Date.now());
+
+  setCurrentTime(now_ms: number): void {
+    this.currentTime_ms = now_ms;
+  }
+
   /**
    * Can edit route planning (deadline not passed)
    */
   get canEditRoutePlanning(): boolean {
-    return new SvelteDate() < optionsStore.route_planning_deadline;
+    return this.currentTime_ms < optionsStore.route_planning_deadline.getTime();
   }
 
   /**
    * Can edit anything (final deadline not passed)
    */
   get canEditAnything(): boolean {
-    return new SvelteDate() < optionsStore.final_deadline;
+    return this.currentTime_ms < optionsStore.final_deadline.getTime();
   }
 
   /**

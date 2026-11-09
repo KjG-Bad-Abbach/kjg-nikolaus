@@ -54,12 +54,6 @@ describe('submitHandlers', () => {
         selectedTimeSlotIds: ['slot1', 'slot2'],
       } as unknown as SubmitContext['bookingStore'],
       validationStore: {} as unknown as SubmitContext['validationStore'],
-      optionsStore: {
-        max_time_slots: 3,
-      } as unknown as SubmitContext['optionsStore'],
-      derivedStores: {
-        canEditRoutePlanning: true,
-      } as unknown as SubmitContext['derivedStores'],
       reloadBooking: vi.fn(),
     };
   });
@@ -83,15 +77,18 @@ describe('submitHandlers', () => {
     });
 
     it('should handle new booking creation', async () => {
+      // Arrange
       vi.mocked(formSubmission.submitContact).mockResolvedValue({
         bookingId: 'new-booking-456',
         isNewBooking: true,
       });
 
+      // Act
       await submitContactDetails(mockContext);
 
+      // Assert
       expect(mockContext.uiStore.setBookingId).toHaveBeenCalledWith('new-booking-456');
-      expect(mockContext.uiStore.setView).toHaveBeenCalledWith('steps');
+      expect(mockContext.uiStore.setView).toHaveBeenCalledWith('email-verification-needed');
       expect(mockContext.reloadBooking).not.toHaveBeenCalled();
       expect(mockContext.uiStore.setStep).toHaveBeenCalledWith(1);
     });
@@ -124,16 +121,18 @@ describe('submitHandlers', () => {
   });
 
   describe('submitAddressStep', () => {
-    it('should prevent default event and submit address', async () => {
+    it('submitAddressStep_Address_Expect_SubmissionWithoutCompletionArguments', async () => {
+      // Arrange
       vi.mocked(formSubmission.submitAddress).mockResolvedValue(true);
 
+      // Act
       await submitAddressStep(mockContext);
 
+      // Assert
       expect(formSubmission.submitAddress).toHaveBeenCalledWith({
         location: mockContext.bookingStore.booking.location,
         presentLocation: mockContext.bookingStore.booking.present_location,
         bookingId: mockContext.uiStore.bookingId,
-        canEditRoutePlanning: mockContext.derivedStores.canEditRoutePlanning,
         uiStore: mockContext.uiStore,
         validationStore: mockContext.validationStore,
       });
@@ -159,17 +158,20 @@ describe('submitHandlers', () => {
   });
 
   describe('submitTimeSlotsStep', () => {
-    it('should prevent default event and submit time slots', async () => {
+    it('submitTimeSlotsStep_Selection_Expect_SubmissionWithDismissalReload', async () => {
+      // Arrange
       vi.mocked(formSubmission.submitTimeSlots).mockResolvedValue(true);
 
+      // Act
       await submitTimeSlotsStep(mockContext);
 
+      // Assert
       expect(formSubmission.submitTimeSlots).toHaveBeenCalledWith({
         selectedTimeSlotIds: mockContext.bookingStore.selectedTimeSlotIds,
         bookingId: mockContext.uiStore.bookingId,
-        maxTimeSlots: mockContext.optionsStore.max_time_slots,
         uiStore: mockContext.uiStore,
         validationStore: mockContext.validationStore,
+        reloadBooking: mockContext.reloadBooking,
       });
     });
 

@@ -13,6 +13,17 @@ describe('StepContainer', () => {
     { name: 'Übersicht', testId: 'summary', anyFilled: false, allFilled: false },
   ];
 
+  it('StepProgress_HiddenNavigation_Expect_OriginalTrailingSiblingSpace', async () => {
+    // Arrange
+    await render(StepContainer, { steps: mockSteps, canJumpToAnyStep: false });
+
+    // Act
+    const progress = page.getByTestId('qa-stepper').element().parentElement!;
+
+    // Assert
+    expect(getComputedStyle(progress).marginInlineEnd).toBe('8px');
+  });
+
   it('should render all step indicators', async () => {
     render(StepContainer, {
       currentStep: 0,

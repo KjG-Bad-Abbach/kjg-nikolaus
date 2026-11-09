@@ -4,7 +4,7 @@
  */
 
 import { isFilled } from './string';
-import type { Booking, DerivedStores } from '$lib/types/booking';
+import type { Booking } from '$lib/types/booking';
 import type { Step } from '$lib/stores/uiStore.svelte';
 
 /**
@@ -132,7 +132,6 @@ export function getFirstIncompleteStep(booking: Booking, maxTimeSlots = 3): numb
 export function calculateStepCompletionStatus(
   booking: Booking,
   maxTimeSlots: number,
-  derivedStores: DerivedStores,
 ): Partial<Step>[] {
   return [
     {
@@ -157,7 +156,7 @@ export function calculateStepCompletionStatus(
     },
     {
       // Step 4: Summary
-      allFilled: derivedStores.isEverythingFilled,
+      allFilled: getFirstIncompleteStep(booking, maxTimeSlots) === 4,
       anyFilled: false,
     },
   ];

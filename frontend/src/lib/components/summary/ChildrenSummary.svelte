@@ -71,9 +71,7 @@
     {/if}
   </ul>
   {#if isFilled(additionalNotes)}
-    <div
-      class="{children.length >= 2 ? 'mt-2' : ''} flex flex-wrap items-baseline gap-1 text-gray-700"
-    >
+    <div class="mt-2 flex flex-wrap items-baseline gap-1 text-gray-700">
       <span>Hinweise für den Nikolaus:</span>
       <div class="min-w-0 flex-1">
         <div class="truncate">{additionalNotes}</div>

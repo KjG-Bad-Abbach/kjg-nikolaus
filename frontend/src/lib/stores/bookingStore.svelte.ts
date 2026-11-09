@@ -54,13 +54,33 @@ class BookingStore {
   }
 
   /**
+   * Set selected time slot IDs
+   */
+  setSelectedTimeSlotIds(ids: string[]): void {
+    this.selectedTimeSlotIds = [...ids].sort(
+      (a, b) =>
+        this.availableTimeSlots.findIndex((slot) => slot.documentId === a) -
+        this.availableTimeSlots.findIndex((slot) => slot.documentId === b),
+    );
+  }
+
+  private restoreTimeSlotSelection(timeSlots: TimeSlot[]): void {
+    // Store selected time slot IDs
+    const savedIds = this.booking.time_slots.map((slot) => slot.documentId);
+    this.setSelectedTimeSlotIds(
+      timeSlots.filter((slot) => savedIds.includes(slot.documentId)).map((slot) => slot.documentId),
+    );
+  }
+
+  /**
    * Update booking data from API response
    */
-  updateFromDatabase(data: Partial<Booking>) {
+  updateFromDatabase(data: Partial<Booking>): void {
     this.booking = createEmptyBooking();
     updateExistingObjectKeys(this.booking as unknown as Record<string, unknown>, data);
     // Clone the complete booking state (not just the partial data) for change detection
     this.bookingLoadedFromDatabase = clone(this.booking) as Booking;
+    this.restoreTimeSlotSelection(this.booking.time_slots);
   }
 
   /**
@@ -73,12 +93,13 @@ class BookingStore {
   /**
    * Revert booking to database state
    */
-  revertToDatabase() {
+  revertToDatabase(): void {
     this.booking = createEmptyBooking();
     updateExistingObjectKeys(
       this.booking as unknown as Record<string, unknown>,
       clone(this.bookingLoadedFromDatabase) as unknown as Record<string, unknown>,
     );
+    this.restoreTimeSlotSelection(this.booking.time_slots);
   }
 
   /**
@@ -123,23 +144,17 @@ class BookingStore {
   /**
    * Set available time slots
    */
-  setAvailableTimeSlots(timeSlots: TimeSlot[]) {
+  setAvailableTimeSlots(timeSlots: TimeSlot[]): void {
     this.availableTimeSlots = timeSlots;
-  }
-
-  /**
-   * Set selected time slot IDs
-   */
-  setSelectedTimeSlotIds(ids: string[]) {
-    this.selectedTimeSlotIds = ids;
+    this.restoreTimeSlotSelection(this.availableTimeSlots);
   }
 
   /**
    * Add a time slot ID to selection
    */
-  addTimeSlotId(id: string) {
+  addTimeSlotId(id: string): void {
     if (!this.selectedTimeSlotIds.includes(id)) {
-      this.selectedTimeSlotIds = [...this.selectedTimeSlotIds, id];
+      this.setSelectedTimeSlotIds([...this.selectedTimeSlotIds, id]);
     }
   }
 

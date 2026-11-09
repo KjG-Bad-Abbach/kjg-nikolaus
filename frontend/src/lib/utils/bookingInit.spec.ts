@@ -9,8 +9,10 @@ import type { UIStore } from '$lib/stores/uiStore.svelte';
 import type { OptionsStore } from '$lib/stores/optionsStore.svelte';
 import type { BookingStore } from '$lib/stores/bookingStore.svelte';
 import type { ValidationStore } from '$lib/stores/validationStore.svelte';
-import type { DerivedStores, Config, Booking, TimeSlot, ApiError } from '$lib/types/booking';
+import type { Config, Booking, TimeSlot, ApiError } from '$lib/types/booking';
 import { SvelteDate } from 'svelte/reactivity';
+import { sendRequest } from '$lib/api/client';
+import { bookingStore } from '$lib/stores/bookingStore.svelte';
 
 // Mock the bookingApi module
 vi.mock('./bookingApi', () => ({
@@ -29,11 +31,10 @@ describe('bookingInit', () => {
   let mockOptionsStore: OptionsStore;
   let mockBookingStore: BookingStore;
   let mockValidationStore: ValidationStore;
-  let mockDerivedStores: DerivedStores;
   let originalWindow: typeof window;
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.resetAllMocks();
 
     // Save original window
     originalWindow = global.window;
@@ -61,9 +62,9 @@ describe('bookingInit', () => {
     // Mock Booking Store
     mockBookingStore = {
       reset: vi.fn(),
+      bookingLoadedFromDatabase: { time_slots: [] },
       updateFromDatabase: vi.fn(),
       setAvailableTimeSlots: vi.fn(),
-      setSelectedTimeSlotIds: vi.fn(),
       hasChanges: vi.fn(() => false),
       revertToDatabase: vi.fn(),
     } as unknown as BookingStore;
@@ -72,21 +73,148 @@ describe('bookingInit', () => {
     mockValidationStore = {
       clearAll: vi.fn(),
     } as unknown as ValidationStore;
-
-    // Mock Derived Stores
-    mockDerivedStores = {
-      canEditRoutePlanning: true,
-      canEditAnything: true,
-      isRoutePlanningFilled: true,
-      isEverythingFilled: true,
-    };
   });
 
   afterEach(() => {
     global.window = originalWindow;
+    vi.unstubAllEnvs();
+    vi.unstubAllGlobals();
   });
 
   describe('initializeBooking', () => {
+    it.each([
+      {
+        state: 'ConfigConfiguration_Expect_CorrectPrecedence',
+        browser: {},
+        build: {},
+        expected: { token: 'config-token', url: 'https://config.example' },
+      },
+      {
+        state: 'BuildConfiguration_Expect_CorrectPrecedence',
+        browser: {},
+        build: { token: 'build-token', url: 'https://build.example' },
+        expected: { token: 'build-token', url: 'https://build.example' },
+      },
+      {
+        state: 'EmptyBuildConfiguration_Expect_ResponseFallback',
+        browser: {},
+        build: { token: '', url: '' },
+        expected: { token: 'config-token', url: 'https://config.example' },
+      },
+      {
+        state: 'BrowserConfiguration_Expect_CorrectPrecedence',
+        browser: { token: 'browser-token', url: 'https://browser.example' },
+        build: { token: 'build-token', url: 'https://build.example' },
+        expected: { token: 'browser-token', url: 'https://browser.example' },
+      },
+      {
+        state: 'EmptyBrowserConfiguration_Expect_BuildFallback',
+        browser: { token: '', url: '' },
+        build: { token: 'build-token', url: 'https://build.example' },
+        expected: { token: 'build-token', url: 'https://build.example' },
+      },
+      {
+        state: 'EmptyBrowserAndBuildConfiguration_Expect_ResponseFallback',
+        browser: { token: '', url: '' },
+        build: { token: '', url: '' },
+        expected: { token: 'config-token', url: 'https://config.example' },
+      },
+      {
+        state: 'MixedConfiguration_Expect_IndependentFieldPrecedence',
+        browser: { token: 'browser-token' },
+        build: { url: 'https://build.example' },
+        expected: { token: 'browser-token', url: 'https://build.example' },
+      },
+      {
+        state: 'MixedEmptyToken_Expect_BuildTokenAndBrowserBaseUrl',
+        browser: { token: '', url: 'https://browser.example' },
+        build: { token: 'build-token', url: '' },
+        expected: { token: 'build-token', url: 'https://browser.example' },
+      },
+      {
+        state: 'MixedEmptyBaseUrl_Expect_BrowserTokenAndResponseBaseUrl',
+        browser: { token: 'browser-token', url: '' },
+        build: { token: '', url: '' },
+        expected: { token: 'browser-token', url: 'https://config.example' },
+      },
+    ])('InitializeBooking_$state', async ({ browser, build, expected }) => {
+      // Arrange
+      const { loadConfig } = await import('./bookingApi');
+      vi.stubEnv('VITE_API_TOKEN', build.token);
+      vi.stubEnv('VITE_API_BASE_URL', build.url);
+      const fetchRequest = vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({ data: {} }),
+      });
+      vi.stubGlobal('fetch', fetchRequest);
+      const browserConfig = {
+        location: { search: '' },
+        API_TOKEN: browser.token,
+        API_BASE_URL: browser.url,
+      };
+      global.window = browserConfig as unknown as Window & typeof globalThis;
+      vi.mocked(loadConfig).mockResolvedValue({
+        id: '1',
+        documentId: 'config-1',
+        route_planning_deadline: new SvelteDate('2024-12-01'),
+        final_deadline: new SvelteDate('2024-12-05'),
+        max_time_slots: 3,
+        show_search_for_time_slots: false,
+        introduction_text: [],
+        privacy_policy_link: null,
+        legal_notice_link: null,
+        api_token: 'config-token',
+        api_base_url: 'https://config.example',
+      });
+
+      // Act
+      await initializeBooking({
+        uiStore: mockUIStore,
+        optionsStore: mockOptionsStore,
+        bookingStore: mockBookingStore,
+        validationStore: mockValidationStore,
+      });
+      await sendRequest({ url: '/api/bookings/bootstrap-check' });
+
+      // Assert
+      expect(browserConfig.API_TOKEN).toBe(expected.token);
+      expect(browserConfig.API_BASE_URL).toBe(expected.url);
+      expect(fetchRequest).toHaveBeenCalledExactlyOnceWith(
+        `${expected.url}/api/bookings/bootstrap-check`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(expected.token ? { Authorization: `Bearer ${expected.token}` } : {}),
+          },
+        },
+      );
+    });
+
+    it('InitializeBooking_UnsavedChangesCallback_Expect_CurrentStoreChangeState', async () => {
+      // Arrange
+      const { registerCheckUnsavedChanges } = await import('./unsavedChanges');
+      mockOptionsStore.id = '1';
+      global.window = { location: { search: '' } } as unknown as Window & typeof globalThis;
+      await initializeBooking({
+        uiStore: mockUIStore,
+        optionsStore: mockOptionsStore,
+        bookingStore: mockBookingStore,
+        validationStore: mockValidationStore,
+      });
+      const checkChanges = vi.mocked(registerCheckUnsavedChanges).mock.calls[0][0];
+
+      // Act
+      const saved = checkChanges();
+      vi.mocked(mockBookingStore.hasChanges).mockReturnValue(true);
+      const edited = checkChanges();
+      vi.mocked(mockBookingStore.hasChanges).mockReturnValue(false);
+      const discarded = checkChanges();
+
+      // Assert
+      expect([saved, edited, discarded]).toEqual([false, true, false]);
+    });
+
     it('should load config and set intro view when introduction text exists', async () => {
       const { loadConfig } = await import('./bookingApi');
       const mockConfig: Config = {
@@ -113,7 +241,6 @@ describe('bookingInit', () => {
         optionsStore: mockOptionsStore,
         bookingStore: mockBookingStore,
         validationStore: mockValidationStore,
-        derivedStores: mockDerivedStores,
       });
 
       expect(mockUIStore.setLoading).toHaveBeenCalledWith(true);
@@ -147,7 +274,6 @@ describe('bookingInit', () => {
         optionsStore: mockOptionsStore,
         bookingStore: mockBookingStore,
         validationStore: mockValidationStore,
-        derivedStores: mockDerivedStores,
       });
 
       expect(mockUIStore.setView).toHaveBeenCalledWith('steps');
@@ -208,7 +334,6 @@ describe('bookingInit', () => {
         optionsStore: mockOptionsStore,
         bookingStore: mockBookingStore,
         validationStore: mockValidationStore,
-        derivedStores: mockDerivedStores,
       });
 
       expect(mockUIStore.setBookingId).toHaveBeenCalledWith('booking-1');
@@ -223,7 +348,6 @@ describe('bookingInit', () => {
         optionsStore: mockOptionsStore,
         bookingStore: mockBookingStore,
         validationStore: mockValidationStore,
-        derivedStores: mockDerivedStores,
       });
 
       expect(mockBookingStore.reset).not.toHaveBeenCalled();
@@ -242,7 +366,6 @@ describe('bookingInit', () => {
         optionsStore: mockOptionsStore,
         bookingStore: mockBookingStore,
         validationStore: mockValidationStore,
-        derivedStores: mockDerivedStores,
       });
 
       expect(loadConfig).not.toHaveBeenCalled();
@@ -262,7 +385,6 @@ describe('bookingInit', () => {
         optionsStore: mockOptionsStore,
         bookingStore: mockBookingStore,
         validationStore: mockValidationStore,
-        derivedStores: mockDerivedStores,
       });
 
       expect(mockUIStore.setLoading).toHaveBeenCalledWith(false);
@@ -293,7 +415,6 @@ describe('bookingInit', () => {
         optionsStore: mockOptionsStore,
         bookingStore: mockBookingStore,
         validationStore: mockValidationStore,
-        derivedStores: mockDerivedStores,
       });
 
       expect(mockUIStore.setLoading).toHaveBeenCalledWith(true);
@@ -303,7 +424,81 @@ describe('bookingInit', () => {
   });
 
   describe('loadBookingData', () => {
+    it('loadBookingData_SavedLaterPageSlot_Expect_CleanSelectionAfterLoadDiscardAndSave', async () => {
+      // Arrange
+      const api = await vi.importActual<typeof import('./bookingApi')>('./bookingApi');
+      const { loadBooking, loadTimeSlots } = await import('./bookingApi');
+      vi.mocked(loadBooking).mockImplementationOnce(api.loadBooking);
+      vi.mocked(loadTimeSlots)
+        .mockImplementationOnce(api.loadTimeSlots)
+        .mockImplementationOnce(api.loadTimeSlots);
+      bookingStore.reset();
+      const rawSlots = Array.from({ length: 26 }, (_, index) => ({
+        id: index + 1,
+        documentId: `slot-${index + 1}`,
+        start: new Date(Date.UTC(2026, 11, 5, 16, (26 - index) * 15)).toISOString(),
+        end: new Date(Date.UTC(2026, 11, 5, 16, (27 - index) * 15)).toISOString(),
+        max_bookings: 4,
+        max_reservations: 12,
+        available_reservations: 0,
+      }));
+      const savedBooking = {
+        ...bookingStore.booking,
+        documentId: 'booking-1',
+        time_slots: [rawSlots[25]],
+      };
+      const pages = [rawSlots.slice(0, 25), rawSlots.slice(25)].map((data, index) => ({
+        data,
+        meta: { pagination: { page: index + 1, pageSize: 25, pageCount: 2, total: 26 } },
+      }));
+      const fetchRequest = vi.fn();
+      for (const response of [{ data: savedBooking }, ...pages, ...pages, { data: savedBooking }]) {
+        fetchRequest.mockResolvedValueOnce(Response.json(response));
+      }
+      vi.stubGlobal('fetch', fetchRequest);
+      vi.stubEnv('VITE_API_BASE_URL', '');
+      vi.stubEnv('VITE_API_TOKEN', '');
+
+      // Act
+      await loadBookingData({
+        bookingId: 'booking-1',
+        uiStore: mockUIStore,
+        optionsStore: mockOptionsStore,
+        bookingStore,
+        validationStore: mockValidationStore,
+      });
+
+      // Assert
+      expect(mockUIStore.setError).toHaveBeenLastCalledWith(null);
+      expect(bookingStore.selectedTimeSlotIds).toEqual(['slot-26']);
+      expect(bookingStore.hasChanges()).toBe(false);
+      expect(bookingStore.availableTimeSlots.map((slot) => slot.documentId)).toEqual(
+        rawSlots.map((slot) => slot.documentId).reverse(),
+      );
+      expect(bookingStore.availableTimeSlots[0].available_reservations).toBe(1);
+
+      // Act
+      bookingStore.setSelectedTimeSlotIds(['slot-1']);
+      const hasUnsavedSelection = bookingStore.hasChanges();
+      bookingStore.revertToDatabase();
+      await fetchAndUpdateTimeSlots('booking-1', bookingStore, mockUIStore);
+      await api.updateBookingTimeSlots('booking-1', bookingStore.selectedTimeSlotIds);
+
+      // Assert
+      expect(hasUnsavedSelection).toBe(true);
+      expect(bookingStore.selectedTimeSlotIds).toEqual(['slot-26']);
+      expect(bookingStore.hasChanges()).toBe(false);
+      expect(bookingStore.availableTimeSlots[0].available_reservations).toBe(1);
+      expect(fetchRequest).toHaveBeenCalledTimes(6);
+      expect(fetchRequest).toHaveBeenLastCalledWith('/api/bookings/booking-1', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data: { time_slots: ['slot-26'] } }),
+      });
+    });
+
     it('should load booking and update stores', async () => {
+      // Arrange
       const { loadBooking, loadTimeSlots } = await import('./bookingApi');
       const mockTimeSlot: TimeSlot = {
         id: '1',
@@ -335,26 +530,31 @@ describe('bookingInit', () => {
       vi.mocked(loadBooking).mockResolvedValue(mockBooking);
       vi.mocked(loadTimeSlots).mockResolvedValue([mockTimeSlot]);
 
+      // Act
       await loadBookingData({
         bookingId: 'booking-1',
         uiStore: mockUIStore,
         optionsStore: mockOptionsStore,
         bookingStore: mockBookingStore,
         validationStore: mockValidationStore,
-        derivedStores: mockDerivedStores,
       });
 
+      // Assert
       expect(loadBooking).toHaveBeenCalledWith('booking-1');
-      expect(loadTimeSlots).toHaveBeenCalledWith('booking-1');
-      expect(mockBookingStore.updateFromDatabase).toHaveBeenCalled();
+      expect(loadTimeSlots).toHaveBeenCalledWith(['slot-1']);
       expect(mockBookingStore.setAvailableTimeSlots).toHaveBeenCalled();
-      expect(mockBookingStore.setSelectedTimeSlotIds).toHaveBeenCalledWith(['slot-1']);
+      expect(mockBookingStore.updateFromDatabase).toHaveBeenCalledWith(mockBooking);
       expect(mockUIStore.setCanJumpToAnyStep).toHaveBeenCalledWith(true);
-      expect(mockUIStore.setStep).toHaveBeenCalled();
-      expect(mockUIStore.updateStep).toHaveBeenCalled();
+      expect(mockUIStore.setStep).toHaveBeenCalledWith(2);
+      expect(mockUIStore.updateStep).toHaveBeenNthCalledWith(5, 4, {
+        allFilled: false,
+        anyFilled: false,
+      });
+      expect(mockValidationStore.clearAll).toHaveBeenCalled();
     });
 
     it('should extract time slot IDs from multiple time slots', async () => {
+      // Arrange
       const { loadBooking, loadTimeSlots } = await import('./bookingApi');
       const mockTimeSlots: TimeSlot[] = [
         {
@@ -395,19 +595,22 @@ describe('bookingInit', () => {
       vi.mocked(loadBooking).mockResolvedValue(mockBooking);
       vi.mocked(loadTimeSlots).mockResolvedValue(mockTimeSlots);
 
+      // Act
       await loadBookingData({
         bookingId: 'booking-1',
         uiStore: mockUIStore,
         optionsStore: mockOptionsStore,
         bookingStore: mockBookingStore,
         validationStore: mockValidationStore,
-        derivedStores: mockDerivedStores,
       });
 
-      expect(mockBookingStore.setSelectedTimeSlotIds).toHaveBeenCalledWith(['slot-1', 'slot-2']);
+      // Assert
+      expect(mockBookingStore.updateFromDatabase).toHaveBeenCalledWith(mockBooking);
+      expect(loadTimeSlots).toHaveBeenCalledWith(['slot-1', 'slot-2']);
     });
 
     it('should handle booking with undefined time slots', async () => {
+      // Arrange
       const { loadBooking, loadTimeSlots } = await import('./bookingApi');
       const mockBooking: Booking = {
         documentId: 'booking-1',
@@ -432,16 +635,18 @@ describe('bookingInit', () => {
       vi.mocked(loadBooking).mockResolvedValue(mockBooking);
       vi.mocked(loadTimeSlots).mockResolvedValue([]);
 
+      // Act
       await loadBookingData({
         bookingId: 'booking-1',
         uiStore: mockUIStore,
         optionsStore: mockOptionsStore,
         bookingStore: mockBookingStore,
         validationStore: mockValidationStore,
-        derivedStores: mockDerivedStores,
       });
 
-      expect(mockBookingStore.setSelectedTimeSlotIds).toHaveBeenCalledWith([]);
+      // Assert
+      expect(mockBookingStore.updateFromDatabase).toHaveBeenCalledWith(mockBooking);
+      expect(loadTimeSlots).toHaveBeenCalledWith([]);
     });
 
     it('should not load when already loading', async () => {
@@ -453,7 +658,6 @@ describe('bookingInit', () => {
         optionsStore: mockOptionsStore,
         bookingStore: mockBookingStore,
         validationStore: mockValidationStore,
-        derivedStores: mockDerivedStores,
       });
 
       expect(mockBookingStore.reset).not.toHaveBeenCalled();
@@ -470,16 +674,64 @@ describe('bookingInit', () => {
         optionsStore: mockOptionsStore,
         bookingStore: mockBookingStore,
         validationStore: mockValidationStore,
-        derivedStores: mockDerivedStores,
       });
 
       expect(mockUIStore.setError).toHaveBeenCalledWith(error);
       expect(mockUIStore.setLoading).toHaveBeenCalledWith(false);
     });
+
+    it.each(['booking', 'slots'])(
+      'LoadBookingData_%sFailure_Expect_InitialNavigationPreservedAndRetryAvailable',
+      async (failedRequest) => {
+        // Arrange
+        const { loadBooking, loadTimeSlots } = await import('./bookingApi');
+        const error: ApiError = { message: 'Temporary failure' };
+        const booking = {
+          contact_person: { first_name: '', last_name: '', email: '', phone_number: '' },
+          location: { street: '', house_number: '', zip_code: '', place: '' },
+          present_location: '',
+          time_slots: [],
+          children: [],
+          additional_notes: '',
+        };
+        vi.mocked(loadBooking).mockResolvedValue(booking);
+        vi.mocked(loadTimeSlots).mockResolvedValue([]);
+        if (failedRequest === 'booking') vi.mocked(loadBooking).mockRejectedValueOnce(error);
+        if (failedRequest === 'slots') vi.mocked(loadTimeSlots).mockRejectedValueOnce(error);
+        const context = {
+          bookingId: 'booking-1',
+          uiStore: mockUIStore,
+          optionsStore: mockOptionsStore,
+          bookingStore: mockBookingStore,
+          validationStore: mockValidationStore,
+        };
+
+        // Act
+        await loadBookingData(context);
+
+        // Assert
+        expect(mockUIStore.setError).toHaveBeenCalledWith(error);
+        expect(mockUIStore.setCanJumpToAnyStep).not.toHaveBeenCalled();
+        expect(mockUIStore.setStep).not.toHaveBeenCalled();
+        expect(mockUIStore.updateStep).not.toHaveBeenCalled();
+        expect(mockValidationStore.clearAll).not.toHaveBeenCalled();
+        expect(mockUIStore.setLoading).toHaveBeenLastCalledWith(false);
+
+        // Act
+        await loadBookingData(context);
+
+        // Assert
+        expect(mockUIStore.setError).toHaveBeenLastCalledWith(null);
+        expect(mockUIStore.setCanJumpToAnyStep).toHaveBeenCalledWith(true);
+        expect(mockUIStore.setStep).toHaveBeenCalledWith(0);
+        expect(mockValidationStore.clearAll).toHaveBeenCalledOnce();
+      },
+    );
   });
 
   describe('fetchAndUpdateTimeSlots', () => {
     it('should fetch and update time slots', async () => {
+      // Arrange
       const { loadTimeSlots } = await import('./bookingApi');
       const mockTimeSlots: TimeSlot[] = [
         {
@@ -492,30 +744,57 @@ describe('bookingInit', () => {
       ];
 
       vi.mocked(loadTimeSlots).mockResolvedValue(mockTimeSlots);
+      mockBookingStore.bookingLoadedFromDatabase.time_slots = mockTimeSlots;
+      mockBookingStore.selectedTimeSlotIds = ['unsaved-slot'];
 
+      // Act
       await fetchAndUpdateTimeSlots('booking-1', mockBookingStore, mockUIStore);
 
-      expect(loadTimeSlots).toHaveBeenCalledWith('booking-1');
+      // Assert
+      expect(loadTimeSlots).toHaveBeenCalledWith(['slot-1']);
       expect(mockBookingStore.setAvailableTimeSlots).toHaveBeenCalledWith(mockTimeSlots);
+      expect(mockUIStore.setError).toHaveBeenCalledWith(null);
+      expect(mockUIStore.setLoading).toHaveBeenNthCalledWith(1, true);
+      expect(mockUIStore.setLoading).toHaveBeenLastCalledWith(false);
+    });
+
+    it('FetchAndUpdateTimeSlots_AlreadyLoading_Expect_NoConcurrentFetch', async () => {
+      // Arrange
+      const { loadTimeSlots } = await import('./bookingApi');
+      mockUIStore.isLoading = true;
+
+      // Act
+      await fetchAndUpdateTimeSlots('booking-1', mockBookingStore, mockUIStore);
+
+      // Assert
+      expect(loadTimeSlots).not.toHaveBeenCalled();
+      expect(mockUIStore.setLoading).not.toHaveBeenCalled();
     });
 
     it('should fetch all slots when no booking ID', async () => {
+      // Arrange
       const { loadTimeSlots } = await import('./bookingApi');
       vi.mocked(loadTimeSlots).mockResolvedValue([]);
 
+      // Act
       await fetchAndUpdateTimeSlots(null, mockBookingStore, mockUIStore);
 
-      expect(loadTimeSlots).toHaveBeenCalledWith(undefined);
+      // Assert
+      expect(loadTimeSlots).toHaveBeenCalledWith([]);
     });
 
     it('should handle errors', async () => {
       const { loadTimeSlots } = await import('./bookingApi');
+      // Arrange
       const error: ApiError = { message: 'Error' };
       vi.mocked(loadTimeSlots).mockRejectedValue(error);
 
+      // Act
       await fetchAndUpdateTimeSlots('booking-1', mockBookingStore, mockUIStore);
 
+      // Assert
       expect(mockUIStore.setError).toHaveBeenCalledWith(error);
+      expect(mockUIStore.setLoading).toHaveBeenLastCalledWith(false);
     });
   });
 
@@ -557,6 +836,7 @@ describe('bookingInit', () => {
     });
 
     it('should revert changes and change step when user confirms', async () => {
+      // Arrange
       // Mock window and global confirm function
       const confirmFn = vi.fn(() => true);
       global.window = {
@@ -564,6 +844,7 @@ describe('bookingInit', () => {
       } as unknown as Window & typeof globalThis;
       global.confirm = confirmFn;
 
+      // Act
       await handleStepChange(
         2,
         true,
@@ -574,11 +855,14 @@ describe('bookingInit', () => {
         mockFetchTimeSlots,
       );
 
+      // Assert
       expect(mockBookingStore.revertToDatabase).toHaveBeenCalled();
       expect(mockUIStore.setStep).toHaveBeenCalledWith(2);
+      expect(mockFetchTimeSlots).toHaveBeenCalledTimes(1);
     });
 
     it('should not change step when user cancels confirmation', async () => {
+      // Arrange
       // Mock window and global confirm function
       const confirmFn = vi.fn(() => false);
       global.window = {
@@ -586,6 +870,7 @@ describe('bookingInit', () => {
       } as unknown as Window & typeof globalThis;
       global.confirm = confirmFn;
 
+      // Act
       await handleStepChange(
         2,
         true,
@@ -596,7 +881,11 @@ describe('bookingInit', () => {
         mockFetchTimeSlots,
       );
 
+      // Assert
       expect(mockUIStore.setStep).not.toHaveBeenCalled();
+      expect(mockBookingStore.revertToDatabase).not.toHaveBeenCalled();
+      expect(mockValidationStore.clearAll).not.toHaveBeenCalled();
+      expect(mockFetchTimeSlots).not.toHaveBeenCalled();
     });
 
     it('should fetch time slots when navigating to step 2', async () => {

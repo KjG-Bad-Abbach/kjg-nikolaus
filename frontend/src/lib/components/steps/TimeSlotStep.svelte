@@ -73,9 +73,7 @@
     for (const [dateKey, slots] of Object.entries(groupedSlots)) {
       const matchingSlots = slots.filter((slot) => slot.label?.toLowerCase().includes(lowerQuery));
 
-      if (matchingSlots.length > 0) {
-        filtered[dateKey] = matchingSlots;
-      }
+      filtered[dateKey] = matchingSlots;
     }
 
     return filtered;
@@ -105,9 +103,9 @@
     return selectedTimeSlotIds.includes(slotId);
   }
 
-  function isSlotDisabled(slotId: string): boolean {
+  function isSlotDisabled(slot: TimeSlot): boolean {
     // Disabled if max reached and not already selected
-    return isMaxReached && !isSlotSelected(slotId);
+    return (isMaxReached && !isSlotSelected(slot.id)) || slot.available_reservations! <= 0;
   }
 
   function getSlotLabel(slotId: string): string {
@@ -201,12 +199,15 @@
                   type="checkbox"
                   class="peer form-checkbox h-5 w-5 text-calypso"
                   checked={isSlotSelected(slot.id)}
-                  disabled={isSlotDisabled(slot.id)}
+                  disabled={isSlotDisabled(slot)}
                   onchange={() => toggleTimeSlot(slot.id)}
                 />
                 <span class="ml-2 text-gray-800 select-none peer-disabled:text-gray-300">
                   {slot.label}
                 </span>
+                {#if slot.available_reservations! <= 0}
+                  <span class="ml-2 text-sm text-sun-400">ausgebucht</span>
+                {/if}
               </label>
             {/each}
           </div>

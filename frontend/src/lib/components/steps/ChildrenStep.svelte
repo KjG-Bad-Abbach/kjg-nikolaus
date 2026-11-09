@@ -21,6 +21,8 @@
     onChange?: (data: { children: Child[]; additionalNotes: string }) => void;
     /** Callback when form is submitted */
     onSubmit?: (data: { children: Child[]; additionalNotes: string }) => void;
+    /** Callback to continue without saving the form */
+    onSkip?: () => void;
   };
 
   const {
@@ -31,14 +33,16 @@
     validationMessages,
     onChange,
     onSubmit,
+    onSkip,
   }: Props = $props();
 
   const deadlineText = $derived(formatDateTime(finalDeadline));
-  const hasNoChildren = $derived(children.length === 0);
+  const hasValidationErrors = $derived(Object.keys(validationMessages).length > 0);
 
   // Local reactive state
   let localChildren = $derived<Child[]>(children.map((c) => ({ ...c })));
   let localAdditionalNotes = $derived(additionalNotes);
+  const hasNoChildren = $derived(localChildren.length === 0);
 
   function handleChange() {
     onChange?.({
@@ -53,8 +57,10 @@
   }
 
   function removeChild(index: number) {
-    localChildren = localChildren.filter((_, i) => i !== index);
-    handleChange();
+    if (confirm('Möchten Sie dieses Kind wirklich entfernen?')) {
+      localChildren = localChildren.filter((_, i) => i !== index);
+      handleChange();
+    }
   }
 
   function handleSubmit(event: Event) {
@@ -193,16 +199,16 @@
             <div class="mx-2 mt-2 text-left text-sm text-rust">{message}</div>
           {/each}
         </div>
-        {#if canEditAnything}
-          <button
-            type="button"
-            onclick={() => removeChild(index)}
-            data-testid={`qa-remove-child-${index}`}
-            class="mt-2 rounded-sm bg-red-500 px-3 py-1 text-sm font-bold text-white hover:bg-red-600 focus:ring-2 focus:ring-rust/50 focus:outline-hidden"
-          >
-            Kind entfernen
-          </button>
-        {/if}
+        <button
+          type="button"
+          onclick={() => removeChild(index)}
+          disabled={!canEditAnything}
+          data-testid={`qa-remove-child-${index}`}
+          class="mt-2 rounded-sm bg-red-500 px-3 py-1 text-sm font-bold text-white hover:bg-red-600 focus:ring-2 focus:ring-rust/50 focus:outline-hidden"
+          class:hidden={!canEditAnything}
+        >
+          Kind entfernen
+        </button>
       </div>
     {/each}
 
@@ -250,8 +256,9 @@
     </div>
 
     <!-- Submit Button -->
-    {#if canEditAnything}
-      <div>
+    <!-- Keep the original spacing sibling when the submit controls are hidden. -->
+    <div>
+      {#if canEditAnything}
         <button
           type="submit"
           data-testid="qa-children-submit"
@@ -259,7 +266,24 @@
         >
           Speichern & Weiter
         </button>
-      </div>
-    {/if}
+        {#if hasValidationErrors}
+          <div class="mx-2 mt-2 text-left text-sm text-rust">Bitte überprüfe deine Eingaben.</div>
+        {/if}
+      {/if}
+    </div>
   </form>
+
+  <!-- Skip to Next Step Button -->
+  {#if canEditAnything}
+    <div class="mt-4">
+      <button
+        type="button"
+        onclick={() => onSkip?.()}
+        data-testid="qa-children-skip"
+        class="w-full rounded-sm border-2 border-atlantis px-4 py-2 font-bold text-atlantis hover:border-surfie-green hover:text-surfie-green focus:ring-2 focus:ring-java/50 focus:outline-hidden"
+      >
+        Aktuell überspringen (nicht speichern)
+      </button>
+    </div>
+  {/if}
 </div>

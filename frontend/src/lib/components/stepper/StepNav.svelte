@@ -43,7 +43,7 @@
   Based on lines 104-224 in frontend-alpine.js/src/index.html
   Navigation container with Previous/Next buttons and step list
 -->
-<div class="flex w-full max-w-5xl items-center gap-2">
+<div class="flex items-center space-x-2 px-2">
   <!-- Previous Step Button -->
   <button
     onclick={handlePrevious}

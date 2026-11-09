@@ -1,0 +1,327 @@
+import { expect, test } from '@playwright/test';
+import {
+  createBaseScenario,
+  createReadOnlyScenario,
+  createResumeScenario,
+  withFailures,
+} from './fixtures/scenarioFactory';
+import { registerScenario } from './fixtures/registerHook';
+import { recordScenarioCoverage } from './fixtures/scenarioCoverage';
+import { captureScreenshot, freezeDate } from './fixtures/visual';
+import { expectDeadlinesEditable, expectDeadlinesLocked } from './utils/deadlineAssertions';
+import { WizardPage } from './pages/wizardPage';
+
+test.describe('UI States & Edge Cases', () => {
+  test('shows loading spinner and skips intro when introduction text missing', async ({ page }) => {
+    // Arrange
+    const scenario = createBaseScenario();
+    scenario.config.introduction_text = [];
+    await registerScenario(page, scenario, { pauseConfigResponse: true });
+    const wizard = new WizardPage(page);
+    recordScenarioCoverage('intro');
+    await freezeDate(page);
+
+    // Act
+    await wizard.goto();
+    // Assert
+    await expect(page.getByTestId('qa-loading')).toBeVisible();
+    await page.evaluate(() => {
+      const hook = (window as unknown as { __bookingTestApi: { releaseConfigResponse(): void } })
+        .__bookingTestApi;
+      hook.releaseConfigResponse();
+    });
+    await expect(page.getByTestId('qa-loading')).toBeHidden();
+    await expect(page.getByTestId('qa-view-intro')).toBeHidden();
+    await expect(page.getByTestId('qa-view-steps')).toBeVisible();
+    await expectDeadlinesEditable(page);
+    await captureScreenshot(page, 'ui-loading-skip-intro.png');
+  });
+
+  test('prevents jumping to later steps before booking is created', async ({ page }) => {
+    // Arrange
+    const scenario = createBaseScenario();
+    await registerScenario(page, scenario);
+    const wizard = new WizardPage(page);
+    recordScenarioCoverage('resume');
+    await freezeDate(page);
+
+    // Act
+    await wizard.goto();
+    // Assert
+    await expectDeadlinesEditable(page);
+    await wizard.startWizard();
+
+    await page.getByTestId('qa-step-address').click();
+
+    await expect(page.getByTestId('qa-contact-form')).toBeVisible();
+    await expect(page.getByTestId('qa-address-form')).toBeHidden();
+    await captureScreenshot(page, 'ui-prevent-jump.png');
+  });
+
+  test('prompts about unsaved changes when navigating steps in resume flow', async ({ page }) => {
+    // Arrange
+    const scenario = createResumeScenario();
+    await registerScenario(page, scenario);
+    const wizard = new WizardPage(page);
+    recordScenarioCoverage('resume');
+    await freezeDate(page);
+
+    // Act
+    await wizard.goto('?id=booking-existing');
+    // Assert
+    await expectDeadlinesEditable(page);
+    await wizard.jumpToStep('contact');
+    await page.getByTestId('qa-contact-phone').fill('+49 111 222222');
+
+    page.removeAllListeners('dialog');
+    await page.once('dialog', async (dialog) => {
+      await dialog.dismiss();
+    });
+    await page.getByTestId('qa-step-address').click();
+    await expect(page.getByTestId('qa-contact-form')).toBeVisible();
+    await captureScreenshot(page, 'ui-unsaved-dialog.png');
+
+    page.removeAllListeners('dialog');
+    await page.once('dialog', async (dialog) => {
+      await dialog.accept();
+    });
+    await page.getByTestId('qa-step-address').click();
+    await expect(page.getByTestId('qa-address-form')).toBeVisible();
+    await captureScreenshot(page, 'ui-unsaved-accepted.png');
+
+    page.on('dialog', (dialog) => dialog.accept());
+  });
+
+  test('renders deadline banners with strikethrough and locks editing after expiry', async ({
+    page,
+  }) => {
+    // Arrange
+    const scenario = createReadOnlyScenario();
+    await registerScenario(page, scenario);
+    const wizard = new WizardPage(page);
+    recordScenarioCoverage('readOnly', 'addressDeadline');
+    await freezeDate(page);
+
+    // Act
+    await wizard.goto('?id=booking-existing');
+    // Assert
+    await expectDeadlinesLocked(page);
+
+    await expect(page.getByTestId('qa-deadline-route-planning')).toHaveClass(/line-through/);
+    await expect(page.getByTestId('qa-deadline-final')).toHaveClass(/line-through/);
+
+    await wizard.jumpToStep('address');
+    await expect(page.getByTestId('qa-address-street')).not.toBeEditable();
+    await wizard.jumpToStep('children');
+    await expect(page.getByTestId('qa-child-name-0')).not.toBeEditable();
+    await expect(page.getByTestId('qa-additional-notes')).not.toBeEditable();
+    await captureScreenshot(page, 'ui-deadline-lock.png');
+  });
+
+  test('allows removing selected time slots and warns when below max selection', async ({
+    page,
+  }) => {
+    // Arrange
+    const scenario = createResumeScenario();
+    await registerScenario(page, scenario);
+    const wizard = new WizardPage(page);
+    recordScenarioCoverage('timeSlot');
+    await freezeDate(page);
+
+    // Act
+    await wizard.goto('?id=booking-existing');
+    // Assert
+    await wizard.jumpToStep('time-slot');
+    await expectDeadlinesEditable(page);
+
+    const slotToAdd = scenario.timeSlots[1].documentId;
+    await wizard.timeSlotStep().toggleSlot(slotToAdd);
+    await wizard.timeSlotStep().expectSelected(slotToAdd);
+
+    const existingSlot = scenario.timeSlots[0].documentId;
+    await wizard.timeSlotStep().removeSelected(existingSlot);
+    await expect(page.getByTestId(`qa-selected-time-slot-${existingSlot}`)).toBeHidden();
+
+    await wizard.timeSlotStep().submit();
+    await wizard.jumpToStep('time-slot');
+    await expect(page.getByTestId('qa-time-slot-form')).toContainText('Bitte wähle mindestens');
+    await captureScreenshot(page, 'ui-time-slot-warning.png');
+  });
+
+  test('hides time-slot search input when disabled in config', async ({ page }) => {
+    // Arrange
+    const scenario = createResumeScenario();
+    scenario.config.show_search_for_time_slots = false;
+    await registerScenario(page, scenario);
+    const wizard = new WizardPage(page);
+    recordScenarioCoverage('timeSlot');
+    await freezeDate(page);
+
+    // Act
+    await wizard.goto('?id=booking-existing');
+    // Assert
+    await expectDeadlinesEditable(page);
+    await wizard.jumpToStep('time-slot');
+
+    await expect(page.getByTestId('qa-time-slot-search')).toBeHidden();
+    await expect(page.getByTestId('qa-time-slot-form')).toBeVisible();
+    await captureScreenshot(page, 'ui-search-hidden.png');
+  });
+
+  test('shows route-complete summary banner while other details are missing', async ({ page }) => {
+    // Arrange
+    const scenario = createResumeScenario();
+    const slotA = scenario.timeSlots[0].documentId;
+    const slotB = scenario.timeSlots[1].documentId;
+    const slotC = scenario.timeSlots[2].documentId;
+    scenario.bookings[0].time_slots = [
+      { documentId: slotA },
+      { documentId: slotB },
+      { documentId: slotC },
+    ];
+    scenario.bookings[0].children = [
+      {
+        name: 'Mila',
+        identification_trait: '6 Jahre, liebt Hunde',
+        speech: '',
+      },
+    ];
+    await registerScenario(page, scenario);
+    const wizard = new WizardPage(page);
+    recordScenarioCoverage('summary');
+    await freezeDate(page);
+
+    // Act
+    await wizard.goto('?id=booking-existing');
+    // Assert
+    await expectDeadlinesEditable(page);
+    await wizard.jumpToStep('summary');
+
+    await expect(page.getByTestId('qa-summary-route-complete')).toBeVisible();
+    await expect(page.getByTestId('qa-summary-details-missing')).toBeVisible();
+    await captureScreenshot(page, 'ui-summary-route-complete.png');
+  });
+
+  test('displays error modal details for failed time-slot fetch', async ({ page }) => {
+    // Arrange
+    const scenario = withFailures(createResumeScenario(), [
+      {
+        stage: 'time-slot-fetch',
+        once: true,
+        error: {
+          message: 'Slots unavailable',
+          status: { code: 500, text: 'Server Error' },
+          body: { error: { code: 'TIME_SLOT_FETCH_FAILED' } },
+        },
+      },
+    ]);
+    await registerScenario(page, scenario);
+    const wizard = new WizardPage(page);
+    recordScenarioCoverage('timeSlot', 'errorModal');
+    await freezeDate(page);
+
+    // Act
+    await wizard.goto('?id=booking-existing');
+    // Assert
+    await expectDeadlinesEditable(page);
+
+    await wizard.errorModal().expectVisible();
+    const codeBlock = page.locator('code').first();
+    const detailsToggle = page.getByTestId('qa-error-details-toggle');
+    await expect(detailsToggle).toBeVisible();
+    await wizard.errorModal().openDetails();
+    await expect(codeBlock).toContainText('TIME_SLOT_FETCH_FAILED');
+    await captureScreenshot(page, 'ui-error-time-slot.png');
+    await wizard.errorModal().dismiss();
+    await expect(page.getByTestId('qa-error-modal')).toBeHidden();
+
+    const contactForm = page.getByTestId('qa-contact-form');
+    await expect(contactForm).toBeVisible();
+    await page.getByTestId('qa-step-time-slot').click();
+    await expect(contactForm).toBeVisible();
+  });
+
+  test('handles resend verification failure with error modal controls', async ({ page }) => {
+    // Arrange
+    const scenario = withFailures(createBaseScenario(), [
+      {
+        stage: 'send-verification',
+        once: true,
+        error: {
+          message: 'E-Mail konnte nicht gesendet werden',
+          status: { code: 500, text: 'Server Error' },
+          body: { error: { code: 'SEND_FAIL' } },
+        },
+      },
+    ]);
+    await registerScenario(page, scenario);
+    const wizard = new WizardPage(page);
+    recordScenarioCoverage('contact', 'errorModal');
+    await freezeDate(page);
+
+    // Act
+    await wizard.goto();
+    // Assert
+    await expectDeadlinesEditable(page);
+    await wizard.startWizard();
+    await wizard.contactStep().fill({
+      firstName: 'Jara',
+      lastName: 'Vogel',
+      email: 'jara@example.com',
+      phone: '+49 160 1112223',
+    });
+    await wizard.contactStep().submit();
+    await wizard.contactStep().expectVerificationViewVisible();
+    await expectDeadlinesEditable(page);
+
+    await wizard.contactStep().resendVerification();
+    await wizard.errorModal().expectVisible();
+    await expect(page.getByTestId('qa-error-modal')).toContainText(
+      'E-Mail konnte nicht gesendet werden',
+    );
+    const detailsToggle = page.getByTestId('qa-error-details-toggle');
+    if (await detailsToggle.isVisible()) {
+      await wizard.errorModal().openDetails();
+      await expect(page.locator('code').first()).toContainText('SEND_FAIL');
+    }
+    await captureScreenshot(page, 'ui-resend-error.png');
+    await wizard.errorModal().dismiss();
+    await expect(page.getByTestId('qa-email-verification')).toBeVisible();
+  });
+
+  test('toggles footer links based on config', async ({ page }) => {
+    // Arrange
+    const withoutLinks = createBaseScenario();
+    withoutLinks.config.legal_notice_link = null;
+    withoutLinks.config.privacy_policy_link = null;
+    await registerScenario(page, withoutLinks);
+    const wizard = new WizardPage(page);
+    await freezeDate(page);
+
+    // Act
+    await wizard.goto();
+    // Assert
+    await expectDeadlinesEditable(page);
+    await expect(page.locator('a', { hasText: 'Impressum' })).toBeHidden();
+    await expect(page.locator('a', { hasText: 'Datenschutz' })).toBeHidden();
+    await captureScreenshot(page, 'ui-footer-hidden.png');
+
+    const withLinks = createBaseScenario();
+    // A fresh page prevents two scenario init scripts from competing for the same hook.
+    const linkedPage = await page.context().newPage();
+    const linkedWizard = new WizardPage(linkedPage);
+    await registerScenario(linkedPage, withLinks);
+    await freezeDate(linkedPage);
+    await linkedWizard.goto();
+    await expectDeadlinesEditable(linkedPage);
+    await expect(linkedPage.locator('a', { hasText: 'Impressum' })).toHaveAttribute(
+      'href',
+      withLinks.config.legal_notice_link!,
+    );
+    await expect(linkedPage.locator('a', { hasText: 'Datenschutz' })).toHaveAttribute(
+      'href',
+      withLinks.config.privacy_policy_link!,
+    );
+    await captureScreenshot(linkedPage, 'ui-footer-visible.png');
+  });
+});

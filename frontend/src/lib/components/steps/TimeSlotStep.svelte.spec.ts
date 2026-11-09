@@ -15,6 +15,8 @@ describe('TimeSlotStep', () => {
       end: '2024-12-05T19:00:00+01:00',
       label: 'Do 5.12. 18:00 - 19:00 Uhr',
       max_bookings: 4,
+      max_reservations: 12,
+      available_reservations: 1,
     },
     {
       id: '2',
@@ -23,6 +25,8 @@ describe('TimeSlotStep', () => {
       end: '2024-12-05T20:00:00+01:00',
       label: 'Do 5.12. 19:00 - 20:00 Uhr',
       max_bookings: 4,
+      max_reservations: 12,
+      available_reservations: 2,
     },
     {
       id: '3',
@@ -31,8 +35,42 @@ describe('TimeSlotStep', () => {
       end: '2024-12-06T19:00:00+01:00',
       label: 'Fr 6.12. 18:00 - 19:00 Uhr',
       max_bookings: 4,
+      max_reservations: 12,
+      available_reservations: 8,
     },
   ];
+
+  it.each([0, -1])(
+    'TimeSlotStep_Capacity%i_Expect_DisabledSoldOutSlotAndSelectableOwnCredit',
+    async (soldOutCapacity) => {
+      // Arrange
+      const onChange = vi.fn();
+      render(TimeSlotStep, {
+        availableTimeSlots: availableTimeSlots.map((slot) => ({
+          ...slot,
+          available_reservations: slot.id === '2' ? soldOutCapacity : slot.available_reservations,
+        })),
+        selectedTimeSlotIds: ['1'],
+        maxTimeSlots: 3,
+        routePlanningDeadline,
+        canEditRoutePlanning: true,
+        showSearch: false,
+        validationMessages: {},
+        onChange,
+      });
+
+      // Act
+      await page.getByTestId('qa-time-slot-1').getByRole('checkbox').click();
+
+      // Assert
+      await expect.element(page.getByTestId('qa-time-slot-2').getByRole('checkbox')).toBeDisabled();
+      await expect.element(page.getByTestId('qa-time-slot-2')).toHaveTextContent('ausgebucht');
+      await expect
+        .element(page.getByTestId('qa-time-slot-1').getByRole('checkbox'))
+        .not.toBeDisabled();
+      expect(onChange).toHaveBeenCalledWith([]);
+    },
+  );
 
   it('should render heading with max slots when editable', async () => {
     render(TimeSlotStep, {
@@ -354,7 +392,8 @@ describe('TimeSlotStep', () => {
     await expect.element(page.getByText('Bitte überprüfe deine Eingaben.')).toBeInTheDocument();
   });
 
-  it('should filter slots by search query', async () => {
+  it('TimeSlotStep_MixedCaseSearch_Expect_FilteredSlotsWithDateGroupsPreserved', async () => {
+    // Arrange
     render(TimeSlotStep, {
       availableTimeSlots,
       selectedTimeSlotIds: [],
@@ -368,12 +407,17 @@ describe('TimeSlotStep', () => {
     });
 
     const searchInput = page.getByTestId('qa-time-slot-search');
-    await searchInput.fill('Fr 6.12');
+    // Act
+    await searchInput.fill('fR 6.12');
 
+    // Assert
     // Should show only the Friday slot
     await expect.element(page.getByTestId('qa-time-slot-3')).toBeInTheDocument();
     // Thursday slots should be hidden (not in DOM when filtered)
     await expect.element(page.getByTestId('qa-time-slot-1')).not.toBeInTheDocument();
+    await expect
+      .element(page.getByRole('heading', { level: 4 }).filter({ hasText: /Do 5\.12\./ }))
+      .toBeInTheDocument();
   });
 
   it('should check selected slots', async () => {

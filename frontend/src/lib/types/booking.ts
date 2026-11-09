@@ -33,6 +33,8 @@ export interface TimeSlot {
   end: string; // ISO 8601
   label?: string;
   max_bookings?: number;
+  max_reservations?: number;
+  available_reservations?: number;
 }
 
 export interface Booking {
@@ -96,7 +98,11 @@ export interface ApiError {
   body?: {
     error?: {
       name?: string;
+      message?: string;
       details?: {
+        meta?: {
+          concurrencyTimeSlotsError?: boolean;
+        };
         errors?: Array<{
           path: string[];
           message: string;

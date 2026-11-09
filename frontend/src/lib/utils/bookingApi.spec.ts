@@ -9,8 +9,9 @@ import {
   updateBookingTimeSlots,
   updateBookingChildren,
 } from './bookingApi';
-import type { Config, Booking, TimeSlot, ContactPerson, Location, Child } from '$lib/types/booking';
+import type { Config, Booking, ContactPerson, Location, Child } from '$lib/types/booking';
 import { SvelteDate } from 'svelte/reactivity';
+import { formatDateTimeRange } from './dateFormat';
 
 // Mock the sendRequest function
 vi.mock('$lib/api/client', () => ({
@@ -19,7 +20,7 @@ vi.mock('$lib/api/client', () => ({
 
 describe('bookingApi', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.resetAllMocks();
   });
 
   describe('loadConfig', () => {
@@ -51,6 +52,30 @@ describe('bookingApi', () => {
   });
 
   describe('loadBooking', () => {
+    it('loadBooking_RawSlotRelation_Expect_FormattedSummaryAndDocumentIdentity', async () => {
+      // Arrange
+      const { sendRequest } = await import('$lib/api/client');
+      const slot = {
+        id: 42,
+        documentId: 'slot-1',
+        start: '2024-12-05T19:00:00+01:00',
+        end: '2024-12-05T19:30:00+01:00',
+      };
+      vi.mocked(sendRequest).mockResolvedValue({ data: { time_slots: [slot] } });
+
+      // Act
+      const booking = await loadBooking('booking-1');
+
+      // Assert
+      expect(booking.time_slots).toEqual([
+        {
+          ...slot,
+          id: 'slot-1',
+          label: formatDateTimeRange(new Date(slot.start), new Date(slot.end)),
+        },
+      ]);
+    });
+
     it('should load booking by ID', async () => {
       const { sendRequest } = await import('$lib/api/client');
       const mockBooking: Booking = {
@@ -85,49 +110,199 @@ describe('bookingApi', () => {
   });
 
   describe('loadTimeSlots', () => {
-    it('should load all time slots when no booking ID provided', async () => {
+    it('loadTimeSlots_MoreThanHundredEntries_Expect_CompleteInventory', async () => {
+      // Arrange
       const { sendRequest } = await import('$lib/api/client');
-      const mockTimeSlots: TimeSlot[] = [
+      const rawSlots = Array.from({ length: 101 }, (_, index) => ({
+        id: index + 1,
+        documentId: `slot-${index + 1}`,
+        start: '2026-12-05T18:00:00Z',
+        end: '2026-12-05T18:30:00Z',
+        available_reservations: 1,
+      }));
+      const pageSize = 25;
+      const pageCount = Math.ceil(rawSlots.length / pageSize);
+      for (let page = 1; page <= pageCount; page++) {
+        vi.mocked(sendRequest).mockResolvedValueOnce({
+          data: rawSlots.slice((page - 1) * pageSize, page * pageSize),
+          meta: { pagination: { page, pageSize, pageCount, total: rawSlots.length } },
+        });
+      }
+
+      // Act
+      const slots = await loadTimeSlots([]);
+
+      // Assert
+      expect(slots.map((slot) => slot.documentId)).toEqual(rawSlots.map((slot) => slot.documentId));
+      expect(sendRequest).toHaveBeenCalledTimes(5);
+      expect(sendRequest).toHaveBeenLastCalledWith({
+        url: '/api/time-slots?pagination[page]=5&pagination[pageSize]=25',
+      });
+    });
+
+    it('loadTimeSlots_PaginatedInventory_Expect_AllPagesGloballySortedAndCreditedOnce', async () => {
+      // Arrange
+      const { sendRequest } = await import('$lib/api/client');
+      const rawSlots = [
         {
-          id: '1',
+          id: 1,
+          documentId: 'late-slot',
+          start: '2026-12-05T20:00:00Z',
+          end: '2026-12-05T20:30:00Z',
+          available_reservations: 2,
+        },
+        {
+          id: 2,
+          documentId: 'early-slot',
+          start: '2026-12-05T18:00:00Z',
+          end: '2026-12-05T18:30:00Z',
+          available_reservations: 0,
+        },
+        {
+          id: 3,
+          documentId: 'middle-slot',
+          start: '2026-12-05T19:00:00Z',
+          end: '2026-12-05T19:30:00Z',
+          available_reservations: -1,
+        },
+      ];
+      for (const [index, slot] of rawSlots.entries()) {
+        vi.mocked(sendRequest).mockResolvedValueOnce({
+          data: [slot],
+          meta: { pagination: { page: index + 1, pageSize: 1, pageCount: 3, total: 3 } },
+        });
+      }
+
+      // Act
+      const slots = await loadTimeSlots(['early-slot', 'middle-slot']);
+
+      // Assert
+      expect(vi.mocked(sendRequest).mock.calls).toEqual([
+        [{ url: '/api/time-slots' }],
+        [{ url: '/api/time-slots?pagination[page]=2&pagination[pageSize]=1' }],
+        [{ url: '/api/time-slots?pagination[page]=3&pagination[pageSize]=1' }],
+      ]);
+      expect(
+        slots.map(({ id, available_reservations }) => ({ id, available_reservations })),
+      ).toEqual([
+        { id: 'early-slot', available_reservations: 1 },
+        { id: 'middle-slot', available_reservations: 0 },
+        { id: 'late-slot', available_reservations: 2 },
+      ]);
+      for (const slot of slots) {
+        expect(slot.label).toBe(formatDateTimeRange(new Date(slot.start), new Date(slot.end)));
+      }
+      expect(rawSlots.map((slot) => slot.available_reservations)).toEqual([2, 0, -1]);
+    });
+
+    it('loadTimeSlots_LaterPageFailure_Expect_NoPartialInventoryReturned', async () => {
+      // Arrange
+      const { sendRequest } = await import('$lib/api/client');
+      const error = { message: 'Inventory unavailable' };
+      vi.mocked(sendRequest)
+        .mockResolvedValueOnce({
+          data: [],
+          meta: { pagination: { page: 1, pageSize: 25, pageCount: 2, total: 26 } },
+        })
+        .mockRejectedValueOnce(error);
+
+      // Act
+      const result = loadTimeSlots([]);
+
+      // Assert
+      await expect(result).rejects.toBe(error);
+    });
+
+    it('loadTimeSlots_RawInventory_Expect_DocumentIdentityLabelsAndChronologicalOrder', async () => {
+      // Arrange
+      const { sendRequest } = await import('$lib/api/client');
+      const mockTimeSlots = [
+        {
+          id: 42,
           documentId: 'slot-1',
           start: '2024-12-05T19:00:00+01:00',
           end: '2024-12-05T19:30:00+01:00',
           max_bookings: 4,
+          max_reservations: 12,
+          available_reservations: 0,
+        },
+        {
+          id: 91,
+          documentId: 'slot-2',
+          start: '2024-12-05T18:00:00+01:00',
+          end: '2024-12-05T18:30:00+01:00',
+          max_bookings: 4,
+          max_reservations: 12,
+          available_reservations: 5,
         },
       ];
 
       vi.mocked(sendRequest).mockResolvedValue({ data: mockTimeSlots });
 
-      const result = await loadTimeSlots();
+      // Act
+      const result = await loadTimeSlots([]);
 
+      // Assert
       expect(sendRequest).toHaveBeenCalledWith({
-        url: '/api/time-slots?populate=*',
+        url: '/api/time-slots',
       });
-      expect(result).toEqual(mockTimeSlots);
+      expect(result).toEqual(
+        [...mockTimeSlots].reverse().map((slot) => ({
+          ...slot,
+          id: slot.documentId,
+          label: formatDateTimeRange(new Date(slot.start), new Date(slot.end)),
+        })),
+      );
+      expect(mockTimeSlots[0].id).toBe(42);
+      expect(sendRequest).toHaveBeenCalledOnce();
     });
 
-    it('should load time slots for specific booking when ID provided', async () => {
-      const { sendRequest } = await import('$lib/api/client');
-      const mockTimeSlots: TimeSlot[] = [
-        {
-          id: '1',
-          documentId: 'slot-1',
-          start: '2024-12-05T19:00:00+01:00',
-          end: '2024-12-05T19:30:00+01:00',
-          max_bookings: 4,
-        },
-      ];
+    it.each([
+      { rawCapacity: -1, creditedCapacity: 0 },
+      { rawCapacity: 0, creditedCapacity: 1 },
+      { rawCapacity: 5, creditedCapacity: 6 },
+    ])(
+      'loadTimeSlots_OwnReservation%j_Expect_AllInventoryWithOwnCapacityCredit',
+      async ({ rawCapacity, creditedCapacity }) => {
+        // Arrange
+        const { sendRequest } = await import('$lib/api/client');
+        const mockTimeSlots = [
+          {
+            id: 42,
+            documentId: 'slot-1',
+            start: '2024-12-05T19:00:00+01:00',
+            end: '2024-12-05T19:30:00+01:00',
+            max_bookings: 4,
+            max_reservations: 12,
+            available_reservations: rawCapacity,
+          },
+          {
+            id: 77,
+            documentId: 'slot-2',
+            start: '2024-12-05T20:00:00+01:00',
+            end: '2024-12-05T20:30:00+01:00',
+            max_bookings: 4,
+            max_reservations: 12,
+            available_reservations: 0,
+          },
+        ];
 
-      vi.mocked(sendRequest).mockResolvedValue({ data: mockTimeSlots });
+        vi.mocked(sendRequest).mockResolvedValue({ data: mockTimeSlots });
 
-      const result = await loadTimeSlots('booking-1');
+        // Act
+        const result = await loadTimeSlots(['slot-1']);
+        const reloaded = await loadTimeSlots(['slot-1']);
 
-      expect(sendRequest).toHaveBeenCalledWith({
-        url: '/api/time-slots?populate=*&filters[bookings][documentId]=booking-1',
-      });
-      expect(result).toEqual(mockTimeSlots);
-    });
+        // Assert
+        expect(sendRequest).toHaveBeenCalledWith({
+          url: '/api/time-slots',
+        });
+        expect(result[0]).toMatchObject({ id: 'slot-1', available_reservations: creditedCapacity });
+        expect(result[1]).toMatchObject({ id: 'slot-2', available_reservations: 0 });
+        expect(reloaded[0].available_reservations).toBe(creditedCapacity);
+        expect(mockTimeSlots[0].available_reservations).toBe(rawCapacity);
+      },
+    );
   });
 
   describe('createBooking', () => {
@@ -296,10 +471,12 @@ describe('bookingApi', () => {
   });
 
   describe('updateBookingChildren', () => {
-    it('should update booking children', async () => {
+    it('updateBookingChildren_ExistingChild_Expect_OnlyEditableFieldsSent', async () => {
+      // Arrange
       const { sendRequest } = await import('$lib/api/client');
       const children: Child[] = [
         {
+          id: 'existing-child',
           name: 'Anna',
           identification_trait: 'Blondes Haar',
           speech: 'Gedicht',
@@ -327,14 +504,16 @@ describe('bookingApi', () => {
 
       vi.mocked(sendRequest).mockResolvedValue({ data: mockBooking });
 
+      // Act
       const result = await updateBookingChildren('booking-1', children, 'Notes');
 
+      // Assert
       expect(sendRequest).toHaveBeenCalledWith({
         url: '/api/bookings/booking-1',
         method: 'PUT',
         body: {
           data: {
-            children,
+            children: [{ name: 'Anna', identification_trait: 'Blondes Haar', speech: 'Gedicht' }],
             additional_notes: 'Notes',
           },
         },

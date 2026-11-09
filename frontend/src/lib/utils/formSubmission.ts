@@ -11,7 +11,6 @@ import type { ValidationStore } from '$lib/stores/validationStore.svelte';
 import {
   validateContactPerson,
   validateAddress,
-  validateTimeSlots,
   validateChildren,
   extractApiValidationErrors,
   trimContactPerson,
@@ -38,7 +37,6 @@ export interface SubmitAddressParams {
   location: Location;
   presentLocation: string;
   bookingId: string | null;
-  canEditRoutePlanning: boolean;
   uiStore: UIStore;
   validationStore: ValidationStore;
 }
@@ -46,9 +44,9 @@ export interface SubmitAddressParams {
 export interface SubmitTimeSlotsParams {
   selectedTimeSlotIds: string[];
   bookingId: string | null;
-  maxTimeSlots: number;
   uiStore: UIStore;
   validationStore: ValidationStore;
+  reloadBooking: () => Promise<void>;
 }
 
 export interface SubmitChildrenParams {
@@ -57,6 +55,13 @@ export interface SubmitChildrenParams {
   bookingId: string | null;
   uiStore: UIStore;
   validationStore: ValidationStore;
+}
+
+function setApiValidationMessages(apiError: ApiError, validationStore: ValidationStore): void {
+  const errors = extractApiValidationErrors(apiError);
+  for (const [path, message] of Object.entries(errors)) {
+    validationStore.setMessage(path, message);
+  }
 }
 
 /**
@@ -110,10 +115,7 @@ export async function submitContact({
     uiStore.setError(apiError);
 
     // Extract validation errors from API response
-    const errors = extractApiValidationErrors(apiError);
-    for (const [path, message] of Object.entries(errors)) {
-      validationStore.setMessage(path, message);
-    }
+    setApiValidationMessages(apiError, validationStore);
 
     return { bookingId: null, isNewBooking: false };
   } finally {
@@ -129,7 +131,6 @@ export async function submitAddress({
   location,
   presentLocation,
   bookingId,
-  canEditRoutePlanning,
   uiStore,
   validationStore,
 }: SubmitAddressParams): Promise<boolean> {
@@ -147,7 +148,7 @@ export async function submitAddress({
     const trimmedPresentLocation = trim(presentLocation);
 
     // Validate
-    const errors = validateAddress(location, trimmedPresentLocation, canEditRoutePlanning);
+    const errors = validateAddress(location);
     if (Object.keys(errors).length > 0) {
       for (const [path, message] of Object.entries(errors)) {
         validationStore.setMessage(path, message);
@@ -164,10 +165,7 @@ export async function submitAddress({
     uiStore.setError(apiError);
 
     // Extract validation errors from API response
-    const errors = extractApiValidationErrors(apiError);
-    for (const [path, message] of Object.entries(errors)) {
-      validationStore.setMessage(path, message);
-    }
+    setApiValidationMessages(apiError, validationStore);
 
     return false;
   } finally {
@@ -177,14 +175,14 @@ export async function submitAddress({
 
 /**
  * Submit time slots (Step 2)
- * @returns true if successful, false if validation failed
+ * @returns true if successful, false if submission failed
  */
 export async function submitTimeSlots({
   selectedTimeSlotIds,
   bookingId,
-  maxTimeSlots,
   uiStore,
   validationStore,
+  reloadBooking,
 }: SubmitTimeSlotsParams): Promise<boolean> {
   if (uiStore.isLoading || !bookingId) {
     return false;
@@ -195,21 +193,28 @@ export async function submitTimeSlots({
   validationStore.clearAll();
 
   try {
-    // Validate
-    const errors = validateTimeSlots(selectedTimeSlotIds, maxTimeSlots);
-    if (Object.keys(errors).length > 0) {
-      for (const [path, message] of Object.entries(errors)) {
-        validationStore.setMessage(path, message);
-      }
-      return false;
-    }
-
     await updateBookingTimeSlots(bookingId, selectedTimeSlotIds);
 
     return true;
   } catch (error) {
     console.error(error);
-    uiStore.setError(error as ApiError);
+    const apiError = error as ApiError;
+    if (
+      apiError.status?.code === 409 &&
+      apiError.body?.error?.details?.meta?.concurrencyTimeSlotsError
+    ) {
+      uiStore.setError(
+        {
+          ...apiError,
+          message: `${apiError.body.error.message} Bitte wähle noch andere Zeitslots aus.`,
+        },
+        false,
+        reloadBooking,
+      );
+    } else {
+      uiStore.setError(apiError);
+      setApiValidationMessages(apiError, validationStore);
+    }
     return false;
   } finally {
     uiStore.setLoading(false);
@@ -253,7 +258,9 @@ export async function submitChildren({
     return true;
   } catch (error) {
     console.error(error);
-    uiStore.setError(error as ApiError);
+    const apiError = error as ApiError;
+    uiStore.setError(apiError);
+    setApiValidationMessages(apiError, validationStore);
     return false;
   } finally {
     uiStore.setLoading(false);

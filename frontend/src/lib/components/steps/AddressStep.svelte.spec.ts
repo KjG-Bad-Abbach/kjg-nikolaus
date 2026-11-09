@@ -265,6 +265,27 @@ describe('AddressStep', () => {
     await expect.element(submitButton).not.toBeInTheDocument();
   });
 
+  it('AddressForm_ReadOnly_Expect_OriginalFinalFieldSpacing', async () => {
+    // Arrange
+    const { container } = await render(AddressStep, {
+      location: filledLocation,
+      presentLocation: 'Garage',
+      routePlanningDeadline,
+      finalDeadline,
+      canEditRoutePlanning: false,
+      canEditAnything: false,
+      validationMessages: {},
+    });
+
+    // Act
+    const finalField = container.querySelector(
+      '[data-testid="qa-address-present-location"]',
+    )!.parentElement!;
+
+    // Assert
+    expect(getComputedStyle(finalField).marginBottom).toBe('24px');
+  });
+
   it('should call onSubmit when form is submitted', async () => {
     const onSubmit = vi.fn();
     render(AddressStep, {
@@ -450,9 +471,11 @@ describe('AddressStep', () => {
   });
 
   it('should limit zip code input to 5 digits', async () => {
+    // Arrange
     const onChange = vi.fn();
+    const onSubmit = vi.fn();
     render(AddressStep, {
-      location: emptyLocation,
+      location: filledLocation,
       presentLocation: '',
       routePlanningDeadline,
       finalDeadline,
@@ -460,14 +483,56 @@ describe('AddressStep', () => {
       canEditAnything: true,
       validationMessages: {},
       onChange,
-      onSubmit: vi.fn(),
+      onSubmit,
     });
 
     const zipInput = page.getByTestId('qa-address-zip');
     zipInput.element().setAttribute('max', '999999999'); // Ensure input allows more than 5 digits for test
+    // Act
     await zipInput.fill('123456789');
+    await page.getByTestId('qa-address-submit').click();
 
+    // Assert
     // Should be truncated to 5 digits
     await expect.element(zipInput).toHaveValue(12345);
+    expect(onChange).toHaveBeenLastCalledWith({ location: filledLocation, presentLocation: '' });
+    expect(onSubmit).toHaveBeenCalledExactlyOnceWith({
+      location: filledLocation,
+      presentLocation: '',
+    });
   });
+
+  it.each(['01234', '12345', ''])(
+    'handleZipInput_Value%s_Expect_StringPayload',
+    async (zipCode) => {
+      // Arrange
+      const onChange = vi.fn();
+      const onSubmit = vi.fn();
+      render(AddressStep, {
+        location: filledLocation,
+        presentLocation: '',
+        routePlanningDeadline,
+        finalDeadline,
+        canEditRoutePlanning: true,
+        canEditAnything: true,
+        validationMessages: {},
+        onChange,
+        onSubmit,
+      });
+      // Act
+      await page.getByTestId('qa-address-zip').fill(zipCode);
+      // Assert
+      expect(onChange).toHaveBeenLastCalledWith({
+        location: { ...filledLocation, zip_code: zipCode },
+        presentLocation: '',
+      });
+      if (zipCode) {
+        await page.getByTestId('qa-address-submit').click();
+        expect(onSubmit).toHaveBeenCalledExactlyOnceWith({
+          location: { ...filledLocation, zip_code: zipCode },
+          presentLocation: '',
+        });
+      }
+    },
+  );
 });

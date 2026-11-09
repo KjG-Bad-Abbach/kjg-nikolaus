@@ -6,8 +6,8 @@
 import type { UIStore } from '$lib/stores/uiStore.svelte';
 import type { BookingStore } from '$lib/stores/bookingStore.svelte';
 import type { ValidationStore } from '$lib/stores/validationStore.svelte';
-import type { OptionsStore } from '$lib/stores/optionsStore.svelte';
-import type { DerivedStores } from '$lib/stores/derivedStores.svelte';
+import type { ApiError } from '$lib/types/booking';
+import { sendVerificationEmail } from '$lib/utils/bookingApi';
 import {
   submitContact,
   submitAddress,
@@ -19,8 +19,6 @@ export interface SubmitContext {
   uiStore: UIStore;
   bookingStore: BookingStore;
   validationStore: ValidationStore;
-  optionsStore: OptionsStore;
-  derivedStores: DerivedStores;
   reloadBooking: () => Promise<void>;
 }
 
@@ -41,8 +39,8 @@ export async function submitContactDetails(context: SubmitContext): Promise<void
     context.uiStore.setBookingId(result.bookingId);
 
     if (result.isNewBooking) {
-      // New booking - just move to next step
-      context.uiStore.setView('steps');
+      // New booking - wait for email verification before showing the next step
+      context.uiStore.setView('email-verification-needed');
     } else {
       // Existing booking - reload data
       context.uiStore.setView('steps');
@@ -50,6 +48,27 @@ export async function submitContactDetails(context: SubmitContext): Promise<void
     }
 
     context.uiStore.setStep(1);
+  }
+}
+
+export async function sendEmailVerification(context: SubmitContext): Promise<void> {
+  const { uiStore } = context;
+  if (uiStore.isLoading || !uiStore.bookingId) {
+    return;
+  }
+  if (!confirm('E-Mail erneut senden?')) {
+    return;
+  }
+
+  uiStore.setLoading(true);
+  uiStore.setError(null);
+  try {
+    await sendVerificationEmail(uiStore.bookingId);
+  } catch (error) {
+    console.error(error);
+    uiStore.setError(error as ApiError);
+  } finally {
+    uiStore.setLoading(false);
   }
 }
 
@@ -61,7 +80,6 @@ export async function submitAddressStep(context: SubmitContext): Promise<void> {
     location: context.bookingStore.booking.location,
     presentLocation: context.bookingStore.booking.present_location,
     bookingId: context.uiStore.bookingId,
-    canEditRoutePlanning: context.derivedStores.canEditRoutePlanning,
     uiStore: context.uiStore,
     validationStore: context.validationStore,
   });
@@ -79,9 +97,9 @@ export async function submitTimeSlotsStep(context: SubmitContext): Promise<void>
   const success = await submitTimeSlots({
     selectedTimeSlotIds: context.bookingStore.selectedTimeSlotIds,
     bookingId: context.uiStore.bookingId,
-    maxTimeSlots: context.optionsStore.max_time_slots,
     uiStore: context.uiStore,
     validationStore: context.validationStore,
+    reloadBooking: context.reloadBooking,
   });
 
   if (success) {

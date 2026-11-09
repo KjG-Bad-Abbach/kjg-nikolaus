@@ -1,6 +1,7 @@
 # Repository Guidelines
 
-- **CRITICAL:** English code, docs, and replies; non-English only in localization files.
+- **CRITICAL:** English identifiers, comments, docs, and replies; non-English text belongs in localization files.
+  - Temporary exception until all German UI text is migrated application-wide: inline German UI strings are allowed; avoid partial localization extractions.
 - **CRITICAL:** Before code, test, or structure changes, read applicable standards and apply them during implementation.
 - **CRITICAL:** Before coding, read existing `DEVELOPMENT.md` files along each edited file's directory hierarchy, from project root to containing folder.
   - Each applies only to its folder and descendants; e.g., `tests/DEVELOPMENT.md` applies only when editing under `tests/`.

@@ -68,8 +68,8 @@
     const input = event.target as HTMLInputElement;
     if (input.value.length > 5) {
       input.value = input.value.slice(0, 5);
-      zip_code = input.value;
     }
+    zip_code = input.value;
     handleChange();
   }
 
@@ -149,7 +149,7 @@
         data-testid="qa-address-zip"
         required
         class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-xs focus:border-atlantis focus:ring-atlantis"
-        bind:value={zip_code}
+        value={zip_code}
         oninput={handleZipInput}
         max="99999"
         min="00000"
@@ -193,14 +193,16 @@
       >
         <p class="font-semibold">Beispiele:</p>
         <ul class="list-inside list-disc">
-          <li>Geschenke hinter der Papiertonne in der offenen Garage</li>
+          <!-- Preserve Alpine's leading text space after inside markers, including in Firefox. -->
+          <li>&#32;Geschenke hinter der Papiertonne in der offenen Garage</li>
           <li>
-            Im Gartenhäuschen hinter dem Haus, der Schlüssel liegt unter dem Blumentopf neben der
-            Tür
+            &#32;Im Gartenhäuschen hinter dem Haus, der Schlüssel liegt unter dem Blumentopf neben
+            der Tür
           </li>
-          <li>Geschenke liegen in einem Sack in der Garage links neben dem Eingang</li>
+          <li>&#32;Geschenke liegen in einem Sack in der Garage links neben dem Eingang</li>
           <li>
-            Im Carport neben dem Auto, die Geschenke sind in einer roten Tasche mit Weihnachtsmotiv
+            &#32;Im Carport neben dem Auto, die Geschenke sind in einer roten Tasche mit
+            Weihnachtsmotiv
           </li>
         </ul>
       </div>
@@ -221,8 +223,9 @@
     </div>
 
     <!-- Submit Button -->
-    {#if canEditAnything}
-      <div>
+    <!-- Keep the original spacing sibling when the submit controls are hidden. -->
+    <div>
+      {#if canEditAnything}
         <button
           type="submit"
           data-testid="qa-address-submit"
@@ -233,7 +236,7 @@
         {#if hasValidationErrors}
           <div class="mx-2 mt-2 text-left text-sm text-rust">Bitte überprüfe deine Eingaben.</div>
         {/if}
-      </div>
-    {/if}
+      {/if}
+    </div>
   </form>
 </div>

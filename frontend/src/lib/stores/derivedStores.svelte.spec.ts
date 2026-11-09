@@ -5,17 +5,23 @@ import { bookingStore } from './bookingStore.svelte';
 import { SvelteDate } from 'svelte/reactivity';
 
 describe('derivedStores', () => {
+  const now_ms = Date.UTC(2024, 11, 1, 12);
+
   beforeEach(() => {
     optionsStore.reset();
     bookingStore.reset();
+    derivedStores.setCurrentTime(now_ms);
   });
 
   describe('canEditRoutePlanning', () => {
     it('should return true when route planning deadline is in future', () => {
-      const futureDate = new SvelteDate();
-      futureDate.setDate(futureDate.getDate() + 7);
+      // Arrange
+      const futureDate = new SvelteDate('2024-12-02T12:00:00Z');
+
+      // Act
       optionsStore.update({ route_planning_deadline: futureDate });
 
+      // Assert
       expect(derivedStores.canEditRoutePlanning).toBe(true);
     });
 
@@ -29,10 +35,13 @@ describe('derivedStores', () => {
 
   describe('canEditAnything', () => {
     it('should return true when final deadline is in future', () => {
-      const futureDate = new SvelteDate();
-      futureDate.setDate(futureDate.getDate() + 7);
+      // Arrange
+      const futureDate = new SvelteDate('2024-12-02T12:00:00Z');
+
+      // Act
       optionsStore.update({ final_deadline: futureDate });
 
+      // Assert
       expect(derivedStores.canEditAnything).toBe(true);
     });
 
@@ -42,6 +51,38 @@ describe('derivedStores', () => {
 
       expect(derivedStores.canEditAnything).toBe(false);
     });
+  });
+
+  it.each([
+    {
+      state: 'RoutePlanningCutoff_Expect_OpenPageEligibilityUpdates',
+      deadline: 'route_planning_deadline',
+      eligibility: 'canEditRoutePlanning',
+    },
+    {
+      state: 'FinalCutoff_Expect_OpenPageEligibilityUpdates',
+      deadline: 'final_deadline',
+      eligibility: 'canEditAnything',
+    },
+  ] as const)('SetCurrentTime_$state', ({ deadline, eligibility }) => {
+    // Arrange
+    optionsStore.update({ [deadline]: new SvelteDate(now_ms) });
+    const cleanup = $effect.root(() => {
+      const canEdit = $derived(derivedStores[eligibility]);
+      const readEligibility = (): boolean => canEdit;
+
+      // Act
+      derivedStores.setCurrentTime(now_ms - 1);
+      const beforeCutoff = readEligibility();
+      derivedStores.setCurrentTime(now_ms);
+      const atCutoff = readEligibility();
+      derivedStores.setCurrentTime(now_ms + 1);
+      const afterCutoff = readEligibility();
+
+      // Assert
+      expect([beforeCutoff, atCutoff, afterCutoff]).toEqual([true, false, false]);
+    });
+    cleanup();
   });
 
   describe('isRoutePlanningFilled', () => {

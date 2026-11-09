@@ -59,11 +59,7 @@ export function validateContactPerson(contact: ContactPerson): Record<string, st
  * Validate address fields
  * @returns Object with validation errors (field path -> error message)
  */
-export function validateAddress(
-  location: Location,
-  presentLocation: string,
-  canEditRoutePlanning: boolean,
-): Record<string, string> {
+export function validateAddress(location: Location): Record<string, string> {
   const errors: Record<string, string> = {};
 
   const trimmedLocation = {
@@ -72,47 +68,20 @@ export function validateAddress(
     zip_code: trim(location.zip_code),
     place: trim(location.place),
   };
-  const trimmedPresentLocation = trim(presentLocation);
-
-  if (!canEditRoutePlanning) {
-    // After route planning deadline, only present_location can be edited
-    if (!isFilled(trimmedPresentLocation)) {
-      errors['booking.present_location'] = 'Eingabe ist erforderlich.';
-    }
-  } else {
-    // Before route planning deadline, all fields required
-    if (!isFilled(trimmedLocation.street)) {
-      errors['booking.location.street'] = 'Eingabe ist erforderlich.';
-    }
-    if (!isFilled(trimmedLocation.house_number)) {
-      errors['booking.location.house_number'] = 'Eingabe ist erforderlich.';
-    }
-    if (!isFilled(trimmedLocation.zip_code)) {
-      errors['booking.location.zip_code'] = 'Eingabe ist erforderlich.';
-    }
-    if (!isFilled(trimmedLocation.place)) {
-      errors['booking.location.place'] = 'Eingabe ist erforderlich.';
-    }
-    if (!isFilled(trimmedPresentLocation)) {
-      errors['booking.present_location'] = 'Eingabe ist erforderlich.';
-    }
+  // After route planning deadline, only present_location can be edited.
+  // Before route planning deadline, address fields can also be edited.
+  // Required save fields remain the same in either case.
+  if (!isFilled(trimmedLocation.street)) {
+    errors['booking.location.street'] = 'Eingabe ist erforderlich.';
   }
-
-  return errors;
-}
-
-/**
- * Validate time slot selection
- * @returns Object with validation errors (field path -> error message)
- */
-export function validateTimeSlots(
-  selectedTimeSlotIds: string[],
-  maxTimeSlots: number,
-): Record<string, string> {
-  const errors: Record<string, string> = {};
-
-  if (selectedTimeSlotIds.length < maxTimeSlots) {
-    errors['booking.time_slots'] = `Bitte wähle ${maxTimeSlots} Zeitslots aus.`;
+  if (!isFilled(trimmedLocation.house_number)) {
+    errors['booking.location.house_number'] = 'Eingabe ist erforderlich.';
+  }
+  if (!isFilled(trimmedLocation.zip_code)) {
+    errors['booking.location.zip_code'] = 'Eingabe ist erforderlich.';
+  }
+  if (!isFilled(trimmedLocation.place)) {
+    errors['booking.location.place'] = 'Eingabe ist erforderlich.';
   }
 
   return errors;
@@ -125,26 +94,9 @@ export function validateTimeSlots(
 export function validateChildren(children: Child[]): Record<string, string> {
   const errors: Record<string, string> = {};
 
-  if (children.length === 0) {
-    errors['booking.children'] = 'Bitte füge mindestens ein Kind hinzu.';
-    return errors;
-  }
-
   children.forEach((child, index) => {
-    const trimmedChild = {
-      name: trim(child.name),
-      identification_trait: trim(child.identification_trait),
-      speech: trim(child.speech),
-    };
-
-    if (!isFilled(trimmedChild.name)) {
-      errors[`booking.children.${index}.name`] = 'Eingabe ist erforderlich.';
-    }
-    if (!isFilled(trimmedChild.identification_trait)) {
-      errors[`booking.children.${index}.identification_trait`] = 'Eingabe ist erforderlich.';
-    }
-    if (!isFilled(trimmedChild.speech)) {
-      errors[`booking.children.${index}.speech`] = 'Eingabe ist erforderlich.';
+    if (!isFilled(trim(child.name))) {
+      errors[`booking.children[${index}].name`] = 'Eingabe ist erforderlich.';
     }
   });
 
@@ -161,7 +113,7 @@ export function extractApiValidationErrors(apiError: ApiError): Record<string, s
 
   if (validationErrors?.length) {
     for (const err of validationErrors) {
-      const path = `booking.${err.path.join('.')}`;
+      const path = `booking.${err.path.join('.').replace(/\.(\d+)(?=\.|$)/g, '[$1]')}`;
       let message = err.message;
 
       // Remove redundant path prefix from message

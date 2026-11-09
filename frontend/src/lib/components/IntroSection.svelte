@@ -48,7 +48,7 @@
     <button
       onclick={onStart}
       data-testid="qa-intro-start"
-      class="focus:ring-opacity-50 rounded-sm bg-atlantis px-6 py-2 font-bold text-white hover:bg-surfie-green focus:ring-2 focus:ring-java focus:outline-hidden"
+      class="rounded-sm bg-atlantis px-6 py-2 font-bold text-white hover:bg-surfie-green focus:ring-2 focus:ring-java/50 focus:outline-hidden"
     >
       Jetzt anmelden
     </button>

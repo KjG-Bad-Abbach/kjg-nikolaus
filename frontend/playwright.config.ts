@@ -8,14 +8,16 @@ export default defineConfig({
   timeout: 60_000,
   expect: {
     timeout: 5_000,
-    toHaveScreenshot: {
-      timeout: 15_000,
-    },
   },
+  snapshotDir: './e2e/__screenshots__',
+  snapshotPathTemplate: '{snapshotDir}/{arg}-{projectName}{ext}',
+  // Missing Alpine baselines must fail rather than establish Svelte as the reference.
+  updateSnapshots: 'none',
   fullyParallel: true,
   forbidOnly: isCI,
   retries: isCI ? 2 : 0,
-  workers: isCI ? 1 : undefined,
+  // Serialize native validation popovers so browser focus cannot destabilize screenshots.
+  workers: 1,
   reporter: [
     ['list'],
     ['html', { open: 'never', outputFolder: 'playwright-report' }],

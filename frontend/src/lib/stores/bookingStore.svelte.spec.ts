@@ -3,6 +3,20 @@ import { bookingStore } from './bookingStore.svelte';
 import type { Booking, TimeSlot } from '$lib/types/booking';
 
 describe('bookingStore', () => {
+  const earlySlot: TimeSlot = {
+    id: '1',
+    documentId: 'early-slot',
+    start: '2024-12-05T18:00:00+01:00',
+    end: '2024-12-05T18:30:00+01:00',
+  };
+  const lateSlot: TimeSlot = {
+    ...earlySlot,
+    id: '2',
+    documentId: 'late-slot',
+    start: '2024-12-05T20:00:00+01:00',
+    end: '2024-12-05T20:30:00+01:00',
+  };
+
   beforeEach(() => {
     bookingStore.reset();
   });
@@ -199,6 +213,57 @@ describe('bookingStore', () => {
     expect(bookingStore.booking.contact_person.first_name).toBe('Max');
     expect(bookingStore.hasChanges()).toBe(false);
   });
+
+  it.each(['reload', 'discard', 'refresh'])(
+    'UpdateSelection_%s_Expect_SavedChronologicalSelection',
+    (operation) => {
+      // Arrange
+      const savedBooking = { time_slots: [lateSlot, earlySlot] };
+      bookingStore.updateFromDatabase(savedBooking);
+      bookingStore.setAvailableTimeSlots([earlySlot, lateSlot]);
+      bookingStore.setSelectedTimeSlotIds(['unsaved-slot']);
+
+      // Act
+      if (operation === 'reload') bookingStore.updateFromDatabase(savedBooking);
+      if (operation === 'discard') bookingStore.revertToDatabase();
+      if (operation === 'refresh') bookingStore.setAvailableTimeSlots([earlySlot, lateSlot]);
+
+      // Assert
+      expect(bookingStore.selectedTimeSlotIds).toEqual(['early-slot', 'late-slot']);
+      expect(bookingStore.hasChanges()).toBe(false);
+    },
+  );
+
+  it('SetSelectedTimeSlotIds_ReverseSelection_Expect_ChronologicalOrder', () => {
+    // Arrange
+    bookingStore.setAvailableTimeSlots([earlySlot, lateSlot]);
+
+    // Act
+    bookingStore.setSelectedTimeSlotIds(['late-slot', 'early-slot']);
+    const hasChanges = bookingStore.hasChanges();
+
+    // Assert
+    expect(bookingStore.selectedTimeSlotIds).toEqual(['early-slot', 'late-slot']);
+    expect(hasChanges).toBe(true);
+  });
+
+  it.each([
+    { available: [earlySlot], expected: ['early-slot'] },
+    { available: [], expected: [] },
+  ])(
+    'SetAvailableTimeSlots_MissingSavedSlots_Expect_OnlyAvailableSelections',
+    ({ available, expected }) => {
+      // Arrange
+      bookingStore.updateFromDatabase({ time_slots: [lateSlot, earlySlot] });
+
+      // Act
+      bookingStore.setAvailableTimeSlots(available);
+
+      // Assert
+      expect(bookingStore.selectedTimeSlotIds).toEqual(expected);
+      expect(bookingStore.booking.time_slots).toEqual([lateSlot, earlySlot]);
+    },
+  );
 
   it('should set available time slots', () => {
     const timeSlots: TimeSlot[] = [

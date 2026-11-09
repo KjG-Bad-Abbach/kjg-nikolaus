@@ -11,25 +11,12 @@ import {
   handleStepChange as utilHandleStepChange,
 } from '$lib/utils/bookingInit';
 import type { OptionsStore } from '$lib/stores/optionsStore.svelte';
-import type { DerivedStores } from '$lib/stores/derivedStores.svelte';
 
 export interface StoreContext {
   uiStore: UIStore;
   bookingStore: BookingStore;
   validationStore: ValidationStore;
   optionsStore: OptionsStore;
-  derivedStores: DerivedStores;
-}
-
-/**
- * Fetches available time slots for the current booking
- */
-export async function fetchTimeSlots(
-  bookingId: string | null,
-  bookingStore: BookingStore,
-  uiStore: UIStore,
-): Promise<void> {
-  await fetchAndUpdateTimeSlots(bookingId, bookingStore, uiStore);
 }
 
 /**
@@ -43,7 +30,6 @@ export async function reloadBooking(context: StoreContext): Promise<void> {
       optionsStore: context.optionsStore,
       bookingStore: context.bookingStore,
       validationStore: context.validationStore,
-      derivedStores: context.derivedStores,
     });
   }
 }
@@ -53,21 +39,16 @@ export async function reloadBooking(context: StoreContext): Promise<void> {
  */
 export async function handleStepChange(
   newStep: number,
-  canJumpToAnyStep: boolean,
-  hasChanges: boolean,
-  bookingStore: BookingStore,
-  validationStore: ValidationStore,
-  uiStore: UIStore,
-  fetchTimeSlotsCallback: () => Promise<void>,
+  { uiStore, bookingStore, validationStore }: StoreContext,
 ): Promise<void> {
   await utilHandleStepChange(
     newStep,
-    canJumpToAnyStep,
-    hasChanges,
+    uiStore.canJumpToAnyStep,
+    bookingStore.hasChanges(),
     bookingStore,
     validationStore,
     uiStore,
-    fetchTimeSlotsCallback,
+    () => fetchAndUpdateTimeSlots(uiStore.bookingId, bookingStore, uiStore),
   );
 }
 
@@ -81,27 +62,27 @@ export function handleStart(uiStore: UIStore): void {
 /**
  * Handles edit button click for contact step
  */
-export function handleEditContact(uiStore: UIStore): void {
-  uiStore.setStep(0);
+export async function handleEditContact(context: StoreContext): Promise<void> {
+  await handleStepChange(0, context);
 }
 
 /**
  * Handles edit button click for address step
  */
-export function handleEditAddress(uiStore: UIStore): void {
-  uiStore.setStep(1);
+export async function handleEditAddress(context: StoreContext): Promise<void> {
+  await handleStepChange(1, context);
 }
 
 /**
  * Handles edit button click for time slots step
  */
-export function handleEditTimeSlots(uiStore: UIStore): void {
-  uiStore.setStep(2);
+export async function handleEditTimeSlots(context: StoreContext): Promise<void> {
+  await handleStepChange(2, context);
 }
 
 /**
  * Handles edit button click for children step
  */
-export function handleEditChildren(uiStore: UIStore): void {
-  uiStore.setStep(3);
+export async function handleEditChildren(context: StoreContext): Promise<void> {
+  await handleStepChange(3, context);
 }

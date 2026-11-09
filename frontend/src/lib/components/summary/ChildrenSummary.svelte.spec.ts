@@ -193,7 +193,8 @@ describe('ChildrenSummary', () => {
     await expect.element(warnings).not.toBeInTheDocument();
   });
 
-  it('should apply correct spacing when single child with additional notes', async () => {
+  it('AdditionalNotes_SingleChild_Expect_OriginalTopSpacing', async () => {
+    // Arrange
     const singleChild: Child[] = [
       {
         id: '1',
@@ -203,6 +204,7 @@ describe('ChildrenSummary', () => {
       },
     ];
 
+    // Act
     const { container } = render(ChildrenSummary, {
       children: singleChild,
       additionalNotes: 'Bitte klingeln Sie zweimal',
@@ -210,9 +212,9 @@ describe('ChildrenSummary', () => {
       onEdit: vi.fn(),
     });
 
-    // With single child (length < 2), the mt-2 class should not be applied
-    const notesSection = container.querySelector('.truncate')?.parentElement?.parentElement;
-    // The element should exist but should not have mt-2 class since children.length < 2
-    expect(notesSection?.classList.contains('mt-2')).toBe(false);
+    // Assert
+    // The original notes section has mt-2 independently of the child count.
+    const notesSection = container.querySelector('ul + div');
+    expect(notesSection?.classList.contains('mt-2')).toBe(true);
   });
 });

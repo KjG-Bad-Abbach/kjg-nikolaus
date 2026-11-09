@@ -1,0 +1,23 @@
+# Use Node.js LTS version
+FROM node:22.22.2-slim
+
+# Set working directory
+WORKDIR /app
+
+# Install pnpm globally
+RUN npm install -g pnpm
+
+# Copy package files
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+
+# Install dependencies
+RUN pnpm install --frozen-lockfile
+
+# Copy the rest of the application
+COPY . .
+
+# Expose the Vite development server
+EXPOSE 3000
+
+# Command to run the development server
+CMD ["pnpm", "run", "dev", "--host", "0.0.0.0", "--port", "3000", "--strictPort"]

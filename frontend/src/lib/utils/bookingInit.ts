@@ -7,30 +7,21 @@ import { clone } from './object';
 import { registerCheckUnsavedChanges } from './unsavedChanges';
 import { loadConfig, loadBooking, loadTimeSlots } from './bookingApi';
 import { getFirstIncompleteStep, calculateStepCompletionStatus } from './stepNavigation';
-import type { ApiError, TimeSlot } from '$lib/types/booking';
+import type { ApiError } from '$lib/types/booking';
 import type { UIStore } from '$lib/stores/uiStore.svelte';
 import type { OptionsStore } from '$lib/stores/optionsStore.svelte';
 import type { BookingStore } from '$lib/stores/bookingStore.svelte';
 import type { ValidationStore } from '$lib/stores/validationStore.svelte';
-import type { DerivedStores } from '$lib/types/booking';
 
 export interface InitializeParams {
   uiStore: UIStore;
   optionsStore: OptionsStore;
   bookingStore: BookingStore;
   validationStore: ValidationStore;
-  derivedStores: DerivedStores;
 }
 
 export interface LoadBookingParams extends InitializeParams {
   bookingId: string;
-}
-
-/**
- * Extract documentId from TimeSlot
- */
-function extractTimeSlotId(slot: TimeSlot): string {
-  return slot.documentId;
 }
 
 /**
@@ -42,7 +33,6 @@ export async function initializeBooking({
   optionsStore,
   bookingStore,
   validationStore,
-  derivedStores,
 }: InitializeParams): Promise<void> {
   if (uiStore.isLoading) {
     return;
@@ -60,6 +50,12 @@ export async function initializeBooking({
     if (!optionsStore.id) {
       const config = await loadConfig();
       optionsStore.update(config);
+
+      if (typeof window !== 'undefined') {
+        const apiWindow = window as Window & { API_TOKEN?: string; API_BASE_URL?: string };
+        apiWindow.API_TOKEN ||= import.meta.env.VITE_API_TOKEN || config.api_token;
+        apiWindow.API_BASE_URL ||= import.meta.env.VITE_API_BASE_URL || config.api_base_url;
+      }
 
       // Set view based on intro text
       if (config.introduction_text && config.introduction_text.length) {
@@ -86,7 +82,6 @@ export async function initializeBooking({
           optionsStore,
           bookingStore,
           validationStore,
-          derivedStores,
         });
       }
     } else {
@@ -107,7 +102,7 @@ export async function loadBookingData({
   uiStore,
   optionsStore,
   bookingStore,
-  derivedStores,
+  validationStore,
 }: LoadBookingParams): Promise<void> {
   if (uiStore.isLoading) {
     return;
@@ -126,26 +121,21 @@ export async function loadBookingData({
     bookingStore.updateFromDatabase(clonedData);
 
     // Fetch time slots
-    const timeSlots = await loadTimeSlots(bookingId);
+    const timeSlots = await loadTimeSlots(
+      (clonedData.time_slots || []).map((slot) => slot.documentId),
+    );
     bookingStore.setAvailableTimeSlots(timeSlots);
-
-    // Store selected time slot IDs
-    const selectedIds = (data.time_slots || []).map(extractTimeSlotId);
-    bookingStore.setSelectedTimeSlotIds(selectedIds);
 
     // Can jump to any step when editing existing booking
     uiStore.setCanJumpToAnyStep(true);
 
     // Navigate to first incomplete step
     const targetStep = getFirstIncompleteStep(clonedData, optionsStore.max_time_slots);
+    validationStore.clearAll();
     uiStore.setStep(targetStep);
 
     // Update step completion status
-    const stepStatus = calculateStepCompletionStatus(
-      clonedData,
-      optionsStore.max_time_slots,
-      derivedStores,
-    );
+    const stepStatus = calculateStepCompletionStatus(clonedData, optionsStore.max_time_slots);
     stepStatus.forEach((status, index) => {
       uiStore.updateStep(index, status);
     });
@@ -165,12 +155,24 @@ export async function fetchAndUpdateTimeSlots(
   bookingStore: BookingStore,
   uiStore: UIStore,
 ): Promise<void> {
+  if (uiStore.isLoading) {
+    return;
+  }
+
+  uiStore.setLoading(true);
+  uiStore.setError(null);
   try {
-    const timeSlots = await loadTimeSlots(bookingId || undefined);
+    const timeSlots = await loadTimeSlots(
+      bookingId
+        ? bookingStore.bookingLoadedFromDatabase.time_slots.map((slot) => slot.documentId)
+        : [],
+    );
     bookingStore.setAvailableTimeSlots(timeSlots);
   } catch (error) {
     console.error(error);
     uiStore.setError(error as ApiError);
+  } finally {
+    uiStore.setLoading(false);
   }
 }
 
@@ -203,14 +205,13 @@ export async function handleStepChange(
     }
     // Revert to database state
     bookingStore.revertToDatabase();
-    await fetchTimeSlots();
   }
 
   validationStore.clearAll();
   uiStore.setStep(newStep);
 
   // Fetch time slots when navigating to time slot step
-  if (newStep === 2) {
+  if (hasChanges || newStep === 2) {
     await fetchTimeSlots();
   }
 }
