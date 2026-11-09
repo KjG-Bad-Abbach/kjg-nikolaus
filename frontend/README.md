@@ -35,4 +35,8 @@ pnpm build
 
 You can preview the production build with `pnpm preview`.
 
+## Testing
+
+Inside the development container, reload the project's Nix shell after changes to `shell.nix` before running browser tests.
+
 > To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.

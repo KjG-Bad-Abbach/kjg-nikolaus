@@ -5,6 +5,14 @@ mkShell {
     nixpkgs-fmt
     nodejs_22
     pnpm
+  ] ++ lib.optionals stdenv.isLinux [
+    (writeShellScriptBin "ldd" ''
+      # Prebuilt Playwright browsers use the container's loader and system libraries.
+      if [ -x /usr/bin/ldd ]; then
+        exec /usr/bin/ldd "$@"
+      fi
+      exec ${glibc.bin}/bin/ldd "$@"
+    '')
   ];
 
   shellHook = ''
