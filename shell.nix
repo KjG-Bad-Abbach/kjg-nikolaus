@@ -13,14 +13,14 @@ mkShell {
     echo "----------------------------------------"
     echo "backend: Installing pnpm dependencies..."
     cd backend
-    pnpm install
+    pnpm install || true # Ignore errors
     cd ..
     echo "----------------------------------------"
 
     echo "-----------------------------------------"
     echo "frontend: Installing pnpm dependencies..."
     cd frontend
-    pnpm install
+    pnpm install || true # Ignore errors
     cd ..
     echo "-----------------------------------------"
   '';
