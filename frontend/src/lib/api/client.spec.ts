@@ -3,13 +3,15 @@
  * @vitest-environment happy-dom
  */
 
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { resetTestApiWarning, sendRequest } from './client';
 
 describe('API client', () => {
   beforeEach(() => {
     // Clear all mocks before each test
     vi.restoreAllMocks();
+    vi.stubEnv('VITE_API_BASE_URL', undefined);
+    vi.stubEnv('VITE_API_TOKEN', undefined);
     // Reset test hook warning flag
     resetTestApiWarning();
     if (typeof window !== 'undefined') {
@@ -17,7 +19,58 @@ describe('API client', () => {
     }
   });
 
+  afterEach(() => {
+    vi.unstubAllEnvs();
+    delete (window as { API_BASE_URL?: string }).API_BASE_URL;
+    delete (window as { API_TOKEN?: string }).API_TOKEN;
+  });
+
   describe('sendRequest', () => {
+    it.each([
+      {
+        state: 'WindowConfigurationAbsent_Expect_EnvironmentConfiguration',
+        overrides: {},
+        expectedBaseUrl: 'https://env.example.com',
+        expectedHeaders: { Authorization: 'Bearer env-token' },
+      },
+      {
+        state: 'WindowConfigurationNull_Expect_EnvironmentConfiguration',
+        overrides: { API_BASE_URL: null, API_TOKEN: null },
+        expectedBaseUrl: 'https://env.example.com',
+        expectedHeaders: { Authorization: 'Bearer env-token' },
+      },
+      {
+        state: 'WindowConfigurationSet_Expect_WindowOverrides',
+        overrides: { API_BASE_URL: 'https://window.example.com', API_TOKEN: 'window-token' },
+        expectedBaseUrl: 'https://window.example.com',
+        expectedHeaders: { Authorization: 'Bearer window-token' },
+      },
+      {
+        state: 'WindowConfigurationEmpty_Expect_SameOriginWithoutToken',
+        overrides: { API_BASE_URL: '', API_TOKEN: '' },
+        expectedBaseUrl: '',
+        expectedHeaders: {},
+      },
+    ])('sendRequest_$state', async ({ overrides, expectedBaseUrl, expectedHeaders }) => {
+      // Arrange
+      vi.stubEnv('VITE_API_BASE_URL', 'https://env.example.com');
+      vi.stubEnv('VITE_API_TOKEN', 'env-token');
+      Object.assign(window, overrides);
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({ data: 'test' }),
+      });
+
+      // Act
+      await sendRequest({ url: '/api/test' });
+
+      // Assert
+      expect(global.fetch).toHaveBeenCalledExactlyOnceWith(`${expectedBaseUrl}/api/test`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json', ...expectedHeaders },
+      });
+    });
+
     it('should send GET request successfully', async () => {
       global.fetch = vi.fn().mockResolvedValue({
         ok: true,

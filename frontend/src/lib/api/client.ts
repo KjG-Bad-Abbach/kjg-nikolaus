@@ -83,13 +83,12 @@ export async function sendRequest<T = unknown>({
 
     // Get API configuration from environment or window
     const API_TOKEN =
-      typeof window !== 'undefined'
-        ? (window as { API_TOKEN?: string }).API_TOKEN
-        : import.meta.env.VITE_API_TOKEN;
+      (typeof window !== 'undefined' ? (window as { API_TOKEN?: string }).API_TOKEN : undefined) ??
+      import.meta.env.VITE_API_TOKEN;
     const API_BASE_URL =
-      typeof window !== 'undefined'
+      (typeof window !== 'undefined'
         ? (window as { API_BASE_URL?: string }).API_BASE_URL
-        : import.meta.env.VITE_API_BASE_URL;
+        : undefined) ?? import.meta.env.VITE_API_BASE_URL;
 
     // Prepare the fetch options
     const options: RequestInit = {
