@@ -13,7 +13,7 @@ describe('StepContainer', () => {
     { name: 'Übersicht', testId: 'summary', anyFilled: false, allFilled: false },
   ];
 
-  it('StepProgress_HiddenNavigation_Expect_OriginalTrailingSiblingSpace', async () => {
+  it('StepProgress_HiddenNavigation_Expect_NoTrailingSiblingSpace', async () => {
     // Arrange
     await render(StepContainer, { steps: mockSteps, canJumpToAnyStep: false });
 
@@ -21,7 +21,7 @@ describe('StepContainer', () => {
     const progress = page.getByTestId('qa-stepper').element().parentElement!;
 
     // Assert
-    expect(getComputedStyle(progress).marginInlineEnd).toBe('8px');
+    expect(getComputedStyle(progress).marginInlineEnd).toBe('0px');
   });
 
   it('should render all step indicators', async () => {

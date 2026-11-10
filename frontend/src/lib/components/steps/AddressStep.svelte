@@ -193,16 +193,14 @@
       >
         <p class="font-semibold">Beispiele:</p>
         <ul class="list-inside list-disc">
-          <!-- Preserve Alpine's leading text space after inside markers, including in Firefox. -->
-          <li>&#32;Geschenke hinter der Papiertonne in der offenen Garage</li>
+          <li>Geschenke hinter der Papiertonne in der offenen Garage</li>
           <li>
-            &#32;Im Gartenhäuschen hinter dem Haus, der Schlüssel liegt unter dem Blumentopf neben
-            der Tür
+            Im Gartenhäuschen hinter dem Haus, der Schlüssel liegt unter dem Blumentopf neben der
+            Tür
           </li>
-          <li>&#32;Geschenke liegen in einem Sack in der Garage links neben dem Eingang</li>
+          <li>Geschenke liegen in einem Sack in der Garage links neben dem Eingang</li>
           <li>
-            &#32;Im Carport neben dem Auto, die Geschenke sind in einer roten Tasche mit
-            Weihnachtsmotiv
+            Im Carport neben dem Auto, die Geschenke sind in einer roten Tasche mit Weihnachtsmotiv
           </li>
         </ul>
       </div>
@@ -223,9 +221,8 @@
     </div>
 
     <!-- Submit Button -->
-    <!-- Keep the original spacing sibling when the submit controls are hidden. -->
-    <div>
-      {#if canEditAnything}
+    {#if canEditAnything}
+      <div>
         <button
           type="submit"
           data-testid="qa-address-submit"
@@ -236,7 +233,7 @@
         {#if hasValidationErrors}
           <div class="mx-2 mt-2 text-left text-sm text-rust">Bitte überprüfe deine Eingaben.</div>
         {/if}
-      {/if}
-    </div>
+      </div>
+    {/if}
   </form>
 </div>

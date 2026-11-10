@@ -265,7 +265,7 @@ describe('AddressStep', () => {
     await expect.element(submitButton).not.toBeInTheDocument();
   });
 
-  it('AddressForm_ReadOnly_Expect_OriginalFinalFieldSpacing', async () => {
+  it('AddressForm_ReadOnly_Expect_NoTrailingControlSpacing', async () => {
     // Arrange
     const { container } = await render(AddressStep, {
       location: filledLocation,
@@ -283,7 +283,7 @@ describe('AddressStep', () => {
     )!.parentElement!;
 
     // Assert
-    expect(getComputedStyle(finalField).marginBottom).toBe('24px');
+    expect(getComputedStyle(finalField).marginBottom).toBe('0px');
   });
 
   it('should call onSubmit when form is submitted', async () => {

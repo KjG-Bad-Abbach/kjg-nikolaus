@@ -392,7 +392,7 @@ describe('TimeSlotStep', () => {
     await expect.element(page.getByText('Bitte überprüfe deine Eingaben.')).toBeInTheDocument();
   });
 
-  it('TimeSlotStep_MixedCaseSearch_Expect_FilteredSlotsWithDateGroupsPreserved', async () => {
+  it('TimeSlotStep_MixedCaseSearch_Expect_OnlyMatchingDateGroups', async () => {
     // Arrange
     render(TimeSlotStep, {
       availableTimeSlots,
@@ -417,7 +417,7 @@ describe('TimeSlotStep', () => {
     await expect.element(page.getByTestId('qa-time-slot-1')).not.toBeInTheDocument();
     await expect
       .element(page.getByRole('heading', { level: 4 }).filter({ hasText: /Do 5\.12\./ }))
-      .toBeInTheDocument();
+      .not.toBeInTheDocument();
   });
 
   it('should check selected slots', async () => {

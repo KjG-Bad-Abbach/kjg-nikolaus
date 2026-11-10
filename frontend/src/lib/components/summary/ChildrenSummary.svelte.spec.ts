@@ -193,7 +193,7 @@ describe('ChildrenSummary', () => {
     await expect.element(warnings).not.toBeInTheDocument();
   });
 
-  it('AdditionalNotes_SingleChild_Expect_OriginalTopSpacing', async () => {
+  it('AdditionalNotes_SingleChild_Expect_ConsistentTopSpacing', async () => {
     // Arrange
     const singleChild: Child[] = [
       {
@@ -213,7 +213,7 @@ describe('ChildrenSummary', () => {
     });
 
     // Assert
-    // The original notes section has mt-2 independently of the child count.
+    // Notes spacing is independent of the child count.
     const notesSection = container.querySelector('ul + div');
     expect(notesSection?.classList.contains('mt-2')).toBe(true);
   });

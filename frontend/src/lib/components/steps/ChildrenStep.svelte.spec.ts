@@ -264,13 +264,12 @@ describe('ChildrenStep', () => {
 
     // Assert
     await expect.element(page.getByTestId('qa-add-child')).not.toBeInTheDocument();
-    // Alpine keeps this hidden control as a spacing sibling inside each child card.
-    await expect.element(page.getByTestId('qa-remove-child-0')).not.toBeVisible();
+    await expect.element(page.getByTestId('qa-remove-child-0')).not.toBeInTheDocument();
     await expect.element(page.getByTestId('qa-children-submit')).not.toBeInTheDocument();
     await expect.element(page.getByTestId('qa-children-skip')).not.toBeInTheDocument();
   });
 
-  it('ChildrenForm_ReadOnly_Expect_LockedFieldsAndOriginalSpacing', async () => {
+  it('ChildrenForm_ReadOnly_Expect_LockedFieldsWithoutTrailingControlSpacing', async () => {
     // Arrange
     const children: Child[] = [{ name: 'Max', identification_trait: '', speech: '' }];
 
@@ -289,8 +288,8 @@ describe('ChildrenStep', () => {
     await expect.element(page.getByTestId('qa-child-name-0')).toHaveAttribute('readonly');
     await expect.element(page.getByTestId('qa-additional-notes')).toHaveAttribute('readonly');
     for (const [testId, marginBottom] of [
-      ['qa-child-speech-0', '16px'],
-      ['qa-additional-notes', '24px'],
+      ['qa-child-speech-0', '0px'],
+      ['qa-additional-notes', '0px'],
     ]) {
       const field = page.getByTestId(testId).element().parentElement!;
       expect(getComputedStyle(field).marginBottom).toBe(marginBottom);

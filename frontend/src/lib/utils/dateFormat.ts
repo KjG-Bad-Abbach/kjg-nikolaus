@@ -7,8 +7,8 @@
 const currentYear = new Date().getFullYear();
 
 /**
- * Format date as "Fr 5.12." or "Fr 5.12. 2025" if not current year
- * Example: "Fr 5.12." or "Sa 31.12. 2025"
+ * Format date as "Fr 5.12." or "Fr 5.12.2025" if not current year
+ * Example: "Fr 5.12." or "Sa 31.12.2025"
  */
 export function formatDate(date: Date): string {
   const day = date.toLocaleDateString('de-DE', {
@@ -16,7 +16,7 @@ export function formatDate(date: Date): string {
   });
   const dateNum = date.getDate();
   const month = date.getMonth() + 1;
-  const year = date.getFullYear() !== currentYear ? ` ${date.getFullYear()}` : '';
+  const year = date.getFullYear() !== currentYear ? `${date.getFullYear()}` : '';
   return `${day} ${dateNum}.${month}.${year}`;
 }
 

@@ -73,7 +73,9 @@
     for (const [dateKey, slots] of Object.entries(groupedSlots)) {
       const matchingSlots = slots.filter((slot) => slot.label?.toLowerCase().includes(lowerQuery));
 
-      filtered[dateKey] = matchingSlots;
+      if (matchingSlots.length > 0) {
+        filtered[dateKey] = matchingSlots;
+      }
     }
 
     return filtered;

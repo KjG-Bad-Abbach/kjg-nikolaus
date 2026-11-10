@@ -11,7 +11,7 @@ export default defineConfig({
   },
   snapshotDir: './e2e/__screenshots__',
   snapshotPathTemplate: '{snapshotDir}/{arg}-{projectName}{ext}',
-  // Missing Alpine baselines must fail rather than establish Svelte as the reference.
+  // Baseline updates require an explicit --update-snapshots command after visual review.
   updateSnapshots: 'none',
   fullyParallel: true,
   forbidOnly: isCI,

@@ -40,6 +40,7 @@ pnpm test:e2e
 ```
 
 Unit tests include coverage and browser component tests.
+Visual expectations now track the Svelte frontend, not historical Alpine pixels; see [baseline provenance and update instructions](e2e/__screenshots__/PROVENANCE.md).
 Browser tests require provisioned Playwright Chromium and Firefox browsers; the E2E command builds and starts its own preview server on port 4173.
 The booking regression suite uses fixtures rather than a live Strapi service, so passing it does not prove real email delivery.
 For live verification, create a booking, follow its verification link, reload it, and request a verification resend against Strapi; inspect notification output at <http://localhost:8025> when using the development stack's Mailhog.

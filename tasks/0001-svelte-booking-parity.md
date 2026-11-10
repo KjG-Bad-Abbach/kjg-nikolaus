@@ -3,12 +3,32 @@
 ## Rationale
 
 The user requested a fully working Svelte frontend with the same functionality as the existing Alpine frontend, accepting the preceding proposal to port its regression suite and restore missing behavior before removing the old implementation.
-The Alpine source and existing behavioral assertions are authoritative.
+The Alpine source and existing behavioral assertions were authoritative during the migration.
 
 Post-migration cleanup retired `frontend-alpine.js/` and the unused historical screenshot set with user approval, including deletion of the duplicate legacy tests.
-Original-source paths below are historical references; the active tests and 107 original-renderer baselines remain in `frontend/`.
-Cleanup verification: type checking and lint pass; 776 unit tests and 92 browser tests pass with the four accepted Firefox skips unchanged.
-All 107 active PNGs remain byte-identical; coverage gates pass.
+Original-source paths below are historical references; active tests and 107 baseline images remain in `frontend/`.
+On 2026-11-10, the user superseded exact Alpine pixel parity with functional, responsive, and accessible Svelte behavior.
+The active screenshots now track Svelte; [current baseline provenance](../frontend/e2e/__screenshots__/PROVENANCE.md) documents the update policy.
+The original parity results below describe the completed migration, not the current visual contract.
+
+### Post-parity simplification audit
+
+- Restored `gap-2` and full-width step navigation, ordinary list-item text, compact date years, conditional read-only controls, and filtering of empty date groups.
+- Restored the existing Tailwind forms and typography plugins; their removal served the Alpine visual reference rather than booking behavior.
+- Retained the simpler page/summaries structure and unconditional notes spacing instead of restoring redundant wrappers or child-count-dependent styling.
+- Retained German document language, the page title, Tailwind 4 focus-ring syntax, and document-level background/layout; these support accessibility or avoid extra layout wrappers.
+- Retained verification/resend, deferred saves, ZIP input synchronization, child-removal confirmation, slot inventory/identity/capacity/pagination, conflict recovery, navigation/discard, deadline updates, retry handling, summaries, and footer behavior.
+- Retained shared completion rules, payload normalization, and removal of unused validation/context plumbing; these fix behavior or simplify its implementation, not pixel matching.
+- Existing test cases remain; parity-only spacing expectations now assert the intended Svelte layout.
+
+Post-simplification verification: `pnpm check`, `pnpm lint`, and default `pnpm test` pass.
+All 776 unit tests and 104 browser tests pass; the four accepted Firefox skips remain unchanged.
+Line coverage is 99.81% and branch coverage is 98.85%, with existing gates unchanged.
+All 107 baselines were recaptured from Svelte; 101 PNGs changed and the subsequent no-update run passed.
+The 12 additional browser cases check keyboard navigation, accessible field names, and horizontal overflow across four viewport widths and three browser projects.
+
+Earlier legacy-directory cleanup verification: type checking and lint passed; 776 unit tests and 92 browser tests passed with the four accepted Firefox skips unchanged.
+At that stage all 107 active PNGs remained byte-identical and coverage gates passed.
 Vitest reported a shutdown-timeout warning before the successful browser run; the full test command exited successfully.
 
 ## Concept overview / diagram
@@ -115,15 +135,15 @@ Svelte component structure may differ internally while preserving observable beh
 - A pre-existing footer-test race between two persistent scenario init scripts was corrected in the port using a fresh page for the second scenario, retaining all assertions and captures.
 - Docker/container execution and real Strapi/Mailhog delivery are unavailable in this environment; no installation or image acquisition was attempted.
 - The installed Alpine Mix build is broken by a removed webpack reporting import; reference-only compilation used existing esbuild plus the original PostCSS/Tailwind pipeline against unchanged original source, with temporary capture evidence generated under ignored `frontend/test-results/alpine-reference/`.
-- The current visual oracle contains 107 original-renderer PNGs across the three browser projects; the 39 historical images are preserved separately.
-  Provenance and source hashes are documented in `frontend/e2e/__screenshots__/PROVENANCE.md`.
+- The migration visual oracle contained 107 original-renderer PNGs across the three browser projects; the 39 historical images were preserved separately until legacy cleanup.
+  Capture provenance and source hashes were recorded in `frontend/e2e/__screenshots__/PROVENANCE.md` before the approved Svelte recapture.
 - The inherited loading test's fixed delay was replaced with a fixture-controlled pending config response, preserving its visible/hidden assertions.
   Original-renderer self-comparison now passes 74 cases with the four original Firefox gallery/homepage skips.
 - Independent data-flow review found a paginated-inventory selection-loss risk and obsolete save-validation plumbing; both were corrected with behavioral regressions and without dropping test cases.
   Browser HTTP contract tests pass all 15 cases across Chromium, Firefox, and mobile Chromium.
 - Final standard verification after all review corrections: `pnpm check` reports zero errors/warnings; `pnpm lint` passes; `pnpm test` passes 776 unit tests and 92 browser tests, with the four inherited Firefox-only visual-suite skips unchanged.
   Line coverage is 99.81% and branch coverage is 98.88%, with the original gates retained.
-  The browser command builds the production frontend and compares all 107 current original-renderer reference PNGs.
+  That browser run built the production frontend and compared all 107 original-renderer reference PNGs.
 - Browser tests default to one worker after an observed native-validation popover focus race under parallel workers; assertions, tolerances, masks, and skip conditions were not relaxed.
 - The user approved merging four exact duplicate unit-table rows introduced during restoration; distinct empty, partial, and complete save cases and their assertions remain covered.
 - Final whole-feature review confirmed no open introduced findings after restoring falsy browser-configuration fallback, removing the unused handler-context dependency, and merging the approved duplicate test rows.

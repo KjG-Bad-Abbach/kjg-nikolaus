@@ -199,16 +199,16 @@
             <div class="mx-2 mt-2 text-left text-sm text-rust">{message}</div>
           {/each}
         </div>
-        <button
-          type="button"
-          onclick={() => removeChild(index)}
-          disabled={!canEditAnything}
-          data-testid={`qa-remove-child-${index}`}
-          class="mt-2 rounded-sm bg-red-500 px-3 py-1 text-sm font-bold text-white hover:bg-red-600 focus:ring-2 focus:ring-rust/50 focus:outline-hidden"
-          class:hidden={!canEditAnything}
-        >
-          Kind entfernen
-        </button>
+        {#if canEditAnything}
+          <button
+            type="button"
+            onclick={() => removeChild(index)}
+            data-testid={`qa-remove-child-${index}`}
+            class="mt-2 rounded-sm bg-red-500 px-3 py-1 text-sm font-bold text-white hover:bg-red-600 focus:ring-2 focus:ring-rust/50 focus:outline-hidden"
+          >
+            Kind entfernen
+          </button>
+        {/if}
       </div>
     {/each}
 
@@ -256,9 +256,8 @@
     </div>
 
     <!-- Submit Button -->
-    <!-- Keep the original spacing sibling when the submit controls are hidden. -->
-    <div>
-      {#if canEditAnything}
+    {#if canEditAnything}
+      <div>
         <button
           type="submit"
           data-testid="qa-children-submit"
@@ -269,8 +268,8 @@
         {#if hasValidationErrors}
           <div class="mx-2 mt-2 text-left text-sm text-rust">Bitte überprüfe deine Eingaben.</div>
         {/if}
-      {/if}
-    </div>
+      </div>
+    {/if}
   </form>
 
   <!-- Skip to Next Step Button -->
