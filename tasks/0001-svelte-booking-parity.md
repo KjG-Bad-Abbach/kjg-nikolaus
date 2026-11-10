@@ -5,6 +5,12 @@
 The user requested a fully working Svelte frontend with the same functionality as the existing Alpine frontend, accepting the preceding proposal to port its regression suite and restore missing behavior before removing the old implementation.
 The Alpine source and existing behavioral assertions are authoritative.
 
+Post-migration cleanup retired `frontend-alpine.js/` and the unused historical screenshot set with user approval, including deletion of the duplicate legacy tests.
+Original-source paths below are historical references; the active tests and 107 original-renderer baselines remain in `frontend/`.
+Cleanup verification: type checking and lint pass; 776 unit tests and 92 browser tests pass with the four accepted Firefox skips unchanged.
+All 107 active PNGs remain byte-identical; coverage gates pass.
+Vitest reported a shutdown-timeout warning before the successful browser run; the full test command exited successfully.
+
 ## Concept overview / diagram
 
 ```text

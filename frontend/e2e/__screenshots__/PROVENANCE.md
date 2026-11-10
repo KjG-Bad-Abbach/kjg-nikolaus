@@ -2,8 +2,8 @@
 
 The 107 root PNGs are the current comparison oracle: 39 Chromium, 29 Firefox, and 39 mobile Chromium images.
 All were captured from the original Alpine application, never from Svelte.
-The 39 byte-identical historical Chromium PNGs remain in `historical-alpine/`; the original `frontend-alpine.js/` folder is unchanged.
-The historical set produced 25 visual failures against the original renderer itself and is retained as evidence, not used as the current oracle.
+The unused set of 39 historical Chromium PNGs and the legacy `frontend-alpine.js/` implementation were retired after parity verification.
+That historical set produced 25 visual failures against the original renderer itself and was never used as the current oracle.
 Snapshot updates remain disabled by default in `frontend/playwright.config.ts`.
 
 ## Reference compilation preserves the original application
@@ -12,7 +12,7 @@ The workspace reference was generated on 2026-11-09 from `frontend-alpine.js/`, 
 The original Mix/Babel pipeline failed in its reporting path, so the reference build used an esbuild browser IIFE instead.
 The original inline application, PostCSS/Tailwind plugin, CSS source, and source-scan base and paths were retained.
 The only HTML rewrite replaced `mix()` asset helpers with their asset paths.
-No original application source or PNG was modified.
+No original application source or PNG was modified during reference capture.
 
 Tool versions: esbuild 0.28.2, PostCSS 8.5.32, Tailwind PostCSS 4.3.5, Playwright 1.59.1, Chromium 147.0.7727.15, Firefox 148.0.2.
 The mobile project uses Playwright's Pixel 5 device profile with Chromium.

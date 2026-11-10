@@ -4,6 +4,10 @@
 
 - Accepted
 
+Implementation and parity verification are complete; see [the parity record](../tasks/0001-svelte-booking-parity.md).
+The legacy frontend and its duplicate tests have been retired.
+Alpine paths and line references below describe the migration source, not current dependencies.
+
 ## Owners
 
 - TBD (Frontend Team)
