@@ -39,6 +39,9 @@ pnpm test:unit
 pnpm test:e2e
 ```
 
+The [frontend-checks job](../.github/workflows/docker-image.yml) must pass before image builds run.
+In GitHub, edit the ruleset targeting `main` and require the `frontend-checks` status check; committing this workflow does not enable branch protection.
+
 See the [backend codemod instructions](../backend/README.md#check-and-apply-strapi-codemods) for shared Strapi version checks and codemod application across both manifests.
 
 Unit tests include coverage and browser component tests.

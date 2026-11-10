@@ -34,13 +34,13 @@ Goal: Failed frontend checks prevent the existing image job from starting.
 
 #### Acceptance criteria (AC)
 
-- [ ] Existing workflow gains `frontend-checks` on its existing triggers, using the approved digest-pinned Playwright 1.59.1 Noble image and `ubuntu-24.04` runner.
-- [ ] Job uses Node `22.23.4` and pnpm `12.9.0`, declared as Renovate-managed version variables; new setup/upload actions use the approved full SHAs.
-- [ ] Frontend frozen install, `pnpm check`, `pnpm lint`, and `pnpm test` execute sequentially with failure propagation; the existing scripts own coverage and production build/preview.
-- [ ] Test job has only `contents: read`, checkout credential persistence disabled, image browsers selected, browser acquisition disabled, and no supplied secrets or added cache/socket/privileges.
-- [ ] Coverage, Playwright report and test results upload after non-cancelled runs, including failures, with seven-day retention and hidden files excluded.
-- [ ] Existing `build` declares `needs: frontend-checks`; existing Strapi guard and publishing behavior remain intact.
-- [ ] Frontend README names the required status check and explains that the GitHub main-branch ruleset must require it; CI validation limitations are documented here.
+- [x] Existing workflow gains `frontend-checks` on its existing triggers, using the approved digest-pinned Playwright 1.59.1 Noble image and `ubuntu-24.04` runner.
+- [x] Job uses Node `22.23.4` and pnpm `12.9.0`, declared as Renovate-managed version variables; new setup/upload actions use the approved full SHAs.
+- [x] Frontend frozen install, `pnpm check`, `pnpm lint`, and `pnpm test` execute sequentially with failure propagation; the existing scripts own coverage and production build/preview.
+- [x] Test job has only `contents: read`, checkout credential persistence disabled, image browsers selected, browser acquisition disabled, and no supplied secrets or added cache/socket/privileges.
+- [x] Coverage, Playwright report and test results upload after non-cancelled runs, including failures, with seven-day retention and hidden files excluded.
+- [x] Existing `build` declares `needs: frontend-checks`; existing Strapi guard and publishing behavior remain intact.
+- [x] Frontend README names the required status check and explains that the GitHub main-branch ruleset must require it; CI validation limitations are documented here.
 
 ## Out of Scope
 
@@ -73,3 +73,14 @@ Goal: Failed frontend checks prevent the existing image job from starting.
 - Native tool hooks and test code execute inside containers; approved isolation and artifact limits remain mandatory.
 - November 11 security release requires rechecking before execution on or after that date.
 - Docker and remote Actions execution unavailable locally; no successful container/CI run claimed without evidence.
+
+### Verification on 2026-11-10
+
+- Installed-tool checks passed: YAML parsing, workflow/README formatting, Renovate extraction of all nine declarations, and inspection of stage scope, job dependencies and isolation.
+- `pnpm check` and `pnpm lint` passed.
+- `CI=true PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 pnpm test` completed with 813 unit passes, 110 browser passes and four existing Firefox skips; production build included.
+  Coverage: lines 99.81%, branches 98.85%; existing gates unchanged.
+  Vite emitted browser-externalization warnings; no test failures or baseline updates.
+- Independent correctness, testing, architecture/simplicity and security review: no findings in the scoped changes.
+- Actual GitHub job execution, frozen installation in the image, artifact upload and Docker builds remain unverified locally.
+  After the first successful Actions run, require `frontend-checks` in the `main` ruleset as described in the frontend README.
