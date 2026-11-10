@@ -9,6 +9,8 @@
     "develop": "strapi develop",
     "start": "strapi start",
     "strapi": "strapi",
+    "strapi:check": "node ../scripts/check-strapi-versions.mjs",
+    "strapi:codemods": "bash ../scripts/apply-strapi-codemods.sh",
     "test": "vitest run --coverage",
     "test:watch": "vitest"
   },
