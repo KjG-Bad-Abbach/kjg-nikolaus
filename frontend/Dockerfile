@@ -5,7 +5,9 @@ FROM node:22.22.2-slim
 WORKDIR /app
 
 # Install pnpm globally
-RUN npm install -g pnpm
+# renovate: datasource=npm depName=pnpm
+ARG PNPM_VERSION=12.9.0
+RUN npm install -g pnpm@"${PNPM_VERSION}"
 
 # Copy package files
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
