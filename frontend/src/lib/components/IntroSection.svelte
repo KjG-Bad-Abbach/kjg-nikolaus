@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { renderRichText, type RichTextNode } from '$lib/utils/richTextRenderer';
+  import type { RichTextNode } from '$lib/types/booking';
+  import RichText from './RichText.svelte';
 
   /**
    * Introduction section component
@@ -17,22 +18,6 @@
     introductionText = [],
     onStart,
   }: Props = $props();
-
-  // Compute HTML content from rich text with custom Tailwind classes
-  function getHtmlContent(): string {
-    return renderRichText(introductionText, {
-      extend: {
-        heading1: 'text-calypso',
-        heading2: 'text-calypso',
-        heading3: 'text-calypso',
-        heading4: 'text-calypso',
-        heading5: 'text-calypso',
-        heading6: 'text-calypso',
-        list: 'marker:text-calypso',
-        link: 'text-atlantis hover:text-surfie-green',
-      },
-    });
-  }
 </script>
 
 <div
@@ -40,8 +25,21 @@
   class="mx-2 my-8 space-y-6 rounded-lg bg-white p-6 text-left shadow-md"
 >
   <div id="introduction-text">
-    <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-    {@html getHtmlContent()}
+    <RichText
+      content={introductionText}
+      customClasses={{
+        extend: {
+          heading1: 'text-calypso',
+          heading2: 'text-calypso',
+          heading3: 'text-calypso',
+          heading4: 'text-calypso',
+          heading5: 'text-calypso',
+          heading6: 'text-calypso',
+          list: 'marker:text-calypso',
+          link: 'text-atlantis hover:text-surfie-green',
+        },
+      }}
+    />
   </div>
 
   <div class="text-center">

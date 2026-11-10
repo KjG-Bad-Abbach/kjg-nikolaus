@@ -1,4 +1,4 @@
-import type { RichTextNode } from '$lib/utils/richTextRenderer';
+import type { RichTextNode } from '$lib/types/booking';
 import { SvelteDate } from 'svelte/reactivity';
 
 /**

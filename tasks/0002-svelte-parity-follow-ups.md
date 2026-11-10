@@ -6,10 +6,15 @@ Completed migration fixes and accepted Firefox screenshot skips remain recorded 
 
 ## Acceptance criteria
 
-- [ ] AC 1 — High priority: inherited CMS rich-text XSS
-  - **Given:** `frontend/src/lib/utils/richTextRenderer.ts` interpolates text and link attributes into HTML rendered by `IntroSection.svelte`; review demonstrated unescaped markup, not a browser exploit.
+- [x] AC 1 — High priority: inherited CMS rich-text XSS
+  - **Given:** The former HTML-string renderer interpolated CMS text and link attributes into raw HTML in `IntroSection.svelte`.
   - **When:** Text escaping, attribute handling, and permitted link protocols are secured at the rendering boundary.
   - **Then:** Malicious text and links cannot execute script; supported formatting remains intact; behavioral security regressions and existing rendering tests pass.
+  - **Resolution:** `RichText.svelte` renders nodes with native Svelte text and attribute bindings, without `{@html}` or a new dependency.
+    Heading tags are limited to levels 1–6; `getSafeRichTextUrl` allows relative links and HTTP, HTTPS, mailto, and tel protocols, leaving rejected links as formatted text.
+    Existing renderer scenarios now assert rendered DOM; new regressions cover literal markup, attribute injection, unsafe/obfuscated URLs, and invalid headings.
+  - **Verification:** 18 security regressions failed before the fix; final checks passed: 813 unit tests, 110 browser tests, type checking, lint, and the production build.
+    Four inherited Firefox visual skips and all screenshot baselines remain unchanged; coverage gates pass.
 
 - [x] AC 2 — Maintenance: duplicated completion rules
   - **Given:** `derivedStores.isEverythingFilled` repeats the rule in `stepNavigation.getFirstIncompleteStep`.

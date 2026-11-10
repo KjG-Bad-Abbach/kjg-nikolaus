@@ -2,9 +2,110 @@ import { page } from 'vitest/browser';
 import { describe, expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import IntroSection from './IntroSection.svelte';
-import type { RichTextNode } from '$lib/utils/richTextRenderer';
+import type { RichTextNode } from '$lib/types/booking';
 
 describe('IntroSection', () => {
+  it.each([
+    '<img src="invalid:" onerror="void 0">',
+    '<svg onload="void 0"></svg>',
+    '&lt;script&gt; & "quoted"',
+  ])('IntroSection_MarkupText_Expect_LiteralText (%s)', (text) => {
+    // Arrange
+    const introductionText: RichTextNode[] = [{ text, bold: true }];
+
+    // Act
+    const { container } = render(IntroSection, { introductionText });
+    const introduction = container.querySelector('#introduction-text')!;
+
+    // Assert
+    expect(introduction.textContent).toBe(text);
+    expect(introduction.querySelector('img, svg, script')).toBeNull();
+    expect(introduction.querySelector('strong')?.textContent).toBe(text);
+  });
+
+  it.each([
+    'javascript:alert(1)',
+    'JaVaScRiPt:alert(1)',
+    ' \tjava\nscript:alert(1)',
+    '\u0000javascript:alert(1)',
+    'data:text/html,<script>alert(1)</script>',
+    'vbscript:msgbox(1)',
+    'file:///etc/passwd',
+    'https://[invalid',
+    '',
+    undefined,
+  ])('IntroSection_UnsafeUrl_Expect_UnlinkedChildren (%s)', (url) => {
+    // Arrange
+    const introductionText: RichTextNode[] = [
+      { type: 'link', url, children: [{ text: 'Link label', italic: true }] },
+    ];
+
+    // Act
+    const { container } = render(IntroSection, { introductionText });
+
+    // Assert
+    expect(container.querySelector('#introduction-text a')).toBeNull();
+    expect(container.querySelector('em')?.textContent).toBe('Link label');
+  });
+
+  it.each([
+    'https://example.com/path?query=1&other=2',
+    'http://example.com',
+    'mailto:booking@example.com',
+    'tel:+49123456789',
+    '/booking',
+    '../booking',
+    '#contact',
+    '//example.com/booking',
+    ' HTTPS://example.com ',
+  ])('IntroSection_SafeUrl_Expect_PreservedLink (%s)', (url) => {
+    // Arrange
+    const introductionText: RichTextNode[] = [
+      { type: 'link', url, children: [{ text: 'Link label' }] },
+    ];
+
+    // Act
+    const { container } = render(IntroSection, { introductionText });
+
+    // Assert
+    const link = container.querySelector('a')!;
+    expect(link.getAttribute('href')).toBe(url.trim());
+    expect(link.textContent).toBe('Link label');
+  });
+
+  it('IntroSection_AttributePayload_Expect_NoInjectedAttributes', () => {
+    // Arrange
+    const url = 'https://example.com/" onclick="void 0';
+
+    // Act
+    const { container } = render(IntroSection, {
+      introductionText: [{ type: 'link', url, children: [{ text: 'Link' }] }],
+    });
+
+    // Assert
+    const link = container.querySelector('a')!;
+    expect(link.getAttribute('href')).toBe(url);
+    expect(link.hasAttribute('onclick')).toBe(false);
+  });
+
+  it.each([0, 7, 1.5, NaN, '1 onclick="void 0"' as unknown as number])(
+    'IntroSection_InvalidHeading_Expect_OnlyChildren (%s)',
+    (level) => {
+      // Arrange
+      const introductionText: RichTextNode[] = [
+        { type: 'heading', level, children: [{ text: 'Heading text' }] },
+      ];
+
+      // Act
+      const { container } = render(IntroSection, { introductionText });
+      const introduction = container.querySelector('#introduction-text')!;
+
+      // Assert
+      expect(introduction.textContent).toBe('Heading text');
+      expect(introduction.children).toHaveLength(0);
+    },
+  );
+
   const sampleIntroText: RichTextNode[] = [
     {
       type: 'heading',
