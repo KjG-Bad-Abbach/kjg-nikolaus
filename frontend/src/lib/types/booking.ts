@@ -86,7 +86,7 @@ export interface Step {
 }
 
 export interface ValidationMessages {
-  [key: string]: string;
+  [key: string]: string | string[];
 }
 
 export interface ApiError {

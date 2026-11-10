@@ -164,6 +164,52 @@ test('persists a complete booking through cross-origin HTTP and a supplied booki
   await expectNativeTransport(page, backend);
 });
 
+test('renders every repeated-path validation message in response order', async ({
+  page,
+  httpBackend,
+}) => {
+  // Arrange
+  const scenario = createResumeScenario();
+  const zipMessages = ['must be at least 5 characters', 'must contain only digits'];
+  scenario.failures = [
+    {
+      stage: 'address-save',
+      error: {
+        message: 'Validation failed',
+        status: { code: 400, text: 'Bad Request' },
+        body: {
+          error: {
+            details: {
+              errors: [
+                { path: ['location', 'zip_code'], message: zipMessages[0] },
+                { path: ['location', 'street'], message: 'Invalid street' },
+                { path: ['location', 'zip_code'], message: zipMessages[1] },
+              ],
+            },
+          },
+        },
+      },
+    },
+  ];
+  const backend = await httpBackend(scenario);
+  const wizard = new WizardPage(page);
+  // Act
+  await wizard.resume(scenario.bookings[0].documentId);
+  await wizard.jumpToStep('address');
+  await wizard.addressStep().submit();
+  await wizard.errorModal().expectVisible();
+  await wizard.errorModal().dismiss();
+  // Assert
+  const zipErrors = page.getByTestId('qa-address-zip').locator('..').locator('div');
+  await expect(zipErrors).toHaveText(zipMessages);
+  await expect(zipErrors.nth(0)).toBeVisible();
+  await expect(zipErrors.nth(1)).toBeVisible();
+  await expect(page.getByTestId('qa-address-street').locator('..').locator('div')).toHaveText(
+    'Invalid street',
+  );
+  await expectNativeTransport(page, backend);
+});
+
 for (const stage of ['config', 'contact-save', 'send-verification'] as const) {
   test(`recovers from a rejected ${stage} HTTP request without losing its view`, async ({
     page,

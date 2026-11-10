@@ -3,9 +3,8 @@
  * Manages form validation error messages
  */
 
-export interface ValidationMessages {
-  [key: string]: string;
-}
+import type { ValidationMessages } from '$lib/types/booking';
+export type { ValidationMessages };
 
 class ValidationStore {
   messages = $state<ValidationMessages>({});
@@ -13,7 +12,7 @@ class ValidationStore {
   /**
    * Set validation message for a field
    */
-  setMessage(field: string, message: string) {
+  setMessage(field: string, message: ValidationMessages[string]) {
     this.messages[field] = message;
   }
 
@@ -50,7 +49,7 @@ class ValidationStore {
   /**
    * Get validation message for a field
    */
-  getMessage(field: string): string | undefined {
+  getMessage(field: string): ValidationMessages[string] | undefined {
     return this.messages[field];
   }
 

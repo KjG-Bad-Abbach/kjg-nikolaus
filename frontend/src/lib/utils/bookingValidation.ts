@@ -13,14 +13,14 @@ import type {
 } from '$lib/types/booking';
 
 /**
- * Convert validation messages from store format (Record<string, string>) to component format (Record<string, string[]>)
+ * Convert single or multiple store messages per field to component arrays
  */
 export function getValidationMessagesForSteps(
   messages: ValidationMessages,
 ): Record<string, string[]> {
   const result: Record<string, string[]> = {};
   for (const [key, value] of Object.entries(messages)) {
-    result[key] = [value];
+    result[key] = [value].flat();
   }
   return result;
 }
@@ -107,8 +107,8 @@ export function validateChildren(children: Child[]): Record<string, string> {
  * Extract validation errors from API error response
  * Converts Strapi validation error format to our validation message format
  */
-export function extractApiValidationErrors(apiError: ApiError): Record<string, string> {
-  const errors: Record<string, string> = {};
+export function extractApiValidationErrors(apiError: ApiError): ValidationMessages {
+  const errors: ValidationMessages = {};
   const validationErrors = apiError.body?.error?.details?.errors;
 
   if (validationErrors?.length) {
@@ -127,7 +127,8 @@ export function extractApiValidationErrors(apiError: ApiError): Record<string, s
           "Die Telefonnummer muss im Format '01234 56789', '01234 567-89', '+49 123 456789' oder '0049 123 456789' sein.";
       }
 
-      errors[path] = message;
+      const previous = errors[path];
+      errors[path] = previous === undefined ? message : [previous, message].flat();
     }
   }
 

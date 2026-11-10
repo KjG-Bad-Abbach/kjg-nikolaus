@@ -232,6 +232,20 @@ describe('bookingValidation', () => {
   });
 
   describe('extractApiValidationErrors', () => {
+    it('extractApiValidationErrors_RepeatedPath_Expect_AllMessagesInOrder', () => {
+      // Arrange
+      const path = ['location', 'zip_code'];
+      const messages = ['must be at least 5 characters', 'must contain only digits', 'invalid ZIP'];
+      const apiError: ApiError = {
+        message: 'Validation failed',
+        body: { error: { details: { errors: messages.map((message) => ({ path, message })) } } },
+      };
+      // Act
+      const errors = extractApiValidationErrors(apiError);
+      // Assert
+      expect(errors).toEqual({ 'booking.location.zip_code': messages });
+    });
+
     it.each(['0', '[0]'])('extractApiValidationErrors_ChildIndex%s_Expect_FieldPath', (index) => {
       // Arrange
       const path = index === '0' ? ['children', index, 'speech'] : [`children${index}`, 'speech'];

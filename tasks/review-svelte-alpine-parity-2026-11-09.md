@@ -1,6 +1,6 @@
 # Svelte–Alpine booking parity review
 
-**Verdict: good to go, with comments — F1/F2/F3 fixed; F4 remains a minor behavioral difference.**
+**Verdict: good to go — F1/F2/F3/F4 fixed.**
 Passing regression tests establish the exercised scenarios, not universal equivalence.
 
 ## Review scope and evidence
@@ -90,7 +90,7 @@ None.
 
 ## 3. Other Optional Comments
 
-Non-blocking; F4 remains an observable difference under the exact-parity requirement.
+Non-blocking; F2–F4 resolved below.
 
 ### F2 — Slot-search text is lost after navigating away and back
 
@@ -133,13 +133,17 @@ Non-blocking; F4 remains an observable difference under the exact-parity require
 - **Severity:** minor
 - **Effort:** spreads
 - **Confidence:** high
-- **Status:** open
+- **Status:** fixed (November 10, 2026)
 - **Location:** `frontend/src/lib/utils/bookingValidation.ts:114-130`; `frontend/src/lib/types/booking.ts:88-90`.
 - **Evidence:** a supported validation response with minimum-length and digit-format errors for `location.zip_code` rendered both messages in Alpine, but only the final message in Svelte.
   Alpine appends each error (`index.html:2589-2592`); Svelte assigns `errors[path] = message`.
   Exponent-form ZIP input such as `1e3` passes the numeric input's range while violating both five-character and digits-only backend rules (`backend/src/components/shared/address.json:22-25`).
   The paired probe supplied the response; live Strapi message generation was not verified.
 - **Fix:** retain every message through extraction, validation state and component conversion; add a repeated-path response regression.
+- **Resolution:** shared string-or-array validation type preserves single-message semantics; extraction appends repeated messages in response order and conversion retains them for rendering; expanded 65–90-line scope approved.
+- **Regression evidence:** extraction and native-HTTP browser regressions failed before the fix (last message only); afterward 74 focused tests and all three browser projects passed, preserving ordered ZIP messages and a distinct street error (`frontend/e2e/http-contract.spec.ts:167-211`).
+- **Fix verification (November 10, 2026):** check/lint passed with zero Svelte diagnostics; full `pnpm test` passed: 779 unit tests, 110 browser tests, four existing Firefox skips, production build included; lines 99.81%, branches 98.85%; `review-tests` and confirmation found no issues; logs: `/tmp/nix-shell.1ZdSXk/opencode/f4-*.log`.
+- **Verification limits:** synthetic HTTP response, not live Strapi message generation or Mailhog; Alpine source unavailable, documented append behavior used as the settled contract; Semgrep unavailable; initial focused run lacked headless mode, corrected before red/green; pre-existing report-format warnings retained; no existing assertions or screenshot baselines changed.
 
 ### Mechanical conventions
 
@@ -150,7 +154,7 @@ None.
 - Reviewed navigation, booking-ID links, API configuration/auth/pagination, reservation credit, capacity/conflict recovery, contact/verification/resend, address/gifts, slots/search, children/notes, deadlines, dirty/discard/retry, summaries, CMS content/footer/loading/modals and deployment/test-oracle contracts.
 - Original behavioral assertions and screenshot tolerances preserved after normalized comparison; pending-config gating and fresh-page footer isolation retain the original outcomes.
 - Inherited rich-text XSS and duplicated completion rules remain in follow-up AC1/AC2; accepted Firefox skips and the removed preview-crash follow-up not reopened.
-- Review itself left application source, tests and configuration unchanged; F1–F3 fixes recorded above; no VCS authoring commands, commits, bookmark moves or cleanup performed.
+- Review itself left application source, tests and configuration unchanged; F1–F4 fixes recorded above; no VCS authoring commands, commits, bookmark moves or cleanup performed.
 - Proposed handoff only: commit this report separately if requested; then approve individual fixes against the green baseline.
 - Estimated fixes including behavioral regressions: F1 roughly 15–30 changed lines; F2 15–30; F3 12–25; F4 20–50.
   None offered as a ≤10-line cleanup.
