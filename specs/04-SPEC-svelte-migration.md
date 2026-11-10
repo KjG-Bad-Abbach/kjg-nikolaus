@@ -133,6 +133,7 @@ flowchart TD
 ### Prerequisites
 
 Before starting the migration, ensure:
+
 - Old Alpine.js frontend moved to `frontend-alpine.js/` ✓
 - New Svelte project initialized in `frontend/` with passing tests ✓
 - Tailwind custom color palette migrated from `frontend-alpine.js/tailwind.config.js` to new Svelte setup
@@ -167,6 +168,7 @@ pnpm ci                  # CI pipeline: full e2e tests (all browsers) + build
 ```
 
 **Recommended additions to `package.json` scripts:**
+
 ```json
 {
   "scripts": {
@@ -180,12 +182,12 @@ pnpm ci                  # CI pipeline: full e2e tests (all browsers) + build
 
 **When to use each command:**
 
-| Command | When | Duration | What It Does |
-|---------|------|----------|--------------|
-| `pnpm qa` | After each component | ~30s | Format + Lint + Typecheck + Unit tests |
-| `pnpm qa:full` | End of day/phase | ~2-3min | `qa` + E2E (chromium) |
-| `pnpm verify` | Before push | ~3-4min | `qa:full` + Build |
-| `pnpm ci` | CI/CD pipeline | ~5-10min | All tests (all browsers) + Build |
+| Command        | When                 | Duration | What It Does                           |
+| -------------- | -------------------- | -------- | -------------------------------------- |
+| `pnpm qa`      | After each component | ~30s     | Format + Lint + Typecheck + Unit tests |
+| `pnpm qa:full` | End of day/phase     | ~2-3min  | `qa` + E2E (chromium)                  |
+| `pnpm verify`  | Before push          | ~3-4min  | `qa:full` + Build                      |
+| `pnpm ci`      | CI/CD pipeline       | ~5-10min | All tests (all browsers) + Build       |
 
 **Detailed breakdown:**
 
@@ -217,6 +219,7 @@ pnpm ci                  # CI pipeline: full e2e tests (all browsers) + build
 **Recommendation: Bottom-Up** - Start with atomic components and build upward to complex layouts.
 
 **Rationale:**
+
 - Enables TDD from the start with isolated, testable units
 - Allows Storybook stories for each component in isolation
 - Reusable components can be tested once and used across multiple steps
@@ -257,7 +260,7 @@ export interface TimeSlot {
   id: string;
   documentId: string;
   start: string; // ISO 8601
-  end: string;   // ISO 8601
+  end: string; // ISO 8601
   label?: string;
   max_bookings?: number;
 }
@@ -306,6 +309,7 @@ Extract components in the following order to avoid dependency conflicts:
 #### Phase 0: Utilities & Types (Days 0.5-1)
 
 **Before extracting any components**, implement:
+
 1. TypeScript types (`lib/types/*.ts`) - See section above
 2. Utility functions (`lib/utils/*.ts`) - See "Utility Functions Migration" section
 3. API client (`lib/api/client.ts`)
@@ -497,45 +501,45 @@ This walkthrough demonstrates the complete TDD process for a simple component.
 **Step 1: Create Test File** (`lib/components/LoadingSpinner.svelte.spec.ts`)
 
 ```typescript
-import { page } from 'vitest/browser';
-import { describe, expect, it } from 'vitest';
-import { render } from 'vitest-browser-svelte';
-import LoadingSpinner from './LoadingSpinner.svelte';
+import { page } from "vitest/browser";
+import { describe, expect, it } from "vitest";
+import { render } from "vitest-browser-svelte";
+import LoadingSpinner from "./LoadingSpinner.svelte";
 
-describe('LoadingSpinner', () => {
-  it('should render with correct defaults', async () => {
+describe("LoadingSpinner", () => {
+  it("should render with correct defaults", async () => {
     render(LoadingSpinner);
 
-    const svg = container.querySelector('svg');
+    const svg = container.querySelector("svg");
     expect(svg).toBeTruthy();
-    expect(svg?.getAttribute('aria-hidden')).toBe('true');
-    expect(svg?.classList.contains('size-6')).toBe(true);
-    expect(svg?.classList.contains('animate-spin')).toBe(true);
+    expect(svg?.getAttribute("aria-hidden")).toBe("true");
+    expect(svg?.classList.contains("size-6")).toBe(true);
+    expect(svg?.classList.contains("animate-spin")).toBe(true);
   });
 
-  it('should apply custom size class', async () => {
+  it("should apply custom size class", async () => {
     const { container } = render(LoadingSpinner, {
-      props: { sizeClass: 'size-16' }
+      props: { sizeClass: "size-16" },
     });
 
-    const svg = container.querySelector('svg');
-    expect(svg?.classList.contains('size-16')).toBe(true);
+    const svg = container.querySelector("svg");
+    expect(svg?.classList.contains("size-16")).toBe(true);
   });
 
-  it('should apply custom color class', async () => {
+  it("should apply custom color class", async () => {
     const { container } = render(LoadingSpinner, {
-      props: { colorClass: 'text-red-500' }
+      props: { colorClass: "text-red-500" },
     });
 
-    const svg = container.querySelector('svg');
-    expect(svg?.classList.contains('text-red-500')).toBe(true);
+    const svg = container.querySelector("svg");
+    expect(svg?.classList.contains("text-red-500")).toBe(true);
   });
 
-  it('should have animate-spin class', async () => {
+  it("should have animate-spin class", async () => {
     const { container } = render(LoadingSpinner);
 
-    const svg = container.querySelector('svg');
-    expect(svg?.classList.contains('animate-spin')).toBe(true);
+    const svg = container.querySelector("svg");
+    expect(svg?.classList.contains("animate-spin")).toBe(true);
   });
 });
 ```
@@ -624,6 +628,7 @@ pnpm test:unit LoadingSpinner
 ```
 
 Expected output:
+
 ```
 ✓ LoadingSpinner (4 tests)
   ✓ should render spinner SVG
@@ -653,26 +658,26 @@ For each subsequent component, follow the same pattern:
 
 ```typescript
 // 1. Test file: ComponentName.svelte.spec.ts
-import { page } from 'vitest/browser';
-import { describe, expect, it } from 'vitest';
-import { render } from 'vitest-browser-svelte';
-import ComponentName from './ComponentName.svelte';
+import { page } from "vitest/browser";
+import { describe, expect, it } from "vitest";
+import { render } from "vitest-browser-svelte";
+import ComponentName from "./ComponentName.svelte";
 
-describe('ComponentName', () => {
-  it('should render with default props', async () => {
-    render(ComponentName, { props: { /* ... */ } });
+describe("ComponentName", () => {
+  it("should render with default props", async () => {
+    render(ComponentName, { props: {/* ... */} });
     // Assertions using page.getBy* or expect.element
   });
 
-  it('should handle props correctly', async () => {
+  it("should handle props correctly", async () => {
     // Test all prop variants
   });
 
-  it('should handle user interactions', async () => {
+  it("should handle user interactions", async () => {
     const onClick = vi.fn();
     render(ComponentName, { props: { onClick } });
 
-    const button = page.getByRole('button');
+    const button = page.getByRole("button");
     await button.click();
 
     expect(onClick).toHaveBeenCalledOnce();
@@ -748,39 +753,43 @@ The old `index.html` is 2140+ lines. Read it in manageable chunks:
 
 ### Alpine.js to Svelte Directive Mapping
 
-| Alpine.js | Svelte Equivalent |
-|-----------|-------------------|
-| `x-data="{ foo: 'bar' }"` | `<script>let foo = $state('bar');</script>` |
-| `x-show="condition"` | `{#if condition}...{/if}` or `class:hidden={!condition}` |
-| `x-if="condition"` | `{#if condition}...{/if}` |
-| `x-for="item in items"` | `{#each items as item}...{/each}` |
-| `x-text="expression"` | `{expression}` |
-| `x-html="expression"` | `{@html expression}` (use cautiously) |
-| `x-model="value"` | `bind:value={value}` |
-| `@click="handler"` | `on:click={handler}` |
-| `@submit.prevent="handler"` | `on:submit|preventDefault={handler}` |
-| `:class="dynamicClass"` | `class={dynamicClass}` or `class:foo={condition}` |
-| `x-cloak` | Remove (Svelte handles this automatically) |
-| `x-init="initLogic()"` | `onMount(() => { initLogic(); })` |
+| Alpine.js                   | Svelte Equivalent                                        |
+| --------------------------- | -------------------------------------------------------- |
+| `x-data="{ foo: 'bar' }"`   | `<script>let foo = $state('bar');</script>`              |
+| `x-show="condition"`        | `{#if condition}...{/if}` or `class:hidden={!condition}` |
+| `x-if="condition"`          | `{#if condition}...{/if}`                                |
+| `x-for="item in items"`     | `{#each items as item}...{/each}`                        |
+| `x-text="expression"`       | `{expression}`                                           |
+| `x-html="expression"`       | `{@html expression}` (use cautiously)                    |
+| `x-model="value"`           | `bind:value={value}`                                     |
+| `@click="handler"`          | `on:click={handler}`                                     |
+| `@submit.prevent="handler"` | `on:submit                                               | preventDefault={handler}` |
+| `:class="dynamicClass"`     | `class={dynamicClass}` or `class:foo={condition}`        |
+| `x-cloak`                   | Remove (Svelte handles this automatically)               |
+| `x-init="initLogic()"`      | `onMount(() => { initLogic(); })`                        |
 
 ### State Management Migration
 
 **Alpine.js Pattern:**
+
 ```javascript
-Alpine.data('bookingForm', () => ({
-  booking: { /* ... */ },
-  async submitContact() { /* ... */ }
+Alpine.data("bookingForm", () => ({
+  booking: {/* ... */},
+  async submitContact() {
+    /* ... */
+  },
 }));
 ```
 
 **Svelte Store Pattern:**
+
 ```typescript
 // lib/stores/bookingStore.svelte.ts
-import { writable } from 'svelte/store';
+import { writable } from "svelte/store";
 
 function createBookingStore() {
   const { subscribe, set, update } = writable({
-    contact_person: { /* ... */ },
+    contact_person: {/* ... */},
     // ...
   });
 
@@ -788,7 +797,9 @@ function createBookingStore() {
     subscribe,
     set,
     update,
-    submitContact: async () => { /* ... */ }
+    submitContact: async () => {
+      /* ... */
+    },
   };
 }
 
@@ -796,6 +807,7 @@ export const bookingStore = createBookingStore();
 ```
 
 **Usage in Component:**
+
 ```svelte
 <script>
   import { bookingStore } from '$lib/stores/bookingStore.svelte';
@@ -837,8 +849,8 @@ Create these utilities first, as components will depend on them:
 
    export async function sendRequest<T = unknown>({
      url,
-     method = 'GET',
-     body = null
+     method = "GET",
+     body = null,
    }: {
      url: string;
      method?: string;
@@ -861,7 +873,7 @@ Create these utilities first, as components will depend on them:
 
    export function updateExistingObjectKeys(
      obj: Record<string, unknown>,
-     newObj: Record<string, unknown>
+     newObj: Record<string, unknown>,
    ): void {
      // Implementation from lines 1884-1901
    }
@@ -874,7 +886,7 @@ Create these utilities first, as components will depend on them:
 
    ```typescript
    export function trim(value: string | null | undefined): string {
-     return (value || '').replace(/^[\s\u00AD]+|\u00AD+|[\s\u00AD]+$/g, '');
+     return (value || "").replace(/^[\s\u00AD]+|\u00AD+|[\s\u00AD]+$/g, "");
    }
 
    export function isFilled(value: string | null | undefined): boolean {
@@ -897,15 +909,16 @@ Create these utilities first, as components will depend on them:
    const currentYear = new Date().getFullYear();
 
    export function formatDate(date: Date): string {
-     const day = date.toLocaleDateString('de-DE', { weekday: 'short' });
+     const day = date.toLocaleDateString("de-DE", { weekday: "short" });
      const dateNum = date.getDate();
      const month = date.getMonth() + 1;
-     const year = date.getFullYear() !== currentYear ? ` ${date.getFullYear()}` : '';
+     const year =
+       date.getFullYear() !== currentYear ? ` ${date.getFullYear()}` : "";
      return `${day} ${dateNum}.${month}.${year}`;
    }
 
    export function formatTime(date: Date): string {
-     return `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+     return `${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
    }
 
    export function formatDateTime(date: Date): string {
@@ -928,7 +941,7 @@ Create these utilities first, as components will depend on them:
      type?: string;
      text?: string;
      level?: number;
-     format?: 'ordered' | 'unordered';
+     format?: "ordered" | "unordered";
      indentLevel?: number;
      url?: string;
      children?: RichTextNode[];
@@ -960,7 +973,7 @@ Create these utilities first, as components will depend on them:
 
    export class RichTextBlocksRenderer {
      private content: RichTextNode[];
-     private defaultClasses: Required<Omit<RichTextClasses, 'extend'>>;
+     private defaultClasses: Required<Omit<RichTextClasses, "extend">>;
 
      constructor(content: RichTextNode[], customClasses: RichTextClasses = {}) {
        // Implementation from lines 1970-2000
@@ -978,7 +991,7 @@ Create these utilities first, as components will depend on them:
    // Convenience function for use in Svelte components
    export function renderRichText(
      content: RichTextNode[],
-     customClasses: RichTextClasses = {}
+     customClasses: RichTextClasses = {},
    ): string {
      const renderer = new RichTextBlocksRenderer(content, customClasses);
      return renderer.render();
@@ -997,7 +1010,10 @@ Create these utilities first, as components will depend on them:
      checkCallback = callback;
    }
 
-   function handleUnsavedChanges(event: BeforeUnloadEvent, action: string): string | undefined {
+   function handleUnsavedChanges(
+     event: BeforeUnloadEvent,
+     action: string,
+   ): string | undefined {
      if (checkCallback && checkCallback()) {
        const message = `Es gibt ungespeicherte Änderungen. Möchten Sie die Seite wirklich ${action}?`;
        event.returnValue = message;
@@ -1006,12 +1022,12 @@ Create these utilities first, as components will depend on them:
    }
 
    // Initialize event listeners
-   if (typeof window !== 'undefined') {
-     window.addEventListener('beforeunload', (event) =>
-       handleUnsavedChanges(event, 'verlassen')
+   if (typeof window !== "undefined") {
+     window.addEventListener("beforeunload", (event) =>
+       handleUnsavedChanges(event, "verlassen"),
      );
-     window.addEventListener('popstate', (event) =>
-       handleUnsavedChanges(event as unknown as BeforeUnloadEvent, 'neu laden')
+     window.addEventListener("popstate", (event) =>
+       handleUnsavedChanges(event as unknown as BeforeUnloadEvent, "neu laden"),
      );
    }
    ```
@@ -1021,6 +1037,7 @@ Create these utilities first, as components will depend on them:
 After creating the `RichTextBlocksRenderer` utility (Phase 0), use it in components:
 
 **Usage in Component** (`IntroSection.svelte`)
+
 ```svelte
 <script lang="ts">
   import { renderRichText } from '$lib/utils/richTextRenderer';
@@ -1049,6 +1066,7 @@ After creating the `RichTextBlocksRenderer` utility (Phase 0), use it in compone
 ### Handling Time Zones
 
 The existing implementation uses ISO 8601 with explicit timezone offsets (e.g., `2024-12-05T19:30+01:00`). Ensure:
+
 - Date parsing respects timezones
 - Formatting functions display local time correctly
 - Daylight saving time transitions handled (CET ↔ CEST)
@@ -1068,35 +1086,38 @@ After completing the migration:
 
 #### Recommended Schedule (20 working days)
 
-| Phase | Days | Components | Deliverables |
-|-------|------|------------|--------------|
-| **Phase 0** | 0.5-1 | Types & Utilities | All utility functions tested, TypeScript types defined |
-| **Phase 1** | 1.5-3 | Tailwind, Icons, Primitives | Design system components in Storybook |
-| **Phase 2** | 3-4 | Form fields, Banners, Modals | Composite UI components tested |
-| **Phase 3** | 5-6 | Stepper navigation | Step progress tracking working |
-| **Phase 4** | 7-8 | Summary cards | All summary displays functional |
-| **Phase 5** | 9-14 | Step forms | All 5 step forms migrated with validation |
-| **Phase 6** | 15-16 | Layout & views | Intro section, step container integrated |
-| **Phase 7** | 17-18 | Stores & API | State management and API client complete |
-| **Phase 8** | 19-20 | App shell & E2E | Full integration, all E2E tests passing |
+| Phase       | Days  | Components                   | Deliverables                                           |
+| ----------- | ----- | ---------------------------- | ------------------------------------------------------ |
+| **Phase 0** | 0.5-1 | Types & Utilities            | All utility functions tested, TypeScript types defined |
+| **Phase 1** | 1.5-3 | Tailwind, Icons, Primitives  | Design system components in Storybook                  |
+| **Phase 2** | 3-4   | Form fields, Banners, Modals | Composite UI components tested                         |
+| **Phase 3** | 5-6   | Stepper navigation           | Step progress tracking working                         |
+| **Phase 4** | 7-8   | Summary cards                | All summary displays functional                        |
+| **Phase 5** | 9-14  | Step forms                   | All 5 step forms migrated with validation              |
+| **Phase 6** | 15-16 | Layout & views               | Intro section, step container integrated               |
+| **Phase 7** | 17-18 | Stores & API                 | State management and API client complete               |
+| **Phase 8** | 19-20 | App shell & E2E              | Full integration, all E2E tests passing                |
 
 #### Daily Workflow
 
 Each development day should follow this rhythm:
 
 **Morning (9:00-12:00):**
+
 - Pick next component from extraction order
 - Write test file (TDD)
 - Write Storybook story
 - Implement component
 
 **Afternoon (13:00-16:00):**
+
 - Run unit tests: `pnpm test:unit ComponentName`
 - Verify in Storybook: `pnpm storybook`
 - Run QA: `pnpm qa` (format, lint, check, unit tests)
 - Commit component with descriptive message
 
 **End of Day:**
+
 - Update migration progress tracker
 - Document any blockers or deviations
 - Prepare next component for tomorrow
@@ -1109,6 +1130,7 @@ Create a checklist to track component completion:
 ## Migration Progress
 
 ### Phase 0: Utilities & Types (0.5-1 days)
+
 - [ ] TypeScript types (booking.ts, config.ts)
 - [ ] API client (client.ts)
 - [ ] Object utilities (object.ts)
@@ -1118,6 +1140,7 @@ Create a checklist to track component completion:
 - [ ] Unsaved changes detection (unsavedChanges.ts)
 
 ### Phase 1: Foundation (1.5-3 days)
+
 - [ ] Tailwind configuration
 - [ ] LoadingSpinner icon
 - [ ] EditIcon
@@ -1167,6 +1190,7 @@ Request code review at the end of each phase:
 #### Pre-Deployment Verification
 
 Run the complete verification suite:
+
 ```bash
 # This should pass with zero errors before deployment
 pnpm verify
@@ -1175,24 +1199,28 @@ pnpm verify
 Detailed checklist:
 
 **Code Quality:**
+
 - [ ] All code formatted (`pnpm format` auto-fixes)
 - [ ] All lint rules passing (`pnpm lint`)
 - [ ] All type checks passing (`pnpm check`)
 - [ ] No console warnings or errors in development
 
 **Testing:**
+
 - [ ] All unit tests passing (`pnpm test:unit --run`)
 - [ ] All E2E tests passing on chromium (`pnpm test:e2e:fast`)
 - [ ] All E2E tests passing on all browsers (`pnpm test:e2e`)
 - [ ] Visual regression tests green (screenshot diffs)
 
 **Build & Performance:**
+
 - [ ] Production build successful (`pnpm build`)
 - [ ] Bundle size within budget (<300 KB gzipped)
 - [ ] No build warnings or errors
 - [ ] Preview build works correctly (`pnpm preview`)
 
 **Documentation:**
+
 - [ ] Storybook stories created for all major components
 - [ ] Component props documented
 - [ ] Migration progress tracker complete
