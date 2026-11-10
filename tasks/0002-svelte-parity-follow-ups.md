@@ -11,10 +11,11 @@ Completed migration fixes and accepted Firefox screenshot skips remain recorded 
   - **When:** Text escaping, attribute handling, and permitted link protocols are secured at the rendering boundary.
   - **Then:** Malicious text and links cannot execute script; supported formatting remains intact; behavioral security regressions and existing rendering tests pass.
 
-- [ ] AC 2 — Maintenance: duplicated completion rules
+- [x] AC 2 — Maintenance: duplicated completion rules
   - **Given:** `derivedStores.isEverythingFilled` repeats the rule in `stepNavigation.getFirstIncompleteStep`.
   - **When:** The getter reuses the existing completion predicate instead of maintaining another copy.
   - **Then:** Routing, step metadata, and the final summary agree; existing completion tests pass without changed outcomes.
+  - **Resolution:** `derivedStores.isEverythingFilled` delegates to `getFirstIncompleteStep` with the configured slot count; existing behavioral tests remain unchanged.
 
 - [ ] AC 3 — Verification gap: live backend and containers
   - **Given:** HTTP-fixture tests passed, but Strapi, Mailhog, and Docker were unavailable during parity verification.

@@ -1,6 +1,7 @@
 import { optionsStore } from './optionsStore.svelte';
 import { bookingStore } from './bookingStore.svelte';
 import { isFilled } from '$lib/utils/string';
+import { getFirstIncompleteStep } from '$lib/utils/stepNavigation';
 
 /**
  * Derived stores and computed values
@@ -51,39 +52,7 @@ class DerivedStores {
    * (all required fields)
    */
   get isEverythingFilled(): boolean {
-    const { contact_person, location, present_location, time_slots, children } =
-      bookingStore.booking;
-
-    const isContactDetailsFilled =
-      isFilled(contact_person?.first_name) &&
-      isFilled(contact_person?.last_name) &&
-      isFilled(contact_person?.email) &&
-      isFilled(contact_person?.phone_number);
-
-    const isAddressFilled =
-      isFilled(location?.street) &&
-      isFilled(location?.house_number) &&
-      isFilled(location?.zip_code) &&
-      isFilled(location?.place);
-
-    const isPresentLocationFilled = isFilled(present_location);
-
-    const areTimeSlotsFilled = time_slots?.length >= optionsStore.max_time_slots;
-
-    const areChildrenFilled =
-      !!children?.length &&
-      children.every(
-        (child) =>
-          isFilled(child.name) && isFilled(child.identification_trait) && isFilled(child.speech),
-      );
-
-    return (
-      isContactDetailsFilled &&
-      isAddressFilled &&
-      isPresentLocationFilled &&
-      areTimeSlotsFilled &&
-      areChildrenFilled
-    );
+    return getFirstIncompleteStep(bookingStore.booking, optionsStore.max_time_slots) === 4;
   }
 }
 
