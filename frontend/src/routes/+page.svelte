@@ -220,6 +220,7 @@
           routePlanningDeadline={optionsStore.route_planning_deadline}
           canEditRoutePlanning={derivedStores.canEditRoutePlanning}
           showSearch={optionsStore.show_search_for_time_slots}
+          bind:searchQuery={bookingStore.timeSlotSearchQuery}
           validationMessages={getValidationMessagesForSteps(validationStore.messages)}
           onChange={wrappedHandleTimeSlotChange}
           onSubmit={wrappedSubmitTimeSlotsStep}

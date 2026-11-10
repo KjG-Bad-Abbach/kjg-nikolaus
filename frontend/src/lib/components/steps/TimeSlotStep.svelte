@@ -19,6 +19,8 @@
     canEditRoutePlanning: boolean;
     /** Whether to show search input */
     showSearch: boolean;
+    /** Current slot search query */
+    searchQuery: string;
     /** Validation error messages keyed by field path */
     validationMessages: Record<string, string[]>;
     /** Callback when selection changes */
@@ -27,13 +29,14 @@
     onSubmit?: (selectedIds: string[]) => void;
   };
 
-  const {
+  let {
     availableTimeSlots,
     selectedTimeSlotIds,
     maxTimeSlots,
     routePlanningDeadline,
     canEditRoutePlanning,
     showSearch,
+    searchQuery = $bindable(),
     validationMessages,
     onChange,
     onSubmit,
@@ -43,8 +46,6 @@
   const hasValidationErrors = $derived(Object.keys(validationMessages).length > 0);
   const isMaxReached = $derived(selectedTimeSlotIds.length >= maxTimeSlots);
   const isUnderMin = $derived(selectedTimeSlotIds.length < maxTimeSlots);
-
-  let searchQuery = $state('');
 
   // Group time slots by date
   const groupedSlots = $derived.by(() => {

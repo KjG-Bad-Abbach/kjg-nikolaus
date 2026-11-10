@@ -95,6 +95,7 @@
       routePlanningDeadline: new Date('2024-12-01T19:30:00+01:00'),
       canEditRoutePlanning: true,
       showSearch: false,
+      searchQuery: '',
       validationMessages: {},
       onChange: fn(),
       onSubmit: fn(),

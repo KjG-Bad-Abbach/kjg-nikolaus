@@ -1,6 +1,6 @@
 # Svelte–Alpine booking parity review
 
-**Verdict: changes needed — one major configuration-startup defect; three minor behavioral differences.**
+**Verdict: good to go, with comments — F1/F2 fixed; two minor behavioral differences remain.**
 Passing regression tests establish the exercised scenarios, not universal equivalence.
 
 ## Review scope and evidence
@@ -90,7 +90,7 @@ None.
 
 ## 3. Other Optional Comments
 
-Non-blocking; all three remain observable differences under the exact-parity requirement.
+Non-blocking; F3/F4 remain observable differences under the exact-parity requirement.
 
 ### F2 — Slot-search text is lost after navigating away and back
 
@@ -98,12 +98,16 @@ Non-blocking; all three remain observable differences under the exact-parity req
 - **Severity:** minor
 - **Effort:** spreads
 - **Confidence:** high
-- **Status:** open
-- **Location:** `frontend/src/lib/components/steps/TimeSlotStep.svelte:47`; `frontend/src/routes/+page.svelte:215-226`.
+- **Status:** fixed (November 10, 2026)
+- **Location:** `frontend/src/lib/components/steps/TimeSlotStep.svelte:22-39`; `frontend/src/routes/+page.svelte:223`.
 - **Evidence:** enter a search, visit Address, then return to Slots without changing booking data.
   The paired probe retained `"Thursday"` in Alpine but returned `""` in Svelte.
   Alpine keeps `timeSlotSearchQuery` on the root object (`index.html:2279,1044`); Svelte recreates the component-local state.
 - **Fix:** reuse the existing `bookingStore.timeSlotSearchQuery` as the page-lifetime owner and wire it to the component; cover the round trip without resetting the search.
+- **Resolution:** required bindable search prop wired to the existing store; standalone test/Storybook callers updated; component-local search state removed; reset behavior unchanged.
+- **Regression evidence:** Slots → Address → Slots failed before the fix with an empty search; afterward all three browser projects retained the text and matching/nonmatching slot filtering (`frontend/e2e/address-time-slot.spec.ts:115-139`).
+- **Fix verification (November 10, 2026):** check/lint passed with zero Svelte diagnostics; full `pnpm test` passed: 778 unit tests, 107 browser tests, four existing Firefox skips, production build included; lines 99.81%, branches 98.85%; `review-tests` and confirmation found no issues; logs: `/tmp/nix-shell.1ZdSXk/opencode/f2-{red,green,check,lint,test}.log`.
+- **Verification limits:** live ports 1337/8025/3000 refused connections; Semgrep unavailable; report-wide Prettier warning predates this fix (unrelated table padding/completion spacing left unchanged); frontend formatting/lint passed; no PNGs or existing assertions changed.
 
 ### F3 — Expanded error details collapse on the next error
 

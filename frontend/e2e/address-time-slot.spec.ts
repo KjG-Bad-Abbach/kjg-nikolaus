@@ -112,6 +112,32 @@ test.describe('Address & Time Slots', () => {
     );
   });
 
+  test('retains slot search and filtering after visiting Address', async ({ page }) => {
+    // Arrange
+    await registerScenario(page, createResumeScenario());
+    const wizard = new WizardPage(page);
+    await freezeDate(page);
+    await wizard.goto('?id=booking-existing');
+    await wizard.jumpToStep('time-slot');
+    const matchingSlot = page.getByTestId('qa-time-slot-slot-1');
+    const otherSlot = page.getByTestId('qa-time-slot-slot-2');
+    const searchQuery = await matchingSlot.innerText();
+
+    // Act
+    await wizard.timeSlotStep().search(searchQuery);
+    // Assert
+    await expect(matchingSlot).toBeVisible();
+    await expect(otherSlot).toHaveCount(0);
+
+    // Act
+    await wizard.jumpToStep('address');
+    await wizard.jumpToStep('time-slot');
+    // Assert
+    await expect(page.getByTestId('qa-time-slot-search')).toHaveValue(searchQuery);
+    await expect(matchingSlot).toBeVisible();
+    await expect(otherSlot).toHaveCount(0);
+  });
+
   test('shows error modal on time slot conflict', async ({ page }) => {
     // Arrange
     const scenario = withFailures(createResumeScenario(), [
