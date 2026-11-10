@@ -67,7 +67,7 @@ Passing regression tests establish the exercised scenarios, not universal equiva
 - **Severity:** major
 - **Effort:** spreads
 - **Confidence:** high
-- **Status:** open
+- **Status:** fixed (November 10, 2026)
 - **Location:** `frontend/src/lib/utils/bookingInit.ts:51-57`; `frontend/src/lib/api/client.ts:85-91`.
 - **Problem:** `loadConfig()` runs before initialization replaces empty browser configuration with nonempty build values.
   The client uses `??`, so an empty `window.API_BASE_URL` sends the first config request to the frontend origin, and an empty `window.API_TOKEN` suppresses the configured bearer token.
@@ -79,6 +79,10 @@ Passing regression tests establish the exercised scenarios, not universal equiva
   Browser HTTP tests supply nonempty overrides, avoiding this case.
 - **Fix:** establish browser/build fallback before requesting config, retaining response fallback afterward and the direct client's deliberately explicit-empty semantics.
   Add real-initialization/native-transport cases for empty URL and token overrides.
+- **Resolution:** browser/build fallback now precedes `loadConfig()`; response fallback and direct-client explicit-empty semantics retained.
+- **Regression evidence:** both new real-initialization/native-fetch cases failed before the fix (wrong first URL; missing bearer token); both passed afterward against an authorization-sensitive local HTTP server, with all 52 focused tests green.
+- **Fix verification (November 10, 2026):** `pnpm check` (zero errors/warnings), `pnpm lint`, and full `pnpm test` passed: 778 unit passes, 92 browser passes, four existing Firefox skips, production build included; `review-tests` and confirmation reported no findings.
+- **Verification limits:** synthetic HTTP fixtures, not live Strapi/Mailhog; Semgrep unavailable.
 
 ## 2. Architecture, Simplicity & Maintenance Trade-Offs
 

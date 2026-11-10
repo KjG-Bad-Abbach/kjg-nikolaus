@@ -48,13 +48,22 @@ export async function initializeBooking({
   try {
     // Load config if not already loaded
     if (!optionsStore.id) {
+      const apiWindow =
+        typeof window !== 'undefined'
+          ? (window as Window & { API_TOKEN?: string; API_BASE_URL?: string })
+          : undefined;
+      // The first config request already needs the browser/build fallback.
+      if (apiWindow) {
+        apiWindow.API_TOKEN ||= import.meta.env.VITE_API_TOKEN;
+        apiWindow.API_BASE_URL ||= import.meta.env.VITE_API_BASE_URL;
+      }
+
       const config = await loadConfig();
       optionsStore.update(config);
 
-      if (typeof window !== 'undefined') {
-        const apiWindow = window as Window & { API_TOKEN?: string; API_BASE_URL?: string };
-        apiWindow.API_TOKEN ||= import.meta.env.VITE_API_TOKEN || config.api_token;
-        apiWindow.API_BASE_URL ||= import.meta.env.VITE_API_BASE_URL || config.api_base_url;
+      if (apiWindow) {
+        apiWindow.API_TOKEN ||= config.api_token;
+        apiWindow.API_BASE_URL ||= config.api_base_url;
       }
 
       // Set view based on intro text

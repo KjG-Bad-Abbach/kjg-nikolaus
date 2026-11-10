@@ -1,4 +1,6 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
+import { createServer } from 'node:http';
+import type { AddressInfo } from 'node:net';
 import {
   initializeBooking,
   loadBookingData,
@@ -82,6 +84,68 @@ describe('bookingInit', () => {
   });
 
   describe('initializeBooking', () => {
+    it.each(['API_BASE_URL', 'API_TOKEN'] as const)(
+      'InitializeBooking_EmptyBrowser%s_Expect_BuildFallbackOnFirstConfigRequest',
+      async (emptyField) => {
+        // Arrange
+        const api = await vi.importActual<typeof import('./bookingApi')>('./bookingApi');
+        const { loadConfig } = await import('./bookingApi');
+        vi.mocked(loadConfig).mockImplementationOnce(api.loadConfig);
+        const token = 'build-token';
+        const requests: { url?: string; authorization?: string; status: number }[] = [];
+        const server = createServer((request, response) => {
+          const status = request.headers.authorization === `Bearer ${token}` ? 200 : 401;
+          requests.push({ url: request.url, authorization: request.headers.authorization, status });
+          response.writeHead(status, { 'Content-Type': 'application/json' });
+          response.end(JSON.stringify({ data: { id: 1 } }));
+        });
+        await new Promise<void>((resolve, reject) => {
+          server.once('error', reject);
+          server.listen(0, '127.0.0.1', resolve);
+        });
+        const baseUrl = `http://127.0.0.1:${(server.address() as AddressInfo).port}`;
+        try {
+          vi.stubEnv('VITE_API_BASE_URL', baseUrl);
+          vi.stubEnv('VITE_API_TOKEN', token);
+          global.window = {
+            location: { search: '' },
+            API_BASE_URL: baseUrl,
+            API_TOKEN: token,
+            [emptyField]: '',
+          } as unknown as Window & typeof globalThis;
+          const fetchRequest = vi.fn(global.fetch);
+          vi.stubGlobal('fetch', fetchRequest);
+
+          // Act
+          await initializeBooking({
+            uiStore: mockUIStore,
+            optionsStore: mockOptionsStore,
+            bookingStore: mockBookingStore,
+            validationStore: mockValidationStore,
+          });
+
+          // Assert
+          expect(fetchRequest).toHaveBeenCalledExactlyOnceWith(`${baseUrl}/api/config?populate=*`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          expect(requests).toEqual([
+            { url: '/api/config?populate=*', authorization: `Bearer ${token}`, status: 200 },
+          ]);
+          expect(mockOptionsStore.update).toHaveBeenCalledWith(expect.objectContaining({ id: 1 }));
+          expect(mockUIStore.setError).toHaveBeenCalledExactlyOnceWith(null);
+        } finally {
+          await new Promise<void>((resolve, reject) => {
+            server.close((error) => (error ? reject(error) : resolve()));
+            server.closeAllConnections();
+          });
+        }
+      },
+    );
+
     it.each([
       {
         state: 'ConfigConfiguration_Expect_CorrectPrecedence',
