@@ -1,6 +1,6 @@
 # Svelte–Alpine booking parity review
 
-**Verdict: good to go, with comments — F1/F2 fixed; two minor behavioral differences remain.**
+**Verdict: good to go, with comments — F1/F2/F3 fixed; F4 remains a minor behavioral difference.**
 Passing regression tests establish the exercised scenarios, not universal equivalence.
 
 ## Review scope and evidence
@@ -90,7 +90,7 @@ None.
 
 ## 3. Other Optional Comments
 
-Non-blocking; F3/F4 remain observable differences under the exact-parity requirement.
+Non-blocking; F4 remains an observable difference under the exact-parity requirement.
 
 ### F2 — Slot-search text is lost after navigating away and back
 
@@ -115,13 +115,17 @@ Non-blocking; F3/F4 remain observable differences under the exact-parity require
 - **Severity:** minor
 - **Effort:** spreads
 - **Confidence:** high
-- **Status:** open
+- **Status:** fixed (November 10, 2026)
 - **Location:** `frontend/src/routes/+page.svelte:306-313`; `frontend/src/lib/components/ErrorModal.svelte:29`.
 - **Evidence:** trigger a slot-fetch error, expand Details, dismiss, then trigger another error.
   Details remained expanded in Alpine and collapsed in Svelte in the paired probe.
   Alpine's `x-show` preserves nested `x-data.open` (`index.html:1716-1780`); the Svelte parent destroys the component when the error clears.
 - **Fix:** retain the modal component across cleared errors; it already accepts a null error and conditionally renders its own markup.
   Add a repeated-error regression preserving the expanded state.
+- **Resolution:** page keeps `ErrorModal` mounted; child-owned details state survives cleared errors; null markup, dismissal and retry unchanged.
+- **Regression evidence:** repeated verification-resend failure lacked expanded `SEND_FAIL` details before the fix; afterward all three browser projects retained them across dismissal (`frontend/e2e/ui-states.spec.ts:244-296`); 33 focused browser tests passed.
+- **Fix verification (November 10, 2026):** check/lint passed with zero Svelte diagnostics; full `pnpm test` passed: 778 unit tests, 107 browser tests, four existing Firefox skips, production build included; lines 99.81%, branches 98.85%; `review-tests` and confirmation found no issues.
+- **Verification limits:** fixture-backed browser coverage, not live Strapi/Mailhog; Semgrep unavailable; no screenshot baselines, tolerances or existing assertions changed.
 
 ### F4 — Repeated validation paths discard earlier messages
 
@@ -146,7 +150,7 @@ None.
 - Reviewed navigation, booking-ID links, API configuration/auth/pagination, reservation credit, capacity/conflict recovery, contact/verification/resend, address/gifts, slots/search, children/notes, deadlines, dirty/discard/retry, summaries, CMS content/footer/loading/modals and deployment/test-oracle contracts.
 - Original behavioral assertions and screenshot tolerances preserved after normalized comparison; pending-config gating and fresh-page footer isolation retain the original outcomes.
 - Inherited rich-text XSS and duplicated completion rules remain in follow-up AC1/AC2; accepted Firefox skips and the removed preview-crash follow-up not reopened.
-- No existing application source, tests or configuration edited; no VCS authoring commands, commits, bookmark moves or cleanup performed.
+- Review itself left application source, tests and configuration unchanged; F1–F3 fixes recorded above; no VCS authoring commands, commits, bookmark moves or cleanup performed.
 - Proposed handoff only: commit this report separately if requested; then approve individual fixes against the green baseline.
 - Estimated fixes including behavioral regressions: F1 roughly 15–30 changed lines; F2 15–30; F3 12–25; F4 20–50.
   None offered as a ≤10-line cleanup.

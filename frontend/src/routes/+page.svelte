@@ -304,12 +304,10 @@
   </footer>
 
   <!-- Error Modal -->
-  {#if uiStore.error}
-    <ErrorModal
-      error={uiStore.error}
-      askToReload={uiStore.askToReload}
-      onClose={() => uiStore.closeError()}
-      onRetry={() => initializeBooking(storeContext)}
-    />
-  {/if}
+  <ErrorModal
+    error={uiStore.error}
+    askToReload={uiStore.askToReload}
+    onClose={() => uiStore.closeError()}
+    onRetry={() => initializeBooking(storeContext)}
+  />
 </div>

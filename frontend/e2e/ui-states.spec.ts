@@ -246,7 +246,7 @@ test.describe('UI States & Edge Cases', () => {
     const scenario = withFailures(createBaseScenario(), [
       {
         stage: 'send-verification',
-        once: true,
+        once: false,
         error: {
           message: 'E-Mail konnte nicht gesendet werden',
           status: { code: 500, text: 'Server Error' },
@@ -287,6 +287,13 @@ test.describe('UI States & Edge Cases', () => {
     await captureScreenshot(page, 'ui-resend-error.png');
     await wizard.errorModal().dismiss();
     await expect(page.getByTestId('qa-email-verification')).toBeVisible();
+    await expect(page.getByTestId('qa-error-modal')).toBeHidden();
+
+    await wizard.contactStep().resendVerification();
+    await wizard.errorModal().expectVisible();
+    await expect(page.locator('code').first()).toContainText('SEND_FAIL');
+    await wizard.errorModal().dismiss();
+    await expect(page.getByTestId('qa-error-modal')).toBeHidden();
   });
 
   test('toggles footer links based on config', async ({ page }) => {
