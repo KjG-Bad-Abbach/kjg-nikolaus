@@ -24,7 +24,7 @@ jobs:
       contents: read
     env:
       # renovate: datasource=node-version depName=node
-      NODE_VERSION: '22.23.4'
+      NODE_VERSION: '22.23.5'
       # renovate: datasource=npm depName=pnpm
       PNPM_VERSION: '12.9.0'
       CI: 'true'
