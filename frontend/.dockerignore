@@ -1,7 +1,10 @@
-.env
+.env*
 node_modules
-dist
+.svelte-kit
+build
 coverage/
+storybook-static/
+.vitest-attachments/
 
 # Playwright
 /test-results/

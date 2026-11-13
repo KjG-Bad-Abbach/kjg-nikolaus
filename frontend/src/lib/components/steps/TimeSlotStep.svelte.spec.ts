@@ -1,0 +1,562 @@
+import { page } from 'vitest/browser';
+import { describe, expect, it, vi } from 'vitest';
+import { render } from 'vitest-browser-svelte';
+import TimeSlotStep from './TimeSlotStep.svelte';
+import type { TimeSlot } from '$lib/types/booking';
+
+describe('TimeSlotStep', () => {
+  const routePlanningDeadline = new Date('2024-12-01T19:30:00+01:00');
+
+  const availableTimeSlots: TimeSlot[] = [
+    {
+      id: '1',
+      documentId: 'doc1',
+      start: '2024-12-05T18:00:00+01:00',
+      end: '2024-12-05T19:00:00+01:00',
+      label: 'Do 5.12. 18:00 - 19:00 Uhr',
+      max_bookings: 4,
+      max_reservations: 12,
+      available_reservations: 1,
+    },
+    {
+      id: '2',
+      documentId: 'doc2',
+      start: '2024-12-05T19:00:00+01:00',
+      end: '2024-12-05T20:00:00+01:00',
+      label: 'Do 5.12. 19:00 - 20:00 Uhr',
+      max_bookings: 4,
+      max_reservations: 12,
+      available_reservations: 2,
+    },
+    {
+      id: '3',
+      documentId: 'doc3',
+      start: '2024-12-06T18:00:00+01:00',
+      end: '2024-12-06T19:00:00+01:00',
+      label: 'Fr 6.12. 18:00 - 19:00 Uhr',
+      max_bookings: 4,
+      max_reservations: 12,
+      available_reservations: 8,
+    },
+  ];
+
+  it.each([0, -1])(
+    'TimeSlotStep_Capacity%i_Expect_DisabledSoldOutSlotAndSelectableOwnCredit',
+    async (soldOutCapacity) => {
+      // Arrange
+      const onChange = vi.fn();
+      render(TimeSlotStep, {
+        availableTimeSlots: availableTimeSlots.map((slot) => ({
+          ...slot,
+          available_reservations: slot.id === '2' ? soldOutCapacity : slot.available_reservations,
+        })),
+        selectedTimeSlotIds: ['1'],
+        maxTimeSlots: 3,
+        routePlanningDeadline,
+        canEditRoutePlanning: true,
+        showSearch: false,
+        searchQuery: '',
+        validationMessages: {},
+        onChange,
+      });
+
+      // Act
+      await page.getByTestId('qa-time-slot-1').getByRole('checkbox').click();
+
+      // Assert
+      await expect.element(page.getByTestId('qa-time-slot-2').getByRole('checkbox')).toBeDisabled();
+      await expect.element(page.getByTestId('qa-time-slot-2')).toHaveTextContent('ausgebucht');
+      await expect
+        .element(page.getByTestId('qa-time-slot-1').getByRole('checkbox'))
+        .not.toBeDisabled();
+      expect(onChange).toHaveBeenCalledWith([]);
+    },
+  );
+
+  it('should render heading with max slots when editable', async () => {
+    render(TimeSlotStep, {
+      availableTimeSlots,
+      selectedTimeSlotIds: [],
+      maxTimeSlots: 3,
+      routePlanningDeadline,
+      canEditRoutePlanning: true,
+      showSearch: false,
+      searchQuery: '',
+      validationMessages: {},
+      onChange: vi.fn(),
+      onSubmit: vi.fn(),
+    });
+
+    await expect
+      .element(page.getByRole('heading', { level: 2 }))
+      .toHaveTextContent(/Wähle.*3.*unterschiedliche Zeitslots/);
+  });
+
+  it('should render readonly heading when not editable', async () => {
+    render(TimeSlotStep, {
+      availableTimeSlots,
+      selectedTimeSlotIds: ['1'],
+      maxTimeSlots: 3,
+      routePlanningDeadline,
+      canEditRoutePlanning: false,
+      showSearch: false,
+      searchQuery: '',
+      validationMessages: {},
+      onChange: vi.fn(),
+      onSubmit: vi.fn(),
+    });
+
+    const heading = page.getByRole('heading', { level: 2 });
+    await expect.element(heading).toHaveTextContent('Ausgewählte Zeitslots');
+  });
+
+  it('should display route planning deadline notice', async () => {
+    render(TimeSlotStep, {
+      availableTimeSlots,
+      selectedTimeSlotIds: [],
+      maxTimeSlots: 3,
+      routePlanningDeadline,
+      canEditRoutePlanning: true,
+      showSearch: false,
+      searchQuery: '',
+      validationMessages: {},
+      onChange: vi.fn(),
+      onSubmit: vi.fn(),
+    });
+
+    await expect
+      .element(page.getByText('Hinweis: Deadline für diese Angaben', { exact: false }))
+      .toBeInTheDocument();
+  });
+
+  it('should show warning when editing is disabled', async () => {
+    render(TimeSlotStep, {
+      availableTimeSlots,
+      selectedTimeSlotIds: [],
+      maxTimeSlots: 3,
+      routePlanningDeadline,
+      canEditRoutePlanning: false,
+      showSearch: false,
+      searchQuery: '',
+      validationMessages: {},
+      onChange: vi.fn(),
+      onSubmit: vi.fn(),
+    });
+
+    await expect
+      .element(
+        page.getByText('Nach der Deadline können die Angaben nicht mehr bearbeitet werden', {
+          exact: false,
+        }),
+      )
+      .toBeInTheDocument();
+  });
+
+  it('should show max selection warning when limit reached', async () => {
+    render(TimeSlotStep, {
+      availableTimeSlots,
+      selectedTimeSlotIds: ['1', '2', '3'],
+      maxTimeSlots: 3,
+      routePlanningDeadline,
+      canEditRoutePlanning: true,
+      showSearch: false,
+      searchQuery: '',
+      validationMessages: {},
+      onChange: vi.fn(),
+      onSubmit: vi.fn(),
+    });
+
+    await expect.element(page.getByText('Du kannst maximal', { exact: false })).toBeInTheDocument();
+  });
+
+  it('should show search input when showSearch is true', async () => {
+    render(TimeSlotStep, {
+      availableTimeSlots,
+      selectedTimeSlotIds: [],
+      maxTimeSlots: 3,
+      routePlanningDeadline,
+      canEditRoutePlanning: true,
+      showSearch: true,
+      searchQuery: '',
+      validationMessages: {},
+      onChange: vi.fn(),
+      onSubmit: vi.fn(),
+    });
+
+    const searchInput = page.getByTestId('qa-time-slot-search');
+    await expect.element(searchInput).toBeInTheDocument();
+  });
+
+  it('should hide search input when showSearch is false', async () => {
+    render(TimeSlotStep, {
+      availableTimeSlots,
+      selectedTimeSlotIds: [],
+      maxTimeSlots: 3,
+      routePlanningDeadline,
+      canEditRoutePlanning: true,
+      showSearch: false,
+      searchQuery: '',
+      validationMessages: {},
+      onChange: vi.fn(),
+      onSubmit: vi.fn(),
+    });
+
+    const searchInput = page.getByTestId('qa-time-slot-search');
+    await expect.element(searchInput).not.toBeInTheDocument();
+  });
+
+  it('should render time slot checkboxes when editable', async () => {
+    render(TimeSlotStep, {
+      availableTimeSlots,
+      selectedTimeSlotIds: [],
+      maxTimeSlots: 3,
+      routePlanningDeadline,
+      canEditRoutePlanning: true,
+      showSearch: false,
+      searchQuery: '',
+      validationMessages: {},
+      onChange: vi.fn(),
+      onSubmit: vi.fn(),
+    });
+
+    await expect.element(page.getByTestId('qa-time-slot-1')).toBeInTheDocument();
+    await expect.element(page.getByTestId('qa-time-slot-2')).toBeInTheDocument();
+    await expect.element(page.getByTestId('qa-time-slot-3')).toBeInTheDocument();
+  });
+
+  it('should call onChange when time slot is selected', async () => {
+    const onChange = vi.fn();
+    render(TimeSlotStep, {
+      availableTimeSlots,
+      selectedTimeSlotIds: [],
+      maxTimeSlots: 3,
+      routePlanningDeadline,
+      canEditRoutePlanning: true,
+      showSearch: false,
+      searchQuery: '',
+      validationMessages: {},
+      onChange,
+      onSubmit: vi.fn(),
+    });
+
+    const checkbox = page.getByTestId('qa-time-slot-1').getByRole('checkbox');
+    await checkbox.click();
+
+    expect(onChange).toHaveBeenCalled();
+    const call = onChange.mock.calls[0][0];
+    expect(call).toContain('1');
+  });
+
+  it('should call onChange when time slot is deselected via checkbox', async () => {
+    const onChange = vi.fn();
+    render(TimeSlotStep, {
+      availableTimeSlots,
+      selectedTimeSlotIds: ['1', '2'],
+      maxTimeSlots: 3,
+      routePlanningDeadline,
+      canEditRoutePlanning: true,
+      showSearch: false,
+      searchQuery: '',
+      validationMessages: {},
+      onChange,
+      onSubmit: vi.fn(),
+    });
+
+    const checkbox = page.getByTestId('qa-time-slot-1').getByRole('checkbox');
+    await checkbox.click();
+
+    expect(onChange).toHaveBeenCalled();
+    const call = onChange.mock.calls[0][0];
+    expect(call).not.toContain('1');
+    expect(call).toContain('2');
+  });
+
+  it('should show selected slots in summary list', async () => {
+    render(TimeSlotStep, {
+      availableTimeSlots,
+      selectedTimeSlotIds: ['1', '2'],
+      maxTimeSlots: 3,
+      routePlanningDeadline,
+      canEditRoutePlanning: true,
+      showSearch: false,
+      searchQuery: '',
+      validationMessages: {},
+      onChange: vi.fn(),
+      onSubmit: vi.fn(),
+    });
+
+    await expect.element(page.getByTestId('qa-selected-time-slot-1')).toBeInTheDocument();
+    await expect.element(page.getByTestId('qa-selected-time-slot-2')).toBeInTheDocument();
+  });
+
+  it('should call onChange when removing a selected slot', async () => {
+    const onChange = vi.fn();
+    render(TimeSlotStep, {
+      availableTimeSlots,
+      selectedTimeSlotIds: ['1', '2'],
+      maxTimeSlots: 3,
+      routePlanningDeadline,
+      canEditRoutePlanning: true,
+      showSearch: false,
+      searchQuery: '',
+      validationMessages: {},
+      onChange,
+      onSubmit: vi.fn(),
+    });
+
+    const removeButton = page.getByTestId('qa-remove-selected-slot-1');
+    await removeButton.click();
+
+    expect(onChange).toHaveBeenCalled();
+    const call = onChange.mock.calls[0][0];
+    expect(call).not.toContain('1');
+    expect(call).toContain('2');
+  });
+
+  it('should show warning when fewer than max slots selected', async () => {
+    render(TimeSlotStep, {
+      availableTimeSlots,
+      selectedTimeSlotIds: ['1'],
+      maxTimeSlots: 3,
+      routePlanningDeadline,
+      canEditRoutePlanning: true,
+      showSearch: false,
+      searchQuery: '',
+      validationMessages: {},
+      onChange: vi.fn(),
+      onSubmit: vi.fn(),
+    });
+
+    await expect
+      .element(page.getByText('Bitte wähle mindestens', { exact: false }))
+      .toBeInTheDocument();
+  });
+
+  it('should show submit button when editable', async () => {
+    render(TimeSlotStep, {
+      availableTimeSlots,
+      selectedTimeSlotIds: ['1', '2', '3'],
+      maxTimeSlots: 3,
+      routePlanningDeadline,
+      canEditRoutePlanning: true,
+      showSearch: false,
+      searchQuery: '',
+      validationMessages: {},
+      onChange: vi.fn(),
+      onSubmit: vi.fn(),
+    });
+
+    const submitButton = page.getByTestId('qa-time-slot-submit');
+    await expect.element(submitButton).toBeInTheDocument();
+  });
+
+  it('should hide submit button when not editable', async () => {
+    render(TimeSlotStep, {
+      availableTimeSlots,
+      selectedTimeSlotIds: ['1'],
+      maxTimeSlots: 3,
+      routePlanningDeadline,
+      canEditRoutePlanning: false,
+      showSearch: false,
+      searchQuery: '',
+      validationMessages: {},
+      onChange: vi.fn(),
+      onSubmit: vi.fn(),
+    });
+
+    const submitButton = page.getByTestId('qa-time-slot-submit');
+    await expect.element(submitButton).not.toBeInTheDocument();
+  });
+
+  it('should call onSubmit when form is submitted', async () => {
+    const onSubmit = vi.fn();
+    render(TimeSlotStep, {
+      availableTimeSlots,
+      selectedTimeSlotIds: ['1', '2', '3'],
+      maxTimeSlots: 3,
+      routePlanningDeadline,
+      canEditRoutePlanning: true,
+      showSearch: false,
+      searchQuery: '',
+      validationMessages: {},
+      onChange: vi.fn(),
+      onSubmit,
+    });
+
+    const submitButton = page.getByTestId('qa-time-slot-submit');
+    await submitButton.click();
+
+    expect(onSubmit).toHaveBeenCalledOnce();
+  });
+
+  it('should show validation error when there are messages', async () => {
+    const validationMessages = {
+      'booking.time_slots': ['Bitte wähle mindestens 3 Zeitslots'],
+    };
+
+    render(TimeSlotStep, {
+      availableTimeSlots,
+      selectedTimeSlotIds: [],
+      maxTimeSlots: 3,
+      routePlanningDeadline,
+      canEditRoutePlanning: true,
+      showSearch: false,
+      searchQuery: '',
+      validationMessages,
+      onChange: vi.fn(),
+      onSubmit: vi.fn(),
+    });
+
+    await expect.element(page.getByText('Bitte überprüfe deine Eingaben.')).toBeInTheDocument();
+  });
+
+  it('TimeSlotStep_MixedCaseSearch_Expect_OnlyMatchingDateGroups', async () => {
+    // Arrange
+    render(TimeSlotStep, {
+      availableTimeSlots,
+      selectedTimeSlotIds: [],
+      maxTimeSlots: 3,
+      routePlanningDeadline,
+      canEditRoutePlanning: true,
+      showSearch: true,
+      searchQuery: '',
+      validationMessages: {},
+      onChange: vi.fn(),
+      onSubmit: vi.fn(),
+    });
+
+    const searchInput = page.getByTestId('qa-time-slot-search');
+    // Act
+    await searchInput.fill('fR 6.12');
+
+    // Assert
+    // Should show only the Friday slot
+    await expect.element(page.getByTestId('qa-time-slot-3')).toBeInTheDocument();
+    // Thursday slots should be hidden (not in DOM when filtered)
+    await expect.element(page.getByTestId('qa-time-slot-1')).not.toBeInTheDocument();
+    await expect
+      .element(page.getByRole('heading', { level: 4 }).filter({ hasText: /Do 5\.12\./ }))
+      .not.toBeInTheDocument();
+  });
+
+  it('should check selected slots', async () => {
+    render(TimeSlotStep, {
+      availableTimeSlots,
+      selectedTimeSlotIds: ['1', '2'],
+      maxTimeSlots: 3,
+      routePlanningDeadline,
+      canEditRoutePlanning: true,
+      showSearch: false,
+      searchQuery: '',
+      validationMessages: {},
+      onChange: vi.fn(),
+      onSubmit: vi.fn(),
+    });
+
+    const checkbox1 = page.getByTestId('qa-time-slot-1').getByRole('checkbox');
+    const checkbox2 = page.getByTestId('qa-time-slot-2').getByRole('checkbox');
+    const checkbox3 = page.getByTestId('qa-time-slot-3').getByRole('checkbox');
+
+    await expect.element(checkbox1).toBeChecked();
+    await expect.element(checkbox2).toBeChecked();
+    await expect.element(checkbox3).not.toBeChecked();
+  });
+
+  it('should disable checkboxes when max slots reached', async () => {
+    render(TimeSlotStep, {
+      availableTimeSlots,
+      selectedTimeSlotIds: ['1', '2'],
+      maxTimeSlots: 2,
+      routePlanningDeadline,
+      canEditRoutePlanning: true,
+      showSearch: false,
+      searchQuery: '',
+      validationMessages: {},
+      onChange: vi.fn(),
+      onSubmit: vi.fn(),
+    });
+
+    const checkbox1 = page.getByTestId('qa-time-slot-1').getByRole('checkbox');
+    await expect.element(checkbox1).toBeChecked();
+    await expect.element(checkbox1).not.toBeDisabled();
+
+    const checkbox2 = page.getByTestId('qa-time-slot-2').getByRole('checkbox');
+    await expect.element(checkbox2).toBeChecked();
+    await expect.element(checkbox2).not.toBeDisabled();
+
+    const checkbox3 = page.getByTestId('qa-time-slot-3').getByRole('checkbox');
+    await expect.element(checkbox3).not.toBeChecked();
+    await expect.element(checkbox3).toBeDisabled();
+  });
+
+  it('should group slots by date', async () => {
+    render(TimeSlotStep, {
+      availableTimeSlots,
+      selectedTimeSlotIds: [],
+      maxTimeSlots: 3,
+      routePlanningDeadline,
+      canEditRoutePlanning: true,
+      showSearch: false,
+      searchQuery: '',
+      validationMessages: {},
+      onChange: vi.fn(),
+      onSubmit: vi.fn(),
+    });
+
+    // Should have two date headings (dates include year if not current year)
+    await expect
+      .element(page.getByRole('heading', { level: 4 }).filter({ hasText: /Do 5\.12\./ }))
+      .toBeInTheDocument();
+    await expect
+      .element(page.getByRole('heading', { level: 4 }).filter({ hasText: /Fr 6\.12\./ }))
+      .toBeInTheDocument();
+  });
+
+  it('should handle selecting a slot with non-existent ID in selected list', async () => {
+    // Edge case: selectedTimeSlotIds contains an ID not in availableTimeSlots
+    render(TimeSlotStep, {
+      availableTimeSlots,
+      selectedTimeSlotIds: ['1', 'non-existent-id'],
+      maxTimeSlots: 3,
+      routePlanningDeadline,
+      canEditRoutePlanning: true,
+      showSearch: false,
+      searchQuery: '',
+      validationMessages: {},
+      onChange: vi.fn(),
+      onSubmit: vi.fn(),
+    });
+
+    // Should render selected slot for ID '1'
+    await expect.element(page.getByTestId('qa-selected-time-slot-1')).toBeInTheDocument();
+    // Should render selected slot for non-existent ID (with empty label)
+    await expect
+      .element(page.getByTestId('qa-selected-time-slot-non-existent-id'))
+      .toBeInTheDocument();
+  });
+
+  it('should show only selected slots in readonly mode', async () => {
+    render(TimeSlotStep, {
+      availableTimeSlots,
+      selectedTimeSlotIds: ['1', '3'],
+      maxTimeSlots: 3,
+      routePlanningDeadline,
+      canEditRoutePlanning: false,
+      showSearch: false,
+      searchQuery: '',
+      validationMessages: {},
+      onChange: vi.fn(),
+      onSubmit: vi.fn(),
+    });
+
+    // Should not render checkbox grid in readonly mode
+    await expect.element(page.getByTestId('qa-time-slot-1')).not.toBeInTheDocument();
+
+    // Should show selected slots
+    await expect.element(page.getByTestId('qa-selected-time-slot-1')).toBeInTheDocument();
+    await expect.element(page.getByTestId('qa-selected-time-slot-3')).toBeInTheDocument();
+
+    // Should not show remove buttons in readonly mode
+    await expect.element(page.getByTestId('qa-remove-selected-slot-1')).not.toBeInTheDocument();
+  });
+});

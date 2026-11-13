@@ -3,19 +3,24 @@ FROM node:22.22.2-slim AS builder
 
 WORKDIR /app
 
-RUN npm install -g pnpm
+# renovate: datasource=npm depName=pnpm
+ARG PNPM_VERSION=12.9.0
+RUN npm install -g pnpm@"${PNPM_VERSION}"
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-RUN pnpm install
+RUN pnpm install --frozen-lockfile
 
 COPY . .
+# These values are embedded in public browser assets; never pass secrets.
+ARG VITE_API_BASE_URL
+ARG VITE_API_TOKEN
 RUN pnpm run build
 
 # Production stage
 FROM nginx:alpine
 
 # Copy built assets from builder stage
-COPY --from=builder /app/dist /usr/share/nginx/html
+COPY --from=builder /app/build /usr/share/nginx/html
 
 # Copy custom nginx config if needed
 # COPY nginx.conf /etc/nginx/conf.d/default.conf

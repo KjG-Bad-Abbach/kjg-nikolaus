@@ -1,0 +1,220 @@
+import { page } from 'vitest/browser';
+import { describe, expect, it, vi } from 'vitest';
+import { render } from 'vitest-browser-svelte';
+import ChildrenSummary from './ChildrenSummary.svelte';
+import type { Child } from '$lib/types/booking';
+
+describe('ChildrenSummary', () => {
+  const finalDeadline = new Date('2024-12-10T19:30:00+01:00');
+
+  const completeChildren: Child[] = [
+    {
+      id: '1',
+      name: 'Max',
+      identification_trait: 'Blaue Augen',
+      speech: 'Max war dieses Jahr besonders fleißig',
+    },
+    {
+      id: '2',
+      name: 'Emma',
+      identification_trait: 'Blonde Haare',
+      speech: 'Emma hat immer ihre Hausaufgaben gemacht',
+    },
+  ];
+
+  it('should render with complete children information', async () => {
+    render(ChildrenSummary, {
+      children: completeChildren,
+      additionalNotes: '',
+      finalDeadline,
+      onEdit: vi.fn(),
+    });
+
+    const heading = page.getByRole('heading', { level: 3 });
+    await expect.element(heading).toHaveTextContent('Kinder');
+
+    await expect.element(page.getByText('Max', { exact: true })).toBeInTheDocument();
+    await expect.element(page.getByText('Blaue Augen', { exact: true })).toBeInTheDocument();
+    await expect
+      .element(page.getByText('Max war dieses Jahr besonders fleißig', { exact: true }))
+      .toBeInTheDocument();
+    await expect.element(page.getByText('Emma', { exact: true })).toBeInTheDocument();
+    await expect.element(page.getByText('Blonde Haare', { exact: true })).toBeInTheDocument();
+    await expect
+      .element(page.getByText('Emma hat immer ihre Hausaufgaben gemacht', { exact: true }))
+      .toBeInTheDocument();
+  });
+
+  it('should show missing field warning for empty children list', async () => {
+    render(ChildrenSummary, {
+      children: [],
+      additionalNotes: '',
+      finalDeadline,
+      onEdit: vi.fn(),
+    });
+
+    const warning = page.getByText('Angabe fehlt', { exact: false });
+    await expect.element(warning).toBeInTheDocument();
+    await expect.element(warning).toHaveClass(/italic/);
+    await expect.element(warning).toHaveClass(/text-rust/);
+  });
+
+  it('should show missing field warnings for incomplete child data', async () => {
+    const incompleteChildren1: Child[] = [
+      {
+        id: '1',
+        name: '',
+        identification_trait: 'Blaue Augen',
+        speech: '',
+      },
+    ];
+
+    const { rerender } = render(ChildrenSummary, {
+      children: incompleteChildren1,
+      additionalNotes: '',
+      finalDeadline,
+      onEdit: vi.fn(),
+    });
+
+    const warnings1 = page.getByText('Angabe fehlt', { exact: false });
+    await expect.element(warnings1.nth(0)).toBeInTheDocument();
+
+    const incompleteChildren2: Child[] = [
+      {
+        id: '1',
+        name: 'Max',
+        identification_trait: '',
+        speech: 'Max war dieses Jahr besonders fleißig',
+      },
+    ];
+
+    rerender({
+      children: incompleteChildren2,
+      additionalNotes: '',
+      finalDeadline,
+      onEdit: vi.fn(),
+    });
+
+    const warnings2 = page.getByText('Angabe fehlt', { exact: false });
+    await expect.element(warnings2.nth(0)).toBeInTheDocument();
+  });
+
+  it('should display additional notes when provided', async () => {
+    render(ChildrenSummary, {
+      children: completeChildren,
+      additionalNotes: 'Bitte klingeln Sie zweimal',
+      finalDeadline,
+      onEdit: vi.fn(),
+    });
+
+    await expect
+      .element(page.getByText('Hinweise für den Nikolaus:', { exact: false }))
+      .toBeInTheDocument();
+    await expect
+      .element(page.getByText('Bitte klingeln Sie zweimal', { exact: true }))
+      .toBeInTheDocument();
+  });
+
+  it('should not display additional notes section when empty', async () => {
+    render(ChildrenSummary, {
+      children: completeChildren,
+      additionalNotes: '',
+      finalDeadline,
+      onEdit: vi.fn(),
+    });
+
+    const notesLabel = page.getByText('Hinweise für den Nikolaus:', { exact: false });
+    await expect.element(notesLabel).not.toBeInTheDocument();
+  });
+
+  it('should call onEdit when edit button is clicked', async () => {
+    const onEdit = vi.fn();
+    render(ChildrenSummary, {
+      children: completeChildren,
+      additionalNotes: '',
+      finalDeadline,
+      onEdit,
+    });
+
+    const editButton = page.getByTitle('Bearbeiten');
+    await editButton.click();
+
+    expect(onEdit).toHaveBeenCalledOnce();
+  });
+
+  it('should show all field labels correctly', async () => {
+    render(ChildrenSummary, {
+      children: completeChildren,
+      additionalNotes: '',
+      finalDeadline,
+      onEdit: vi.fn(),
+    });
+
+    // Check that labels exist (there will be multiple since we have multiple children)
+    await expect.element(page.getByText('Name:', { exact: false }).nth(0)).toBeInTheDocument();
+    await expect.element(page.getByText('Merkmal:', { exact: false }).nth(0)).toBeInTheDocument();
+    await expect.element(page.getByText('Rede:', { exact: false }).nth(0)).toBeInTheDocument();
+  });
+
+  it('should show deadline in warnings', async () => {
+    render(ChildrenSummary, {
+      children: [],
+      additionalNotes: '',
+      finalDeadline,
+      onEdit: vi.fn(),
+    });
+
+    const deadline = page.getByText('Deadline:', { exact: false });
+    await expect.element(deadline).toBeInTheDocument();
+  });
+
+  it('should handle multiple children correctly', async () => {
+    render(ChildrenSummary, {
+      children: completeChildren,
+      additionalNotes: '',
+      finalDeadline,
+      onEdit: vi.fn(),
+    });
+
+    const list = page.getByRole('list');
+    await expect.element(list).toBeInTheDocument();
+  });
+
+  it('should not show deadline warning for complete child fields', async () => {
+    render(ChildrenSummary, {
+      children: completeChildren,
+      additionalNotes: '',
+      finalDeadline,
+      onEdit: vi.fn(),
+    });
+
+    // There should be no "Angabe fehlt" warnings for complete children
+    const warnings = page.getByText('Angabe fehlt', { exact: false });
+    await expect.element(warnings).not.toBeInTheDocument();
+  });
+
+  it('AdditionalNotes_SingleChild_Expect_ConsistentTopSpacing', async () => {
+    // Arrange
+    const singleChild: Child[] = [
+      {
+        id: '1',
+        name: 'Max',
+        identification_trait: 'Blaue Augen',
+        speech: 'Max war dieses Jahr besonders fleißig',
+      },
+    ];
+
+    // Act
+    const { container } = render(ChildrenSummary, {
+      children: singleChild,
+      additionalNotes: 'Bitte klingeln Sie zweimal',
+      finalDeadline,
+      onEdit: vi.fn(),
+    });
+
+    // Assert
+    // Notes spacing is independent of the child count.
+    const notesSection = container.querySelector('ul + div');
+    expect(notesSection?.classList.contains('mt-2')).toBe(true);
+  });
+});

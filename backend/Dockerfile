@@ -6,7 +6,11 @@ ENV NODE_ENV=${NODE_ENV}
 
 WORKDIR /opt/
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-RUN npm install -g node-gyp pnpm && pnpm config set fetch-retry-maxtimeout 600000 -g && pnpm install
+# renovate: datasource=npm depName=node-gyp
+ARG NODE_GYP_VERSION=11.2.0
+# renovate: datasource=npm depName=pnpm
+ARG PNPM_VERSION=12.9.0
+RUN npm install -g node-gyp@"${NODE_GYP_VERSION}" pnpm@"${PNPM_VERSION}" && pnpm config set fetch-retry-maxtimeout 600000 -g && pnpm install
 ENV PATH=/opt/node_modules/.bin:$PATH
 
 WORKDIR /opt/app

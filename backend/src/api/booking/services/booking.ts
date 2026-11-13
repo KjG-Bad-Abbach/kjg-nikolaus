@@ -121,7 +121,7 @@ export default factories.createCoreService(
         let subject =
           config.verification_email_subject_template ||
           "E-Mail verifiziert - Vervollständige deine Buchung";
-        const bookingUrl = `${config.base_url}/?id=${bookingId}`;
+        const bookingUrl = `${config.base_url.replace(/\/+$/, "")}/?id=${bookingId}`;
 
         let parameters = {
           booking_url: bookingUrl,
@@ -141,7 +141,7 @@ export default factories.createCoreService(
           return `
             <div class="mt-6">
               <a
-                class="w-full rounded-sm bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:outline-hidden focus:ring-2 focus:ring-java focus:ring-opacity-50"
+                class="w-full rounded-sm bg-atlantis px-4 py-2 font-bold text-white hover:bg-surfie-green focus:outline-hidden focus:ring-2 focus:ring-java/50"
                 href="${bookingUrl}"
               >
                 ${param || "Buchung vervollständigen/bearbeiten"}
@@ -239,7 +239,7 @@ export default factories.createCoreService(
             <h1>E-Mail erfolgreich verifiziert!</h1>
             <p>Vielen Dank für die Verifizierung deiner E-Mail-Adresse. Du kannst jetzt deine Buchung vervollständigen, indem du alle erforderlichen Informationen eingibst.</p>
             <p>Nutze den untenstehenden Link, um deine Buchung jederzeit aufzurufen und zu bearbeiten:</p>
-            <a href="${config.base_url}/?id=${bookingId}">Buchung vervollständigen/bearbeiten</a>
+            <a href="${bookingUrl}">Buchung vervollständigen/bearbeiten</a>
             <p>Bitte stelle sicher, dass du alle erforderlichen Felder für eine erfolgreiche Buchung ausfüllst.</p>
             `,
         });

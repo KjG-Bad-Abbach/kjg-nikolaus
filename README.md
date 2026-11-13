@@ -210,3 +210,11 @@ Deine KjG Bad Abbach.
 - Run the screenshot proof-of-concept from `frontend/` with `pnpm test:e2e:fast homepage-smoke`; the script freezes the homepage date and records a full-page capture once the hero renders.
 - Baselines are stored at `frontend/tests/e2e/__screenshots__/homepage-smoke-chromium.png`. After intentional UI updates, refresh them via `pnpm test:e2e:fast homepage-smoke --update-snapshots`.
 - Review results locally with `pnpm exec playwright show-report`. In CI, download the `homepage-smoke-playwright-report` and `homepage-smoke-screenshots` artifacts to inspect the HTML report, baseline, and any diffs.
+
+## Nix flake maintenance
+
+Run `nix --extra-experimental-features 'nix-command flakes' flake update` regularly to keep dependencies current and secure.
+
+## Dev container maintenance
+
+Run `devcontainer upgrade --workspace-folder .` regularly to keep feature versions current and secure.

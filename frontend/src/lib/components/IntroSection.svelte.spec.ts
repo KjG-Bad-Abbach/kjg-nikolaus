@@ -1,0 +1,320 @@
+import { page } from 'vitest/browser';
+import { describe, expect, it, vi } from 'vitest';
+import { render } from 'vitest-browser-svelte';
+import IntroSection from './IntroSection.svelte';
+import type { RichTextNode } from '$lib/types/booking';
+
+describe('IntroSection', () => {
+  it.each([
+    '<img src="invalid:" onerror="void 0">',
+    '<svg onload="void 0"></svg>',
+    '&lt;script&gt; & "quoted"',
+  ])('IntroSection_MarkupText_Expect_LiteralText (%s)', (text) => {
+    // Arrange
+    const introductionText: RichTextNode[] = [{ text, bold: true }];
+
+    // Act
+    const { container } = render(IntroSection, { introductionText });
+    const introduction = container.querySelector('#introduction-text')!;
+
+    // Assert
+    expect(introduction.textContent).toBe(text);
+    expect(introduction.querySelector('img, svg, script')).toBeNull();
+    expect(introduction.querySelector('strong')?.textContent).toBe(text);
+  });
+
+  it.each([
+    'javascript:alert(1)',
+    'JaVaScRiPt:alert(1)',
+    ' \tjava\nscript:alert(1)',
+    '\u0000javascript:alert(1)',
+    'data:text/html,<script>alert(1)</script>',
+    'vbscript:msgbox(1)',
+    'file:///etc/passwd',
+    'https://[invalid',
+    '',
+    undefined,
+  ])('IntroSection_UnsafeUrl_Expect_UnlinkedChildren (%s)', (url) => {
+    // Arrange
+    const introductionText: RichTextNode[] = [
+      { type: 'link', url, children: [{ text: 'Link label', italic: true }] },
+    ];
+
+    // Act
+    const { container } = render(IntroSection, { introductionText });
+
+    // Assert
+    expect(container.querySelector('#introduction-text a')).toBeNull();
+    expect(container.querySelector('em')?.textContent).toBe('Link label');
+  });
+
+  it.each([
+    'https://example.com/path?query=1&other=2',
+    'http://example.com',
+    'mailto:booking@example.com',
+    'tel:+49123456789',
+    '/booking',
+    '../booking',
+    '#contact',
+    '//example.com/booking',
+    ' HTTPS://example.com ',
+  ])('IntroSection_SafeUrl_Expect_PreservedLink (%s)', (url) => {
+    // Arrange
+    const introductionText: RichTextNode[] = [
+      { type: 'link', url, children: [{ text: 'Link label' }] },
+    ];
+
+    // Act
+    const { container } = render(IntroSection, { introductionText });
+
+    // Assert
+    const link = container.querySelector('a')!;
+    expect(link.getAttribute('href')).toBe(url.trim());
+    expect(link.textContent).toBe('Link label');
+  });
+
+  it('IntroSection_AttributePayload_Expect_NoInjectedAttributes', () => {
+    // Arrange
+    const url = 'https://example.com/" onclick="void 0';
+
+    // Act
+    const { container } = render(IntroSection, {
+      introductionText: [{ type: 'link', url, children: [{ text: 'Link' }] }],
+    });
+
+    // Assert
+    const link = container.querySelector('a')!;
+    expect(link.getAttribute('href')).toBe(url);
+    expect(link.hasAttribute('onclick')).toBe(false);
+  });
+
+  it.each([0, 7, 1.5, NaN, '1 onclick="void 0"' as unknown as number])(
+    'IntroSection_InvalidHeading_Expect_OnlyChildren (%s)',
+    (level) => {
+      // Arrange
+      const introductionText: RichTextNode[] = [
+        { type: 'heading', level, children: [{ text: 'Heading text' }] },
+      ];
+
+      // Act
+      const { container } = render(IntroSection, { introductionText });
+      const introduction = container.querySelector('#introduction-text')!;
+
+      // Assert
+      expect(introduction.textContent).toBe('Heading text');
+      expect(introduction.children).toHaveLength(0);
+    },
+  );
+
+  const sampleIntroText: RichTextNode[] = [
+    {
+      type: 'heading',
+      level: 2,
+      children: [{ type: 'text', text: 'Willkommen' }],
+    },
+    {
+      type: 'paragraph',
+      children: [
+        {
+          type: 'text',
+          text: 'Dies ist ein Test für die Einführung.',
+        },
+      ],
+    },
+  ];
+
+  it('should render introduction text', async () => {
+    render(IntroSection, {
+      introductionText: sampleIntroText,
+      onStart: vi.fn(),
+    });
+
+    await expect.element(page.getByText('Willkommen')).toBeInTheDocument();
+    await expect
+      .element(page.getByText('Dies ist ein Test für die Einführung.'))
+      .toBeInTheDocument();
+  });
+
+  it('should render start button and call onStart when clicked', async () => {
+    const onStart = vi.fn();
+    render(IntroSection, {
+      introductionText: sampleIntroText,
+      onStart,
+    });
+
+    const button = page.getByTestId('qa-intro-start');
+    await expect.element(button).toBeInTheDocument();
+    await expect.element(button).toHaveTextContent('Jetzt anmelden');
+
+    await button.click();
+    expect(onStart).toHaveBeenCalledOnce();
+  });
+
+  it('should render empty introduction text gracefully', async () => {
+    render(IntroSection, {
+      introductionText: [],
+      onStart: vi.fn(),
+    });
+
+    const button = page.getByTestId('qa-intro-start');
+    await expect.element(button).toBeInTheDocument();
+  });
+
+  it('should apply custom styles to headings via rich text renderer', async () => {
+    const introWithHeadings: RichTextNode[] = [
+      {
+        type: 'heading',
+        level: 1,
+        children: [{ type: 'text', text: 'Heading 1' }],
+      },
+    ];
+
+    const { container } = render(IntroSection, {
+      introductionText: introWithHeadings,
+      onStart: vi.fn(),
+    });
+
+    const heading = container.querySelector('h1');
+    expect(heading).toBeTruthy();
+    expect(heading?.classList.contains('text-calypso')).toBe(true);
+  });
+
+  it('should apply custom styles to links via rich text renderer', async () => {
+    const introWithLink: RichTextNode[] = [
+      {
+        type: 'paragraph',
+        children: [
+          {
+            type: 'link',
+            url: 'https://example.com',
+            children: [{ type: 'text', text: 'Example Link' }],
+          },
+        ],
+      },
+    ];
+
+    const { container } = render(IntroSection, {
+      introductionText: introWithLink,
+      onStart: vi.fn(),
+    });
+
+    const link = container.querySelector('a');
+    expect(link).toBeTruthy();
+    expect(link?.classList.contains('text-atlantis')).toBe(true);
+    expect(link?.classList.contains('hover:text-surfie-green')).toBe(true);
+  });
+
+  it('should render complex nested structures', async () => {
+    const complexIntro: RichTextNode[] = [
+      {
+        type: 'list',
+        format: 'ordered',
+        children: [
+          {
+            type: 'list-item',
+            children: [{ type: 'text', text: 'First item' }],
+          },
+          {
+            type: 'list-item',
+            children: [{ type: 'text', text: 'Second item' }],
+          },
+        ],
+      },
+    ];
+
+    const { container } = render(IntroSection, {
+      introductionText: complexIntro,
+      onStart: vi.fn(),
+    });
+
+    const list = container.querySelector('ol');
+    expect(list).toBeTruthy();
+  });
+
+  it('should handle text with bold formatting', async () => {
+    const boldIntro: RichTextNode[] = [
+      {
+        type: 'paragraph',
+        children: [
+          { type: 'text', text: 'This is ' },
+          { type: 'text', text: 'bold', bold: true },
+        ],
+      },
+    ];
+
+    const { container } = render(IntroSection, {
+      introductionText: boldIntro,
+      onStart: vi.fn(),
+    });
+
+    const strong = container.querySelector('strong');
+    expect(strong).toBeTruthy();
+    expect(strong?.textContent).toBe('bold');
+  });
+
+  it('should handle text with italic formatting', async () => {
+    const italicIntro: RichTextNode[] = [
+      {
+        type: 'paragraph',
+        children: [{ type: 'text', text: 'italic text', italic: true }],
+      },
+    ];
+
+    const { container } = render(IntroSection, {
+      introductionText: italicIntro,
+      onStart: vi.fn(),
+    });
+
+    const em = container.querySelector('em');
+    expect(em).toBeTruthy();
+    expect(em?.textContent).toBe('italic text');
+  });
+
+  it('should render multiple paragraphs correctly', async () => {
+    const multiParagraph: RichTextNode[] = [
+      {
+        type: 'paragraph',
+        children: [{ type: 'text', text: 'First paragraph' }],
+      },
+      {
+        type: 'paragraph',
+        children: [{ type: 'text', text: 'Second paragraph' }],
+      },
+    ];
+
+    render(IntroSection, {
+      introductionText: multiParagraph,
+      onStart: vi.fn(),
+    });
+
+    await expect.element(page.getByText('First paragraph')).toBeInTheDocument();
+    await expect.element(page.getByText('Second paragraph')).toBeInTheDocument();
+  });
+
+  it('should reactively update when introductionText changes', async () => {
+    const initialText: RichTextNode[] = [
+      {
+        type: 'paragraph',
+        children: [{ type: 'text', text: 'Initial text' }],
+      },
+    ];
+
+    const { rerender } = render(IntroSection, {
+      introductionText: initialText,
+      onStart: vi.fn(),
+    });
+
+    await expect.element(page.getByText('Initial text')).toBeInTheDocument();
+
+    const updatedText: RichTextNode[] = [
+      {
+        type: 'paragraph',
+        children: [{ type: 'text', text: 'Updated text' }],
+      },
+    ];
+
+    rerender({ introductionText: updatedText, onStart: vi.fn() });
+
+    await expect.element(page.getByText('Updated text')).toBeInTheDocument();
+  });
+});

@@ -22,15 +22,15 @@
     },
     "max_time_slots": {
       "type": "integer",
-      "default": 1,
       "required": true,
-      "max": 99,
-      "min": 1
+      "default": 1,
+      "min": 1,
+      "max": 99
     },
     "show_search_for_time_slots": {
       "type": "boolean",
-      "default": false,
-      "required": true
+      "required": true,
+      "default": false
     },
     "route_planning_deadline": {
       "type": "datetime",
@@ -58,6 +58,13 @@
       "required": true
     },
     "verification_email_body_template": {
+      "type": "blocks"
+    },
+    "confirmation_email_subject_template": {
+      "type": "string",
+      "required": true
+    },
+    "confirmation_email_body_template": {
       "type": "blocks"
     }
   }

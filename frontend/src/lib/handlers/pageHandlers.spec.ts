@@ -1,0 +1,203 @@
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import {
+  reloadBooking,
+  handleStepChange,
+  handleStart,
+  handleEditContact,
+  handleEditAddress,
+  handleEditTimeSlots,
+  handleEditChildren,
+  type StoreContext,
+} from './pageHandlers';
+import * as bookingInit from '$lib/utils/bookingInit';
+
+// Mock the bookingInit utility
+vi.mock('$lib/utils/bookingInit', async () => {
+  const actual = await vi.importActual('$lib/utils/bookingInit');
+  return {
+    ...actual,
+    fetchAndUpdateTimeSlots: vi.fn(),
+    loadBookingData: vi.fn(),
+    handleStepChange: vi.fn(),
+  };
+});
+
+describe('pageHandlers', () => {
+  let mockContext: StoreContext;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+
+    mockContext = {
+      uiStore: {
+        bookingId: 'test-booking-123',
+        setView: vi.fn(),
+        setStep: vi.fn(),
+        canJumpToAnyStep: true,
+      } as unknown as StoreContext['uiStore'],
+      bookingStore: {
+        hasChanges: vi.fn().mockReturnValue(false),
+      } as unknown as StoreContext['bookingStore'],
+      validationStore: {} as unknown as StoreContext['validationStore'],
+      optionsStore: {} as unknown as StoreContext['optionsStore'],
+    };
+  });
+
+  describe('handleStepChange refresh', () => {
+    it('HandleStepChange_ExistingBooking_Expect_RefreshCurrentBookingSlots', async () => {
+      // Arrange
+      const bookingId = 'test-booking-123';
+      const bookingStore = mockContext.bookingStore;
+      const uiStore = mockContext.uiStore;
+
+      // Act
+      await handleStepChange(2, mockContext);
+      await vi.mocked(bookingInit.handleStepChange).mock.calls[0][6]();
+
+      // Assert
+      expect(bookingInit.fetchAndUpdateTimeSlots).toHaveBeenCalledWith(
+        bookingId,
+        bookingStore,
+        uiStore,
+      );
+    });
+
+    it('HandleStepChange_NewBooking_Expect_RefreshWithoutBookingId', async () => {
+      // Arrange
+      mockContext.uiStore.bookingId = null;
+
+      // Act
+      await handleStepChange(2, mockContext);
+      await vi.mocked(bookingInit.handleStepChange).mock.calls[0][6]();
+
+      // Assert
+      expect(bookingInit.fetchAndUpdateTimeSlots).toHaveBeenCalledWith(
+        null,
+        mockContext.bookingStore,
+        mockContext.uiStore,
+      );
+    });
+  });
+
+  describe('reloadBooking', () => {
+    it('should reload booking data when bookingId exists', async () => {
+      await reloadBooking(mockContext);
+
+      expect(bookingInit.loadBookingData).toHaveBeenCalledWith({
+        bookingId: 'test-booking-123',
+        uiStore: mockContext.uiStore,
+        optionsStore: mockContext.optionsStore,
+        bookingStore: mockContext.bookingStore,
+        validationStore: mockContext.validationStore,
+      });
+    });
+
+    it('should not reload when bookingId is null', async () => {
+      mockContext.uiStore.bookingId = null;
+
+      await reloadBooking(mockContext);
+
+      expect(bookingInit.loadBookingData).not.toHaveBeenCalled();
+    });
+
+    it('should not reload when bookingId is empty string', async () => {
+      mockContext.uiStore.bookingId = '';
+
+      await reloadBooking(mockContext);
+
+      expect(bookingInit.loadBookingData).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('handleStepChange', () => {
+    it('should call utility handleStepChange with all parameters', async () => {
+      // Arrange
+      const newStep = 2;
+      const canJumpToAnyStep = true;
+      const hasChanges = false;
+
+      // Act
+      await handleStepChange(newStep, mockContext);
+
+      // Assert
+      expect(bookingInit.handleStepChange).toHaveBeenCalledWith(
+        newStep,
+        canJumpToAnyStep,
+        hasChanges,
+        mockContext.bookingStore,
+        mockContext.validationStore,
+        mockContext.uiStore,
+        expect.any(Function),
+      );
+    });
+
+    it('should handle step change when canJumpToAnyStep is false', async () => {
+      // Arrange
+      mockContext.uiStore.canJumpToAnyStep = false;
+      vi.mocked(mockContext.bookingStore.hasChanges).mockReturnValue(true);
+
+      // Act
+      await handleStepChange(3, mockContext);
+
+      // Assert
+      expect(bookingInit.handleStepChange).toHaveBeenCalledWith(
+        3,
+        false,
+        true,
+        mockContext.bookingStore,
+        mockContext.validationStore,
+        mockContext.uiStore,
+        expect.any(Function),
+      );
+    });
+  });
+
+  describe('handleStart', () => {
+    it('should set view to steps', () => {
+      handleStart(mockContext.uiStore);
+
+      expect(mockContext.uiStore.setView).toHaveBeenCalledWith('steps');
+    });
+  });
+
+  it.each([
+    {
+      name: 'HandleEditContact_ExistingBooking_Expect_SharedNavigation',
+      handler: handleEditContact,
+      step: 0,
+    },
+    {
+      name: 'HandleEditAddress_ExistingBooking_Expect_SharedNavigation',
+      handler: handleEditAddress,
+      step: 1,
+    },
+    {
+      name: 'HandleEditTimeSlots_ExistingBooking_Expect_SharedNavigation',
+      handler: handleEditTimeSlots,
+      step: 2,
+    },
+    {
+      name: 'HandleEditChildren_ExistingBooking_Expect_SharedNavigation',
+      handler: handleEditChildren,
+      step: 3,
+    },
+  ])('$name', async ({ handler, step }) => {
+    // Arrange
+    vi.mocked(mockContext.bookingStore.hasChanges).mockReturnValue(true);
+
+    // Act
+    await handler(mockContext);
+
+    // Assert
+    expect(bookingInit.handleStepChange).toHaveBeenCalledWith(
+      step,
+      true,
+      true,
+      mockContext.bookingStore,
+      mockContext.validationStore,
+      mockContext.uiStore,
+      expect.any(Function),
+    );
+    expect(mockContext.uiStore.setStep).not.toHaveBeenCalled();
+  });
+});

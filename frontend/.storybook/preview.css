@@ -1,0 +1,4 @@
+#storybook-root,
+div:has(> .innerZoomElementWrapper) {
+  max-width: 100%;
+}

@@ -81,7 +81,7 @@ export interface SharedContactPerson extends Struct.ComponentSchema {
 }
 
 declare module '@strapi/strapi' {
-  export module Public {
+  export namespace Public {
     export interface ComponentSchemas {
       'booking.child': BookingChild;
       'shared.address': SharedAddress;

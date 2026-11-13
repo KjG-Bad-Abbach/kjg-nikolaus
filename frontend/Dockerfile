@@ -5,19 +5,21 @@ FROM node:22.22.2-slim
 WORKDIR /app
 
 # Install pnpm globally
-RUN npm install -g pnpm
+# renovate: datasource=npm depName=pnpm
+ARG PNPM_VERSION=12.9.0
+RUN npm install -g pnpm@"${PNPM_VERSION}"
 
 # Copy package files
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
 # Install dependencies
-RUN pnpm install
+RUN pnpm install --frozen-lockfile
 
 # Copy the rest of the application
 COPY . .
 
-# Expose port (if you're using browser-sync)
-EXPOSE 3000 3001
+# Expose the Vite development server
+EXPOSE 3000
 
 # Command to run the development server
-CMD ["pnpm", "run", "dev"]
+CMD ["pnpm", "run", "dev", "--host", "0.0.0.0", "--port", "3000", "--strictPort"]

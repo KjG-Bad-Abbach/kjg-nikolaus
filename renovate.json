@@ -12,17 +12,43 @@
     ":label(renovate)",
     ":maintainLockFilesWeekly",
     ":semanticCommits",
-    ":separateMultipleMajorReleases"
+    ":separateMultipleMajorReleases",
+    "customManagers:dockerfileVersions",
+    "customManagers:githubActionsVersions",
+    "customManagers:gitlabPipelineVersions"
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "**/*.sh",
+        "**/*.bash",
+        "**/.*rc",
+        "**/.*profile",
+        "**/Dockerfile",
+        "**/Dockerfile.*",
+        "**/*.yml",
+        "**/*.yaml"
+      ],
+      "matchStrings": [
+        "# +renovate: +datasource=(?<datasource>[a-zA-Z0-9-._]+?) +depName=(?<depName>[^\\n\\r\\s]+?)(?: +(lookupName|packageName)=(?<packageName>[^\\n\\r\\s]+?))?(?: +versioning=(?<versioning>[^\\n\\r\\s]+?))?(?: +extractVersion=(?<extractVersion>[^\\n\\r\\s]+?))?(?: +registryUrl=(?<registryUrl>[^\\n\\r\\s]+?))?[\\n\\r\\s]+(?:(?:local|global|ARG|ENV)[\\n\\r\\s]+)?[A-Za-z0-9_]+?_VERSION[\\n\\r\\s]*(?:=|:)[\\n\\r\\s]*[\"']?(?<currentValue>[^\\n\\r\\s\"']+)[\"']?[^\\S\\n\\r]*"
+      ]
+    }
   ],
   "git-submodules": {
     "enabled": true
   },
   "rangeStrategy": "bump",
+  "separateMultipleMajor": true,
   "packageRules": [
     {
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
-      "automerge": true,
-      "platformAutomerge": false
+      "matchCurrentVersion": "!/^0/",
+      "automerge": true
+    },
+    {
+      "matchManagers": ["git-submodules"],
+      "automerge": true
     },
     {
       "matchDatasources": ["npm"],
@@ -30,6 +56,7 @@
       "internalChecksFilter": "strict"
     }
   ],
+  "platformAutomerge": false,
   "rebaseWhen": "conflicted",
   "osvVulnerabilityAlerts": true
 }

@@ -1,0 +1,69 @@
+{
+  "kind": "collectionType",
+  "collectionName": "booking_confirmations",
+  "info": {
+    "singularName": "booking-confirmation",
+    "pluralName": "booking-confirmations",
+    "displayName": "BookingConfirmation"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "booking": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::booking.booking",
+      "inversedBy": "confirmation"
+    },
+    "assigned_time_slot": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::time-slot.time-slot"
+    },
+    "assigned_time_slot_overwrite": {
+      "type": "string"
+    },
+    "additional_hint_type": {
+      "type": "enumeration",
+      "required": true,
+      "default": "text",
+      "enum": [
+        "text",
+        "rich"
+      ]
+    },
+    "additional_hint_text": {
+      "type": "text",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "additional_hint_type"
+            },
+            "text"
+          ]
+        }
+      }
+    },
+    "additional_hint_rich": {
+      "type": "blocks",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "additional_hint_type"
+            },
+            "rich"
+          ]
+        }
+      }
+    },
+    "confirmation_sent": {
+      "type": "boolean",
+      "required": true,
+      "default": false
+    }
+  }
+}
