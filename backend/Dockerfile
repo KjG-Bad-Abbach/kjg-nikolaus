@@ -9,7 +9,7 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 # renovate: datasource=npm depName=node-gyp
 ARG NODE_GYP_VERSION=11.5.0
 # renovate: datasource=npm depName=pnpm
-ARG PNPM_VERSION=12.9.0
+ARG PNPM_VERSION=12.18.0
 RUN npm install -g node-gyp@"${NODE_GYP_VERSION}" pnpm@"${PNPM_VERSION}" && pnpm config set fetch-retry-maxtimeout 600000 -g && pnpm install
 ENV PATH=/opt/node_modules/.bin:$PATH
 
