@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Install pnpm globally
 # renovate: datasource=npm depName=pnpm
-ARG PNPM_VERSION=12.20.0
+ARG PNPM_VERSION=12.21.0
 RUN npm install -g pnpm@"${PNPM_VERSION}"
 
 # Copy package files
