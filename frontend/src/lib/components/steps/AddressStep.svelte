@@ -12,9 +12,9 @@
     /** Present location description */
     presentLocation: string;
     /** Route planning deadline */
-    routePlanningDeadline: Date;
+    routePlanningDeadline: Date | null;
     /** Final deadline for data completion */
-    finalDeadline: Date;
+    finalDeadline: Date | null;
     /** Whether route planning fields can be edited */
     canEditRoutePlanning: boolean;
     /** Whether any editing is allowed */

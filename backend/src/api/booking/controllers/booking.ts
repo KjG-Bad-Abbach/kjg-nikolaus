@@ -2,7 +2,20 @@
  * booking controller
  */
 
-import { factories } from "@strapi/strapi";
+import { factories, type Core } from "@strapi/strapi";
+
+async function requireConfiguredDeadlines(
+  strapi: Core.Strapi,
+  ctx: { throw(status: number, message: string): never }
+): Promise<void> {
+  const config = await strapi.documents("api::config.config").findFirst();
+  if (!config?.route_planning_deadline || !config?.final_deadline) {
+    ctx.throw(
+      403,
+      "Booking and editing are closed until both deadlines are configured."
+    );
+  }
+}
 
 export default factories.createCoreController(
   "api::booking.booking",
@@ -18,6 +31,7 @@ export default factories.createCoreController(
     },
 
     async create(ctx) {
+      await requireConfiguredDeadlines(strapi, ctx);
       const data = (await this.sanitizeInput(ctx.request.body.data, ctx)) as {
         time_slots?: any[];
       };
@@ -48,6 +62,7 @@ export default factories.createCoreController(
     },
 
     async update(ctx) {
+      await requireConfiguredDeadlines(strapi, ctx);
       const data = (await this.sanitizeInput(ctx.request.body.data, ctx)) as {
         time_slots?: any[];
       };

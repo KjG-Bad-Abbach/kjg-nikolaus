@@ -11,8 +11,8 @@
    */
 
   export type Props = {
-    routePlanningDeadline: Date;
-    finalDeadline: Date;
+    routePlanningDeadline: Date | null;
+    finalDeadline: Date | null;
     canEditRoutePlanning: boolean;
     canEditAnything: boolean;
   };

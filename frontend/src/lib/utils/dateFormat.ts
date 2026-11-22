@@ -32,7 +32,8 @@ export function formatTime(date: Date): string {
  * Format date and time as "Fr 5.12. 19:30 Uhr"
  * Example: "Fr 5.12. 19:30 Uhr"
  */
-export function formatDateTime(date: Date): string {
+export function formatDateTime(date: Date | null): string {
+  if (date === null) return 'noch nicht festgelegt';
   return `${formatDate(date)} ${formatTime(date)} Uhr`;
 }
 

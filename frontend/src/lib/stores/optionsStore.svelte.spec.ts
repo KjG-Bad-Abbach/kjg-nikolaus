@@ -11,10 +11,8 @@ describe('optionsStore', () => {
     expect(optionsStore.id).toBe(null);
     expect(optionsStore.show_search_for_time_slots).toBe(false);
     expect(optionsStore.max_time_slots).toBe(3);
-    expect(optionsStore.route_planning_deadline).toEqual(
-      new SvelteDate('2004-11-27T23:59:59+01:00'),
-    );
-    expect(optionsStore.final_deadline).toEqual(new SvelteDate('2004-12-01T23:59:59+01:00'));
+    expect(optionsStore.route_planning_deadline).toBeNull();
+    expect(optionsStore.final_deadline).toBeNull();
     expect(optionsStore.introduction_text).toEqual([]);
     expect(optionsStore.privacy_policy_link).toBe(null);
     expect(optionsStore.legal_notice_link).toBe(null);
@@ -96,17 +94,39 @@ describe('optionsStore', () => {
   });
 
   it('should reset to default values', () => {
+    // Arrange
     optionsStore.update({
       id: '789',
       show_search_for_time_slots: true,
       max_time_slots: 10,
+      route_planning_deadline: new SvelteDate('2024-12-05T23:59:59+01:00'),
+      final_deadline: new SvelteDate('2024-12-10T23:59:59+01:00'),
     });
 
+    // Act
     optionsStore.reset();
 
+    // Assert
     expect(optionsStore.id).toBe(null);
     expect(optionsStore.show_search_for_time_slots).toBe(false);
     expect(optionsStore.max_time_slots).toBe(3);
+    expect(optionsStore.route_planning_deadline).toBeNull();
+    expect(optionsStore.final_deadline).toBeNull();
+  });
+
+  it('Update_UnsetDeadlines_Expect_PreviouslyConfiguredDatesCleared', () => {
+    // Arrange
+    optionsStore.update({
+      route_planning_deadline: new SvelteDate('2024-12-05T23:59:59+01:00'),
+      final_deadline: new SvelteDate('2024-12-10T23:59:59+01:00'),
+    });
+
+    // Act
+    optionsStore.update({ route_planning_deadline: null, final_deadline: null });
+
+    // Assert
+    expect(optionsStore.route_planning_deadline).toBeNull();
+    expect(optionsStore.final_deadline).toBeNull();
   });
 
   it('should preserve unchanged values when updating partial options', () => {

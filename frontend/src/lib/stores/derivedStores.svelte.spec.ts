@@ -9,8 +9,29 @@ describe('derivedStores', () => {
 
   beforeEach(() => {
     optionsStore.reset();
+    optionsStore.update({
+      route_planning_deadline: new SvelteDate('2024-12-02T12:00:00Z'),
+      final_deadline: new SvelteDate('2024-12-02T12:00:00Z'),
+    });
     bookingStore.reset();
     derivedStores.setCurrentTime(now_ms);
+  });
+
+  it.each([
+    { route_planning_deadline: null },
+    { final_deadline: null },
+    { route_planning_deadline: null, final_deadline: null },
+  ])('Permissions_UnsetDeadlines%j_Expect_AllEditingClosed', (deadlines) => {
+    // Arrange
+    expect(derivedStores.canEditRoutePlanning).toBe(true);
+    expect(derivedStores.canEditAnything).toBe(true);
+
+    // Act
+    optionsStore.update(deadlines);
+
+    // Assert
+    expect(derivedStores.canEditRoutePlanning).toBe(false);
+    expect(derivedStores.canEditAnything).toBe(false);
   });
 
   describe('canEditRoutePlanning', () => {

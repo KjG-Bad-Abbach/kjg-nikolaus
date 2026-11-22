@@ -68,14 +68,14 @@ export interface Config {
   documentId?: string;
   show_search_for_time_slots: boolean;
   max_time_slots: number;
-  route_planning_deadline: SvelteDate;
-  final_deadline: SvelteDate;
+  route_planning_deadline: SvelteDate | null;
+  final_deadline: SvelteDate | null;
   introduction_text: RichTextNode[];
   privacy_policy_link: string | null;
   legal_notice_link: string | null;
   api_token?: string;
-  base_url?: string;
-  api_base_url?: string;
+  base_url?: string | null;
+  api_base_url?: string | null;
 }
 
 export interface Step {

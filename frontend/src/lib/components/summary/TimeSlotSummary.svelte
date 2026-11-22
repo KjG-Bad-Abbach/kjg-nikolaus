@@ -13,7 +13,7 @@
     /** Maximum number of time slots that can be selected */
     maxTimeSlots: number;
     /** Route planning deadline */
-    routePlanningDeadline: Date;
+    routePlanningDeadline: Date | null;
     /** Callback when edit button is clicked */
     onEdit?: () => void;
   };

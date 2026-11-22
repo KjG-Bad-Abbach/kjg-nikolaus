@@ -77,6 +77,53 @@ describe('/+page.svelte', () => {
     await expect.element(page.getByText(/Finale Deadline:/)).toBeInTheDocument();
   });
 
+  it.each(['route_planning_deadline', 'final_deadline'] as const)(
+    'Deadlines_Unset%s_Expect_AllFormsClosedAndBlankDatesExplained',
+    async (deadline) => {
+      // Arrange
+      render(Page);
+      await expect.element(page.getByTestId('qa-contact-form')).toBeVisible();
+
+      // Act
+      optionsStore.update({ [deadline]: null });
+
+      // Assert
+      for (const [step, form, fields, submit] of [
+        [0, 'qa-contact-form', ['qa-contact-first-name'], 'qa-contact-submit'],
+        [
+          1,
+          'qa-address-form',
+          ['qa-address-street', 'qa-address-present-location'],
+          'qa-address-submit',
+        ],
+        [2, 'qa-time-slot-form', [], 'qa-time-slot-submit'],
+        [3, 'qa-children-form', ['qa-additional-notes'], 'qa-children-submit'],
+      ] as const) {
+        uiStore.setStep(step);
+        await expect.element(page.getByTestId(form)).toBeInTheDocument();
+        for (const field of fields) {
+          await expect.element(page.getByTestId(field)).toHaveAttribute('readonly');
+        }
+        await expect.element(page.getByTestId(submit)).not.toBeInTheDocument();
+      }
+      uiStore.setStep(4);
+      await expect
+        .element(
+          page.getByTestId(
+            deadline === 'route_planning_deadline'
+              ? 'qa-summary-route-missing'
+              : 'qa-summary-details-missing',
+          ),
+        )
+        .toHaveTextContent('noch nicht festgelegt');
+      await expect
+        .element(page.getByTestId('qa-booking-root'))
+        .not.toHaveTextContent(/1970|Invalid Date/);
+      expect(derivedStores.canEditRoutePlanning).toBe(false);
+      expect(derivedStores.canEditAnything).toBe(false);
+    },
+  );
+
   it.each([0, 1, 2, 3, 4])(
     'Summaries_CurrentStep%s_Expect_AllPopulatedNoncurrentSections',
     async (step) => {

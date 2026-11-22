@@ -10,7 +10,7 @@
     /** Contact person information */
     contactPerson: ContactPerson;
     /** Final deadline for data completion */
-    finalDeadline: Date;
+    finalDeadline: Date | null;
     /** Whether editing is allowed */
     canEdit: boolean;
     /** Validation error messages keyed by field path */

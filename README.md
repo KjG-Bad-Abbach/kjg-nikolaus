@@ -1,10 +1,34 @@
 # 🚀 Getting started with KjG Nikolaus Buchung
 
-In the Strapi backend `Content Manager` -> `Single Types` -> `Config` configure the basic configuration:
+## Initial setup runs on backend startup
 
-- `api_token`: see below how to create an [API Token](#-create-an-api-token)
-- `base_url`: this is the web URL for the tool and is used for link generation in emails (i. e. `https://nikolaus.kjg-bad-abbach.de`)
-- `api_base_url`: this is the API URL the frontend will use to make API calls (i. e. `https://nikolaus.kjg-bad-abbach.de`)
+The backend creates the `Config` record, a browser-public API token with limited permissions, and Public access to `Config.find` without replacing other role permissions.
+It seeds the verification and confirmation email templates from the [default templates](backend/src/locales/de.json).
+Existing Config values and tokens are preserved; missing or empty confirmation templates receive their defaults.
+Time slots are never generated.
+
+Complete these steps before opening bookings:
+
+1. Replace the placeholder secrets and database settings in [`.env.example`](.env.example), then start the backend and create your first Strapi administrator.
+2. Supply `BASE_URL` and `API_BASE_URL` to the backend and restart it after changing them.
+   `BASE_URL` is the browser-reachable booking site URL used for email links; `API_BASE_URL` is the browser-reachable API origin, without `/api`.
+   Use absolute HTTP(S) URLs without credentials.
+   URLs are environment-owned, not saved or editable in Config; the Config API exposes the current environment values.
+   No explicit Docker service mappings are added; provide the variables through your deployment environment or the existing Compose `env_file`.
+   The frontend must reach `/api/config` through its configured API URL or a same-origin `/api/` route before it can load the Config values.
+   Keep that bootstrap origin aligned with your deployment; changing a frontend build-time API origin requires [rebuilding its static assets](frontend/README.md#build-and-deploy-static-files).
+3. Set both `route_planning_deadline` and `final_deadline` in Config.
+   Booking creation and editing remain closed while either deadline is unset; startup warnings identify the missing setup.
+4. Review Config and the email templates, configure the [SMTP settings](backend/config/plugins.ts), and [create this season's time slots](#-create-the-time-slots).
+5. Test booking creation, verification email delivery, and booking reload before sharing the booking site.
+   For the development stack, inspect email in Mailhog at <http://localhost:8025>.
+
+Before upgrading an existing installation, back up the database and copy its Config URLs into the backend environment.
+The URL fields are removed from the Config schema and are no longer read from the database; there is no database fallback when an environment value is missing or invalid.
+
+### Review the Config values
+
+- `api_token`: generated automatically with the [frontend permissions](#-create-an-api-token); publicly readable by design, not a private credential
 - `max_time_slots`: this is the number of concurrent reservations per available slot booking
   - Example:
     - A Time-slot from `17:00-17:30` has `max_bookings = 4` (there are 4 Nikolaus, they can visit 4 families in parallel at the same time)
@@ -15,7 +39,7 @@ In the Strapi backend `Content Manager` -> `Single Types` -> `Config` configure 
     - In rare cases there might be a constellation where the last family maybe cannot select 3 Time-slots anymore, then it can be possible that this family does not get any Time-slot and gets no visit by the Nikolaus. But this only happens if the sum of `max_bookings` of all Time-slots can not be divided by `max_time_slots`.
   - In 2024 we testet the tool with `max_time_slots = 3`
 - `show_search_for_time_slots`: if there are many Time-slots you can enable the search box for them
-- Deadlines
+- Deadlines: initially unset; configure both to enable booking and editing
   - Example for 2024: Nikolaus visits are planned for 5. and 6. December
   - `route_planning_deadline`: a good value is one week before the first Nikolaus visit will happen (so for 2024 we used: `27.11.2024 23:59`)
   - `final_deadline`: a good value is one week before the first Nikolaus visit will happen (so for 2024 we used: `01.12.2024 23:59`)
@@ -35,23 +59,9 @@ In the Strapi backend `Content Manager` -> `Single Types` -> `Config` configure 
   ```
 - Verification Email
   - Once the contact details are filled out and saved to the server, the user will get an email to verify their email address and to get the personal link to edit the booking at any time.
-  - `verification_email_subject_template`: enter the subject for that verification email (i. e. `E-Mail verifiziert - Vervollständige deine Buchung`)
-  - `verification_email_body_template`: enter the body for that verification email, for example:
-    ```
-    E-Mail erfolgreich verifiziert!
-
-    Hallo {{first_name}} {{last_name}},
-
-    vielen Dank für die Verifizierung deiner E-Mail-Adresse. Du kannst jetzt deine Buchung vervollständigen, indem du alle erforderlichen Informationen eingibst.
-
-    Nutze den untenstehenden Link, um deine Buchung jederzeit aufzurufen, zu überprüfen und zu bearbeiten:
-
-    {{button('Buchung vervollständigen/bearbeiten')}}
-
-    Bitte stelle sicher, dass du alle erforderlichen Felder für eine erfolgreiche Buchung ausfüllst.
-
-    Deine KjG Bad Abbach.
-    ```
+  - `verification_email_subject_template` and `verification_email_body_template`: initialized from the [default template](backend/src/locales/de.json); edit them in Config if needed
+  - `confirmation_email_subject_template`: required and initialized from the default templates; existing custom subjects are preserved
+  - `confirmation_email_body_template`: initialized from the default templates; existing custom bodies are preserved
   - Possible placeholders are:
     - `{{subject}}` (not available for `verification_email_subject_template`)
     - `{{button('Some text for the button')}}` (not available for `verification_email_subject_template`)
@@ -60,11 +70,6 @@ In the Strapi backend `Content Manager` -> `Single Types` -> `Config` configure 
     - `{{last_name}}`
     - `{{phone_number}}`
     - `{{email}}`
-
-Make the config available for Public users with the following rights under `Settings` -> `Users & Permissions Plugin` -> `Roles` -> edit `Public`
-
-- `Permissions` for `Config`:
-  - `find`
 
 ## ⏰ Create the Time-slots
 
@@ -133,19 +138,15 @@ Authorization: Bearer {{$dotenv REST_HISTORY_API_TOKEN}}
 
 ## 🔑 Create an API Token
 
-Generate an API token with the following rights under `Settings` -> `Global Settings` -> `API Tokens` -> `New`
+The backend creates the `Booking frontend` custom token and stores its value in Config.
+Its exact permissions are defined in [the provisioning code](backend/src/provisioning.ts); no booking-list, history, delete, or time-slot write access is granted.
+The token has no expiry.
+When rotating it, update Config and any frontend token overrides together.
+Existing tokens are neither rotated nor removed, including Strapi's built-in default tokens.
+Audit existing installations separately; never put a Full Access token or an administrative token in Config or frontend environment variables.
 
-- `Token type`: `Custom`
-- `Permissions` for `Config`:
-  - `find`
-- `Permissions` for `Booking`:
-  - `sendVerificationEmail`
-  - `create`
-  - `update`
-  - `findOne`
-- `Permissions` for `Time-slot`:
-  - `find`
-  - `findOne`
+For the separate administrative operations above, create a token under `Settings` -> `Global Settings` -> `API Tokens` -> `New`, choose `Custom`, and grant only the permissions needed for that operation.
+Never reuse those administrative tokens for the frontend.
 
 ## Screenshots
 

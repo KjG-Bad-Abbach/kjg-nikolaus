@@ -20,18 +20,27 @@ function normalizeTimeSlots(timeSlots: TimeSlotResponse[]): TimeSlot[] {
     .sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime());
 }
 
+function parseDeadline(deadline: string | null): SvelteDate | null {
+  return deadline === null ? null : new SvelteDate(deadline);
+}
+
 /**
  * Load application configuration from API
  */
 export async function loadConfig(): Promise<Config> {
-  const response = await sendRequest<{ data: Config }>({
+  const response = await sendRequest<{
+    data: Omit<Config, 'route_planning_deadline' | 'final_deadline'> & {
+      route_planning_deadline: string | null;
+      final_deadline: string | null;
+    };
+  }>({
     url: '/api/config?populate=*',
   });
 
   return {
     ...response.data,
-    route_planning_deadline: new SvelteDate(response.data.route_planning_deadline),
-    final_deadline: new SvelteDate(response.data.final_deadline),
+    route_planning_deadline: parseDeadline(response.data.route_planning_deadline),
+    final_deadline: parseDeadline(response.data.final_deadline),
   };
 }
 

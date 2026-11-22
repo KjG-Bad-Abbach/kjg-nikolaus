@@ -68,6 +68,17 @@ describe('date formatting utilities', () => {
   });
 
   describe('formatDateTime', () => {
+    it('FormatDateTime_UnsetDeadline_Expect_MeaningfulGermanText', () => {
+      // Arrange
+      const deadline = null;
+
+      // Act
+      const result = formatDateTime(deadline);
+
+      // Assert
+      expect(result).toBe('noch nicht festgelegt');
+    });
+
     it('should combine date and time with "Uhr"', () => {
       const currentYear = new Date().getFullYear();
       const differentYear = currentYear + 1;

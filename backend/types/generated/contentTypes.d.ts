@@ -574,16 +574,14 @@ export interface ApiConfigConfig extends Struct.SingleTypeSchema {
     draftAndPublish: false;
   };
   attributes: {
-    api_base_url: Schema.Attribute.String & Schema.Attribute.Required;
     api_token: Schema.Attribute.Text & Schema.Attribute.Required;
-    base_url: Schema.Attribute.String & Schema.Attribute.Required;
     confirmation_email_body_template: Schema.Attribute.Blocks;
     confirmation_email_subject_template: Schema.Attribute.String &
       Schema.Attribute.Required;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    final_deadline: Schema.Attribute.DateTime & Schema.Attribute.Required;
+    final_deadline: Schema.Attribute.DateTime;
     introduction_text: Schema.Attribute.Blocks;
     legal_notice_link: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
@@ -601,11 +599,10 @@ export interface ApiConfigConfig extends Struct.SingleTypeSchema {
         },
         number
       > &
-      Schema.Attribute.DefaultTo<1>;
+      Schema.Attribute.DefaultTo<3>;
     privacy_policy_link: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
-    route_planning_deadline: Schema.Attribute.DateTime &
-      Schema.Attribute.Required;
+    route_planning_deadline: Schema.Attribute.DateTime;
     show_search_for_time_slots: Schema.Attribute.Boolean &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<false>;

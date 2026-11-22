@@ -10,9 +10,9 @@
     /** Whether all information is complete */
     isEverythingFilled: boolean;
     /** Route planning deadline */
-    routePlanningDeadline: Date;
+    routePlanningDeadline: Date | null;
     /** Final deadline for all details */
-    finalDeadline: Date;
+    finalDeadline: Date | null;
   };
 
   const { isRoutePlanningFilled, isEverythingFilled, routePlanningDeadline, finalDeadline }: Props =

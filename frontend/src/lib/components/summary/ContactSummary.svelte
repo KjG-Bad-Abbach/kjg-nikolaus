@@ -12,7 +12,7 @@
     /** Contact person information */
     contactPerson: ContactPerson;
     /** Final deadline for data completion */
-    finalDeadline: Date;
+    finalDeadline: Date | null;
     /** Callback when edit button is clicked */
     onEdit?: () => void;
   };

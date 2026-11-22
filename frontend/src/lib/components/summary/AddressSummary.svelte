@@ -14,9 +14,9 @@
     /** Present location description */
     presentLocation: string;
     /** Route planning deadline (for address fields) */
-    routePlanningDeadline: Date;
+    routePlanningDeadline: Date | null;
     /** Final deadline (for present location) */
-    finalDeadline: Date;
+    finalDeadline: Date | null;
     /** Callback when edit button is clicked */
     onEdit?: () => void;
   };

@@ -14,7 +14,7 @@
     /** Maximum number of slots that can be selected */
     maxTimeSlots: number;
     /** Route planning deadline */
-    routePlanningDeadline: Date;
+    routePlanningDeadline: Date | null;
     /** Whether route planning can be edited */
     canEditRoutePlanning: boolean;
     /** Whether to show search input */

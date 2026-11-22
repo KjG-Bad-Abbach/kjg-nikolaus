@@ -9,7 +9,7 @@ import {
   updateBookingTimeSlots,
   updateBookingChildren,
 } from './bookingApi';
-import type { Config, Booking, ContactPerson, Location, Child } from '$lib/types/booking';
+import type { Booking, ContactPerson, Location, Child } from '$lib/types/booking';
 import { SvelteDate } from 'svelte/reactivity';
 import { formatDateTimeRange } from './dateFormat';
 
@@ -24,31 +24,55 @@ describe('bookingApi', () => {
   });
 
   describe('loadConfig', () => {
-    it('should load config and parse dates', async () => {
-      const { sendRequest } = await import('$lib/api/client');
-      const mockConfig: Config = {
-        id: '1',
-        documentId: 'config-1',
-        route_planning_deadline: new SvelteDate('2024-12-01T00:00:00.000Z'),
-        final_deadline: new SvelteDate('2024-12-05T00:00:00.000Z'),
-        max_time_slots: 3,
-        show_search_for_time_slots: false,
-        introduction_text: [],
-        privacy_policy_link: null,
-        legal_notice_link: null,
-      };
+    it.each([
+      ['2024-12-01T00:00:00.000Z', '2024-12-05T00:00:00.000Z'],
+      [null, '2024-12-05T00:00:00.000Z'],
+      ['2024-12-01T00:00:00.000Z', null],
+      [null, null],
+    ])(
+      'LoadConfig_Deadlines%s%s_Expect_ParsedDatesOrNull',
+      async (routeDeadline, finalDeadline) => {
+        // Arrange
+        const { sendRequest } = await import('$lib/api/client');
+        const mockConfig = {
+          id: '1',
+          documentId: 'config-1',
+          route_planning_deadline: routeDeadline,
+          final_deadline: finalDeadline,
+          max_time_slots: 3,
+          show_search_for_time_slots: false,
+          introduction_text: [],
+          privacy_policy_link: null,
+          legal_notice_link: null,
+          base_url: null,
+          api_base_url: null,
+        };
 
-      vi.mocked(sendRequest).mockResolvedValue({ data: mockConfig });
+        vi.mocked(sendRequest).mockResolvedValue({ data: mockConfig });
 
-      const result = await loadConfig();
+        // Act
+        const result = await loadConfig();
 
-      expect(sendRequest).toHaveBeenCalledWith({
-        url: '/api/config?populate=*',
-      });
-      expect(result.route_planning_deadline).toBeInstanceOf(SvelteDate);
-      expect(result.final_deadline).toBeInstanceOf(SvelteDate);
-      expect(result.max_time_slots).toBe(3);
-    });
+        // Assert
+        expect(sendRequest).toHaveBeenCalledWith({
+          url: '/api/config?populate=*',
+        });
+        for (const [parsed, raw] of [
+          [result.route_planning_deadline, routeDeadline],
+          [result.final_deadline, finalDeadline],
+        ] as const) {
+          if (raw === null) {
+            expect(parsed).toBeNull();
+          } else {
+            expect(parsed).toBeInstanceOf(SvelteDate);
+            expect(parsed?.toISOString()).toBe(raw);
+          }
+        }
+        expect(result.max_time_slots).toBe(3);
+        expect(result.base_url).toBeNull();
+        expect(result.api_base_url).toBeNull();
+      },
+    );
   });
 
   describe('loadBooking', () => {

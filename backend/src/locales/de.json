@@ -1,0 +1,92 @@
+{
+  "confirmation_email_subject_template": "Buchungsbestätigung",
+  "confirmation_email_body_template": [
+    {
+      "type": "paragraph",
+      "children": [
+        { "type": "text", "text": "Hallo {{first_name}} {{last_name}}," }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "type": "text",
+          "text": "hiermit bestätigen wir deine Buchung für unseren Nikolausbesuch."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "type": "text",
+          "text": "Deine Buchung kannst du über den folgenden Link aufrufen und überprüfen:"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "children": [{ "type": "text", "text": "{{button('Buchung ansehen')}}" }]
+    },
+    {
+      "type": "paragraph",
+      "children": [{ "type": "text", "text": "Deine KjG Bad Abbach." }]
+    }
+  ],
+  "verification_email_subject_template": "E-Mail verifiziert - Vervollständige deine Buchung",
+  "verification_email_body_template": [
+    {
+      "type": "paragraph",
+      "children": [
+        { "type": "text", "text": "E-Mail erfolgreich verifiziert!" }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "children": [
+        { "type": "text", "text": "Hallo {{first_name}} {{last_name}}," }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "type": "text",
+          "text": "vielen Dank für die Verifizierung deiner E-Mail-Adresse. Du kannst jetzt deine Buchung vervollständigen, indem du alle erforderlichen Informationen eingibst."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "type": "text",
+          "text": "Nutze den untenstehenden Link, um deine Buchung jederzeit aufzurufen, zu überprüfen und zu bearbeiten:"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "type": "text",
+          "text": "{{button('Buchung vervollständigen/bearbeiten')}}"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "type": "text",
+          "text": "Bitte stelle sicher, dass du alle erforderlichen Felder für eine erfolgreiche Buchung ausfüllst."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "children": [{ "type": "text", "text": "Deine KjG Bad Abbach." }]
+    }
+  ]
+}

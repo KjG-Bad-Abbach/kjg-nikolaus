@@ -50,7 +50,7 @@ export async function initializeBooking({
     if (!optionsStore.id) {
       const apiWindow =
         typeof window !== 'undefined'
-          ? (window as Window & { API_TOKEN?: string; API_BASE_URL?: string })
+          ? (window as Window & { API_TOKEN?: string; API_BASE_URL?: string | null })
           : undefined;
       // The first config request already needs the browser/build fallback.
       if (apiWindow) {

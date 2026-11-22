@@ -15,18 +15,22 @@ class DerivedStores {
     this.currentTime_ms = now_ms;
   }
 
+  private canEditBefore(deadline: Date | null, otherDeadline: Date | null): boolean {
+    return deadline !== null && otherDeadline !== null && this.currentTime_ms < deadline.getTime();
+  }
+
   /**
    * Can edit route planning (deadline not passed)
    */
   get canEditRoutePlanning(): boolean {
-    return this.currentTime_ms < optionsStore.route_planning_deadline.getTime();
+    return this.canEditBefore(optionsStore.route_planning_deadline, optionsStore.final_deadline);
   }
 
   /**
    * Can edit anything (final deadline not passed)
    */
   get canEditAnything(): boolean {
-    return this.currentTime_ms < optionsStore.final_deadline.getTime();
+    return this.canEditBefore(optionsStore.final_deadline, optionsStore.route_planning_deadline);
   }
 
   /**

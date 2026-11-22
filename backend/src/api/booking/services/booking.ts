@@ -121,7 +121,9 @@ export default factories.createCoreService(
         let subject =
           config.verification_email_subject_template ||
           "E-Mail verifiziert - Vervollständige deine Buchung";
-        const bookingUrl = `${config.base_url.replace(/\/+$/, "")}/?id=${bookingId}`;
+        const bookingUrl = strapi
+          .service("api::config.config")
+          .getBookingUrl(bookingId);
 
         let parameters = {
           booking_url: bookingUrl,

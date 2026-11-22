@@ -16,14 +16,10 @@
       "type": "text",
       "required": true
     },
-    "api_base_url": {
-      "type": "string",
-      "required": true
-    },
     "max_time_slots": {
       "type": "integer",
       "required": true,
-      "default": 1,
+      "default": 3,
       "min": 1,
       "max": 99
     },
@@ -33,16 +29,10 @@
       "default": false
     },
     "route_planning_deadline": {
-      "type": "datetime",
-      "required": true
+      "type": "datetime"
     },
     "final_deadline": {
-      "type": "datetime",
-      "required": true
-    },
-    "base_url": {
-      "type": "string",
-      "required": true
+      "type": "datetime"
     },
     "introduction_text": {
       "type": "blocks"

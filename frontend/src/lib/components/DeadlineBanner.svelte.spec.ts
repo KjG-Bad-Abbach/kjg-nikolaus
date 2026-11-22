@@ -7,6 +7,23 @@ describe('DeadlineBanner', () => {
   const routePlanningDeadline = new Date('2024-12-05T19:30:00+01:00');
   const finalDeadline = new Date('2024-12-20T23:59:00+01:00');
 
+  it('DeadlineBanner_UnsetDeadlines_Expect_MeaningfulGermanText', async () => {
+    // Arrange
+    const deadlines = { routePlanningDeadline: null, finalDeadline: null };
+
+    // Act
+    render(DeadlineBanner, {
+      ...deadlines,
+      canEditRoutePlanning: false,
+      canEditAnything: false,
+    });
+
+    // Assert
+    for (const testId of ['qa-deadline-route-planning', 'qa-deadline-final']) {
+      await expect.element(page.getByTestId(testId)).toHaveTextContent('noch nicht festgelegt');
+    }
+  });
+
   it('should render both deadlines with explanation text', async () => {
     render(DeadlineBanner, {
       routePlanningDeadline,

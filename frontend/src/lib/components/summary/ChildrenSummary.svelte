@@ -14,7 +14,7 @@
     /** Additional notes for Nikolaus */
     additionalNotes: string;
     /** Final deadline */
-    finalDeadline: Date;
+    finalDeadline: Date | null;
     /** Callback when edit button is clicked */
     onEdit?: () => void;
   };

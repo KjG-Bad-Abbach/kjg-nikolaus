@@ -12,7 +12,7 @@
     /** Additional notes for the visit */
     additionalNotes: string;
     /** Final deadline for data completion */
-    finalDeadline: Date;
+    finalDeadline: Date | null;
     /** Whether any editing is allowed */
     canEditAnything: boolean;
     /** Validation error messages keyed by field path */
